@@ -176,7 +176,7 @@ def main(argv: list[str] | None = None) -> int:
             n_envs = args.envs
             run = {'bodyId': body.id, 'skill': args.skill, 'seed': args.seed, 'envs': n_envs,
                    'ppo': cfg.to_dict(), 'bodyAssetSha256': body.asset_sha256, 'createdAt': now_iso(),
-                   'chunks': 0}
+                   'chunks': 0, 'gravityOffset': True}
         run['budget'] = args.budget
         run['targetEnvSteps'] = target
         run['chunks'] = int(run.get('chunks', 0)) + 1
@@ -215,8 +215,15 @@ def main(argv: list[str] | None = None) -> int:
                 print(f'note: no ready walk bundle at {walk_dir}; jumps start from standing only', file=sys.stderr)
 
         torch.manual_seed(run['seed'])
-        env = CreatureEnv(body, args.skill, n_envs=n_envs, threads=threads, seed=run['seed'],
-                          cache_dir=work, state_bank=bank)
+        # The offset is computed once and stored in run.json, so every chunk (on any machine)
+        # uses identical targets; runs started before it existed keep training without it.
+        stored = run.get('actionOffset')
+        env = CreatureEnv(body, args.skill, n_envs=n_envs, threads=threads, seed=run['seed'], cache_dir=work,
+                          state_bank=bank,
+                          gravity_offset=stored if stored is not None else bool(run.get('gravityOffset', False)))
+        if stored is None and run.get('gravityOffset'):
+            run['actionOffset'] = [float(x) for x in env.action_offset]
+            write_json_atomic(run_path, run)
         n_obs, n_act = env.task.obs_size, env.nu
         obs = env.actor_obs()
         critic_obs = env.critic_obs()

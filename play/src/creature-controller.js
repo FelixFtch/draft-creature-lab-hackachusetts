@@ -96,9 +96,12 @@ function skillRuntime(manifest) {
   }
   if (size !== manifest.observation.size) throw Error('Observation size does not match its terms');
   const bounds = manifest.commandBounds;
+  const offset = manifest.actionOffset ?? Array(n).fill(0);   // static gravity compensation (older bundles: none)
+  if (offset.length !== n || !finite(offset)) throw Error(`Manifest actionOffset must list ${n} finite values`);
   return {
     manifest, terms, size,
     defaults: Float64Array.from(manifest.defaultJointPositions),
+    offset: Float64Array.from(offset),
     scale: Float64Array.from(manifest.actionScale),
     clip: manifest.actionClip,
     bounds: [bounds.vx, bounds.vy, bounds.wz],
@@ -195,6 +198,12 @@ export function observeCreature(context, skill, state, command) {
   }
   if (!finite(observation)) throw Error('Creature observation contains non-finite values');
   return observation;
+}
+
+// Re-express the last action in another skill's units (same joint targets);
+// identical operation order to evaluate.py:convert_action.
+export function convertAction(action, src, dst) {
+  return Float32Array.from(action, (a, i) => clamp((src.offset[i] + src.scale[i] * a - dst.offset[i]) / dst.scale[i], -dst.clip, dst.clip));
 }
 
 export function measureCreature(context) {
@@ -297,7 +306,9 @@ export async function createCreatureController({ mujoco, model, data, walk, jump
     for (let i = 0; i < 6; i++) data.qvel[context.rootDof + i] = 0;
     context.qposAddresses.forEach((a, i) => { data.qpos[a] = init[7 + i]; });
     context.qvelAddresses.forEach(a => { data.qvel[a] = 0; });
-    context.actuatorIds.forEach((a, i) => { data.ctrl[a] = skills.walk.defaults[i]; });
+    context.actuatorIds.forEach((a, i) => {
+      data.ctrl[a] = clamp(skills.walk.defaults[i] + skills.walk.offset[i], context.ctrlLo[i], context.ctrlHi[i]);
+    });
     mujoco.mj_forward(model, data);
     state.mode = 'walk'; state.phase = 0; state.jumpPhase = 0; state.lastAction = new Float32Array(nu);
     startPosition = measureCreature(context).position;
@@ -335,8 +346,7 @@ export async function createCreatureController({ mujoco, model, data, walk, jump
     const { clamped, changed } = clampCommand(Array.from(command, Number));
     if (wantJump && state.mode === 'walk' && skills.jump) {
       state.mode = 'jump'; state.jumpPhase = 0; evidence.jumps++;
-      const ratio = skills.walk.scale.map((s, i) => s / skills.jump.scale[i]);
-      state.lastAction = Float32Array.from(state.lastAction, (a, i) => clamp(a * ratio[i], -skills.jump.clip, skills.jump.clip));
+      state.lastAction = convertAction(state.lastAction, skills.walk, skills.jump);
     }
     const skill = skills[state.mode];
     const tick = generation; busy = true;
@@ -352,7 +362,7 @@ export async function createCreatureController({ mujoco, model, data, walk, jump
       if (raw.length !== nu || !finite(raw)) throw Error('Policy returned an invalid action');
       const action = Float32Array.from(raw, a => clamp(a, -skill.clip, skill.clip));
       context.actuatorIds.forEach((id, i) => {
-        data.ctrl[id] = clamp(skill.defaults[i] + skill.scale[i] * action[i], context.ctrlLo[i], context.ctrlHi[i]);
+        data.ctrl[id] = clamp(skill.defaults[i] + skill.offset[i] + skill.scale[i] * action[i], context.ctrlLo[i], context.ctrlHi[i]);
       });
       evidence.command = clamped; evidence.commandClamped = changed; evidence.action = Array.from(action); evidence.active = true;
       for (let substep = 0; substep < SUBSTEPS; substep++) {
@@ -370,8 +380,7 @@ export async function createCreatureController({ mujoco, model, data, walk, jump
         if (state.jumpPhase >= 1 - 1e-9) {
           // Microduck-style handoff: the walk policy resumes with the last targets in its own units.
           state.mode = 'walk';
-          const ratio = skills.jump.scale.map((s, i) => s / skills.walk.scale[i]);
-          state.lastAction = Float32Array.from(state.lastAction, (a, i) => clamp(a * ratio[i], -skills.walk.clip, skills.walk.clip));
+          state.lastAction = convertAction(state.lastAction, skills.jump, skills.walk);
         }
       }
       Object.assign(evidence, currentState());

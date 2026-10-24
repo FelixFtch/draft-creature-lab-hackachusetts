@@ -153,7 +153,11 @@ standing and from walking, and hands back to walk without a fall.
 `kp = 100/70 · effort`, `kd = 5/70 · effort`, as MuJoCo `<position kp kv>`
 actuators with `forcerange = ±effort`, `ctrlrange = joint range`; 5 ms
 `implicitfast` steps, 4 per 50 Hz policy step. Collision bits from PLAN §3 (only
-feet and structural geoms collide; no self-collision).
+feet and structural geoms collide; no self-collision). Targets are
+`default + actionOffset + actionScale · action`; `actionOffset` is a static
+gravity compensation found in simulation so zero action holds the nominal
+stance (these soft servos otherwise sag: the Flower's 12 Nm hips needed
++0.15 rad, and without it its first run stood still for 1.2 M steps).
 
 **Walk.** Observation: root linear/angular velocity, projected gravity,
 command `[vx, vy, wz]`, joint positions and velocities, last action, and a

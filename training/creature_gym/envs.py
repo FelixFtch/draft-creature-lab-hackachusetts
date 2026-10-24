@@ -72,6 +72,36 @@ def gait_offsets(body: Body) -> tuple[np.ndarray, float]:
     return offsets, swing
 
 
+def standing_offset(model: mujoco.MjModel, idx: SceneIndex, body: Body, *, iterations: int = 15,
+                    settle_s: float = 3.0, tolerance: float = 0.002) -> np.ndarray:
+    """Per-joint target offsets that make zero action hold the nominal stance.
+
+    Position servos with Draft's soft gains (kp = 100/70 effort) sag under the body's
+    weight; weak bodies (e.g. 12 Nm servos carrying 10 kg) sag by 0.2-0.4 rad, so a
+    policy would first have to learn large constant biases before it can explore
+    stepping. Fixed-point iteration: hold targets nominal + offset on flat ground,
+    measure the steady-state joint error and add it to the offset (the servo is
+    linear below its torque limit). Clipped to the joint range; deterministic.
+    """
+    data = mujoco.MjData(model)
+    nominal = np.array(body.nominal_joint_positions)
+    lo, hi = idx.ctrl_lo, idx.ctrl_hi
+    offset = np.zeros_like(nominal)
+    steps = int(round(settle_s / model.opt.timestep))
+    for _ in range(iterations):
+        mujoco.mj_resetData(model, data)
+        data.qpos[:7 + len(nominal)] = body.initial_qpos
+        data.qpos[2] += 0.002
+        data.ctrl[idx.actuators] = np.clip(nominal + offset, lo, hi)
+        for _ in range(steps):
+            mujoco.mj_step(model, data)
+        error = nominal - data.qpos[idx.joint_qpos]
+        offset = np.clip(nominal + offset + error, lo, hi) - nominal
+        if np.max(np.abs(error)) < tolerance:
+            break
+    return np.round(offset, 6)
+
+
 def ramp(x: float, start: float, end: float, lo: float = 0.0, hi: float = 1.0) -> float:
     if end <= start:
         return hi if x >= end else lo
@@ -163,7 +193,10 @@ class CreatureEnv:
     """Batched env for one body and one skill (``walk`` or ``jump``)."""
 
     def __init__(self, body: Body, skill: str, *, n_envs: int = 256, threads: int = 2, seed: int = 0,
-                 n_variants: int = 32, cache_dir=None, state_bank: dict | None = None):
+                 n_variants: int = 32, cache_dir=None, state_bank: dict | None = None,
+                 gravity_offset=True):
+        """``gravity_offset``: True computes the standing offset, False uses zeros, or pass
+        the stored per-joint offsets (resumed runs reuse the exact values)."""
         if skill not in ('walk', 'jump'):
             raise ValueError(f'unknown skill {skill}')
         self.body, self.skill, self.n, self.threads = body, skill, n_envs, threads
@@ -182,6 +215,13 @@ class CreatureEnv:
         self.nu, self.n_legs = idx.nu, len(body.legs)
         self.default = np.array(body.nominal_joint_positions)
         self.lo, self.hi = idx.ctrl_lo, idx.ctrl_hi
+        # Targets are default + action_offset + scale * action (offset: static gravity compensation).
+        if isinstance(gravity_offset, (list, tuple, np.ndarray)):
+            self.action_offset = np.array(gravity_offset, dtype=float)
+            if self.action_offset.shape != (idx.nu,):
+                raise ValueError('stored action offset does not match the body')
+        else:
+            self.action_offset = standing_offset(self.model, idx, body) if gravity_offset else np.zeros(idx.nu)
         mid, half = (self.lo + self.hi) / 2, (self.hi - self.lo) / 2
         self.soft_lo, self.soft_hi = mid - 0.95 * half, mid + 0.95 * half
         self.effort = self.scene.effort
@@ -325,7 +365,7 @@ class CreatureEnv:
         a = np.clip(np.asarray(actions, dtype=np.float64), -task.action_clip, task.action_clip)
         self.prev_action[:] = self.last_action
         self.last_action[:] = a
-        ctrl = np.clip(self.default + task.action_scale * a, self.lo, self.hi)
+        ctrl = np.clip(self.default + self.action_offset + task.action_scale * a, self.lo, self.hi)
         t_before = self.state[:, 0].copy()
         self.physics(ctrl)
         self.state[:] = self.out_state[:, -1]
@@ -730,8 +770,12 @@ class JumpTask:
                 qpos[:, 1] = env.rng.uniform(-2.5, 2.5, len(pick))
                 env.state[from_walk, 1:1 + env.idx.nq] = qpos
                 env.state[from_walk, 1 + env.idx.nq:1 + env.idx.nq + env.idx.nv] = bank['qvel'][pick]
-                # The walk policy's last targets, re-expressed in jump action units.
-                env.last_action[from_walk] = np.clip(bank['last_action'][pick] * self.walk_scale / self.action_scale,
+                # The walk policy's last targets, re-expressed in jump action units
+                # (same rule as the controller's handoff: equal targets, different units).
+                walk_scale = bank.get('walk_scale', np.full(env.nu, self.walk_scale))
+                walk_offset = bank.get('walk_offset', np.zeros(env.nu))
+                target = walk_offset + walk_scale * bank['last_action'][pick]
+                env.last_action[from_walk] = np.clip((target - env.action_offset) / self.action_scale,
                                                      -self.action_clip, self.action_clip)
         else:
             env.state[ids, 1 + env.idx.nq:1 + env.idx.nq + env.idx.nv] *= 0.3

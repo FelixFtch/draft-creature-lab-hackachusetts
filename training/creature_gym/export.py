@@ -116,6 +116,7 @@ def manifest_for(body: Body, env, scene_xml: bytes, onnx_bytes: bytes, run: dict
         'jointNames': joints_names, 'actuatorNames': joints_names,
         'defaultJointPositions': [float(x) for x in env.default],
         'actionScale': [float(x) for x in task.action_scale], 'actionClip': float(task.action_clip),
+        'actionOffset': [float(x) for x in env.action_offset],
         'observation': {'size': n_obs, 'terms': task.terms,
                         'notes': ('All terms from robot qpos/qvel and controller state (see training/creature_gym/obs.py): '
                                   'base_lin_vel = R^T qvel[0:3]; base_ang_vel = qvel[3:6]; projected_gravity = R^T (0,0,-1); '

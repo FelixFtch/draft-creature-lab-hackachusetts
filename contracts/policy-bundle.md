@@ -64,8 +64,10 @@ the robot part (bodies, joints, actuators, sensors) is identical.
   "rootBody": "torso_link", "rootJoint": "torso_link_freejoint", "imuSite": "imu", "floorGeom": "cg_floor",
   "legNames": [ … ], "footSites": [ … ], "footGeoms": [ … ], "footRadius": [ … ],
   "jointNames": [ … ], "actuatorNames": [ … ],            // same order; actuators named like joints
-  "defaultJointPositions": [ … ],                          // = body nominalJointPositions
-  "actionScale": [ … ], "actionClip": 4.0,                 // target = clip(default + scale * clip(a, ±4), ctrlrange)
+  "defaultJointPositions": [ … ],                          // = body nominalJointPositions (observation zero)
+  "actionScale": [ … ], "actionClip": 4.0,
+  "actionOffset": [ … ],                                   // static gravity compensation, rad (absent = zeros)
+  //   target = clip(default + actionOffset + actionScale * clip(a, ±actionClip), ctrlrange)
   "observation": { "size": N, "terms": [ { "name": "…", "start": 0, "length": 3, "scale": 1 } ], "notes": "…" },
   "commandBounds": { "vx": [-0.54, 1.08], "vy": [0, 0], "wz": [-0.96, 0.96] },   // controller clamps to these
   "moving": { "fraction": 0.05, "vmax": 1.085, "wmax": 0.957 },                 // gait clock on/off rule
@@ -117,10 +119,18 @@ control step (also during a jump). Moving iff `|vx| > fraction·vmax` or
 ### Walk → jump → walk handoff (Microduck-style)
 
 On a jump trigger while walking: `mode = jump`, `p = 0`, and the last action is
-re-expressed in jump units (`a · walkScale / jumpScale`, clipped). Each control
-step runs the jump policy, then `p += 0.02 / durationS`; when `p >= 1 - 1e-9`
-the walk policy resumes with `a · jumpScale / walkScale` (clipped). The user's
-command is ignored during the window. The browser only enables jump if
+re-expressed in jump units so the joint targets are unchanged:
+`a' = clip((offset_src + scale_src · a - offset_dst) / scale_dst, ±clip_dst)`
+(computed in float64 in exactly this order, then stored as float32). Each
+control step runs the jump policy, then `p += 0.02 / durationS`; when
+`p >= 1 - 1e-9` the walk policy resumes with the same conversion in the other
+direction. The user's command is ignored during the window.
+
+`actionOffset` is computed by the trainer (`envs.standing_offset`): the servos'
+soft Draft gains let a body sag under its own weight (12 Nm servos carrying
+10 kg sag ~0.15 rad at the hips), so the offset is found by fixed-point
+iteration in simulation such that zero action holds the nominal stance. It is a
+constant part of the target, not learned. The browser only enables jump if
 `jump.sceneSha256 == walk.sceneSha256` and
 `jump.handoff.walkPolicySha256 == walk.policySha256`.
 
@@ -183,6 +193,6 @@ the measured steps per second, never a guess.
 
 Extended, not broken: added `rootJoint`, `floorGeom`, `footSites`/`footGeoms`/
 `footRadius`, `moving`, `handoff`, `sensors`, `contactThresholdN`, `scaling`,
-`pd`, `export`, `evaluation`, `fixtures`, `bodyName`; `fallCriteria` is
+`pd`, `export`, `evaluation`, `fixtures`, `bodyName`, `actionOffset`; `fallCriteria` is
 `{tiltRad, minHeightAboveFeetM, torsoContactSensor}`; command bounds are
 clamped (not rejected) by the controller.

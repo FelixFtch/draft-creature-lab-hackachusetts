@@ -1,8 +1,8 @@
 {
- "createdAt": "2026-10-24T20:37:20.608Z",
+ "createdAt": "2026-10-24T20:49:53.282Z",
  "pass": true,
  "scope": "Node CPU: production creature-controller.js with MuJoCo WASM 3.11.0 and ONNX Runtime Web WASM; not a live-browser test",
- "controllerSha256": "bb6860d969ec460b6b2c33e16c22d88d33d46562d529e70c6dd2204e92d077ec",
+ "controllerSha256": "59ced13ee055ddcd49921e46e04e86da74c74b823815716d680d7a45baea9812",
  "bundle": "training/dev-bundles/cheetah/policies/walk",
  "jumpBundle": "training/dev-bundles/cheetah/policies/jump",
  "hashes": {
@@ -2984,7 +2984,7 @@
     "error": null,
     "jumps": [
      {
-      "apexGainM": 0.08313770100696094,
+      "apexGainM": 0.08313770016903599,
       "airborneS": 0.2,
       "python": {
        "t": 1.5,
@@ -2998,7 +2998,7 @@
       "agree": true
      },
      {
-      "apexGainM": 0.08131875644027281,
+      "apexGainM": 0.08131876238356067,
       "airborneS": 0.2,
       "python": {
        "t": 4.46,
@@ -3012,7 +3012,7 @@
       "agree": true
      },
      {
-      "apexGainM": 0.08139646715501014,
+      "apexGainM": 0.08139645616245972,
       "airborneS": 0.2,
       "python": {
        "t": 7.42,

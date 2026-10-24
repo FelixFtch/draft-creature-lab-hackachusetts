@@ -102,6 +102,8 @@ class SkillRuntime:
         self.size = manifest['observation']['size']
         self.default = np.array(manifest['defaultJointPositions'])
         self.scale = np.array(manifest['actionScale'])
+        # Static gravity-compensation offset (absent in older bundles = zeros).
+        self.offset = np.array(manifest.get('actionOffset') or np.zeros(len(self.scale)))
         self.clip = float(manifest['actionClip'])
         clock = manifest.get('clock')
         self.freq = clock['frequencyHz'] if clock else 0.0
@@ -116,6 +118,12 @@ class SkillRuntime:
     def infer(self, obs: np.ndarray) -> np.ndarray:
         out = self.session.run([self.output], {self.input: obs[None, :].astype(np.float32)})[0]
         return np.asarray(out[0], dtype=np.float32)
+
+
+def convert_action(action: np.ndarray, src: 'SkillRuntime', dst: 'SkillRuntime') -> np.ndarray:
+    """Re-express the last action in another skill's units (same joint targets)."""
+    target = src.offset + src.scale * action.astype(float)
+    return np.clip((target - dst.offset) / dst.scale, -dst.clip, dst.clip).astype(np.float32)
 
 
 class ReferenceController:
@@ -156,7 +164,7 @@ class ReferenceController:
         d.qpos[self.joint_qpos] = q[7:]
         d.qvel[self.root_dof:self.root_dof + 6] = 0 if qvel is None else qvel[:6]
         d.qvel[self.joint_dof] = 0 if qvel is None else qvel[6:]
-        d.ctrl[self.actuators] = self.walk.default
+        d.ctrl[self.actuators] = np.clip(self.walk.default + self.walk.offset, self.lo, self.hi)
         mujoco.mj_forward(self.model, d)
         self.phase = 0.0
         self.jump_phase = 0.0
@@ -199,14 +207,13 @@ class ReferenceController:
         cmd = self.clamp_command(command)
         if jump and self.mode == 'walk' and self.jump is not None:
             self.mode, self.jump_phase = 'jump', 0.0
-            self.last_action = np.clip(self.last_action * self.walk.scale / self.jump.scale,
-                                       -self.jump.clip, self.jump.clip).astype(np.float32)
+            self.last_action = convert_action(self.last_action, self.walk, self.jump)
             self.jumps += 1
         skill = self.jump if self.mode == 'jump' else self.walk
         obs = self.observe(cmd)
         raw = skill.infer(obs)
         action = np.clip(raw, -skill.clip, skill.clip).astype(np.float32)
-        ctrl = np.clip(skill.default + skill.scale * action.astype(float), self.lo, self.hi)
+        ctrl = np.clip(skill.default + skill.offset + skill.scale * action.astype(float), self.lo, self.hi)
         d.ctrl[self.actuators] = ctrl
         warnings_before = [int(w.number) for w in d.warning]
         t0 = d.time
@@ -223,8 +230,7 @@ class ReferenceController:
             self.jump_phase += CONTROL_DT / self.jump.duration
             if self.jump_phase >= 1.0 - 1e-9:
                 self.mode = 'walk'
-                self.last_action = np.clip(self.last_action * self.jump.scale / self.walk.scale,
-                                           -self.walk.clip, self.walk.clip).astype(np.float32)
+                self.last_action = convert_action(self.last_action, self.jump, self.walk)
         finite = bool(np.all(np.isfinite(d.qpos)) and np.all(np.isfinite(d.qvel)))
         return {'obs': obs, 'action': raw, 'ctrl': ctrl, 'mode': mode_used, 'command': cmd,
                 'valid': finite and not warned and d.time > t0}
@@ -581,7 +587,9 @@ def walk_state_bank(body: Body, walk_dir: Path, cache_dir: Path, *, seed: int = 
                 qpos.append(np.concatenate([data.qpos[ctrl.root_qpos:ctrl.root_qpos + 7], data.qpos[ctrl.joint_qpos]]))
                 qvel.append(np.concatenate([data.qvel[ctrl.root_dof:ctrl.root_dof + 6], data.qvel[ctrl.joint_dof]]))
                 last.append(ctrl.last_action.astype(float))
-    bank = {'qpos': np.array(qpos[:count]), 'qvel': np.array(qvel[:count]), 'last_action': np.array(last[:count])}
+    bank = {'qpos': np.array(qpos[:count]), 'qvel': np.array(qvel[:count]), 'last_action': np.array(last[:count]),
+            'walk_scale': np.array(walk.manifest['actionScale']),
+            'walk_offset': np.array(walk.manifest.get('actionOffset') or np.zeros(len(walk.manifest['actionScale'])))}
     cache.parent.mkdir(parents=True, exist_ok=True)
     np.savez(cache, **bank)
     return bank
