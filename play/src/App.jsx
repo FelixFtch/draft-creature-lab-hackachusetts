@@ -24,8 +24,8 @@ import { createWhiteboxStudio } from './app/whitebox.js';
 // motor, detail and foot shades. These are the original lab's colours.
 const classic = (id, name, body) => ({ id, name, look: { schema: 'creature-look/1', theme: 'classic', palette: { body } } });
 const PRODUCT_LOOKS = [
-  classic('teal', 'Draft Teal', '#1f8c80'), classic('apricot', 'Apricot', '#ed9553'), classic('slate-blue', 'Slate Blue', '#647db6'),
-  classic('rose', 'Rose', '#d16b78'), classic('brass', 'Brass', '#c5ac5a'), classic('graphite', 'Graphite', '#3a3d42'), classic('cloud', 'Cloud', '#e5e9e2'),
+  classic('teal', 'Sage Teal', '#7fa39d'), classic('sand', 'Sand', '#c4ad94'), classic('slate-blue', 'Slate', '#8794aa'),
+  classic('dusty-rose', 'Dusty Rose', '#b9969a'), classic('olive', 'Olive', '#a6a68a'), classic('graphite', 'Graphite', '#5b5f66'), classic('cloud', 'Cloud', '#d9dcd6'),
 ];
 const DEFAULT_LOOK = PRODUCT_LOOKS[0].look;
 
@@ -107,6 +107,7 @@ export default function App() {
         created = await createDraftLab(workshopEl.current, { createStudio: createWhiteboxStudio });
         if (cancelled) { created.dispose(); return; }
         lab.current = created;
+        created.setLook(lookRef.current);
         await openRoster('dog', { quiet: true });
       } catch (error) { if (!cancelled) push({ tone: 'bad', title: 'The workshop could not start', text: String(error.message || error) }); }
     })();
@@ -163,6 +164,8 @@ export default function App() {
     } catch (error) { push({ tone: 'bad', title: `Could not open ${robot.name}`, text: String(error.message || error) }); }
   }
 
+  const lookRef = useRef(look);
+  lookRef.current = look;
   useEffect(() => { lab.current?.setLook(look); }, [look]);
   useEffect(() => { lab.current?.setViewMode(viewMode); }, [viewMode]);
 
@@ -213,12 +216,14 @@ export default function App() {
 
   // ---------- Tinker ----------
   function stateForTinker(extra = {}) {
-    const body = current?.kind === 'body' ? { id: current.body.id, massKg: current.body.massKg, design: current.design || current.body.design,
-      feasibility: current.body.feasibility, trainability: current.body.trainability, terrainProfile: current.body.terrainProfile } : undefined;
-    return { design: current?.design || undefined, look, body: lastBuild.current?.error ? lastBuild.current.error : body,
+    const now = extra.current || current;
+    const body = now?.kind === 'body' ? { id: now.body.id, massKg: now.body.massKg, design: now.design || now.body.design,
+      feasibility: now.body.feasibility, trainability: now.body.trainability, terrainProfile: now.body.terrainProfile } : undefined;
+    delete extra.current;
+    return { design: now?.design || undefined, look, body: lastBuild.current?.error ? lastBuild.current.error : body,
       policies: { walk: walkState.state === 'ready', jump: jumpState.state === 'ready' }, ...extra };
   }
-  async function askTinker(text) {
+  async function askTinker(text, override = {}) {
     const userMessage = text ? { id: uid('u'), role: 'user', kind: 'text', text } : null;
     const history = userMessage ? [...messages, userMessage] : messages;
     if (userMessage) setMessages(history);
@@ -227,7 +232,7 @@ export default function App() {
     try {
       const apiMessages = history.filter(m => (m.role === 'user' || m.role === 'tinker') && m.text).slice(-24)
         .map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: String(m.text).slice(0, 3900) }));
-      const value = await aiApi.chat(apiMessages, stateForTinker(), abort.signal);
+      const value = await aiApi.chat(apiMessages, stateForTinker({ ...override }), abort.signal);
       if (value.provider) setProvider(value.provider);
       setSuggestions(Array.isArray(value.suggestions) ? value.suggestions : []);
       const next = [];
@@ -252,12 +257,13 @@ export default function App() {
       const value = await fetchJson('/api/design', { method: 'POST', body: design, timeoutMs: 180000 });
       lastBuild.current = { body: value.body };
       await lab.current?.loadBody(value.body, `/creatures/${value.body.id}`);
-      setCurrent({ kind: 'body', id: value.body.id, name: design.name, body: value.body, design });
+      const built = { kind: 'body', id: value.body.id, name: design.name, body: value.body, design };
+      setCurrent(built);
       if (design.look) setLook(normalizeLook(design.look));
       loadPolicies(value.body.id); refreshBodies();
       setMessages(list => [...list.map(m => (m === message || m.id === message?.id ? { ...m, designStatus: 'built', body: value.body } : m)),
         { id: uid('n'), role: 'system', kind: 'note', text: `Draft built ${design.name}: ${value.body.massKg?.toFixed?.(1) ?? '?'} kg, ${value.body.jointNames?.length ?? '?'} joints, feasibility ${value.body.feasibility?.passed === false ? 'needs work' : 'passed'}${value.cached ? ' (cached)' : ''}.` }]);
-      await askTinker(null);
+      await askTinker(null, { current: built });
     } catch (error) {
       const problem = error instanceof ApiError ? error.body : { error: 'design-failed', message: String(error.message || error) };
       lastBuild.current = { error: problem };

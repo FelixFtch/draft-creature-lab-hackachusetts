@@ -5,6 +5,7 @@ import { paintGround, GROUND_EXTENT } from './ground-texture.js';
 import { planDecor } from './decor.js';
 import * as TX from './textures.js';
 import { createLabView } from './view-lab.js';
+import { createTopoMaterial } from '../app/whitebox.js';
 
 // World visuals for the playground. Everything MuJoCo-related is authored in
 // the MuJoCo frame under `root` (rotation.x = -PI/2): (x, y, z) here renders
@@ -166,7 +167,11 @@ export function createWorldView({ scene, root, layout, terrain, hfields = [], pr
   function material(key, make) { if (!materials.has(key)) materials.set(key, keep(make())); return materials.get(key); }
   const tileTex = keep(TX.tileTexture('#ffffff', 'rgba(110,95,70,0.42)'));
   const plankTex = new Map();
+  const mutedFor = c => { const col = new THREE.Color(c), hsl = {}; col.getHSL(hsl);
+    return '#' + new THREE.Color().setHSL(hsl.h, Math.min(.22, hsl.s * .35), .62 + .22 * Math.min(1, hsl.l)).getHexString(); };
   function matFor(s) {
+    // White-box level: every obstacle is plaster in a muted tint of its colour.
+    if (s.color) return material(`muted${s.color}`, () => { const m = createTopoMaterial({ base: mutedFor(s.color) }); m.userData.whitebox = true; return m; });
     const c = s.color;
     if (s.role === 'ramp') { if (!plankTex.has(c)) plankTex.set(c, keep(TX.plankTexture(c))); return material(`ramp${c}`, () => new THREE.MeshStandardMaterial({ map: plankTex.get(c), roughness: .78 })); }
     if (s.role === 'plateau' || s.role === 'step') return material(`tile${c}`, () => new THREE.MeshStandardMaterial({ color: c, map: tileTex, roughness: .9 }));
@@ -372,19 +377,19 @@ export function createWorldView({ scene, root, layout, terrain, hfields = [], pr
   // ----------------------------------------------------------------- sparks
   const sparkScale = .8 + .5 * Math.min(1.6, height);
   const sparkGeo = keep(new THREE.OctahedronGeometry(.075 * sparkScale, 0).scale(1, 1, 1.35));
-  const sparkMat = keep(new THREE.MeshStandardMaterial({ color: '#ff7a3d', emissive: '#ff5a1f', emissiveIntensity: 1.1, roughness: .3, metalness: .05 }));
+  const sparkMat = keep(new THREE.MeshStandardMaterial({ color: '#d6a088', emissive: '#c98466', emissiveIntensity: .55, roughness: .4, metalness: 0 }));
   const sparkMesh = new THREE.InstancedMesh(sparkGeo, sparkMat, layout.sparks.length);
   sparkMesh.frustumCulled = false; world.add(sparkMesh);
   const glowTex = keep(TX.glowTexture());
   const glowGeo = keep(new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(new Float32Array(layout.sparks.length * 3), 3)));
-  const glow = new THREE.Points(glowGeo, keep(new THREE.PointsMaterial({ map: glowTex, color: '#ff8a50', size: .5 * sparkScale, sizeAttenuation: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })));
+  const glow = new THREE.Points(glowGeo, keep(new THREE.PointsMaterial({ map: glowTex, color: '#e2b5a0', size: .32 * sparkScale, sizeAttenuation: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })));
   glow.frustumCulled = false; world.add(glow);
   let sparkState = layout.sparks.map(s => ({ ...s, z: terrain.groundHeight(s.x, s.y) + .3, collected: false }));
   const dummy = new THREE.Object3D();
 
   // ------------------------------------------------------------------ hoops
-  const hoopTex = keep(TX.stripeTexture('#ff5a1f', '#ffffff', 14));
-  const hoopMatOn = keep(new THREE.MeshStandardMaterial({ map: hoopTex, roughness: .35, emissive: '#ff5a1f', emissiveIntensity: .25 }));
+  const hoopTex = keep(TX.stripeTexture('#cf9273', '#f4f1ee', 14));
+  const hoopMatOn = keep(new THREE.MeshStandardMaterial({ map: hoopTex, roughness: .35, emissive: '#cf9273', emissiveIntensity: .12 }));
   const hoopMatOff = keep(new THREE.MeshStandardMaterial({ color: '#d9d2df', roughness: .6, transparent: true, opacity: .45 }));
   const hoopGeo = keep(new THREE.TorusGeometry(1, .05, 12, 64));
   const hoops = layout.hoops.map(h => {
@@ -428,8 +433,8 @@ export function createWorldView({ scene, root, layout, terrain, hfields = [], pr
     }
   }
   setSignChips({});
-  // Welcome board near the plaza.
-  {
+  // Welcome board near the plaza (not shown in the white-box level).
+  if (false) {
     const a = 195 * Math.PI / 180, g = new THREE.Group(); g.position.set(2.6 * Math.cos(a), 2.6 * Math.sin(a), 0); g.rotation.z = a + Math.PI; world.add(g);
     const tex = keep(TX.welcomeTexture('Creature Park', 'drive · explore · play'));
     for (const side of [-.55, .55]) { const post = new THREE.Mesh(keep(new THREE.CylinderGeometry(.035, .04, 1.25, 10).rotateX(Math.PI / 2)), postMat); post.position.set(0, side, .62); post.castShadow = true; g.add(post); }

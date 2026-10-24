@@ -19,7 +19,7 @@ export function LogoGlyph({ size = 40, title, className = "", ...rest }) {
       focusable="false"
       {...rest}
     >
-      <rect x="2" y="2" width="44" height="44" rx="12" fill="#1e4e95" stroke="#1c2440" strokeWidth="2.5" />
+      <rect x="2" y="2" width="44" height="44" rx="12" fill="#3a414c" stroke="#1c2440" strokeWidth="2.5" />
       <path d="M13 3v42M24 3v42M35 3v42M3 13h42M3 24h42M3 35h42" stroke="#dce8fb" strokeOpacity=".16" strokeWidth="1" />
       {/* dimension line over the creature */}
       <path d="M9 8.5v4.5M39 8.5v4.5M9 10.75h30" stroke="#dce8fb" strokeOpacity=".9" strokeWidth="1.5" strokeLinecap="round" />
@@ -28,7 +28,7 @@ export function LogoGlyph({ size = 40, title, className = "", ...rest }) {
       <circle cx="11" cy="33.5" r="2.6" fill="#fffcf5" />
       <circle cx="29" cy="33.5" r="2.6" fill="#fffcf5" />
       {/* toy body */}
-      <rect x="7.5" y="15.5" width="33" height="13.5" rx="6.75" fill="#ffc63a" stroke="#1c2440" strokeWidth="2.4" />
+      <rect x="7.5" y="15.5" width="33" height="13.5" rx="6.75" fill="#d8cdb8" stroke="#1c2440" strokeWidth="2.4" />
       <circle cx="35" cy="21.5" r="2.2" fill="#1c2440" />
     </svg>
   );

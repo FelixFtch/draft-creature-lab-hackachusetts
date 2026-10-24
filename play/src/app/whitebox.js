@@ -5,7 +5,7 @@ import * as THREE from 'three';
 // sun shading (hillshade) and thin contour lines. Only the robot and the
 // things it can interact with carry colour. Purely visual: no physics here.
 
-export const HIGHLIGHT = '#ff5a1f';
+export const HIGHLIGHT = '#cf9273'; // muted terracotta: interactive things
 const SKY = { zenith: '#c9d1da', horizon: '#f1f2f3', below: '#e9eaec' };
 
 // Plaster with world-height contour lines (fine every 2 cm, bold every 10 cm
@@ -144,6 +144,7 @@ export function applyWhiteboxWorld({ scene, view }) {
     if (!first) return;
     const emissive = !!first.emissive && first.emissiveIntensity > 0 && first.emissive.getHex() !== 0;
     if (isProp(object)) { replaced.push([object, object.material]); object.material = highlight; return; }
+    if (first.userData?.whitebox) return;                        // muted obstacles keep their tint
     if (emissive) return;                                         // collectibles and hoops keep their glow
     // Signage, banners, decks with lettering and painted strips: a blockout
     // level has none. Hidden meshes keep their own materials (signs update them).

@@ -28,27 +28,27 @@
   --cl-bp-800: #11141a;
   --cl-bp-700: #171b22;
   --cl-bp-600: #1d222b;
-  --cl-bp-500: #3e6ae1;
+  --cl-bp-500: #5b6b84;
   --cl-bp-300: #8fa8e8;
   --cl-bp-200: #b9c4d6;
   --cl-bp-100: #d9dee7;
   --cl-bp-50: #f2f4f7;
   --cl-bp-grid-minor: rgb(217 222 231 / 0.05);
   --cl-bp-grid-major: rgb(217 222 231 / 0.11);
-  --cl-bp-mark: #3e6ae1;
+  --cl-bp-mark: #5b6b84;
 
   /* One accent: Tesla-like blue. The old sun/yellow slots map to it. */
-  --cl-sun-600: #2f55c4;
-  --cl-sun-500: #3459c9;
-  --cl-sun-400: #3e6ae1;
-  --cl-sun-200: #c9d6f7;
-  --cl-sun-100: #eef2fc;
-  --cl-sky-700: #2f55c4;
-  --cl-sky-400: #3e6ae1;
-  --cl-sky-100: #eef2fc;
-  --cl-leaf-700: #12805c;
-  --cl-leaf-500: #1fa37a;
-  --cl-leaf-100: #e3f5ee;
+  --cl-sun-600: #47556b;
+  --cl-sun-500: #4f5e75;
+  --cl-sun-400: #5b6b84;
+  --cl-sun-200: #d3d8e0;
+  --cl-sun-100: #eef0f3;
+  --cl-sky-700: #47556b;
+  --cl-sky-400: #5b6b84;
+  --cl-sky-100: #eef0f3;
+  --cl-leaf-700: #4f7a68;
+  --cl-leaf-500: #6f9a86;
+  --cl-leaf-100: #e8efeb;
   --cl-tomato-600: #c8102e;
   --cl-tomato-500: #e31937;
   --cl-tomato-100: #fde8eb;
@@ -69,9 +69,9 @@
   --cl-keyline: rgb(23 26 32 / 0.12);
   --cl-hairline: rgb(23 26 32 / 0.08);
   --cl-divider: rgb(23 26 32 / 0.10);
-  --cl-accent: #3e6ae1;
-  --cl-accent-soft: #eef2fc;
-  --cl-focus: #3e6ae1;
+  --cl-accent: #5b6b84;
+  --cl-accent-soft: #eef0f3;
+  --cl-focus: #5b6b84;
   --cl-warn: #8a5a00;
   --cl-warn-fill: #f5b301;
   --cl-warn-soft: #fff6dd;
@@ -120,8 +120,8 @@
 /* Buttons: flat, confident, no chunky press depth. */
 .cl-btn, .cl-iconbtn, .cl-chip, .cl-seg, .cl-tab, .cl-key, .cl-badge { font-weight: 500; box-shadow: none; }
 .cl-btn { border-radius: 6px; letter-spacing: 0; }
-.cl-btn--primary, .cl-btn--go { background: #3e6ae1; color: #fff; border-color: #3e6ae1; }
-.cl-btn--primary:hover, .cl-btn--go:hover { background: #3459c9; border-color: #3459c9; }
+.cl-btn--primary, .cl-btn--go { background: #5b6b84; color: #fff; border-color: #5b6b84; }
+.cl-btn--primary:hover, .cl-btn--go:hover { background: #4f5e75; border-color: #4f5e75; }
 .cl-btn:active, .cl-iconbtn:active { transform: none; }
 .cl-badge { border-radius: 4px; text-transform: none; }
 .cl-chip { border-radius: 999px; }

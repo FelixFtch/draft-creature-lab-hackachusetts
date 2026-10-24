@@ -502,6 +502,26 @@ export const STICKERS = [
   { id: 'gap-jumper', title: 'Gap Jumper', blurb: 'Crossed the 0.50 m gap.' },
 ];
 
+// Organised collectibles: each zone's sparks become one straight, evenly
+// spaced line down the zone axis (a runway the robot can follow). Ids, tags
+// and counts are unchanged, so every challenge keeps its target.
+{
+  const byZone = new Map();
+  for (const sp of sparks) if (FRAMES[sp.zone] && sp.zone !== 'landmark') (byZone.get(sp.zone) ?? byZone.set(sp.zone, []).get(sp.zone)).push(sp);
+  for (const [zone, list] of byZone) {
+    const z = ZONES.find(item => item.id === zone);
+    if (!z) continue;
+    const u0 = z.u[0] + .7, u1 = z.u[1] - .7, v = (z.v[0] + z.v[1]) / 2;
+    list.forEach((sp, i) => {
+      const u = list.length === 1 ? (u0 + u1) / 2 : u0 + (u1 - u0) * i / (list.length - 1);
+      const [x, y] = FRAMES[zone].toWorld(u, v);
+      sp.x = round(x); sp.y = round(y);
+    });
+  }
+}
+// White-box level: no signboards (the UI names every zone).
+signs.length = 0;
+
 export const PARK = Object.freeze({
   id: PARK_ID, name: 'Creature Park', islandRadius: ISLAND_RADIUS, hubRadius: HUB_RADIUS,
   spawn: { x: 0, y: 0, yaw: 0 }, pads, zones: ZONES, statics, props, hfields, sparks, hoops, signs, lanes,
