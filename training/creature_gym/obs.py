@@ -26,6 +26,14 @@ ANG_VEL_SCALE = 0.25
 MOVING_FRACTION = 0.05
 
 
+def _joint_pos(nu: int, pos_indices) -> tuple:
+    """joint_pos over all joints, or (wheeled bodies) over the leg joints only: a wheel's
+    angle carries no information, so it is never observed (its velocity is)."""
+    if pos_indices is None or len(pos_indices) == nu:
+        return ('joint_pos', nu, 1.0)
+    return ('joint_pos', len(pos_indices), 1.0, [int(i) for i in pos_indices])
+
+
 def walk_terms(nu: int, n_legs: int) -> list[dict]:
     return _layout([
         ('base_lin_vel', 3, 1.0), ('base_ang_vel', 3, ANG_VEL_SCALE), ('projected_gravity', 3, 1.0),
@@ -33,17 +41,31 @@ def walk_terms(nu: int, n_legs: int) -> list[dict]:
         ('last_action', nu, 1.0), ('gait_clock', 2 * n_legs, 1.0)])
 
 
-def jump_terms(nu: int) -> list[dict]:
+def drive_terms(nu: int, pos_indices) -> list[dict]:
+    """Wheeled balance + velocity tracking: no gait clock; wheel velocities, not angles."""
     return _layout([
         ('base_lin_vel', 3, 1.0), ('base_ang_vel', 3, ANG_VEL_SCALE), ('projected_gravity', 3, 1.0),
-        ('joint_pos', nu, 1.0), ('joint_vel', nu, JOINT_VEL_SCALE), ('last_action', nu, 1.0),
+        ('command', 3, 1.0), _joint_pos(nu, pos_indices), ('joint_vel', nu, JOINT_VEL_SCALE),
+        ('last_action', nu, 1.0)])
+
+
+def jump_terms(nu: int, pos_indices=None) -> list[dict]:
+    return _layout([
+        ('base_lin_vel', 3, 1.0), ('base_ang_vel', 3, ANG_VEL_SCALE), ('projected_gravity', 3, 1.0),
+        _joint_pos(nu, pos_indices), ('joint_vel', nu, JOINT_VEL_SCALE), ('last_action', nu, 1.0),
         ('jump_phase', 3, 1.0)])
 
 
-def _layout(spec: list[tuple[str, int, float]]) -> list[dict]:
+def _layout(spec: list[tuple]) -> list[dict]:
+    """Terms with offsets. An optional 4th entry ``indices`` selects elements of the
+    raw value (jointNames order) before scaling; it is written to the manifest only
+    when present, so layouts without it are unchanged."""
     terms, start = [], 0
-    for name, length, scale in spec:
-        terms.append({'name': name, 'start': start, 'length': int(length), 'scale': float(scale)})
+    for name, length, scale, *rest in spec:
+        term = {'name': name, 'start': start, 'length': int(length), 'scale': float(scale)}
+        if rest:
+            term['indices'] = list(rest[0])
+        terms.append(term)
         start += length
     return terms
 
@@ -109,6 +131,8 @@ def build(terms: list[dict], values: dict[str, np.ndarray]) -> np.ndarray:
     parts = []
     for term in terms:
         value = values[term['name']]
+        if 'indices' in term:
+            value = value[..., term['indices']]
         if value.shape[-1] != term['length']:
             raise ValueError(f"{term['name']} has length {value.shape[-1]}, expected {term['length']}")
         parts.append(value * term['scale'] if term['scale'] != 1.0 else value)

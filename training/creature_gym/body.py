@@ -18,8 +18,9 @@ from . import BODY_SCHEMA
 MAX_BODY_JSON_BYTES = 4 * 1024 * 1024
 SAFE_FILE = re.compile(r'^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$')
 SAFE_NAME = re.compile(r'^[A-Za-z0-9_][A-Za-z0-9_./-]{0,127}$')
-GAIT_PATTERNS = ('trot', 'tripod', 'wave', 'ripple', 'pace', 'bound', 'walk')
-JOINT_ROLES = ('hip_roll', 'hip_yaw', 'hip_pitch', 'knee', 'ankle', 'other')
+GAIT_PATTERNS = ('trot', 'tripod', 'wave', 'ripple', 'pace', 'bound', 'walk', 'alternate')
+JOINT_ROLES = ('hip_roll', 'hip_yaw', 'hip_pitch', 'knee', 'ankle', 'ankle_pitch', 'ankle_roll', 'wheel', 'other')
+BODY_PLANS = ('quadruped', 'multileg', 'wheeled', 'humanoid')
 NOMINAL_RANGE_TOLERANCE = 1e-6
 
 
@@ -68,14 +69,27 @@ def _numbers(value: object, what: str, length: int | None = None) -> tuple[float
 @dataclass(frozen=True)
 class JointSpec:
     name: str
-    range: tuple[float, float]
+    range: tuple[float, float] | None     # None for continuous joints (wheels)
     effort: float
     velocity: float
     role: str
+    continuous: bool = False
     gear: float | None = None
     armature: float | None = None
     damping: float | None = None
     frictionloss: float | None = None
+
+    @property
+    def is_wheel(self) -> bool:
+        return self.continuous or self.role == 'wheel'
+
+
+@dataclass(frozen=True)
+class WheelSpec:
+    joint: str
+    geom: str
+    radius: float
+    axis: tuple[float, float, float]
 
 
 @dataclass(frozen=True)
@@ -84,11 +98,13 @@ class LegSpec:
     joints: tuple[str, ...]
     foot_geom: str
     foot_site: str
-    foot_radius: float
+    foot_radius: float | None               # point feet; flat feet / wheels use geometry
     mount_angle: float
     side: str
     end: str
     bodies: tuple[str, ...]
+    wheel: WheelSpec | None = None
+    contact_sites: tuple[str, ...] = ()     # flat feet: sole corner sites (informational)
 
 
 @dataclass(frozen=True)
@@ -129,6 +145,24 @@ class Body:
             if joint.name == name:
                 return joint
         raise KeyError(name)
+
+    @property
+    def wheel_mask(self) -> tuple[bool, ...]:
+        """Per actuated joint (jointNames order): True for wheel (velocity-controlled) joints."""
+        return tuple(j.is_wheel for j in self.joints)
+
+    @property
+    def is_wheeled(self) -> bool:
+        return any(self.wheel_mask)
+
+    @property
+    def flat_feet(self) -> bool:
+        return self.body_plan == 'humanoid' or any(leg.contact_sites for leg in self.legs)
+
+    @property
+    def base_skill(self) -> str:
+        """The perpetual skill this body trains: 'drive' on wheels, else 'walk'."""
+        return 'drive' if self.is_wheeled else 'walk'
 
 
 def default_gait(n_legs: int, legs: list[LegSpec]) -> tuple[str, tuple[tuple[int, ...], ...]]:
@@ -201,15 +235,32 @@ def load_body(path: str | Path, *, verify_hashes: bool = True) -> Body:
         end = leg.get('end', 'middle')
         if side not in ('left', 'right', 'center') or end not in ('front', 'middle', 'rear'):
             raise BodyError(f'legs[{index}] side/end are invalid')
+        wheel = None
+        if leg.get('wheel') is not None:
+            w = leg['wheel']
+            if not isinstance(w, dict):
+                raise BodyError(f'legs[{index}].wheel must be an object')
+            wheel = WheelSpec(joint=_name(w.get('joint'), f'legs[{index}].wheel.joint'),
+                              geom=_name(w.get('geom'), f'legs[{index}].wheel.geom'),
+                              radius=_number(w.get('radiusM'), f'legs[{index}].wheel.radiusM', positive=True),
+                              axis=_numbers(w.get('axis', [0, 1, 0]), f'legs[{index}].wheel.axis', 3))
+        contact_sites = leg.get('footContactSites') or []
+        if not isinstance(contact_sites, list):
+            raise BodyError(f'legs[{index}].footContactSites must be a list')
+        radius = leg.get('footRadius')
         legs.append(LegSpec(
             name=_name(leg.get('name'), f'legs[{index}].name'),
             joints=tuple(_name(j, f'legs[{index}].joints') for j in joints),
-            foot_geom=_name(leg.get('footGeom'), f'legs[{index}].footGeom'),
+            foot_geom=_name(leg.get('footGeom', wheel.geom if wheel else None), f'legs[{index}].footGeom'),
             foot_site=_name(leg.get('footSite'), f'legs[{index}].footSite'),
-            foot_radius=_number(leg.get('footRadius'), f'legs[{index}].footRadius', positive=True),
+            # Point feet state a radius; wheels and flat feet are measured from their geoms.
+            foot_radius=(_number(radius, f'legs[{index}].footRadius', positive=True)
+                         if radius not in (None, 0) else None),
             mount_angle=_number(leg.get('mountAngle', 0.0), f'legs[{index}].mountAngle'),
             side=side, end=end,
             bodies=tuple(_name(b, f'legs[{index}].bodies') for b in bodies),
+            wheel=wheel,
+            contact_sites=tuple(_name(s, f'legs[{index}].footContactSites') for s in contact_sites),
         ))
     if len({leg.name for leg in legs}) != len(legs):
         raise BodyError('leg names must be distinct')
@@ -228,16 +279,21 @@ def load_body(path: str | Path, *, verify_hashes: bool = True) -> Body:
         if not isinstance(joint, dict):
             raise BodyError(f'joints[{index}] must be an object')
         name = _name(joint.get('name'), f'joints[{index}].name')
-        lo, hi = _numbers(joint.get('range'), f'{name}.range', 2)
-        if not lo < hi:
-            raise BodyError(f'{name}.range must be increasing')
         role = joint.get('role', 'other')
         if role not in JOINT_ROLES:
             raise BodyError(f'{name}.role {role!r} is not one of {JOINT_ROLES}')
+        continuous = bool(joint.get('continuous', False)) or role == 'wheel'
+        if continuous:
+            rng = None   # wheels spin freely; a stated range is ignored
+        else:
+            lo, hi = _numbers(joint.get('range'), f'{name}.range', 2)
+            if not lo < hi:
+                raise BodyError(f'{name}.range must be increasing')
+            rng = (lo, hi)
         optional = {key: (_number(joint[key], f'{name}.{key}') if joint.get(key) is not None else None)
                     for key in ('gear', 'armature', 'damping', 'frictionloss')}
         by_name[name] = JointSpec(
-            name=name, range=(lo, hi), role=role,
+            name=name, range=rng, role=role, continuous=continuous,
             effort=_number(joint.get('effort'), f'{name}.effort', positive=True),
             velocity=_number(joint.get('velocity'), f'{name}.velocity', positive=True),
             **optional)
@@ -246,8 +302,16 @@ def load_body(path: str | Path, *, verify_hashes: bool = True) -> Body:
         raise BodyError(f'joints is missing {missing}')
     joints = tuple(by_name[n] for n in expected)
 
+    for leg in legs:
+        if leg.wheel is not None:
+            if leg.wheel.joint not in leg.joints or not by_name[leg.wheel.joint].is_wheel:
+                raise BodyError(f'leg {leg.name}: wheel joint must be one of its joints with role "wheel"')
+        elif leg.foot_radius is None and not leg.contact_sites:
+            raise BodyError(f'leg {leg.name}: point feet need footRadius (flat feet list footContactSites)')
     nominal = _numbers(raw.get('nominalJointPositions'), 'nominalJointPositions', len(expected))
     for joint, value in zip(joints, nominal):
+        if joint.range is None:
+            continue
         lo, hi = joint.range
         if not lo - NOMINAL_RANGE_TOLERANCE <= value <= hi + NOMINAL_RANGE_TOLERANCE:
             raise BodyError(f'nominal {joint.name}={value} is outside its range {joint.range}')
@@ -296,9 +360,15 @@ def load_body(path: str | Path, *, verify_hashes: bool = True) -> Body:
             if declared.get(name) != digest:
                 raise BodyError(f'{name} does not match provenance.assetSha256 (body changed after export?)')
 
+    plan = str(raw.get('bodyPlan') or 'multileg')
+    if plan not in BODY_PLANS:
+        raise BodyError(f'bodyPlan {plan!r} is not one of {BODY_PLANS}')
+    if (plan == 'wheeled') != any(leg.wheel is not None for leg in legs):
+        raise BodyError('bodyPlan "wheeled" and legs[].wheel must go together')
+
     return Body(
         directory=directory, raw=raw, id=body_id, name=str(raw.get('name') or body_id),
-        body_plan=str(raw.get('bodyPlan') or 'multileg'), xml_file=xml_file, mesh_files=mesh_files,
+        body_plan=plan, xml_file=xml_file, mesh_files=mesh_files,
         root_body=root_body, imu_site=imu_site, forward_axis=forward, legs=tuple(legs),
         joint_names=tuple(expected), joints=joints, nominal_joint_positions=nominal,
         nominal_root_height=root_height, initial_qpos=initial_qpos, mass_kg=mass,

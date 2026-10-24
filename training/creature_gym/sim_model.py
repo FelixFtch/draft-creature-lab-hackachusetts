@@ -25,6 +25,7 @@ the model is byte-for-byte the same XML.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+import math
 import xml.etree.ElementTree as ET
 
 import numpy as np
@@ -33,6 +34,8 @@ from .body import Body, BodyError, sha256_bytes
 
 KP_PER_NM = 100.0 / 70.0
 KD_PER_NM = 5.0 / 70.0
+#: Wheel velocity servos reach full torque at this fraction of the no-load speed error.
+WHEEL_FULL_TORQUE_SPEED_FRACTION = 0.1
 TIMESTEP = 0.005
 DECIMATION = 4
 CONTROL_DT = TIMESTEP * DECIMATION
@@ -78,6 +81,7 @@ class Scene:
     kp: np.ndarray | None = None
     kv: np.ndarray | None = None
     effort: np.ndarray | None = None
+    actuator_kinds: list[str] = field(default_factory=list)   # 'position' | 'velocity' per joint
 
     @property
     def sha256(self) -> str:
@@ -90,7 +94,7 @@ class Scene:
 
 def sensor_names(body: Body) -> dict:
     legs = [leg.name for leg in body.legs]
-    return {
+    names = {
         'gyro': 'cg_imu_gyro', 'velocimeter': 'cg_imu_vel', 'accelerometer': 'cg_imu_acc',
         'touch': [f'cg_touch_{leg}' for leg in legs],
         'footPos': [f'cg_foot_pos_{leg}' for leg in legs],
@@ -99,10 +103,63 @@ def sensor_names(body: Body) -> dict:
         'thighContact': [f'cg_thigh_contact_{leg}' for leg in legs],
         'actuatorForce': [f'cg_frc_{name}' for name in body.joint_names],
     }
+    if body.flat_feet:
+        # Sole normal (world frame) of each flat foot, for the "foot flat on the ground" reward.
+        names['footNormal'] = [f'cg_foot_normal_{leg}' for leg in legs]
+    return names
+
+
+def geom_lowest_z(model, data, g: int) -> float:
+    """Lowest world z of geom ``g`` in the posed ``data`` (exact per primitive type)."""
+    import mujoco
+    c = data.geom_xpos[g]
+    rot = data.geom_xmat[g].reshape(3, 3)
+    size = model.geom_size[g]
+    kind = model.geom_type[g]
+    gt = mujoco.mjtGeom
+    if kind == gt.mjGEOM_SPHERE:
+        return float(c[2] - size[0])
+    if kind == gt.mjGEOM_CAPSULE:
+        return float(c[2] - abs(rot[2, 2]) * size[1] - size[0])
+    if kind == gt.mjGEOM_CYLINDER:
+        az = abs(rot[2, 2])
+        return float(c[2] - az * size[1] - size[0] * math.sqrt(max(0.0, 1.0 - az * az)))
+    if kind == gt.mjGEOM_ELLIPSOID:
+        return float(c[2] - math.sqrt(float(np.sum((rot[2, :] * size) ** 2))))
+    if kind == gt.mjGEOM_BOX:
+        return float(c[2] - float(np.sum(np.abs(rot[2, :]) * size)))
+    if kind == gt.mjGEOM_MESH:
+        mesh = int(model.geom_dataid[g])
+        start, count = int(model.mesh_vertadr[mesh]), int(model.mesh_vertnum[mesh])
+        verts = model.mesh_vert[start:start + count]
+        return float(c[2] + np.min(verts @ rot[2, :]))
+    raise BodyError(f'foot geom type {int(kind)} is not supported')
+
+
+def flat_axis(size: np.ndarray) -> int:
+    """Index of a box's thinnest half-size: the sole normal of a flat foot plate."""
+    return int(np.argmin(size[:3]))
 
 
 def touch_site_name(leg: str) -> str:
     return f'cg_touch_site_{leg}'
+
+
+def _foot_geometry(body: Body) -> dict:
+    """Compile body.xml alone to read each foot geom's type/size/frame in its body.
+
+    Touch sites copy these numbers, so they follow any MJCF orientation syntax."""
+    import mujoco
+    model = mujoco.MjModel.from_xml_string(body.xml_path.read_text(), body.mesh_assets())
+    out = {}
+    for leg in body.legs:
+        g = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, leg.foot_geom)
+        if g < 0:
+            raise BodyError(f'foot geom {leg.foot_geom} not found')
+        out[leg.name] = {'type': int(model.geom_type[g]), 'size': model.geom_size[g].copy(),
+                         'pos': model.geom_pos[g].copy(), 'quat': model.geom_quat[g].copy(),
+                         'body': mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_BODY, int(model.geom_bodyid[g]))}
+    return out
 
 
 def build_scene(body: Body, *, terrain: TerrainSpec | None = None) -> Scene:
@@ -173,15 +230,41 @@ def build_scene(body: Body, *, terrain: TerrainSpec | None = None) -> Scene:
             geom.set('priority', '1')
 
     parent = {child: element for element in root.iter() for child in element}
+    geometry = (_foot_geometry(body) if body.flat_feet or any(leg.foot_radius is None for leg in body.legs)
+                else {})
     for leg in body.legs:
         site = next((s for s in worldbody.iter('site') if s.get('name') == leg.foot_site), None)
         if site is None:
             raise BodyError(f'foot site {leg.foot_site} not found')
-        holder = parent[site]
-        touch = ET.Element('site', {'name': touch_site_name(leg.name), 'type': 'sphere',
-                                    'size': fmt(leg.foot_radius * TOUCH_SITE_SCALE + TOUCH_SITE_MARGIN),
-                                    'pos': site.get('pos', '0 0 0'), 'group': '5', 'rgba': '1 0.5 0 0.3'})
-        holder.insert(list(holder).index(site) + 1, touch)
+        if leg.foot_radius is not None:
+            # Point foot: a sphere slightly larger than the foot, centred on the foot site.
+            holder = parent[site]
+            touch = ET.Element('site', {'name': touch_site_name(leg.name), 'type': 'sphere',
+                                        'size': fmt(leg.foot_radius * TOUCH_SITE_SCALE + TOUCH_SITE_MARGIN),
+                                        'pos': site.get('pos', '0 0 0'), 'group': '5', 'rgba': '1 0.5 0 0.3'})
+            holder.insert(list(holder).index(site) + 1, touch)
+            continue
+        g = geometry[leg.name]
+        holder = bodies.get(g['body'])
+        if holder is None:
+            raise BodyError(f'body of foot geom {leg.foot_geom} not found')
+        pos, quat = ' '.join(fmt(v) for v in g['pos']), ' '.join(fmt(v) for v in g['quat'])
+        if g['type'] == 6:   # box sole plate (flat foot): a box a few millimetres larger
+            size = ' '.join(fmt(s + m) for s, m in zip(g['size'], (0.003, 0.003, 0.004)))
+            touch = ET.Element('site', {'name': touch_site_name(leg.name), 'type': 'box', 'size': size,
+                                        'pos': pos, 'quat': quat, 'group': '5', 'rgba': '1 0.5 0 0.3'})
+        else:                # wheel or other round foot: sphere around the geom centre
+            touch = ET.Element('site', {'name': touch_site_name(leg.name), 'type': 'sphere',
+                                        'size': fmt(g['size'][0] * TOUCH_SITE_SCALE + TOUCH_SITE_MARGIN),
+                                        'pos': pos, 'group': '5', 'rgba': '1 0.5 0 0.3'})
+        holder.append(touch)
+
+    wheel_joints = {j.name for j in body.joints if j.is_wheel}
+    for element in worldbody.iter('joint'):
+        if element.get('name') in wheel_joints:
+            # Wheels spin freely: no joint range even if the body XML stated one.
+            element.attrib.pop('range', None)
+            element.set('limited', 'false')
 
     option = ET.Element('option', dict(OPTION))
     root.insert(list(root).index(compiler) + 1, option)
@@ -203,16 +286,25 @@ def build_scene(body: Body, *, terrain: TerrainSpec | None = None) -> Scene:
                                                 'friction': '1 0.005 0.0001', 'rgba': '0.5 0.55 0.5 1'}))
 
     names = sensor_names(body)
-    kp = np.array([KP_PER_NM * j.effort for j in body.joints])
-    kv = np.array([KD_PER_NM * j.effort for j in body.joints])
+    # Legs: position servos (Draft PD rule). Wheels: velocity servos, ctrl = wheel speed
+    # target, full torque at 10% of the no-load speed error, ctrlrange = +-no-load speed.
+    kp = np.array([0.0 if j.is_wheel else KP_PER_NM * j.effort for j in body.joints])
+    kv = np.array([j.effort / (WHEEL_FULL_TORQUE_SPEED_FRACTION * j.velocity) if j.is_wheel else KD_PER_NM * j.effort
+                   for j in body.joints])
     effort = np.array([j.effort for j in body.joints])
+    kinds = ['velocity' if j.is_wheel else 'position' for j in body.joints]
     actuator = ET.SubElement(root, 'actuator')
-    for joint, p, v in zip(body.joints, kp, kv):
+    for joint, p, v, kind in zip(body.joints, kp, kv, kinds):
+        force = {'forcelimited': 'true', 'forcerange': f'{fmt(-joint.effort)} {fmt(joint.effort)}'}
+        if kind == 'velocity':
+            ET.SubElement(actuator, 'velocity', {
+                'name': joint.name, 'joint': joint.name, 'kv': fmt(v), 'ctrllimited': 'true',
+                'ctrlrange': f'{fmt(-joint.velocity)} {fmt(joint.velocity)}', **force})
+            continue
         lo, hi = joint.range
         ET.SubElement(actuator, 'position', {
             'name': joint.name, 'joint': joint.name, 'kp': fmt(p), 'kv': fmt(v),
-            'ctrllimited': 'true', 'ctrlrange': f'{fmt(lo)} {fmt(hi)}',
-            'forcelimited': 'true', 'forcerange': f'{fmt(-joint.effort)} {fmt(joint.effort)}'})
+            'ctrllimited': 'true', 'ctrlrange': f'{fmt(lo)} {fmt(hi)}', **force})
 
     sensor = ET.SubElement(root, 'sensor')
     ET.SubElement(sensor, 'gyro', {'name': names['gyro'], 'site': body.imu_site})
@@ -230,11 +322,16 @@ def build_scene(body: Body, *, terrain: TerrainSpec | None = None) -> Scene:
         ET.SubElement(sensor, 'contact', {'name': name, 'body1': thigh, 'data': 'found', 'reduce': 'netforce'})
     for joint, name in zip(body.joint_names, names['actuatorForce']):
         ET.SubElement(sensor, 'actuatorfrc', {'name': name, 'actuator': joint})
+    for leg, name in zip(body.legs, names.get('footNormal', [])):
+        g = geometry[leg.name]
+        axis = 'xyz'[flat_axis(g['size'])] if g['type'] == 6 else 'z'
+        ET.SubElement(sensor, f'frame{axis}axis', {'name': name, 'objtype': 'geom', 'objname': leg.foot_geom})
 
     ET.indent(root, space='  ')
     xml = ET.tostring(root, encoding='unicode') + '\n'
     return Scene(xml=xml, assets=body.mesh_assets(), body=body, terrain=terrain,
-                 actuator_names=list(body.joint_names), sensor_names=names, kp=kp, kv=kv, effort=effort)
+                 actuator_names=list(body.joint_names), sensor_names=names, kp=kp, kv=kv, effort=effort,
+                 actuator_kinds=kinds)
 
 
 @dataclass
@@ -267,6 +364,25 @@ class SceneIndex:
     floor_geom: int
     terrain_geom: int
     terrain_hfield: int
+    #: Per leg: foot site height above the foot geom's lowest point at the nominal pose
+    #: (= footRadius for point feet, wheel radius for a site at the wheel centre).
+    foot_bottom: np.ndarray = None
+    #: Per actuated joint: True for wheels (velocity actuators, continuous joints).
+    wheel_mask: np.ndarray = None
+    #: Joint limits from body.json (+-inf for continuous joints); ctrl_lo/hi are the
+    #: actuator ctrlrange (= joint range for position servos, +-speed for wheels).
+    joint_lo: np.ndarray = None
+    joint_hi: np.ndarray = None
+    foot_normal: np.ndarray = None   # sensor addresses (flat feet only, else empty)
+
+    @property
+    def leg_joints(self) -> np.ndarray:
+        """Indices (jointNames order) of the position-controlled joints."""
+        return np.nonzero(~self.wheel_mask)[0]
+
+    @property
+    def wheel_joints(self) -> np.ndarray:
+        return np.nonzero(self.wheel_mask)[0]
 
     @classmethod
     def build(cls, model, body: Body, names: dict) -> 'SceneIndex':
@@ -295,6 +411,21 @@ class SceneIndex:
             if model.actuator_trnid[a, 0] != j:
                 raise BodyError('actuator/joint mapping mismatch')
         terrain_geom = mujoco.mj_name2id(model, obj.mjOBJ_GEOM, TERRAIN)
+        foot_sites = np.array([ident(obj.mjOBJ_SITE, leg.foot_site) for leg in body.legs])
+        foot_geoms = np.array([ident(obj.mjOBJ_GEOM, leg.foot_geom) for leg in body.legs])
+        # Foot bottoms measured at the nominal pose (upright, joints nominal).
+        data = mujoco.MjData(model)
+        root_qpos = int(model.jnt_qposadr[jnt])
+        # initialQpos is the body model's own qpos (root, then joints in model order).
+        data.qpos[root_qpos:root_qpos + len(body.initial_qpos)] = body.initial_qpos
+        mujoco.mj_kinematics(model, data)
+        foot_bottom = np.array([
+            leg.foot_radius if leg.foot_radius is not None
+            else float(data.site_xpos[s, 2]) - geom_lowest_z(model, data, int(g))
+            for leg, s, g in zip(body.legs, foot_sites, foot_geoms)])
+        wheel_mask = np.array(body.wheel_mask, dtype=bool)
+        joint_lo = np.array([-np.inf if j.range is None else j.range[0] for j in body.joints])
+        joint_hi = np.array([np.inf if j.range is None else j.range[1] for j in body.joints])
         return cls(
             nq=model.nq, nv=model.nv, nu=model.nu, nsensordata=model.nsensordata,
             nstate=mujoco.mj_stateSize(model, mujoco.mjtState.mjSTATE_FULLPHYSICS),
@@ -312,9 +443,10 @@ class SceneIndex:
             torso_contact=sensor(names['torsoContact'], 1),
             thigh_contact=np.array([sensor(n, 1) for n in names['thighContact']]),
             actuator_force=np.array([sensor(n, 1) for n in names['actuatorForce']]),
-            foot_sites=np.array([ident(obj.mjOBJ_SITE, leg.foot_site) for leg in body.legs]),
-            foot_geoms=np.array([ident(obj.mjOBJ_GEOM, leg.foot_geom) for leg in body.legs]),
+            foot_sites=foot_sites, foot_geoms=foot_geoms,
             floor_geom=ident(obj.mjOBJ_GEOM, FLOOR),
             terrain_geom=terrain_geom,
             terrain_hfield=mujoco.mj_name2id(model, obj.mjOBJ_HFIELD, TERRAIN),
+            foot_bottom=foot_bottom, wheel_mask=wheel_mask, joint_lo=joint_lo, joint_hi=joint_hi,
+            foot_normal=np.array([sensor(n, 3) for n in names.get('footNormal', [])], dtype=np.int64),
         )
