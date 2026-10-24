@@ -14,12 +14,16 @@ export { CreatureShelf } from "./CreatureShelf.jsx";
 export { ShapeTweaks, DESIGN_BOUNDS } from "./ShapeTweaks.jsx";
 export { LabNotes } from "./LabNotes.jsx";
 
-export { PlayHUD, CreatureBadge, ChallengeTracker, SparkCounter, DEFAULT_HINTS } from "./PlayHUD.jsx";
+export { PlayHUD, CreatureBadge, ChallengeTracker, SparkCounter, DEFAULT_HINTS, GAMEPAD_HINTS } from "./PlayHUD.jsx";
 export { TouchControls } from "./TouchControls.jsx";
 export { ExplorePanel } from "./ExplorePanel.jsx";
 export { PauseMenu } from "./PauseMenu.jsx";
 export { ChallengeBoard } from "./ChallengeBoard.jsx";
 export { StickerBook, Sticker, StickerPop } from "./StickerBook.jsx";
+
+export { RobotRoster, SkillBadges } from "./RobotRoster.jsx";
+export { TerrainLab, StructureCard } from "./TerrainLab.jsx";
+export { TERRAIN_LANES, TERRAIN_GROUPS, normalizeTrials, normalizeLane, predictCell, cellFor, whyLine, bestAtFromTrials, profileStat } from "./terrain.js";
 
 export { Modal } from "./Modal.jsx";
 export { Toasts, useToasts } from "./Toasts.jsx";
@@ -29,6 +33,6 @@ export { Button, IconButton, Badge, Chip, Segmented, Slider, Switch, Keycap, Tab
 export { Icon, ICON_NAMES } from "./icons.jsx";
 export { Logo, LogoGlyph } from "./Logo.jsx";
 export { Tinker } from "./Tinker.jsx";
-export { CreatureGlyph, normalizeShape, lookForGlyph, PRESET_SHAPES } from "./CreatureGlyph.jsx";
+export { CreatureGlyph, normalizeShape, lookForGlyph, PRESET_SHAPES, describePlan } from "./CreatureGlyph.jsx";
 export { useMediaQuery, useLayoutSize, useReducedMotion, useCoarsePointer } from "./hooks.js";
 export * as format from "./format.js";

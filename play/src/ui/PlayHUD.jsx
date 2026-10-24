@@ -6,13 +6,30 @@ import { CreatureGlyph } from "./CreatureGlyph.jsx";
 import { Icon } from "./icons.jsx";
 import { Button, Keycap, cx } from "./primitives.jsx";
 import { useCoarsePointer } from "./hooks.js";
-import { fixed, isNum } from "./format.js";
+import { fixed, isNum, skillIcon, skillName } from "./format.js";
 
 export const DEFAULT_HINTS = [
   { keys: ["W", "A", "S", "D"], label: "Move" },
-  { keys: ["Space"], label: "Jump" },
+  { keys: ["Space"], label: "Jump", action: "jump" },
+  { keys: ["R"], label: "Respawn" },
+  { keys: ["C"], label: "Camera" },
   { keys: ["Esc"], label: "Pause" },
 ];
+
+/** Standard-mapping gamepad hints (matches world/input.js: A jump, B respawn, Y camera, Start pause). */
+export const GAMEPAD_HINTS = [
+  { pad: ["LS"], label: "Move" },
+  { pad: ["A"], label: "Jump", action: "jump" },
+  { pad: ["B"], label: "Respawn" },
+  { pad: ["Y"], label: "Camera" },
+  { pad: ["RS"], label: "Look" },
+  { pad: ["Start"], label: "Pause" },
+];
+
+function PadKey({ name }) {
+  const k = name.toLowerCase();
+  return <span className={cx("cl-padkey", `cl-padkey--${k}`, name.length > 1 && "cl-padkey--wide")}>{name}</span>;
+}
 
 function usePop(value) {
   const [pop, setPop] = useState(0);
@@ -27,9 +44,9 @@ function usePop(value) {
 function SkillChip({ skill, state }) {
   const ready = state === "ready";
   return (
-    <span className={cx("cl-skillchip", ready ? "is-ready" : "is-locked")} title={ready ? `${skill === "jump" ? "Jump" : "Walk"}: verified` : `${skill === "jump" ? "Jump" : "Walk"}: not learned yet`}>
-      <Icon name={ready ? (skill === "jump" ? "jump" : "walk") : "lock"} size={14} strokeWidth={2.5} />
-      {skill === "jump" ? "Jump" : "Walk"}
+    <span className={cx("cl-skillchip", ready ? "is-ready" : "is-locked")} title={ready ? `${skillName(skill)}: verified` : `${skillName(skill)}: not verified`}>
+      <Icon name={ready ? skillIcon(skill) : "lock"} size={14} strokeWidth={2.5} />
+      {skillName(skill)}
     </span>
   );
 }
@@ -46,7 +63,7 @@ export function CreatureBadge({ creature, speed }) {
       <div className="cl-cbadge__text">
         <strong className="cl-cbadge__name">{creature.name}</strong>
         <span className="cl-cbadge__skills">
-          {["walk", "jump"].map(skill => (skills[skill] ? <SkillChip key={skill} skill={skill} state={skills[skill]} /> : null))}
+          {["walk", "drive", "jump"].map(skill => (skills[skill] ? <SkillChip key={skill} skill={skill} state={skills[skill]} /> : null))}
         </span>
       </div>
       {isNum(speed) && (
@@ -117,16 +134,32 @@ export function SparkCounter({ got = 0, total }) {
   );
 }
 
-function DockButton({ icon, label, keyHint, onClick, pressed, disabled, tone, hint }) {
+function DockButton({ icon, label, keyHint, padHint, onClick, onBlocked, pressed, disabled, tone, hint, showReason = false }) {
+  // Locked actions stay focusable (aria-disabled) so keyboard and screen
+  // reader users can still find out why; pressing one calls onBlocked.
   return (
     <div className="cl-dock__item">
-      <button type="button" className={cx("cl-dockbtn", tone && `cl-dockbtn--${tone}`)} onClick={onClick} aria-pressed={typeof pressed === "boolean" ? pressed : undefined} disabled={disabled} title={disabled ? hint : undefined} aria-label={disabled && hint ? `${label}. ${hint}` : label}>
+      <button
+        type="button"
+        className={cx("cl-dockbtn", tone && `cl-dockbtn--${tone}`, disabled && "is-locked")}
+        onClick={disabled ? () => onBlocked?.(hint) : onClick}
+        aria-pressed={typeof pressed === "boolean" ? pressed : undefined}
+        aria-disabled={disabled || undefined}
+        title={disabled ? hint : undefined}
+        aria-label={disabled && hint ? `${label}, locked. ${hint}` : label}
+      >
         <Icon name={disabled ? "lock" : icon} size={26} strokeWidth={2.4} />
       </button>
       <span className="cl-dock__label">
         {label}
         {keyHint && <Keycap>{keyHint}</Keycap>}
+        {padHint && <PadKey name={padHint} />}
       </span>
+      {disabled && showReason && hint && (
+        <span className="cl-dock__reason" aria-hidden="true">
+          {hint}
+        </span>
+      )}
     </div>
   );
 }
@@ -161,11 +194,16 @@ export function PlayHUD({
   forceTouch = false,
   stickerPop,
   keyHints = DEFAULT_HINTS,
+  gamepad,
+  onJumpBlocked,
 }) {
   const coarse = useCoarsePointer();
   const touch = forceTouch || coarse;
   const robot = snapshot.robot || {};
   const sparks = snapshot.sparks || {};
+  // world snapshot().command.gamepad is the pad id while one is connected.
+  const pad = gamepad ?? snapshot.command?.gamepad ?? null;
+  const hints = pad ? GAMEPAD_HINTS : keyHints;
   return (
     <div className={cx("cl-hud", touch && "is-touch")}>
       <h2 className="cl-sr-only">Playground{creature?.name ? ` with ${creature.name}` : ""}</h2>
@@ -205,22 +243,35 @@ export function PlayHUD({
         <div className="cl-hud__touch">{touchControls}</div>
       ) : (
         <>
-          {keyHints?.length > 0 && !exploreOpen && (
-            <ul className="cl-hud__keys" aria-label="Keyboard controls">
-              {keyHints.map(hint => (
-                <li key={hint.label}>
-                  {hint.keys.map(k => (
-                    <Keycap key={k}>{k}</Keycap>
-                  ))}
-                  <span>{hint.label}</span>
+          {hints?.length > 0 && !exploreOpen && (
+            <ul className="cl-hud__keys" aria-label={pad ? "Gamepad controls" : "Keyboard controls"}>
+              {pad && (
+                <li className="cl-hud__pad" title={pad}>
+                  <Icon name="gamepad" size={18} />
+                  <span>Gamepad</span>
                 </li>
-              ))}
+              )}
+              {hints.map(hint => {
+                const locked = hint.action === "jump" && !canJump;
+                return (
+                  <li key={hint.label} className={cx(locked && "is-locked")}>
+                    {(hint.pad || []).map(k => (
+                      <PadKey key={k} name={k} />
+                    ))}
+                    {(hint.keys || []).map(k => (
+                      <Keycap key={k}>{k}</Keycap>
+                    ))}
+                    {locked && <Icon name="lock" size={13} strokeWidth={2.6} />}
+                    <span>{locked ? `${hint.label} (locked)` : hint.label}</span>
+                  </li>
+                );
+              })}
             </ul>
           )}
           <div className="cl-dock" role="toolbar" aria-label="Actions">
             {onCamera && <DockButton icon="camera" label={cameraMode === "chase" ? "Chase cam" : "Orbit cam"} onClick={onCamera} />}
             {onExplore && <DockButton icon="eye" label="Explore" pressed={exploreOpen} onClick={onExplore} disabled={!exploreAvailable} hint="Set up Tinker's eyes in Settings" tone="bp" />}
-            {onJump && <DockButton icon="jump" label="Jump" keyHint="Space" onClick={onJump} disabled={!canJump} hint={jumpHint} tone="sun" />}
+            {onJump && <DockButton icon="jump" label="Jump" keyHint={pad ? null : "Space"} padHint={pad ? "A" : null} onClick={onJump} onBlocked={onJumpBlocked} disabled={!canJump} hint={jumpHint} tone="sun" showReason />}
           </div>
         </>
       )}

@@ -204,6 +204,11 @@ export function TouchControls({ variant = "stick", onCommand, disabled = false, 
             <span>Jump</span>
           </button>
         )}
+        {onJump && !canJump && jumpHint && (
+          <span className="cl-jumpbtn__why" aria-hidden="true">
+            {jumpHint}
+          </span>
+        )}
       </div>
     </div>
   );

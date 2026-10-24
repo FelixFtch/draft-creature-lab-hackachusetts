@@ -66,7 +66,9 @@ function ball(at, radius, material) {
 
 /** Toy creature from design + look, standing on y = 0, facing +x. */
 export function buildCreature(design, look) {
-  const shape = normalizeShape(design);
+  const parsed = normalizeShape(design);
+  // Harness only: the fake stage has no wheel-leg / humanoid model yet.
+  const shape = parsed.plan === "wheeled" || parsed.plan === "humanoid" ? normalizeShape("cheetah") : parsed;
   const lk = lookForGlyph(look);
   const p = lk.palette;
   const gloss = lk.finish === "gloss" ? 0.25 : lk.finish === "metal" ? 0.3 : 0.55;

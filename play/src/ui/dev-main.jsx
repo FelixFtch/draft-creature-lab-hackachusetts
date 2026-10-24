@@ -38,6 +38,8 @@ import {
   IconButton,
   Icon,
   useLayoutSize,
+  RobotRoster,
+  TerrainLab,
 } from "./index.js";
 import { Kit } from "./dev-kit.jsx";
 
@@ -79,6 +81,9 @@ export const SCENARIOS = {
   "pg-stickers": { ...base, label: "Playground: sticker book", mode: "playground", training: T.ready, look: M.lookById("ladybug"), modal: "stickers" },
   "pg-pop": { ...base, label: "Playground: new sticker", mode: "playground", training: T.ready, look: M.lookById("ladybug"), pop: true },
   "pg-locked": { ...base, label: "Playground: jump locked, fall", mode: "playground", training: { walk: T.ready.walk, jump: { state: "untrained" } }, look: M.lookById("frog"), fall: true },
+  "pg-gamepad": { ...base, label: "Playground: gamepad, jump locked (Octo)", mode: "playground", design: M.ROSTER[2].design, look: M.ROSTER[2].look, training: { walk: T.ready.walk, jump: { state: "failed" } }, gamepad: M.GAMEPAD_ID, jumpHint: "Octo has no verified jump: its jump didn't pass checks" },
+  roster: { ...base, label: "Robot roster", mode: "playground", training: T.ready, look: M.lookById("ladybug"), modal: "roster" },
+  "terrain-lab": { ...base, label: "Terrain Lab", mode: "playground", training: T.ready, look: M.lookById("ladybug"), modal: "terrain" },
   kit: { label: "Kit: identity and primitives", kit: true },
 };
 
@@ -119,6 +124,7 @@ function Harness({ id }) {
   const [motion, setMotion] = useState("auto");
   const [controls, setControls] = useState("stick");
   const [activeChallenge, setActiveChallenge] = useState("ramp-run");
+  const [robotId, setRobotId] = useState("rollo");
   const { toasts, push, dismiss } = useToasts();
   const design = sc.design;
   const stageRef = useFakeStage(mode, design, look);
@@ -282,6 +288,12 @@ function Harness({ id }) {
           <Modal open={modal === "stickers"} onClose={() => setModal(null)} title="Sticker book" icon="sticker" size="lg" placement={phone ? "bottom" : "center"}>
             <StickerBook stickers={M.STICKERS} newId="spark-hunt" />
           </Modal>
+          <Modal open={modal === "roster"} onClose={() => setModal(null)} title="Pick a robot" icon="gamepad" description="Four real Draft bodies. Badges show only what passed its checks." size="xl" placement={phone ? "bottom" : "center"}>
+            <RobotRoster robots={M.ROSTER} selectedId={robotId} onSelect={setRobotId} trials={M.TERRAIN_TRIALS} onOpenTerrain={() => setModal("terrain")} />
+          </Modal>
+          <Modal open={modal === "terrain"} onClose={() => setModal(null)} title="Terrain Lab" icon="terrain-step" description="How each robot's structure meets the terrain" size="xl" placement={phone ? "bottom" : "center"}>
+            <TerrainLab robots={M.ROSTER} trials={M.TERRAIN_TRIALS} initial={{ robotId: "octo", laneId: "gap-35" }} onTryLane={() => setModal(null)} />
+          </Modal>
         </>
       }
     >
@@ -326,6 +338,9 @@ function Harness({ id }) {
           snapshot={{ ...M.PLAY_SNAPSHOT, robot: { ...M.PLAY_SNAPSHOT.robot, fall: !!sc.fall }, challenge: { ...M.PLAY_SNAPSHOT.challenge } }}
           onJump={() => {}}
           canJump={jump === "ready"}
+          jumpHint={sc.jumpHint}
+          gamepad={sc.gamepad}
+          onJumpBlocked={hint => push({ tone: "info", title: "Jump is locked", text: hint })}
           onExplore={() => setExploreOpen(o => !o)}
           exploreOpen={exploreOpen}
           explorePanel={
