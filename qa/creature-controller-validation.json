@@ -1,15 +1,22 @@
 {
- "createdAt": "2026-10-24T20:13:21.888Z",
+ "createdAt": "2026-10-24T20:37:20.608Z",
  "pass": true,
  "scope": "Node CPU: production creature-controller.js with MuJoCo WASM 3.11.0 and ONNX Runtime Web WASM; not a live-browser test",
- "controllerSha256": "3ba89c0346c60ff8d62d23dbbd279105711f09b781d9298f9bf21551e95c8a23",
+ "controllerSha256": "bb6860d969ec460b6b2c33e16c22d88d33d46562d529e70c6dd2204e92d077ec",
  "bundle": "training/dev-bundles/cheetah/policies/walk",
- "jumpBundle": null,
+ "jumpBundle": "training/dev-bundles/cheetah/policies/jump",
  "hashes": {
   "walk": {
    "sceneSha256": "f1d4189fdce901af0202409b1864d3934e5008cce63a7247167831b0cdc6ee73",
    "policySha256": "ccc9222948556af933f4dfda364f215fe70911f177dcc6598aacb4a13ce5561e",
-   "evalSha256": "3865016738e489a16a7802056060faf680825e13bab3809bcf5545a1b65a6d66",
+   "evalSha256": "0c3be74bb5690edd0248ad1c7c0122a64f09a538e27c804dcbbc2c679157b5ff",
+   "evalPass": true,
+   "verifiedByController": true
+  },
+  "jump": {
+   "sceneSha256": "f1d4189fdce901af0202409b1864d3934e5008cce63a7247167831b0cdc6ee73",
+   "policySha256": "1c082603430803f45810b7aaec7b11718623fda4eddb4e5f2a03f36868d76df9",
+   "evalSha256": "7a2ee67ba31e48a16dac2b1baf200dff6c3cf81e4e2fd94f53e4c8abad4aaf6f",
    "evalPass": true,
    "verifiedByController": true
   }
@@ -1713,7 +1720,962 @@
     ]
    }
   ],
-  "jump": []
+  "jump": [
+   {
+    "k": 0,
+    "modeUsed": "walk",
+    "pass": true,
+    "comparisons": [
+     {
+      "label": "obs",
+      "maxAbs": 0,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "action",
+      "maxAbs": 8.940696716308594e-8,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "ctrl",
+      "maxAbs": 1.564621932015342e-8,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "qposAfter",
+      "maxAbs": 3.4677480886813328e-9,
+      "tolerance": 0.000001,
+      "pass": true
+     },
+     {
+      "label": "qvelAfter",
+      "maxAbs": 2.1676443137663703e-7,
+      "tolerance": 0.0001,
+      "pass": true
+     },
+     {
+      "label": "phaseAfter",
+      "maxAbs": 0,
+      "tolerance": 1e-12,
+      "pass": true
+     },
+     {
+      "label": "lastActionAfter",
+      "maxAbs": 8.940696716308594e-8,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "modeAfter",
+      "pass": true
+     }
+    ]
+   },
+   {
+    "k": 1,
+    "modeUsed": "walk",
+    "pass": true,
+    "comparisons": [
+     {
+      "label": "obs",
+      "maxAbs": 0,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "action",
+      "maxAbs": 1.7881393432617188e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "ctrl",
+      "maxAbs": 3.129243852928454e-8,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "qposAfter",
+      "maxAbs": 5.856535589821021e-9,
+      "tolerance": 0.000001,
+      "pass": true
+     },
+     {
+      "label": "qvelAfter",
+      "maxAbs": 2.4407231946632635e-7,
+      "tolerance": 0.0001,
+      "pass": true
+     },
+     {
+      "label": "phaseAfter",
+      "maxAbs": 0,
+      "tolerance": 1e-12,
+      "pass": true
+     },
+     {
+      "label": "lastActionAfter",
+      "maxAbs": 1.7881393432617188e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "modeAfter",
+      "pass": true
+     }
+    ]
+   },
+   {
+    "k": 2,
+    "modeUsed": "walk",
+    "pass": true,
+    "comparisons": [
+     {
+      "label": "obs",
+      "maxAbs": 0,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "action",
+      "maxAbs": 9.685754776000977e-8,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "ctrl",
+      "maxAbs": 1.6950070791388328e-8,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "qposAfter",
+      "maxAbs": 9.934590927684894e-10,
+      "tolerance": 0.000001,
+      "pass": true
+     },
+     {
+      "label": "qvelAfter",
+      "maxAbs": 7.762180431747367e-8,
+      "tolerance": 0.0001,
+      "pass": true
+     },
+     {
+      "label": "phaseAfter",
+      "maxAbs": 0,
+      "tolerance": 1e-12,
+      "pass": true
+     },
+     {
+      "label": "lastActionAfter",
+      "maxAbs": 9.685754776000977e-8,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "modeAfter",
+      "pass": true
+     }
+    ]
+   },
+   {
+    "k": 3,
+    "modeUsed": "walk",
+    "pass": true,
+    "comparisons": [
+     {
+      "label": "obs",
+      "maxAbs": 0,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "action",
+      "maxAbs": 1.1920928955078125e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "ctrl",
+      "maxAbs": 2.086162566999894e-8,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "qposAfter",
+      "maxAbs": 6.523179774120536e-10,
+      "tolerance": 0.000001,
+      "pass": true
+     },
+     {
+      "label": "qvelAfter",
+      "maxAbs": 5.061912333736984e-8,
+      "tolerance": 0.0001,
+      "pass": true
+     },
+     {
+      "label": "phaseAfter",
+      "maxAbs": 0,
+      "tolerance": 1e-12,
+      "pass": true
+     },
+     {
+      "label": "lastActionAfter",
+      "maxAbs": 1.1920928955078125e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "modeAfter",
+      "pass": true
+     }
+    ]
+   },
+   {
+    "k": 4,
+    "modeUsed": "jump",
+    "pass": true,
+    "comparisons": [
+     {
+      "label": "obs",
+      "maxAbs": 0,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "action",
+      "maxAbs": 3.5762786865234375e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "ctrl",
+      "maxAbs": 1.0728836064011205e-7,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "qposAfter",
+      "maxAbs": 2.1813638007017744e-8,
+      "tolerance": 0.000001,
+      "pass": true
+     },
+     {
+      "label": "qvelAfter",
+      "maxAbs": 0.0000014075425860404778,
+      "tolerance": 0.0001,
+      "pass": true
+     },
+     {
+      "label": "phaseAfter",
+      "maxAbs": 0,
+      "tolerance": 1e-12,
+      "pass": true
+     },
+     {
+      "label": "lastActionAfter",
+      "maxAbs": 3.5762786865234375e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "modeAfter",
+      "pass": true
+     }
+    ]
+   },
+   {
+    "k": 5,
+    "modeUsed": "jump",
+    "pass": true,
+    "comparisons": [
+     {
+      "label": "obs",
+      "maxAbs": 0,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "action",
+      "maxAbs": 2.980232238769531e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "ctrl",
+      "maxAbs": 8.940696716308594e-8,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "qposAfter",
+      "maxAbs": 1.9365530068427006e-8,
+      "tolerance": 0.000001,
+      "pass": true
+     },
+     {
+      "label": "qvelAfter",
+      "maxAbs": 0.0000011626331710701265,
+      "tolerance": 0.0001,
+      "pass": true
+     },
+     {
+      "label": "phaseAfter",
+      "maxAbs": 0,
+      "tolerance": 1e-12,
+      "pass": true
+     },
+     {
+      "label": "lastActionAfter",
+      "maxAbs": 2.980232238769531e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "modeAfter",
+      "pass": true
+     }
+    ]
+   },
+   {
+    "k": 6,
+    "modeUsed": "jump",
+    "pass": true,
+    "comparisons": [
+     {
+      "label": "obs",
+      "maxAbs": 0,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "action",
+      "maxAbs": 2.2351741790771484e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "ctrl",
+      "maxAbs": 6.705522537231445e-8,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "qposAfter",
+      "maxAbs": 1.0209403072947154e-8,
+      "tolerance": 0.000001,
+      "pass": true
+     },
+     {
+      "label": "qvelAfter",
+      "maxAbs": 6.752721033453923e-7,
+      "tolerance": 0.0001,
+      "pass": true
+     },
+     {
+      "label": "phaseAfter",
+      "maxAbs": 0,
+      "tolerance": 1e-12,
+      "pass": true
+     },
+     {
+      "label": "lastActionAfter",
+      "maxAbs": 2.2351741790771484e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "modeAfter",
+      "pass": true
+     }
+    ]
+   },
+   {
+    "k": 7,
+    "modeUsed": "jump",
+    "pass": true,
+    "comparisons": [
+     {
+      "label": "obs",
+      "maxAbs": 0,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "action",
+      "maxAbs": 5.364418029785156e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "ctrl",
+      "maxAbs": 1.6093254096016807e-7,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "qposAfter",
+      "maxAbs": 3.051759611683025e-8,
+      "tolerance": 0.000001,
+      "pass": true
+     },
+     {
+      "label": "qvelAfter",
+      "maxAbs": 0.0000017892696417831644,
+      "tolerance": 0.0001,
+      "pass": true
+     },
+     {
+      "label": "phaseAfter",
+      "maxAbs": 0,
+      "tolerance": 1e-12,
+      "pass": true
+     },
+     {
+      "label": "lastActionAfter",
+      "maxAbs": 5.364418029785156e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "modeAfter",
+      "pass": true
+     }
+    ]
+   },
+   {
+    "k": 8,
+    "modeUsed": "jump",
+    "pass": true,
+    "comparisons": [
+     {
+      "label": "obs",
+      "maxAbs": 0,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "action",
+      "maxAbs": 2.384185791015625e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "ctrl",
+      "maxAbs": 7.152557374157098e-8,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "qposAfter",
+      "maxAbs": 9.583143389946258e-9,
+      "tolerance": 0.000001,
+      "pass": true
+     },
+     {
+      "label": "qvelAfter",
+      "maxAbs": 3.4329077092110083e-7,
+      "tolerance": 0.0001,
+      "pass": true
+     },
+     {
+      "label": "phaseAfter",
+      "maxAbs": 0,
+      "tolerance": 1e-12,
+      "pass": true
+     },
+     {
+      "label": "lastActionAfter",
+      "maxAbs": 2.384185791015625e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "modeAfter",
+      "pass": true
+     }
+    ]
+   },
+   {
+    "k": 9,
+    "modeUsed": "jump",
+    "pass": true,
+    "comparisons": [
+     {
+      "label": "obs",
+      "maxAbs": 0,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "action",
+      "maxAbs": 1.7881393432617188e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "ctrl",
+      "maxAbs": 5.364418020903372e-8,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "qposAfter",
+      "maxAbs": 9.193376171445777e-9,
+      "tolerance": 0.000001,
+      "pass": true
+     },
+     {
+      "label": "qvelAfter",
+      "maxAbs": 5.550873141135781e-7,
+      "tolerance": 0.0001,
+      "pass": true
+     },
+     {
+      "label": "phaseAfter",
+      "maxAbs": 0,
+      "tolerance": 1e-12,
+      "pass": true
+     },
+     {
+      "label": "lastActionAfter",
+      "maxAbs": 1.7881393432617188e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "modeAfter",
+      "pass": true
+     }
+    ]
+   },
+   {
+    "k": 73,
+    "modeUsed": "jump",
+    "pass": true,
+    "comparisons": [
+     {
+      "label": "obs",
+      "maxAbs": 0,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "action",
+      "maxAbs": 1.1920928955078125e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "ctrl",
+      "maxAbs": 3.5762786898541066e-8,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "qposAfter",
+      "maxAbs": 1.3289729317023102e-9,
+      "tolerance": 0.000001,
+      "pass": true
+     },
+     {
+      "label": "qvelAfter",
+      "maxAbs": 1.0119325764834652e-7,
+      "tolerance": 0.0001,
+      "pass": true
+     },
+     {
+      "label": "phaseAfter",
+      "maxAbs": 0,
+      "tolerance": 1e-12,
+      "pass": true
+     },
+     {
+      "label": "lastActionAfter",
+      "maxAbs": 1.1920928955078125e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "modeAfter",
+      "pass": true
+     }
+    ]
+   },
+   {
+    "k": 74,
+    "modeUsed": "jump",
+    "pass": true,
+    "comparisons": [
+     {
+      "label": "obs",
+      "maxAbs": 0,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "action",
+      "maxAbs": 1.7136335372924805e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "ctrl",
+      "maxAbs": 5.1409006107672184e-8,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "qposAfter",
+      "maxAbs": 2.094662887586196e-9,
+      "tolerance": 0.000001,
+      "pass": true
+     },
+     {
+      "label": "qvelAfter",
+      "maxAbs": 1.642971696053097e-7,
+      "tolerance": 0.0001,
+      "pass": true
+     },
+     {
+      "label": "phaseAfter",
+      "maxAbs": 0,
+      "tolerance": 1e-12,
+      "pass": true
+     },
+     {
+      "label": "lastActionAfter",
+      "maxAbs": 1.7136335372924805e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "modeAfter",
+      "pass": true
+     }
+    ]
+   },
+   {
+    "k": 75,
+    "modeUsed": "jump",
+    "pass": true,
+    "comparisons": [
+     {
+      "label": "obs",
+      "maxAbs": 0,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "action",
+      "maxAbs": 1.6391277313232422e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "ctrl",
+      "maxAbs": 4.917383200631065e-8,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "qposAfter",
+      "maxAbs": 4.914533002775556e-9,
+      "tolerance": 0.000001,
+      "pass": true
+     },
+     {
+      "label": "qvelAfter",
+      "maxAbs": 3.826042673515939e-7,
+      "tolerance": 0.0001,
+      "pass": true
+     },
+     {
+      "label": "phaseAfter",
+      "maxAbs": 0,
+      "tolerance": 1e-12,
+      "pass": true
+     },
+     {
+      "label": "lastActionAfter",
+      "maxAbs": 1.6391277313232422e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "modeAfter",
+      "pass": true
+     }
+    ]
+   },
+   {
+    "k": 76,
+    "modeUsed": "jump",
+    "pass": true,
+    "comparisons": [
+     {
+      "label": "obs",
+      "maxAbs": 0,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "action",
+      "maxAbs": 1.341104507446289e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "ctrl",
+      "maxAbs": 4.023313515677529e-8,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "qposAfter",
+      "maxAbs": 2.3152715300511773e-9,
+      "tolerance": 0.000001,
+      "pass": true
+     },
+     {
+      "label": "qvelAfter",
+      "maxAbs": 1.942594795856234e-7,
+      "tolerance": 0.0001,
+      "pass": true
+     },
+     {
+      "label": "phaseAfter",
+      "maxAbs": 0,
+      "tolerance": 1e-12,
+      "pass": true
+     },
+     {
+      "label": "lastActionAfter",
+      "maxAbs": 2.384185791015625e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "modeAfter",
+      "pass": true
+     }
+    ]
+   },
+   {
+    "k": 77,
+    "modeUsed": "walk",
+    "pass": true,
+    "comparisons": [
+     {
+      "label": "obs",
+      "maxAbs": 0,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "action",
+      "maxAbs": 1.9371509552001953e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "ctrl",
+      "maxAbs": 3.390014169379896e-8,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "qposAfter",
+      "maxAbs": 5.322150498088263e-10,
+      "tolerance": 0.000001,
+      "pass": true
+     },
+     {
+      "label": "qvelAfter",
+      "maxAbs": 3.569340620290795e-8,
+      "tolerance": 0.0001,
+      "pass": true
+     },
+     {
+      "label": "phaseAfter",
+      "maxAbs": 0,
+      "tolerance": 1e-12,
+      "pass": true
+     },
+     {
+      "label": "lastActionAfter",
+      "maxAbs": 1.9371509552001953e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "modeAfter",
+      "pass": true
+     }
+    ]
+   },
+   {
+    "k": 78,
+    "modeUsed": "walk",
+    "pass": true,
+    "comparisons": [
+     {
+      "label": "obs",
+      "maxAbs": 0,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "action",
+      "maxAbs": 6.332993507385254e-8,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "ctrl",
+      "maxAbs": 1.1082738637403777e-8,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "qposAfter",
+      "maxAbs": 1.1155703028009611e-9,
+      "tolerance": 0.000001,
+      "pass": true
+     },
+     {
+      "label": "qvelAfter",
+      "maxAbs": 8.182135102785537e-8,
+      "tolerance": 0.0001,
+      "pass": true
+     },
+     {
+      "label": "phaseAfter",
+      "maxAbs": 0,
+      "tolerance": 1e-12,
+      "pass": true
+     },
+     {
+      "label": "lastActionAfter",
+      "maxAbs": 6.332993507385254e-8,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "modeAfter",
+      "pass": true
+     }
+    ]
+   },
+   {
+    "k": 79,
+    "modeUsed": "walk",
+    "pass": true,
+    "comparisons": [
+     {
+      "label": "obs",
+      "maxAbs": 0,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "action",
+      "maxAbs": 1.7881393432617188e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "ctrl",
+      "maxAbs": 3.129243847377339e-8,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "qposAfter",
+      "maxAbs": 2.7877364860984244e-9,
+      "tolerance": 0.000001,
+      "pass": true
+     },
+     {
+      "label": "qvelAfter",
+      "maxAbs": 2.0803425485049765e-7,
+      "tolerance": 0.0001,
+      "pass": true
+     },
+     {
+      "label": "phaseAfter",
+      "maxAbs": 0,
+      "tolerance": 1e-12,
+      "pass": true
+     },
+     {
+      "label": "lastActionAfter",
+      "maxAbs": 1.7881393432617188e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "modeAfter",
+      "pass": true
+     }
+    ]
+   },
+   {
+    "k": 80,
+    "modeUsed": "walk",
+    "pass": true,
+    "comparisons": [
+     {
+      "label": "obs",
+      "maxAbs": 0,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "action",
+      "maxAbs": 1.7881393432617188e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "ctrl",
+      "maxAbs": 3.129243852928454e-8,
+      "tolerance": 0.00001,
+      "pass": true
+     },
+     {
+      "label": "qposAfter",
+      "maxAbs": 1.7388414041974443e-9,
+      "tolerance": 0.000001,
+      "pass": true
+     },
+     {
+      "label": "qvelAfter",
+      "maxAbs": 1.1550568491253133e-7,
+      "tolerance": 0.0001,
+      "pass": true
+     },
+     {
+      "label": "phaseAfter",
+      "maxAbs": 0,
+      "tolerance": 1e-12,
+      "pass": true
+     },
+     {
+      "label": "lastActionAfter",
+      "maxAbs": 1.7881393432617188e-7,
+      "tolerance": 0.00005,
+      "pass": true
+     },
+     {
+      "label": "modeAfter",
+      "pass": true
+     }
+    ]
+   }
+  ]
  },
  "closedLoop": {
   "walk": [
@@ -1962,7 +2924,111 @@
     "skipped": "terrain rows need the training height field (Python-only)"
    }
   ],
-  "jump": []
+  "jump": [
+   {
+    "name": "jump_from_stand",
+    "pythonPass": true,
+    "fallPython": false,
+    "fallJs": false,
+    "complete": true,
+    "error": null,
+    "jumps": [
+     {
+      "apexGainM": 0.09749074309252198,
+      "airborneS": 0.2,
+      "python": {
+       "t": 1.5,
+       "executed": true,
+       "apexGainM": 0.0975,
+       "airborneS": 0.2,
+       "maxTiltRad": 0.0205,
+       "handoffSteps": 50,
+       "pass": true
+      },
+      "agree": true
+     }
+    ],
+    "pass": true
+   },
+   {
+    "name": "jump_from_walk",
+    "pythonPass": true,
+    "fallPython": false,
+    "fallJs": false,
+    "complete": true,
+    "error": null,
+    "jumps": [
+     {
+      "apexGainM": 0.08407961261149077,
+      "airborneS": 0.2,
+      "python": {
+       "t": 2,
+       "executed": true,
+       "apexGainM": 0.0841,
+       "airborneS": 0.2,
+       "maxTiltRad": 0.0318,
+       "handoffSteps": 50,
+       "pass": true
+      },
+      "agree": true
+     }
+    ],
+    "pass": true
+   },
+   {
+    "name": "jump_repeat",
+    "pythonPass": true,
+    "fallPython": false,
+    "fallJs": false,
+    "complete": true,
+    "error": null,
+    "jumps": [
+     {
+      "apexGainM": 0.08313770100696094,
+      "airborneS": 0.2,
+      "python": {
+       "t": 1.5,
+       "executed": true,
+       "apexGainM": 0.0831,
+       "airborneS": 0.2,
+       "maxTiltRad": 0.0288,
+       "handoffSteps": 50,
+       "pass": true
+      },
+      "agree": true
+     },
+     {
+      "apexGainM": 0.08131875644027281,
+      "airborneS": 0.2,
+      "python": {
+       "t": 4.46,
+       "executed": true,
+       "apexGainM": 0.0813,
+       "airborneS": 0.2,
+       "maxTiltRad": 0.0363,
+       "handoffSteps": 50,
+       "pass": true
+      },
+      "agree": true
+     },
+     {
+      "apexGainM": 0.08139646715501014,
+      "airborneS": 0.2,
+      "python": {
+       "t": 7.42,
+       "executed": true,
+       "apexGainM": 0.0814,
+       "airborneS": 0.2,
+       "maxTiltRad": 0.0503,
+       "handoffSteps": 50,
+       "pass": true
+      },
+      "agree": true
+     }
+    ],
+    "pass": true
+   }
+  ]
  },
  "lifecycle": {
   "reset": {
@@ -2018,6 +3084,14 @@
    "headingAfterSpawn": 0.6842324574521123,
    "pass": true
   },
+  "staleJumpRefused": {
+   "skills": [
+    "walk"
+   ],
+   "jumpError": "Jump handoff was validated with a different walk policy",
+   "mode": "walk",
+   "pass": true
+  },
   "pilot": {
    "meta": {
     "bodyId": "quadruped-329a735927fa8b37",
@@ -2059,7 +3133,8 @@
      ]
     },
     "skills": [
-     "walk"
+     "walk",
+     "jump"
     ],
     "jumpError": null,
     "floorGeom": "cg_floor",
@@ -2067,17 +3142,24 @@
     "honesty": "PPO velocity-tracking policy trained on CPU for this exact body (Cheetah (dev), quadruped-329a735927fa8b37); simulated position servos (Draft PD rule, torque-limited, no DC-motor speed droop); flat ground plus small smooth bump patches during training. Not validated on hardware, stairs, steep ramps or slippery ice.",
     "evaluation": {
      "walk": true,
-     "jump": null
+     "jump": true
     }
    },
-   "steps": 25,
+   "steps": 26,
    "fall": false,
-   "jumpEngaged": null,
+   "jumpEngaged": true,
    "pass": true
   }
  },
  "tolerances": {
   "walk": {
+   "obs": 0.00001,
+   "action": 0.00005,
+   "ctrl": 0.00001,
+   "qposAfter": 0.000001,
+   "qvelAfter": 0.0001
+  },
+  "jump": {
    "obs": 0.00001,
    "action": 0.00005,
    "ctrl": 0.00001,
