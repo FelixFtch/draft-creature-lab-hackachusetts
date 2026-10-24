@@ -1,0 +1,9 @@
+{
+  "comment": "Copy to ai-service/config.json (git-ignored), or run scripts/setup-local-ai.sh on a Mac to write it for you. Never put API keys here: export DASHSCOPE_API_KEY / ZHIPUAI_API_KEY / GEMINI_API_KEY / OPENAI_API_KEY / OPENROUTER_API_KEY or put them in the git-ignored ai-service/.env.local. Providers: ollama, lmstudio, dashscope, dashscope-cn, dashscope-us, zhipu, zhipu-cn, gemini, openai, openrouter, custom. See ai-service/README.md.",
+  "port": 18383,
+  "allowed_origins": ["http://127.0.0.1:18381", "http://localhost:18381"],
+  "roles": {
+    "brain": {"provider": "ollama", "model": "qwen3.5:4b", "reasoning_effort": "none"},
+    "eyes": {"provider": "ollama", "model": "qwen3.5:4b", "reasoning_effort": "none"}
+  }
+}

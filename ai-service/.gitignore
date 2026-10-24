@@ -1,0 +1,6 @@
+# Local AI configuration and secrets never leave this computer.
+config.json
+config.json.*.bak
+.env
+.env.local
+__pycache__/
