@@ -1,0 +1,28 @@
+{
+  "note": "Bodies committed under creatures/<bodyId>/. Regenerate with: python draft-service/designs.py build-showcase. The first four are the legacy presets at original size (byte-identical to /api/generate); the rest are showcase designs.",
+  "designs": [
+    {"schema": "creature-design/1", "name": "Cheetah", "concept": "Draft's light, fast QDD quadruped preset.",
+     "bodyPlan": "quadruped", "basePreset": "cheetah", "skills": ["walk", "jump"]},
+    {"schema": "creature-design/1", "name": "Bear", "concept": "Draft's heavy quadruped preset with planetary geared actuators.",
+     "bodyPlan": "quadruped", "basePreset": "bear", "skills": ["walk"]},
+    {"schema": "creature-design/1", "name": "Giraffe", "concept": "Draft's long-legged quadruped preset with harmonic actuators.",
+     "bodyPlan": "quadruped", "basePreset": "giraffe", "skills": ["walk"]},
+    {"schema": "creature-design/1", "name": "Flower crawler", "concept": "The lab's original six-legged radial Draft design.",
+     "bodyPlan": "multileg", "basePreset": "flower", "skills": ["walk"]},
+    {"schema": "creature-design/1", "name": "Hopper", "concept": "A compact, springy quadruped built to jump onto platforms.",
+     "bodyPlan": "quadruped",
+     "quadruped": {"torsoLength": 0.34, "torsoWidth": 0.18, "torsoHeight": 0.12, "shoulderWidth": 0.15,
+                   "hipOffset": 0.08, "upperLeg": 0.21, "lowerLeg": 0.21, "actuator": "qdd", "strength": 1.3},
+     "skills": ["walk", "jump"]},
+    {"schema": "creature-design/1", "name": "Octo", "concept": "An eight-legged radial spider that can walk in any direction.",
+     "bodyPlan": "multileg",
+     "multileg": {"legCount": 8, "arrangement": "radial", "bodyRadius": 0.16, "bodyAspect": 1.0, "coxa": 0.09,
+                  "upperLeg": 0.18, "lowerLeg": 0.24, "actuator": "micro"},
+     "skills": ["walk"]},
+    {"schema": "creature-design/1", "name": "Beetle", "concept": "A six-legged insect with an oval shell and a tripod gait.",
+     "bodyPlan": "multileg",
+     "multileg": {"legCount": 6, "arrangement": "bilateral", "bodyRadius": 0.12, "bodyAspect": 1.7, "coxa": 0.085,
+                  "upperLeg": 0.16, "lowerLeg": 0.2, "actuator": "micro", "strength": 1.2},
+     "skills": ["walk"]}
+  ]
+}

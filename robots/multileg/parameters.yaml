@@ -1,0 +1,125 @@
+# Multileg crawler template (Draft Creature Lab v2): 3-8 identical three-joint legs
+# (hip yaw, hip pitch, knee) around an elliptical hub, radial or bilateral.
+# Generalises robots/flower. draft-service/designs.py computes `legs`, the hip-yaw
+# range and the actuator class from a creature-design/1 DesignSpec and passes them as
+# overrides; the defaults below are a self-consistent six-leg radial crawler.
+#
+# Mass model: actuators are sized by Draft's fitted trends (mass, envelope, armature,
+# frontier gate). Structure follows the Flower: no measured population exists for
+# multileg robots, so link radii are stated as fractions of the actuator radius and
+# densities are stated engineering assumptions (Draft reports them as stated members).
+design_note: Multileg crawler; actuators trend-sized and gated by Draft, structural
+  densities are stated engineering assumptions (no multileg mass population).
+allow_hypothetical: false
+allow_motor_overlap: false
+allow_actuator_in_structure: false
+
+# Actuator class L drives every joint. Default: the micro family (Xiaomi CyberGear
+# MS01, 12 Nm, 25.13 rad/s, 7.75:1), drawn slimmer (L/D 0.6) like the Flower's class.
+L_motor: CyberGear MS01
+L_motor_mode: torque_speed
+L_motor_effort: 12.0
+L_motor_velocity: 25.13
+L_motor_gear: 7.75
+L_motor_aspect: 0.6
+L_motor_friction: 0.02
+L_motor_damping: 0.003
+hip_yaw_mot: L
+hip_pitch_mot: L
+knee_mot: L
+
+# Joint ranges (rad). Positive hip pitch and knee fold the outward leg downwards.
+# The hip-yaw half range shrinks with leg density (designs.py) so neighbouring legs
+# cannot be commanded through each other.
+hip_yaw_range:
+- -0.6
+- 0.6
+hip_pitch_range:
+- -0.65
+- 0.8
+knee_range:
+- 0.35
+- 2.1
+
+# Hub: an ellipse with semi-axes hub_a (forward) and hub_b (sideways).
+body_radius: 0.15
+body_aspect: 1.0
+hub_a: ${body_radius * body_aspect}
+hub_b: ${body_radius}
+# Flower proportions (0.66 x radius) for small hubs; large hubs stay flat instead of
+# turning into heavy drums the leg actuators cannot lift.
+hub_thickness: ${min(0.66 * body_radius, 0.11)}
+# Mount bodies start this far outside the hub wall, along its outward normal.
+mount_gap: 0.002
+# The hip-yaw actuator sits at the tip of the mount link; its face clears the hub
+# wall by mount_clearance.
+mount_clearance: 0.008
+mount_link_length: ${L_motor_r + mount_clearance}
+coxa_length: 0.09
+upper_leg_length: 0.18
+lower_leg_length: 0.22
+foot_sphere_r: ${max(0.015, min(0.035, 0.11 * lower_leg_length))}
+
+# Stated structure (Flower values): densities [kg/m^3], radii as fractions of the
+# actuator radius so members stay proportional to the motors they join.
+link_rho: 750.0
+torso_rho: 500.0
+foot_rho: 500.0
+mount_link_r: ${0.43 * L_motor_r}
+coxa_link_r: ${0.37 * L_motor_r}
+upper_leg_r: ${0.40 * L_motor_r}
+lower_leg_r: ${0.32 * L_motor_r}
+
+link_color: 0.25 0.56 0.44 1
+motor_color: 0.22 0.29 0.29 1
+mot_detail_color: 0.79 0.58 0.30 1
+torso_color: 0.84 0.40 0.48 1
+foot_color: 0.25 0.31 0.30 1
+geom_friction: 0.8 0.005 0.0001
+
+# Leg layout in units of the hub: (ux, uy) is the wall point scaled by (hub_a, hub_b),
+# (nx, ny) the outward normal there and yaw its angle. Legs are ordered
+# counter-clockwise from +X. Default: six radial legs on a round hub.
+legs:
+- index: 0
+  name: leg0
+  ux: 1.0
+  uy: 0.0
+  nx: 1.0
+  ny: 0.0
+  yaw: 0.0
+- index: 1
+  name: leg1
+  ux: 0.5
+  uy: 0.866025403784
+  nx: 0.5
+  ny: 0.866025403784
+  yaw: 1.047197551197
+- index: 2
+  name: leg2
+  ux: -0.5
+  uy: 0.866025403784
+  nx: -0.5
+  ny: 0.866025403784
+  yaw: 2.094395102393
+- index: 3
+  name: leg3
+  ux: -1.0
+  uy: 0.0
+  nx: -1.0
+  ny: 0.0
+  yaw: 3.141592653590
+- index: 4
+  name: leg4
+  ux: -0.5
+  uy: -0.866025403784
+  nx: -0.5
+  ny: -0.866025403784
+  yaw: -2.094395102393
+- index: 5
+  name: leg5
+  ux: 0.5
+  uy: -0.866025403784
+  nx: 0.5
+  ny: -0.866025403784
+  yaw: -1.047197551197

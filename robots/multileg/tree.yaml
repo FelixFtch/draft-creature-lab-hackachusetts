@@ -1,0 +1,120 @@
+# Multileg kinematic tree: one for_each over `legs`, every leg an independent
+# three-hinge branch (Flower topology):
+#   <leg>_mount (fixed, carries the hip-yaw actuator at the end of a short radial link)
+#   -> <leg>_yaw_link (hip_yaw, axis z; coxa carries the hip-pitch actuator)
+#   -> <leg>_upper_leg_link (hip_pitch, axis y; thigh carries the knee actuator)
+#   -> <leg>_lower_leg_link (knee, axis y; shank ends in the foot sphere + foot site)
+# Each mount is placed on the hub wall and yawed onto its outward normal, so every
+# leg's local +X points away from the body and positive pitch folds it downwards.
+name: torso_link
+type: root
+color: ${torso_color}
+pos:
+- 0
+- 0
+- ${upper_leg_length + lower_leg_length + foot_sphere_r + 0.05}
+sites:
+- name: imu
+  pos:
+  - 0
+  - 0
+  - 0
+sensors:
+- type: gyro
+  name: imu_ang_vel
+  site: imu
+- type: velocimeter
+  name: imu_lin_vel
+  site: imu
+- type: accelerometer
+  name: imu_lin_acc
+  site: imu
+children:
+- for_each: ${legs}
+  as: leg
+  node:
+    name: ${leg.name}_mount
+    type: basic
+    pos:
+    - ${hub_a * leg.ux + mount_gap * leg.nx}
+    - ${hub_b * leg.uy + mount_gap * leg.ny}
+    - 0
+    euler:
+    - 0
+    - 0
+    - ${leg.yaw}
+    geometry:
+      link_axis: x
+      link_l: ${mount_link_length}
+      link_r: ${mount_link_r}
+      motor_axis: z
+      motor_class: ${hip_yaw_mot}
+      motor_for: hip_yaw
+    children:
+    - name: ${leg.name}_yaw_link
+      type: basic
+      pos:
+      - ${mount_link_length}
+      - 0
+      - 0
+      joint:
+        name: ${leg.name}_hip_yaw
+        axis: z
+        range: ${hip_yaw_range}
+        motor_class: ${hip_yaw_mot}
+      geometry:
+        link_axis: x
+        link_l: ${coxa_length}
+        link_r: ${coxa_link_r}
+        motor_axis: y
+        motor_class: ${hip_pitch_mot}
+        motor_for: hip_pitch
+      children:
+      - name: ${leg.name}_upper_leg_link
+        type: basic
+        pos:
+        - ${coxa_length}
+        - 0
+        - 0
+        joint:
+          name: ${leg.name}_hip_pitch
+          axis: y
+          range: ${hip_pitch_range}
+          motor_class: ${hip_pitch_mot}
+        geometry:
+          link_axis: x
+          link_l: ${upper_leg_length}
+          link_r: ${upper_leg_r}
+          motor_axis: y
+          motor_class: ${knee_mot}
+          motor_for: knee
+        children:
+        - name: ${leg.name}_lower_leg_link
+          type: sphere
+          pos:
+          - ${upper_leg_length}
+          - 0
+          - 0
+          joint:
+            name: ${leg.name}_knee
+            axis: y
+            range: ${knee_range}
+            motor_class: ${knee_mot}
+          geometry:
+            link_axis: x
+            link_l: ${lower_leg_length}
+            link_r: ${lower_leg_r}
+            sphere_dir: 1
+            sphere_r: ${foot_sphere_r}
+            sphere_rho: ${foot_rho}
+            sphere_color: ${foot_color}
+            friction:
+            - 0.8
+            - 0.005
+            - 0.0001
+          sites:
+          - name: ${leg.name}_foot
+            pos:
+            - ${lower_leg_length}
+            - 0
+            - 0

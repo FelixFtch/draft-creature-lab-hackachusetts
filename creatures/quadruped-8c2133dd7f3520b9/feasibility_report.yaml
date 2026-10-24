@@ -1,0 +1,641 @@
+robot: quadruped
+actuator_checks:
+  classes:
+    L:
+      anchor: eRob110H-80
+      category: Harmonic
+      designed_from: torque_speed
+      gear_ratio: 80.0
+      gear_source: declared
+      effort_Nm: 332.0
+      velocity_rad_s: 3.93
+      mass_kg: 2.88
+      radius_m: 0.055
+      length_m: 0.1152
+      volume_cm3: 1094.78
+      aspect_LD: 1.0473
+      aspect_source: population_fit
+      density_kg_m3: 2630.66
+      rotor_inertia_kgm2: 0.00024846326
+      rotor_inertia_from: areal(k*r^4)
+      armature_kgm2: 1.590164866
+      torque_density_Nm_per_kg: 115.3
+      power_density_W_per_kg: 113.3
+      peak_power_W: 326.2
+      frontier_tau_max_Nm: 525.2
+      overridden_by_law: []
+    M:
+      anchor: eRob90H-80
+      category: Harmonic
+      designed_from: torque_speed
+      gear_ratio: 80.0
+      gear_source: declared
+      effort_Nm: 165.0
+      velocity_rad_s: 3.93
+      mass_kg: 1.75
+      radius_m: 0.045
+      length_m: 0.0989
+      volume_cm3: 629.17
+      aspect_LD: 1.0989
+      aspect_source: population_fit
+      density_kg_m3: 2781.42
+      rotor_inertia_kgm2: 0.00011134263
+      rotor_inertia_from: areal(k*r^4)
+      armature_kgm2: 0.712592834
+      torque_density_Nm_per_kg: 94.3
+      power_density_W_per_kg: 92.6
+      peak_power_W: 162.1
+      frontier_tau_max_Nm: 476.7
+      overridden_by_law: []
+    S:
+      anchor: eRob80H-80
+      category: Harmonic
+      designed_from: torque_speed
+      gear_ratio: 80.0
+      gear_source: declared
+      effort_Nm: 113.0
+      velocity_rad_s: 3.93
+      mass_kg: 1.19
+      radius_m: 0.04
+      length_m: 0.0842
+      volume_cm3: 423.24
+      aspect_LD: 1.0525
+      aspect_source: population_fit
+      density_kg_m3: 2811.67
+      rotor_inertia_kgm2: 6.9510656e-05
+      rotor_inertia_from: areal(k*r^4)
+      armature_kgm2: 0.444868198
+      torque_density_Nm_per_kg: 95.0
+      power_density_W_per_kg: 93.3
+      peak_power_W: 111.0
+      frontier_tau_max_Nm: 319.6
+      overridden_by_law: []
+  errors: []
+  warnings:
+  - "[L]: power density 113 W/kg is above the Harmonic p90 (96 W/kg) \u2014 best-in-class\
+    \ territory."
+  - "fl_pitch_link_link: to weigh its 0.686 kg share of the thigh trend inside the\
+    \ actuators it joins, the member's density is 4200 kg/m\xB3 against the class's\
+    \ 345"
+  - "fl_roll_link_link: to weigh its 0.292 kg share of the hip_link trend inside the\
+    \ actuators it joins, the member's density is 1982 kg/m\xB3 against the class's\
+    \ 676"
+  - "fr_pitch_link_link: to weigh its 0.686 kg share of the thigh trend inside the\
+    \ actuators it joins, the member's density is 4200 kg/m\xB3 against the class's\
+    \ 345"
+  - "fr_roll_link_link: to weigh its 0.292 kg share of the hip_link trend inside the\
+    \ actuators it joins, the member's density is 1982 kg/m\xB3 against the class's\
+    \ 676"
+  - "rl_pitch_link_link: to weigh its 0.686 kg share of the thigh trend inside the\
+    \ actuators it joins, the member's density is 4200 kg/m\xB3 against the class's\
+    \ 345"
+  - "rl_roll_link_link: to weigh its 0.292 kg share of the hip_link trend inside the\
+    \ actuators it joins, the member's density is 1982 kg/m\xB3 against the class's\
+    \ 676"
+  - "rr_pitch_link_link: to weigh its 0.686 kg share of the thigh trend inside the\
+    \ actuators it joins, the member's density is 4200 kg/m\xB3 against the class's\
+    \ 345"
+  - "rr_roll_link_link: to weigh its 0.292 kg share of the hip_link trend inside the\
+    \ actuators it joins, the member's density is 1982 kg/m\xB3 against the class's\
+    \ 676"
+segment_densities:
+  population: quadruped
+  derived:
+    thigh_rho:
+      segment: thigh
+      rho_kg_m3: 345.036
+      measured_p10_p90:
+      - 117.33902
+      - 828.38969
+      n: 60
+      source: quadruped thigh structural effective density (datasets/robot_descriptions)
+      declared: 370.7
+    shank_rho:
+      segment: shank
+      rho_kg_m3: 644.163
+      measured_p10_p90:
+      - 466.7091
+      - 1276.70581
+      n: 60
+      source: quadruped shank structural effective density (datasets/robot_descriptions)
+      declared: 637.1
+    torso_rho:
+      segment: pelvis
+      rho_kg_m3: 653.521
+      measured_p10_p90:
+      - 305.64318
+      - 1094.8703
+      n: 20
+      source: quadruped pelvis structural effective density (datasets/robot_descriptions)
+      declared: 200.0
+      volume_convention:
+        measured_rho_kg_m3: 653.52
+        mesh_volume_m3: 0.058956
+        inertia_box_volume_m3: 0.056564
+        shape_factor: 0.9594
+        applied_rho_kg_m3: 627.0
+        why: the measured density is mass / inertia-equivalent-box volume; the emitted
+          geom is charged on MESH volume, so the ratio is applied to keep the mass
+          the measurement implies
+  warnings: []
+actuator_mass_audit:
+  n_joints: 12
+  charged_by_motor_law_kg: 34.56
+  emitted_motor_geom_kg: 34.56
+  emitted_over_charged: 1.0
+actuator_packing:
+  n_actuator_geoms: 12
+  n_exempt: 4
+  n_overlapping_pairs: 0
+  n_neutral_pose_pairs: 0
+  worst_depth_m: 0.0
+  worst_neutral_pose_depth_m: 0.0
+  tolerance_m: 0.0005
+  tolerance_fraction: 0.02
+  pairs: []
+  neutral_pose_pairs: []
+actuator_in_structure:
+  mesh_volume_cm3: 58956.5
+  inside_cm3: 0.0
+  double_charged_kg: 0.0
+  actuators: []
+mass_kg:
+  link: 19.7384
+  motor: 34.56
+  torso: 36.9658
+total_mass_kg: 91.2642
+mass_composition_check:
+  reference_population: quadruped
+  size_metric: leg_length_m
+  total_mass_kg: 91.2641585548084
+  by_role_kg:
+    torso: 36.96576273790878
+    motor: 34.559999999999995
+    link: 19.73839581689963
+  checks:
+  - quantity: actuator_mass_fraction
+    value: 0.3787
+    status: ok
+    median: 0.448
+    p10: 0.28167
+    p90: 0.59224
+    min: 0.25442
+    max: 0.61071
+    n: 20
+    unit: ''
+  - quantity: trunk_mass_fraction
+    value: 0.405
+    status: outside_measured_range
+    median: 0.46782
+    p10: 0.42428
+    p90: 0.55002
+    min: 0.41277
+    max: 0.5556
+    n: 20
+    unit: ''
+  - quantity: total_mass_vs_size_kg
+    value: 91.264
+    status: size_outside_fit_range
+    predicted: 260.769
+    lo_2sigma: 152.541
+    hi_2sigma: 445.784
+    size_m: 1.3
+    size_metric: leg_length_m
+    extrapolated: true
+    fit_range_m:
+    - 0.294
+    - 0.743
+    reach_past_fit: 1.75
+    mass_leverage: 3.98
+  trunk_bodies:
+  - torso_link
+distal_taper: null
+link_render:
+  n_links_slimmed: 4
+  structural_link_rho_kg_m3: 0.0
+  drawn_radius_over_structural:
+  - 2.0863
+  - 2.0863
+  emitted_density_kg_m3:
+  - 0.0
+  - 0.0
+  mass_effect: "none \u2014 density compensates exactly; \u03C1\xB7\u03C0\xB7r\xB2\
+    \xB7L is invariant"
+  inertia_effect: "slimmer cylinders: transverse inertia within a few percent, axial\
+    \ inertia scales with (r_drawn/r_struct)\xB2 and is dominated by the joint armature\
+    \ anyway"
+  links:
+    fl_lower_leg_link_link:
+      r_structural_m: 0.02109
+      r_drawn_m: 0.044
+      length_m: 0.61
+    fr_lower_leg_link_link:
+      r_structural_m: 0.02109
+      r_drawn_m: 0.044
+      length_m: 0.61
+    rl_lower_leg_link_link:
+      r_structural_m: 0.02109
+      r_drawn_m: 0.044
+      length_m: 0.61
+    rr_lower_leg_link_link:
+      r_structural_m: 0.02109
+      r_drawn_m: 0.044
+      length_m: 0.61
+link_inset:
+  n_links_inset: 12
+  removed_fraction_of_length:
+  - 0.1497
+  - 0.9118
+  rule: "a structural link stops at its actuator housing face plus a bolt flange,\
+    \ rather than running to the joint centre through the motor \u2014 see core/tree_ops.py:link_span"
+  penetration_m: 0.005
+  scope: "the DISTAL end only: this body's own actuator shares its frame so the overlap\
+    \ is fixed, while the actuator at the proximal end is on the far side of a joint\
+    \ and how much it interpenetrates depends on the angle \u2014 core/packing.py\
+    \ governs that pair instead"
+  links:
+    fl_pitch_link_link:
+      joint_to_joint_m: 0.18
+      structural_m: 0.0172
+      removed_m: 0.1628
+      removed_frac: 0.9044
+    fl_roll_link_link:
+      joint_to_joint_m: 0.1757
+      structural_m: 0.0155
+      removed_m: 0.1602
+      removed_frac: 0.9118
+    fl_upper_leg_link_link:
+      joint_to_joint_m: 0.69
+      structural_m: 0.5867
+      removed_m: 0.1033
+      removed_frac: 0.1497
+    fr_pitch_link_link:
+      joint_to_joint_m: 0.18
+      structural_m: 0.0172
+      removed_m: 0.1628
+      removed_frac: 0.9044
+    fr_roll_link_link:
+      joint_to_joint_m: 0.1757
+      structural_m: 0.0155
+      removed_m: 0.1602
+      removed_frac: 0.9118
+    fr_upper_leg_link_link:
+      joint_to_joint_m: 0.69
+      structural_m: 0.5867
+      removed_m: 0.1033
+      removed_frac: 0.1497
+    rl_pitch_link_link:
+      joint_to_joint_m: 0.18
+      structural_m: 0.0172
+      removed_m: 0.1628
+      removed_frac: 0.9044
+    rl_roll_link_link:
+      joint_to_joint_m: 0.1757
+      structural_m: 0.0155
+      removed_m: 0.1602
+      removed_frac: 0.9118
+    rl_upper_leg_link_link:
+      joint_to_joint_m: 0.69
+      structural_m: 0.5867
+      removed_m: 0.1033
+      removed_frac: 0.1497
+    rr_pitch_link_link:
+      joint_to_joint_m: 0.18
+      structural_m: 0.0172
+      removed_m: 0.1628
+      removed_frac: 0.9044
+    rr_roll_link_link:
+      joint_to_joint_m: 0.1757
+      structural_m: 0.0155
+      removed_m: 0.1602
+      removed_frac: 0.9118
+    rr_upper_leg_link_link:
+      joint_to_joint_m: 0.69
+      structural_m: 0.5867
+      removed_m: 0.1033
+      removed_frac: 0.1497
+structural_links:
+  fl_lower_leg_link_link:
+    class: shank
+    basis: 'm = 9.254 L^2.38 (n=60), mass per metre held at its 0.350 m value: L=0.610
+      m is outside the fitted 0.1685-0.35 m'
+    segment_root: fl_lower_leg_link
+    share_of_segment: 1.0
+    joint_to_joint_m: 0.61
+    lambda_kg_per_m: 2.1718
+    target_kg: 1.3248
+    fixed_in_segment_kg: 0.7757
+    structural_length_m: 0.61
+    class_density_kg_m3: 644.16
+    density_kg_m3: 644.16
+    r_m: 0.02109
+    r_cap_m: 0.055
+    emitted_member_kg: 0.5491
+    density_raised_at_cap: false
+    floored_at_5pct: false
+  fl_pitch_link_link:
+    class: thigh
+    basis: 'm = 28.34 L^2.69 (n=60), mass per metre held at its 0.350 m value: L=0.690
+      m is outside the fitted 0.12-0.35 m'
+    segment_root: fl_pitch_link
+    share_of_segment: 0.2069
+    joint_to_joint_m: 0.69
+    lambda_kg_per_m: 4.8085
+    target_kg: 0.6865
+    fixed_in_segment_kg: 0.0
+    structural_length_m: 0.0172
+    class_density_kg_m3: 345.04
+    density_kg_m3: 4199.6
+    r_m: 0.055
+    r_cap_m: 0.055
+    emitted_member_kg: 0.6865
+    density_raised_at_cap: true
+    floored_at_5pct: false
+  fl_roll_link_link:
+    class: hip_link
+    basis: 'm = 0.6044 L^0.508 (n=72), mass per metre held at its 0.128 m value: L=0.176
+      m is outside the fitted 0.037-0.1278 m'
+    segment_root: fl_roll_link
+    share_of_segment: 1.0
+    joint_to_joint_m: 0.1757
+    lambda_kg_per_m: 1.6614
+    target_kg: 0.2919
+    fixed_in_segment_kg: 0.0
+    structural_length_m: 0.0155
+    class_density_kg_m3: 676.28
+    density_kg_m3: 1981.74
+    r_m: 0.055
+    r_cap_m: 0.055
+    emitted_member_kg: 0.2919
+    density_raised_at_cap: true
+    floored_at_5pct: false
+  fl_upper_leg_link_link:
+    class: thigh
+    basis: 'm = 28.34 L^2.69 (n=60), mass per metre held at its 0.350 m value: L=0.690
+      m is outside the fitted 0.12-0.35 m'
+    segment_root: fl_pitch_link
+    share_of_segment: 0.7931
+    joint_to_joint_m: 0.69
+    lambda_kg_per_m: 4.8085
+    target_kg: 2.6314
+    fixed_in_segment_kg: 0.0
+    structural_length_m: 0.5867
+    class_density_kg_m3: 345.04
+    density_kg_m3: 471.95
+    r_m: 0.055
+    r_cap_m: 0.055
+    emitted_member_kg: 2.6314
+    density_raised_at_cap: true
+    floored_at_5pct: false
+  fr_lower_leg_link_link:
+    class: shank
+    basis: 'm = 9.254 L^2.38 (n=60), mass per metre held at its 0.350 m value: L=0.610
+      m is outside the fitted 0.1685-0.35 m'
+    segment_root: fr_lower_leg_link
+    share_of_segment: 1.0
+    joint_to_joint_m: 0.61
+    lambda_kg_per_m: 2.1718
+    target_kg: 1.3248
+    fixed_in_segment_kg: 0.7757
+    structural_length_m: 0.61
+    class_density_kg_m3: 644.16
+    density_kg_m3: 644.16
+    r_m: 0.02109
+    r_cap_m: 0.055
+    emitted_member_kg: 0.5491
+    density_raised_at_cap: false
+    floored_at_5pct: false
+  fr_pitch_link_link:
+    class: thigh
+    basis: 'm = 28.34 L^2.69 (n=60), mass per metre held at its 0.350 m value: L=0.690
+      m is outside the fitted 0.12-0.35 m'
+    segment_root: fr_pitch_link
+    share_of_segment: 0.2069
+    joint_to_joint_m: 0.69
+    lambda_kg_per_m: 4.8085
+    target_kg: 0.6865
+    fixed_in_segment_kg: 0.0
+    structural_length_m: 0.0172
+    class_density_kg_m3: 345.04
+    density_kg_m3: 4199.6
+    r_m: 0.055
+    r_cap_m: 0.055
+    emitted_member_kg: 0.6865
+    density_raised_at_cap: true
+    floored_at_5pct: false
+  fr_roll_link_link:
+    class: hip_link
+    basis: 'm = 0.6044 L^0.508 (n=72), mass per metre held at its 0.128 m value: L=0.176
+      m is outside the fitted 0.037-0.1278 m'
+    segment_root: fr_roll_link
+    share_of_segment: 1.0
+    joint_to_joint_m: 0.1757
+    lambda_kg_per_m: 1.6614
+    target_kg: 0.2919
+    fixed_in_segment_kg: 0.0
+    structural_length_m: 0.0155
+    class_density_kg_m3: 676.28
+    density_kg_m3: 1981.74
+    r_m: 0.055
+    r_cap_m: 0.055
+    emitted_member_kg: 0.2919
+    density_raised_at_cap: true
+    floored_at_5pct: false
+  fr_upper_leg_link_link:
+    class: thigh
+    basis: 'm = 28.34 L^2.69 (n=60), mass per metre held at its 0.350 m value: L=0.690
+      m is outside the fitted 0.12-0.35 m'
+    segment_root: fr_pitch_link
+    share_of_segment: 0.7931
+    joint_to_joint_m: 0.69
+    lambda_kg_per_m: 4.8085
+    target_kg: 2.6314
+    fixed_in_segment_kg: 0.0
+    structural_length_m: 0.5867
+    class_density_kg_m3: 345.04
+    density_kg_m3: 471.95
+    r_m: 0.055
+    r_cap_m: 0.055
+    emitted_member_kg: 2.6314
+    density_raised_at_cap: true
+    floored_at_5pct: false
+  rl_lower_leg_link_link:
+    class: shank
+    basis: 'm = 9.254 L^2.38 (n=60), mass per metre held at its 0.350 m value: L=0.610
+      m is outside the fitted 0.1685-0.35 m'
+    segment_root: rl_lower_leg_link
+    share_of_segment: 1.0
+    joint_to_joint_m: 0.61
+    lambda_kg_per_m: 2.1718
+    target_kg: 1.3248
+    fixed_in_segment_kg: 0.7757
+    structural_length_m: 0.61
+    class_density_kg_m3: 644.16
+    density_kg_m3: 644.16
+    r_m: 0.02109
+    r_cap_m: 0.055
+    emitted_member_kg: 0.5491
+    density_raised_at_cap: false
+    floored_at_5pct: false
+  rl_pitch_link_link:
+    class: thigh
+    basis: 'm = 28.34 L^2.69 (n=60), mass per metre held at its 0.350 m value: L=0.690
+      m is outside the fitted 0.12-0.35 m'
+    segment_root: rl_pitch_link
+    share_of_segment: 0.2069
+    joint_to_joint_m: 0.69
+    lambda_kg_per_m: 4.8085
+    target_kg: 0.6865
+    fixed_in_segment_kg: 0.0
+    structural_length_m: 0.0172
+    class_density_kg_m3: 345.04
+    density_kg_m3: 4199.6
+    r_m: 0.055
+    r_cap_m: 0.055
+    emitted_member_kg: 0.6865
+    density_raised_at_cap: true
+    floored_at_5pct: false
+  rl_roll_link_link:
+    class: hip_link
+    basis: 'm = 0.6044 L^0.508 (n=72), mass per metre held at its 0.128 m value: L=0.176
+      m is outside the fitted 0.037-0.1278 m'
+    segment_root: rl_roll_link
+    share_of_segment: 1.0
+    joint_to_joint_m: 0.1757
+    lambda_kg_per_m: 1.6614
+    target_kg: 0.2919
+    fixed_in_segment_kg: 0.0
+    structural_length_m: 0.0155
+    class_density_kg_m3: 676.28
+    density_kg_m3: 1981.74
+    r_m: 0.055
+    r_cap_m: 0.055
+    emitted_member_kg: 0.2919
+    density_raised_at_cap: true
+    floored_at_5pct: false
+  rl_upper_leg_link_link:
+    class: thigh
+    basis: 'm = 28.34 L^2.69 (n=60), mass per metre held at its 0.350 m value: L=0.690
+      m is outside the fitted 0.12-0.35 m'
+    segment_root: rl_pitch_link
+    share_of_segment: 0.7931
+    joint_to_joint_m: 0.69
+    lambda_kg_per_m: 4.8085
+    target_kg: 2.6314
+    fixed_in_segment_kg: 0.0
+    structural_length_m: 0.5867
+    class_density_kg_m3: 345.04
+    density_kg_m3: 471.95
+    r_m: 0.055
+    r_cap_m: 0.055
+    emitted_member_kg: 2.6314
+    density_raised_at_cap: true
+    floored_at_5pct: false
+  rr_lower_leg_link_link:
+    class: shank
+    basis: 'm = 9.254 L^2.38 (n=60), mass per metre held at its 0.350 m value: L=0.610
+      m is outside the fitted 0.1685-0.35 m'
+    segment_root: rr_lower_leg_link
+    share_of_segment: 1.0
+    joint_to_joint_m: 0.61
+    lambda_kg_per_m: 2.1718
+    target_kg: 1.3248
+    fixed_in_segment_kg: 0.7757
+    structural_length_m: 0.61
+    class_density_kg_m3: 644.16
+    density_kg_m3: 644.16
+    r_m: 0.02109
+    r_cap_m: 0.055
+    emitted_member_kg: 0.5491
+    density_raised_at_cap: false
+    floored_at_5pct: false
+  rr_pitch_link_link:
+    class: thigh
+    basis: 'm = 28.34 L^2.69 (n=60), mass per metre held at its 0.350 m value: L=0.690
+      m is outside the fitted 0.12-0.35 m'
+    segment_root: rr_pitch_link
+    share_of_segment: 0.2069
+    joint_to_joint_m: 0.69
+    lambda_kg_per_m: 4.8085
+    target_kg: 0.6865
+    fixed_in_segment_kg: 0.0
+    structural_length_m: 0.0172
+    class_density_kg_m3: 345.04
+    density_kg_m3: 4199.6
+    r_m: 0.055
+    r_cap_m: 0.055
+    emitted_member_kg: 0.6865
+    density_raised_at_cap: true
+    floored_at_5pct: false
+  rr_roll_link_link:
+    class: hip_link
+    basis: 'm = 0.6044 L^0.508 (n=72), mass per metre held at its 0.128 m value: L=0.176
+      m is outside the fitted 0.037-0.1278 m'
+    segment_root: rr_roll_link
+    share_of_segment: 1.0
+    joint_to_joint_m: 0.1757
+    lambda_kg_per_m: 1.6614
+    target_kg: 0.2919
+    fixed_in_segment_kg: 0.0
+    structural_length_m: 0.0155
+    class_density_kg_m3: 676.28
+    density_kg_m3: 1981.74
+    r_m: 0.055
+    r_cap_m: 0.055
+    emitted_member_kg: 0.2919
+    density_raised_at_cap: true
+    floored_at_5pct: false
+  rr_upper_leg_link_link:
+    class: thigh
+    basis: 'm = 28.34 L^2.69 (n=60), mass per metre held at its 0.350 m value: L=0.690
+      m is outside the fitted 0.12-0.35 m'
+    segment_root: rr_pitch_link
+    share_of_segment: 0.7931
+    joint_to_joint_m: 0.69
+    lambda_kg_per_m: 4.8085
+    target_kg: 2.6314
+    fixed_in_segment_kg: 0.0
+    structural_length_m: 0.5867
+    class_density_kg_m3: 345.04
+    density_kg_m3: 471.95
+    r_m: 0.055
+    r_cap_m: 0.055
+    emitted_member_kg: 2.6314
+    density_raised_at_cap: true
+    floored_at_5pct: false
+foot_render: null
+xml_roundtrip:
+  written_mass_kg: 91.26418
+  in_memory_mass_kg: 91.26416
+  relative_drift: 2.24e-07
+  note: MuJoCo writes 6 significant figures; this is the cost of that rounding, not
+    a modelling difference
+warnings:
+- "[L]: power density 113 W/kg is above the Harmonic p90 (96 W/kg) \u2014 best-in-class\
+  \ territory."
+- "fl_pitch_link_link: to weigh its 0.686 kg share of the thigh trend inside the actuators\
+  \ it joins, the member's density is 4200 kg/m\xB3 against the class's 345"
+- "fl_roll_link_link: to weigh its 0.292 kg share of the hip_link trend inside the\
+  \ actuators it joins, the member's density is 1982 kg/m\xB3 against the class's\
+  \ 676"
+- "fr_pitch_link_link: to weigh its 0.686 kg share of the thigh trend inside the actuators\
+  \ it joins, the member's density is 4200 kg/m\xB3 against the class's 345"
+- "fr_roll_link_link: to weigh its 0.292 kg share of the hip_link trend inside the\
+  \ actuators it joins, the member's density is 1982 kg/m\xB3 against the class's\
+  \ 676"
+- "rl_pitch_link_link: to weigh its 0.686 kg share of the thigh trend inside the actuators\
+  \ it joins, the member's density is 4200 kg/m\xB3 against the class's 345"
+- "rl_roll_link_link: to weigh its 0.292 kg share of the hip_link trend inside the\
+  \ actuators it joins, the member's density is 1982 kg/m\xB3 against the class's\
+  \ 676"
+- "rr_pitch_link_link: to weigh its 0.686 kg share of the thigh trend inside the actuators\
+  \ it joins, the member's density is 4200 kg/m\xB3 against the class's 345"
+- "rr_roll_link_link: to weigh its 0.292 kg share of the hip_link trend inside the\
+  \ actuators it joins, the member's density is 1982 kg/m\xB3 against the class's\
+  \ 676"
+- trunk_mass_fraction = 0.405 is outside measured range (measured median 0.468, p10-p90
+  0.424-0.550, n=20 quadrupeds).
+- "leg_length_m = 1.30 m is outside the 0.29-0.74 m range of the measured quadrupeds,\
+  \ so mass-vs-size is EXTRAPOLATED: the law predicts 260.8 kg and the design is 91.3\
+  \ kg, outside 2\u03C3. At 1.75x past the fitted range a ^2.47 law carries 4.0x of\
+  \ leverage on mass, so treat this as a sanity check and not as evidence."
