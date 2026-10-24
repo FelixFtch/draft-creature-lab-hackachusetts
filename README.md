@@ -12,7 +12,7 @@ Everything runs on one computer. MuJoCo physics and the learned controllers run 
 You need Git, Python 3.10–3.13, Node.js 22.12+ (or 20.19+) and a browser with WebGL2 (Chrome, Safari, Edge or Firefox). On a Mac you can install Python and Node with `brew install python@3.12 node`.
 
 ```bash
-git clone https://github.com/rbynwang/Robo_draft_lab.git draft-creature-lab
+git clone https://github.com/FelixFtch/draft-creature-lab-hackachusetts.git draft-creature-lab
 cd draft-creature-lab
 ./setup.sh --no-training     # about 5 minutes the first time
 ./start.sh
