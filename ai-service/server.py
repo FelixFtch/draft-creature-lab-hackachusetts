@@ -75,7 +75,8 @@ class AIService:
     def role_health(self, role, refresh=False):
         provider = self.providers[role]
         if provider is None:
-            status = {"configured": False, "reachable": False, "ready": False}
+            status = {"configured": False, "reachable": False, "ready": False,
+                      "kind": "offline" if role == "brain" else "none"}
             if role == "brain":
                 status["note"] = "Tinker uses the offline designer"
             return status
@@ -91,6 +92,7 @@ class AIService:
             status = {"configured": True, **provider.info(), "reachable": False, "ready": False, "error": exc.code}
         except Exception:
             status = {"configured": True, **provider.info(), "reachable": False, "ready": False, "error": "health_failed"}
+        status["kind"] = "local" if provider.local else "cloud"
         with self._health_lock:
             self._health_cache[role] = (time.monotonic(), status)
         return dict(status)

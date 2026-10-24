@@ -96,6 +96,7 @@ Response:
     "model": "qwen3.5:4b" | "tinker-rules/1",
     "offline": false,
     "local": true,
+    "kind": "local" | "cloud" | "offline",         // for the provider badge
     "fallbackReason": "provider_offline",          // only when a configured brain failed and the offline designer answered
     "fallbackFrom": { "name": "ollama", "model": "qwen3.5:4b" }
   },
@@ -160,7 +161,7 @@ Response:
   "suggestions": ["Add a beetle shell"],                // 0..3, <= 80 chars
   "lookPatch": { "shell": { "kind": "beetle", "color": "#d93a32", "size": 1.3 } },  // optional
   "look": { /* the current look with the patch merged; complete and schema-valid */ },  // present with lookPatch
-  "provider": { "name": "ollama", "model": "qwen3.5:4b", "offline": false, "local": true },
+  "provider": { "name": "ollama", "model": "qwen3.5:4b", "offline": false, "local": true, "kind": "local" },
   "provenance": { "source": "local_vlm", "provider": "ollama", "model": "qwen3.5:4b",
                   "imageSha256": "<64 hex>", "elapsedMilliseconds": 1400 }
 }
@@ -180,9 +181,10 @@ providers.
   "ok": true, "service": "draft_ai_service", "version": 2,
   "offline": true,                       // true when Tinker would use the offline designer (no brain, or brain not ready)
   "roles": {
-    "brain": { "configured": true, "provider": "ollama", "label": "Ollama on this computer", "model": "qwen3.5:4b",
-               "local": true, "reachable": true, "ready": true, "modelAvailable": true, "latencyMs": 4 },
-    "eyes":  { "configured": false, "reachable": false, "ready": false }
+    "brain": { "configured": true, "kind": "local", "provider": "ollama", "label": "Ollama on this computer",
+               "model": "qwen3.5:4b", "local": true, "reachable": true, "ready": true, "modelAvailable": true, "latencyMs": 4 },
+    "eyes":  { "configured": false, "kind": "none", "reachable": false, "ready": false }
+    // kind: "local" | "cloud" for a configured role; unconfigured brain = "offline" (offline designer), eyes = "none"
     // other fields that may appear: error (provider_offline | provider_missing_key | provider_auth_error |
     // model_not_pulled | model_not_listed | invalid_api_key_format | …), hint, modelListed, note
   },
@@ -230,8 +232,8 @@ All providers are OpenAI-compatible chat completions.
 - `/chat`:
   - request accepts `language`, draft-service 400/422 error JSON as `state.body` (with `hints`), and body.json
     `trainability` (`verdict`, `flags`);
-  - response adds `provider.local`, `provider.fallbackReason`, `provider.fallbackFrom` and `repairs`;
+  - response adds `provider.local`, `provider.kind`, `provider.fallbackReason`, `provider.fallbackFrom` and `repairs`;
   - design actions never embed `look`, and they follow `x-actuatorFamilies` when the schema has it.
 - `/critique` response adds `look`, `provider` and `provenance`.
-- `/health` adds `roles`, `offline`, `version`, `schemas`, `configProblems` and `?refresh=1`, and keeps all legacy
-  fields.
+- `/health` adds `roles` (with `kind`), `offline`, `version`, `schemas`, `configProblems` and `?refresh=1`, and keeps
+  all legacy fields.

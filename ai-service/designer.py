@@ -406,12 +406,13 @@ class Tinker:
         suggestions = [clean_text(s, MAX_SUGGESTION_CHARS) for s in proposal.get("suggestions") or []]
         suggestions = [s for s in dict.fromkeys(suggestions) if s][:4]
         if provider is None:
-            info = {"name": "offline", "model": OFFLINE_MODEL, "offline": True, "local": True}
+            info = {"name": "offline", "model": OFFLINE_MODEL, "offline": True, "local": True, "kind": "offline"}
             if fallback and self.provider is not None:
                 info["fallbackReason"] = fallback
                 info["fallbackFrom"] = {"name": self.provider.name, "model": self.provider.model}
         else:
-            info = {"name": provider.name, "model": provider.model, "offline": False, "local": provider.local}
+            info = {"name": provider.name, "model": provider.model, "offline": False, "local": provider.local,
+                    "kind": "local" if provider.local else "cloud"}
         result = {"ok": True, "reply": reply, "actions": actions, "suggestions": suggestions, "provider": info}
         if repairs:
             result["repairs"] = repairs[:8]

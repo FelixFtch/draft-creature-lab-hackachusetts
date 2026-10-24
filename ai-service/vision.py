@@ -346,7 +346,7 @@ class Critic:
                     suggestions.append(item)
             result = {"ok": True, "text": text, "suggestions": suggestions[:3],
                       "provider": {"name": provider.name, "model": provider.model, "offline": False,
-                                   "local": provider.local},
+                                   "local": provider.local, "kind": "local" if provider.local else "cloud"},
                       "provenance": {"source": provenance_source(provider), "provider": provider.name,
                                      "model": provider.model,
                                      "imageSha256": hashlib.sha256(request["image"]).hexdigest(),

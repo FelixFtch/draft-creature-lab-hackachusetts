@@ -50,6 +50,7 @@ class OfflineServerTests(ServerHarness):
         self.assertEqual(status, 200)
         self.assertTrue(result["offline"])
         self.assertEqual(result["roles"]["brain"]["configured"], False)
+        self.assertEqual((result["roles"]["brain"]["kind"], result["roles"]["eyes"]["kind"]), ("offline", "none"))
         self.assertEqual(result["provider"], {"reachable": False, "ready": False})
         self.assertIsNone(result["model"])
         self.assertEqual(headers["Cache-Control"], "no-store")
@@ -62,6 +63,7 @@ class OfflineServerTests(ServerHarness):
         self.assertEqual(status, 200)
         self.assertEqual(headers["Access-Control-Allow-Origin"], "http://localhost:18381")
         self.assertTrue(result["provider"]["offline"])
+        self.assertEqual(result["provider"]["kind"], "offline")
         self.assertEqual({a["type"] for a in result["actions"]}, {"design", "look"})
 
     def test_vision_routes_need_eyes(self):
@@ -206,6 +208,7 @@ class EndToEndNoLeakTests(unittest.TestCase):
                 status, health = call("GET", "/health?refresh=1")
                 self.assertEqual(status, 200)
                 self.assertTrue(health["roles"]["brain"]["ready"])
+                self.assertEqual(health["roles"]["eyes"]["kind"], "local")
                 self.assertFalse(health["offline"])
                 status, chat = call("POST", "/chat", {"messages": [{"role": "user", "content": "a zippy runner"}]})
                 self.assertEqual((status, chat["provider"]["name"]), (200, "custom"))

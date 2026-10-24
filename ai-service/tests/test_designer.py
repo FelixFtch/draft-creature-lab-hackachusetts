@@ -48,7 +48,7 @@ class TinkerModelTests(unittest.TestCase):
         acts = actions(result)
         self.assertEqual(STORE.validate(DESIGN_ID, acts["design"]["design"]), [])
         self.assertEqual(STORE.validate(LOOK_ID, acts["look"]["look"]), [])
-        self.assertEqual(result["provider"], {"name": "custom", "model": "m", "offline": False, "local": False})
+        self.assertEqual(result["provider"], {"name": "custom", "model": "m", "offline": False, "local": False, "kind": "cloud"})
         self.assertEqual(result["suggestions"], GOOD["suggestions"])
         payload = transport.posts[0]["payload"]
         self.assertEqual(payload["response_format"], {"type": "json_object"})
