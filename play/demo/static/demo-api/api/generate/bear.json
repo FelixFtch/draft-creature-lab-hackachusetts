@@ -1,0 +1,70 @@
+{
+  "id": "bear-58f91b599b31ad6b",
+  "preset": "bear",
+  "parameters": {
+    "preset": "bear",
+    "lengthScale": 1.0,
+    "legScale": 1.0
+  },
+  "xmlUrl": "/draft/bear-58f91b599b31ad6b/quadruped.xml",
+  "meshUrl": "/draft/bear-58f91b599b31ad6b/torso_mesh.stl",
+  "manifestUrl": "/draft/bear-58f91b599b31ad6b/manifest.json",
+  "massKg": 110.04996939582054,
+  "resolvedParameters": {
+    "torso_lx": 0.62,
+    "torso_ly": 0.46,
+    "torso_lz": 0.3,
+    "upper_leg_link_length": 0.38,
+    "lower_leg_link_length": 0.36,
+    "hip_roll_link_length": 0.18,
+    "shoulder_width": 0.38,
+    "L_motor_effort": 450.0,
+    "L_motor_velocity": 11.31
+  },
+  "provenance": {
+    "generator": "Draft RobotGenerator",
+    "repository": "https://github.com/davidhnguyen2000/draft",
+    "revision": "3b03e144735098ef94b938e85756806f45628f83",
+    "packageVersion": "0.1.0",
+    "robot": "quadruped",
+    "strict": true,
+    "allowHypothetical": false,
+    "generation": "Official experiment YAML plus bounded dimension overrides; regenerated MJCF and torso mesh",
+    "controller": "No learned controller is created or certified by this endpoint",
+    "presetFile": "experiments/quadruped_variants/bear.yaml",
+    "presetSha256": "31f630f44f04569f05e8f0088908e4d3759060bbd159f231438d9ec7988c0baf"
+  },
+  "validation": {
+    "massKg": 110.04996939582054,
+    "nq": 19,
+    "nv": 18,
+    "actuators": 0,
+    "hingeJoints": 12,
+    "bodies": 22,
+    "mujocoVersion": "3.8.0",
+    "finiteSteps": 250,
+    "simulationSeconds": 0.5000000000000003,
+    "validationScope": "CPU compile and finite unactuated scene steps; not a locomotion or hardware validation"
+  },
+  "warnings": [
+    "[L]: torque density 129 Nm/kg is above the MidGear p90 (117 Nm/kg) — best-in-class territory.",
+    "[L]: power density 364 W/kg is above the MidGear p90 (362 W/kg) — best-in-class territory.",
+    "[M]: torque density 135 Nm/kg is above the MidGear p90 (117 Nm/kg) — best-in-class territory.",
+    "[M]: power density 442 W/kg is above the MidGear p90 (362 W/kg) — best-in-class territory.",
+    "fl_roll_link_link: to weigh its 0.301 kg share of the hip_link trend inside the actuators it joins, the member's density is 2587 kg/m³ against the class's 676",
+    "fl_upper_leg_link_link: to weigh its 1.240 kg share of the thigh trend inside the actuators it joins, the member's density is 765 kg/m³ against the class's 345",
+    "fr_roll_link_link: to weigh its 0.301 kg share of the hip_link trend inside the actuators it joins, the member's density is 2587 kg/m³ against the class's 676",
+    "fr_upper_leg_link_link: to weigh its 1.240 kg share of the thigh trend inside the actuators it joins, the member's density is 765 kg/m³ against the class's 345",
+    "rl_roll_link_link: to weigh its 0.301 kg share of the hip_link trend inside the actuators it joins, the member's density is 2587 kg/m³ against the class's 676",
+    "rl_upper_leg_link_link: to weigh its 1.240 kg share of the thigh trend inside the actuators it joins, the member's density is 765 kg/m³ against the class's 345",
+    "rr_roll_link_link: to weigh its 0.301 kg share of the hip_link trend inside the actuators it joins, the member's density is 2587 kg/m³ against the class's 676",
+    "rr_upper_leg_link_link: to weigh its 1.240 kg share of the thigh trend inside the actuators it joins, the member's density is 765 kg/m³ against the class's 345"
+  ],
+  "assetSha256": {
+    "quadruped.xml": "49900c88c9ef6307609eee109cf588dc65e031a38c445ea0f1deb8f1bbe23100",
+    "torso_mesh.stl": "4825b1832edd8bbb5b030a64aee8211a339b2ac6b67827dbc467eef69bc9e5b1",
+    "scene.xml": "d5ecc781c4d692ba9616999d962664ae21b7624870a960f2e1ac9f6220e4c13d",
+    "parameters_resolved.yaml": "589aef16fcff4fd64cf4480d914892750a1ddb2a1fab56f230f02b398c5a8cf5",
+    "feasibility_report.yaml": "02971f4178c73a0ae1979785813aa994a33806c48e6b59e0e73045c8239ac0b1"
+  }
+}

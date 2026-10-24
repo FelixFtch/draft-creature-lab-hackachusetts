@@ -1,0 +1,1 @@
+{"available": true, "status": "completed", "mode": "full", "body": "cheetah", "iterationsObserved": 1200, "iterationsRequested": 1200, "elapsedSeconds": 1298.93, "peakOwnedGpuMiB": 6848, "peakOwnedRamMiB": 2818.75, "minGpuFreeMiB": null, "updatedAt": "2026-10-23T00:20:06.936485+00:00", "ageSeconds": 165718.3, "stale": false, "evaluation": null}
