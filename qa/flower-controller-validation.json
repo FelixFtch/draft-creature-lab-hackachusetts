@@ -1,8 +1,8 @@
 {
-  "createdAt": "2026-10-24T18:32:13.838Z",
+  "createdAt": "2026-10-24T19:33:29.567Z",
   "pass": true,
   "scope": "Node CPU, actual production Flower controller, MuJoCo WASM and ONNX Runtime Web WASM; not live browser/device validation",
-  "controllerSha256": "e483ccf7978aabaa49eabf00ba08b20ad42b4470d38e7304e31fe7afa51c12f1",
+  "controllerSha256": "533ab4b8414e6e02da1c449096c4f9714281b0f6361e6c981d9d892915069487",
   "policySha256": "3364db3b53d5195abc0725b3eb9924eabcb4ae390bd588bd542494700bc08abf",
   "xmlSha256": "95bd775ac07d8b42ccf1936c1662c8d2b13caf45b08289eda784706e375ccbd6",
   "rawBodyXmlSha256": "63c1b09b73e18372d02fc03eb328aa2e429177ad9fdb058a710fc2529525e683",
@@ -3331,7 +3331,7 @@
         0.06777434921821307,
         0.07964908942552554
       ],
-      "wallSeconds": 0.15348350700000002,
+      "wallSeconds": 0.5048550849999999,
       "traceSampleEverySteps": 10,
       "samples": [
         {
@@ -6844,7 +6844,7 @@
         0.07485104280864396,
         0.08793082986670323
       ],
-      "wallSeconds": 0.125655154,
+      "wallSeconds": 0.417460791,
       "traceSampleEverySteps": 10,
       "samples": [
         {
@@ -10357,7 +10357,7 @@
         0.07076781799063778,
         0.07923379398461344
       ],
-      "wallSeconds": 0.12261442999999997,
+      "wallSeconds": 0.4251262960000001,
       "traceSampleEverySteps": 10,
       "samples": [
         {
@@ -13870,7 +13870,7 @@
         0.07502273605088508,
         0.08012171700343007
       ],
-      "wallSeconds": 0.12329232500000001,
+      "wallSeconds": 0.3193912010000001,
       "traceSampleEverySteps": 10,
       "samples": [
         {
@@ -17383,7 +17383,7 @@
         0.07601684179747759,
         0.08666551588221394
       ],
-      "wallSeconds": 0.122089564,
+      "wallSeconds": 0.3064359039999999,
       "traceSampleEverySteps": 10,
       "samples": [
         {
@@ -20896,7 +20896,7 @@
         0.08806300227951047,
         0.09488045018825694
       ],
-      "wallSeconds": 0.12237156600000003,
+      "wallSeconds": 0.31690161699999997,
       "traceSampleEverySteps": 10,
       "samples": [
         {
@@ -24409,7 +24409,7 @@
         0.07227035050147229,
         0.07859504958858796
       ],
-      "wallSeconds": 0.11502531199999999,
+      "wallSeconds": 0.30316161000000014,
       "traceSampleEverySteps": 10,
       "samples": [
         {
@@ -27922,7 +27922,7 @@
         0.0759404133713229,
         0.08288599296259011
       ],
-      "wallSeconds": 0.11598602499999992,
+      "wallSeconds": 0.2934134690000001,
       "traceSampleEverySteps": 10,
       "samples": [
         {
@@ -31435,7 +31435,7 @@
         0.08321342221244707,
         0.08629043808669079
       ],
-      "wallSeconds": 0.11607138400000008,
+      "wallSeconds": 0.32429098699999986,
       "traceSampleEverySteps": 10,
       "samples": [
         {
@@ -34952,7 +34952,7 @@
         0.08036798850677562,
         0.10360333518272064
       ],
-      "wallSeconds": 0.11585123199999998,
+      "wallSeconds": 0.31247973500000037,
       "traceSampleEverySteps": 10,
       "samples": [
         {
@@ -38469,7 +38469,7 @@
         0.0924508983107144,
         0.09524565545166405
       ],
-      "wallSeconds": 0.11578012599999989,
+      "wallSeconds": 0.3294841640000004,
       "traceSampleEverySteps": 10,
       "samples": [
         {

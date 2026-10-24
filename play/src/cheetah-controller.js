@@ -23,14 +23,29 @@ function idByName(mj, model, type, name) {
   return id;
 }
 
+// A playground may append static world geoms and free props after the robot.
+// The exported robot must still lead the model unchanged: root free joint at
+// qpos/qvel 0 and every named joint at its exported address, so the policy
+// reads and drives exactly the state it was trained on.
+function requireRobotPrefix(mujoco, model, manifest, jointIds) {
+  const root = manifest.model?.joints?.[0]?.name;
+  if (!root || mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT.value, root) !== 0 ||
+      model.jnt_type[0] !== 0 || model.jnt_qposadr[0] !== 0 || model.jnt_dofadr[0] !== 0)
+    throw Error('Cheetah root free joint must be the first joint of the model');
+  if (manifest.jointQposAdr?.length !== 12 || manifest.jointDofAdr?.length !== 12 ||
+      jointIds.some((id, i) => model.jnt_qposadr[id] !== manifest.jointQposAdr[i] || model.jnt_dofadr[id] !== manifest.jointDofAdr[i]))
+    throw Error('Cheetah joints must keep their exported qpos/qvel addresses');
+}
+
 export function createControllerContext(mujoco, model, data, manifest) {
-  if (model.nq !== 19 || model.nv !== 18 || model.nu !== 12)
+  if (model.nq < 19 || model.nv < 18 || model.nu !== 12)
     throw Error('Cheetah control requires the exported nq=19, nv=18, nu=12 training model');
   if (manifest.jointNames?.length !== 12 || manifest.motors?.length !== 12)
     throw Error('Controller manifest must specify 12 ordered joints and motors');
   if (Math.abs(model.opt.timestep - .005) > 1e-10)
     throw Error('Controller model timestep must be 0.005 seconds');
   const jointIds = manifest.jointNames.map(n => idByName(mujoco, model, 'mjOBJ_JOINT', n));
+  requireRobotPrefix(mujoco, model, manifest, jointIds);
   const actuatorIds = manifest.actuatorNames.map(n => idByName(mujoco, model, 'mjOBJ_ACTUATOR', n));
   for (let i = 0; i < 12; i++) {
     if (model.actuator_trnid[actuatorIds[i] * 2] !== jointIds[i])

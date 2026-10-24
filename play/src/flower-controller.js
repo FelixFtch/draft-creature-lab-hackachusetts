@@ -25,8 +25,22 @@ function idByName(mj, model, type, name) {
 
 // Public helpers expose the exact exported 18-action/66-observation contract for
 // independent parity tests. No terrain rays or four-leg assumptions are used.
+// A playground may append static world geoms and free props after the robot.
+// The exported robot must still lead the model unchanged: root free joint at
+// qpos/qvel 0 and every named joint at its exported address, so the policy
+// reads and drives exactly the state it was trained on.
+function requireFlowerRobotPrefix(mujoco, model, manifest, jointIds) {
+  const root = manifest.model?.joints?.[0]?.name;
+  if (!root || mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT.value, root) !== 0 ||
+      model.jnt_type[0] !== 0 || model.jnt_qposadr[0] !== 0 || model.jnt_dofadr[0] !== 0)
+    throw Error('Flower root free joint must be the first joint of the model');
+  if (manifest.jointQposAdr?.length !== 18 || manifest.jointDofAdr?.length !== 18 ||
+      jointIds.some((id, i) => model.jnt_qposadr[id] !== manifest.jointQposAdr[i] || model.jnt_dofadr[id] !== manifest.jointDofAdr[i]))
+    throw Error('Flower joints must keep their exported qpos/qvel addresses');
+}
+
 export function createFlowerControllerContext(mujoco, model, data, manifest) {
-  if (model.nq !== 25 || model.nv !== 24 || model.nu !== 18)
+  if (model.nq < 25 || model.nv < 24 || model.nu !== 18)
     throw Error('Flower control requires the exported nq=25, nv=24, nu=18 training model');
   if (manifest.observationSize !== 66 || manifest.actionSize !== 18 || manifest.scan != null || manifest.normalizerIncluded !== true)
     throw Error('Flower requires the normalized 66-input, 18-output proprioceptive policy export');
@@ -49,6 +63,7 @@ export function createFlowerControllerContext(mujoco, model, data, manifest) {
   const actuatorIds = manifest.actuatorNames.map(n => idByName(mujoco, model, 'mjOBJ_ACTUATOR', n));
   if (new Set(jointIds).size !== 18 || new Set(actuatorIds).size !== 18)
     throw Error('Flower joints and actuators must be distinct');
+  requireFlowerRobotPrefix(mujoco, model, manifest, jointIds);
   for (let i = 0; i < 18; i++) {
     const motor = manifest.motors[i];
     if (model.actuator_trnid[actuatorIds[i] * 2] !== jointIds[i] || motor.jointName !== manifest.jointNames[i] || motor.actuatorName !== manifest.actuatorNames[i])
