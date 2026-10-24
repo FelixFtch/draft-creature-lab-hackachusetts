@@ -170,6 +170,8 @@ class JobManager:
             return {'job': None}
         code = job['process'].poll()
         progress = _read_json(job['out'] / 'progress.json')
+        if progress and str(progress.get('updatedAt', '')) < job['startedAt']:
+            progress = None   # left over from an earlier run; this job has not reported yet
         if code is None:
             status = 'cancelling' if job.get('cancelRequested') else 'running'
         elif job.get('cancelRequested'):

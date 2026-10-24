@@ -40,7 +40,10 @@ function joinUrl(base, name) {
 
 // Fetch and verify one bundle. Refuses hash mismatches and bundles whose eval.json
 // does not pass for exactly this policy and scene (same spirit as the Flower gate).
-export async function loadCreatureBundle(baseUrl, { fetchImpl = globalThis.fetch } = {}) {
+// Unbound `fetch` references can throw "Illegal invocation"; always call through globalThis.
+const defaultFetch = (...args) => globalThis.fetch(...args);
+
+export async function loadCreatureBundle(baseUrl, { fetchImpl = defaultFetch } = {}) {
   const get = async (name, kind = 'bytes') => {
     const response = await fetchImpl(joinUrl(baseUrl, safeName(name, 'file')));
     if (!response.ok) throw Error(`Bundle file ${name} could not be loaded (${response.status})`);
@@ -417,7 +420,7 @@ async function assertBodyMatches(bodyUrl, manifest, fetchImpl) {
 // Playground pilot (contracts/world-api.md). The engine injects world geoms/bodies
 // into `xml` after the robot (keep the robot's free joint first), compiles one
 // model, then calls attach(). `meta.floorGeom` names this scene's flat floor plane.
-export function createCreaturePilot({ walkUrl, jumpUrl = null, bodyUrl = null, fetchImpl = globalThis.fetch, ort = null } = {}) {
+export function createCreaturePilot({ walkUrl, jumpUrl = null, bodyUrl = null, fetchImpl = defaultFetch, ort = null } = {}) {
   let walk = null, jump = null, jumpError = null;
   return {
     kind: 'creature',

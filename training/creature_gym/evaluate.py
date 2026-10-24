@@ -312,6 +312,20 @@ def summarize(samples: list, start: dict, measure_from: float) -> dict:
     }
 
 
+def gait_stats(samples: list, measure_from: float, threshold: float) -> dict:
+    """Per-foot duty factor, touchdown rate and swing clearance in the measurement window."""
+    win = [s for s in samples if s['t'] > measure_from + 1e-9]
+    if len(win) < 10:
+        return {}
+    contact = np.array([s['touch'] > threshold for s in win])           # (T, legs)
+    feet = np.array([s['feetZ'] for s in win])
+    touchdowns = np.sum(contact[1:] & ~contact[:-1], axis=0)
+    seconds = len(win) * CONTROL_DT
+    return {'dutyFactor': [round(float(x), 3) for x in contact.mean(axis=0)],
+            'touchdownsPerS': [round(float(x), 3) for x in touchdowns / seconds],
+            'peakFootClearanceM': [round(float(x), 4) for x in feet.max(axis=0)]}
+
+
 def walk_scenarios(m: dict) -> list[dict]:
     vmax, wmax = m['moving']['vmax'], m['moving']['wmax']
     vmin = m['commandBounds']['vx'][0]
@@ -431,7 +445,8 @@ def score_walk_row(sc: dict, res: dict, m: dict) -> dict:
     row = {k: sc[k] for k in sc if k not in ('criteria',)}
     row.update(criteria=crit, required=True, command=cmd, executedSteps=len(samples), requestedSteps=steps,
                fall=fell, error=res['error'], complete=complete, outcomes=outcomes,
-               pass_=complete and all(o['pass'] for o in outcomes), **summary)
+               pass_=complete and all(o['pass'] for o in outcomes), **summary,
+               gait=gait_stats(samples, sc['measureFromS'], m['contactThresholdN']))
     row['pass'] = row.pop('pass_')
     return row
 
@@ -535,17 +550,20 @@ def record_fixtures(walk: Bundle, jump: Bundle | None = None) -> dict:
 
 
 # --------------------------------------------------------------------------- jump support
-def walk_state_bank(body: Body, walk_dir: Path, cache: Path, *, seed: int = 0, count: int = 2048) -> dict | None:
-    """Slow-walk start states for jump training, recorded with the ready walk bundle."""
-    if cache.is_file():
-        data = np.load(cache)
-        return {k: data[k] for k in data.files}
+def walk_state_bank(body: Body, walk_dir: Path, cache_dir: Path, *, seed: int = 0, count: int = 2048) -> dict | None:
+    """Slow-walk start states for jump training, recorded with the ready walk bundle.
+
+    Cached per walk policy hash, so retraining walk never feeds jump stale states."""
     try:
         walk = Bundle(walk_dir, require_eval=True)
     except (BundleError, OSError, KeyError):
         return None
     if walk.manifest['bodyId'] != body.id:
         return None
+    cache = Path(cache_dir) / f"walk_state_bank-{walk.manifest['policySha256'][:16]}.npz"
+    if cache.is_file():
+        data = np.load(cache)
+        return {k: data[k] for k in data.files}
     model = walk.compile()
     data = mujoco.MjData(model)
     ctrl = ReferenceController(model, data, runtime_for(walk, model))

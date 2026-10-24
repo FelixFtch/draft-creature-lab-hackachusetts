@@ -20,13 +20,15 @@ spec.loader.exec_module(training_jobs)
 
 FAKE_TRAINER = '''#!{python}
 import json, signal, sys, time
+from datetime import datetime, timezone
 from pathlib import Path
 args = sys.argv[1:]
 out = Path(args[args.index('--out') + 1])
 mode = Path(args[args.index('--body') + 1], 'mode.txt').read_text().strip()
 def progress(phase, running, **extra):
     data = dict(schema='creature-train-progress/1', phase=phase, running=running, iteration=3, envSteps=18432,
-                envStepsTarget=6000000, message='training ' + str(out), **extra)
+                envStepsTarget=6000000, message='training ' + str(out),
+                updatedAt=datetime.now(timezone.utc).isoformat(timespec='seconds'), **extra)
     (out / 'progress.json').write_text(json.dumps(data))
 stop = False
 def handler(*_):
@@ -139,6 +141,16 @@ class TrainingJobsTest(unittest.TestCase):
         response = self.manager.status()[1]
         self.assertIn('boom', response['job']['error'])
         self.assert_no_paths(response)
+
+    def test_stale_progress_hidden_until_job_reports(self):
+        out = self.body / 'policies' / 'walk'
+        out.mkdir(parents=True)
+        (out / 'progress.json').write_text(json.dumps({'phase': 'done', 'updatedAt': '2001-01-01T00:00:00+00:00'}))
+        (self.body / 'mode.txt').write_text('run')
+        code, response = self.manager.start({'bodyId': self.body_id})
+        self.assertEqual(code, 202)
+        progress = response['job']['progress']
+        self.assertTrue(progress is None or progress['phase'] != 'done')
 
     def test_jump_requires_ready_walk(self):
         code, response = self.manager.start({'bodyId': self.body_id, 'skill': 'jump'})

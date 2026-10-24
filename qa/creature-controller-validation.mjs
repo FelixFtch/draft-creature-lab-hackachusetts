@@ -256,6 +256,16 @@ try {
     } catch (e) { error = e.message; report.lifecycle.extraWorldBodies = { error, pass: false }; }
     d.delete(); worldModel.delete();
   }
+  if (jump) {
+    // A jump validated against a different walk policy must be refused; walk keeps working.
+    const d = new mj.MjData(model); toDelete.push(d);
+    const staleJump = { ...jump, session: sessions.jump, manifest: { ...jump.manifest, handoff: { ...jump.manifest.handoff, walkPolicySha256: '0'.repeat(64) } } };
+    const c = await api.createCreatureController({ mujoco: mj, model, data: d, ort, walk: { ...walk, session: sessions.walk }, jump: staleJump });
+    const s = await c.step([0, 0, 0], { jump: true });
+    report.lifecycle.staleJumpRefused = { skills: c.skills, jumpError: s.jumpError, mode: s.mode,
+      pass: c.skills.length === 1 && !!s.jumpError && s.mode === 'walk' && !s.jumpAvailable };
+    c.dispose();
+  }
   {
     const pilot = api.createCreaturePilot({ walkUrl: walkDir, jumpUrl: jumpDir, fetchImpl: fileFetch(), ort });
     const prepared = await pilot.prepare();

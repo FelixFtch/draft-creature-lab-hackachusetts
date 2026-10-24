@@ -210,7 +210,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.skill == 'jump':
             from .evaluate import walk_state_bank
             walk_dir = (args.walk_bundle or out.parent / 'walk').resolve()
-            bank = walk_state_bank(body, walk_dir, work / 'walk_state_bank.npz', seed=run['seed'])
+            bank = walk_state_bank(body, walk_dir, work, seed=run['seed'])
             if bank is None:
                 print(f'note: no ready walk bundle at {walk_dir}; jumps start from standing only', file=sys.stderr)
 

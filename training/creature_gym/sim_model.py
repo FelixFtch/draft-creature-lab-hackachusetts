@@ -118,9 +118,11 @@ def build_scene(body: Body, *, terrain: TerrainSpec | None = None) -> Scene:
                 raise BodyError(f'body.xml <{tag}> is not supported by creature_gym')
             root.remove(element)
     compiler = root.find('compiler')
-    if compiler is not None:
-        for attr in ('meshdir', 'assetdir', 'texturedir'):
-            compiler.attrib.pop(attr, None)
+    # MuJoCo defaults to degrees; body.json ranges (and our ctrlrange) are radians.
+    if compiler is None or compiler.get('angle') != 'radian':
+        raise BodyError('body.xml must declare <compiler angle="radian"> (Draft does)')
+    for attr in ('meshdir', 'assetdir', 'texturedir'):
+        compiler.attrib.pop(attr, None)
     for tag, attr in FILE_ATTRS:
         for element in root.iter(tag):
             name = element.get(attr)
@@ -182,8 +184,7 @@ def build_scene(body: Body, *, terrain: TerrainSpec | None = None) -> Scene:
         holder.insert(list(holder).index(site) + 1, touch)
 
     option = ET.Element('option', dict(OPTION))
-    insert_at = 1 if compiler is not None and list(root).index(compiler) == 0 else 0
-    root.insert(insert_at, option)
+    root.insert(list(root).index(compiler) + 1, option)
 
     floor = ET.Element('geom', {'name': FLOOR, 'type': 'plane', 'size': '0 0 0.05', 'contype': '1',
                                 'conaffinity': '15', 'condim': '3', 'friction': '1 0.005 0.0001',

@@ -194,6 +194,7 @@ class CreatureEnv:
         self.datas = [mujoco.MjData(self.model) for _ in range(max(1, threads))]
         self.fk = mujoco.MjData(self.model)
         n, ns = n_envs, idx.nstate
+        self._proprio = None
         self.state = np.zeros((n, ns))
         self.out_state = np.zeros((n, DECIMATION, ns))
         self.out_sensor = np.zeros((n, DECIMATION, idx.nsensordata))
@@ -212,6 +213,10 @@ class CreatureEnv:
         self.curriculum = {}
         self.set_progress(0.0, force_pool=True)
         self.reset(np.arange(n))
+        # Desynchronise episodes (like rsl_rl's random initial episode length): the first
+        # episode of each env is cut at a random step, so every PPO batch mixes all phases
+        # of the task instead of all envs being at the same moment of a jump.
+        self.cut = self.rng.integers(1, self.task.max_steps + 1, n)
         self.obs_noise = True
 
     # ------------------------------------------------------------------ curriculum
@@ -300,9 +305,12 @@ class CreatureEnv:
         self.prev_action[ids] = 0
         self.ep_step[ids] = 0
         self.ep_return[ids] = 0
+        if hasattr(self, 'cut'):
+            self.cut[ids] = np.iinfo(np.int64).max   # only the very first episode is cut short
         sc = self.scaling
         self.push_timer[ids] = (self.rng.uniform(2, 5, len(ids)) * sc.sqrt_s / CONTROL_DT).astype(np.int64)
         self.task.reset(ids)
+        self._proprio = None
         self.prev_joint_vel[ids] = self.qvel()[ids][:, self.idx.joint_dof]
 
     # ------------------------------------------------------------------ stepping
@@ -321,6 +329,7 @@ class CreatureEnv:
         t_before = self.state[:, 0].copy()
         self.physics(ctrl)
         self.state[:] = self.out_state[:, -1]
+        self._proprio = None
         finite = np.all(np.isfinite(self.state), axis=1)
         # MuJoCo resets MjData (time -> 0) on divergence; treat that as a failed episode.
         valid = finite & (self.state[:, 0] > t_before + 0.5 * DECIMATION * 0.005) & \
@@ -332,7 +341,7 @@ class CreatureEnv:
         self.ep_step += 1
         self.push(valid)
         rewards, terminated, info = task.evaluate(valid)
-        truncated = (self.ep_step >= task.max_steps) & ~terminated
+        truncated = (self.ep_step >= np.minimum(self.cut, task.max_steps)) & ~terminated
         done = terminated | truncated
         self.ep_return += rewards
         # Clocks advance before the terminal observation so a time-out bootstraps
@@ -364,12 +373,17 @@ class CreatureEnv:
         base = 1 + self.idx.nq + self.idx.root_dof
         self.state[ids, base:base + 2] += self.rng.uniform(-0.5, 0.5, (len(ids), 2)) * sc.sqrt_s * scale
         self.state[ids, base + 3:base + 6] += self.rng.uniform(-0.3, 0.3, (len(ids), 3)) * scale
+        self._proprio = None
 
     # ------------------------------------------------------------------ observations
     def proprio(self) -> dict:
-        idx = self.idx
-        return O.proprio_values(self.qpos(), self.qvel(), idx.root_qpos, idx.root_dof,
-                                idx.joint_qpos, idx.joint_dof, self.default)
+        """Robot terms of the current state, computed once per state change (rewards,
+        actor and critic observations all read them every step)."""
+        if self._proprio is None:
+            idx = self.idx
+            self._proprio = O.proprio_values(self.qpos(), self.qvel(), idx.root_qpos, idx.root_dof,
+                                             idx.joint_qpos, idx.joint_dof, self.default)
+        return dict(self._proprio)   # shallow copy: callers replace entries (noise), never mutate arrays
 
     def actor_obs(self) -> np.ndarray:
         values = self.proprio()
@@ -408,7 +422,7 @@ class CreatureEnv:
             'state': self.state.copy(), 'variant': self.variant.copy(),
             'last_action': self.last_action.copy(), 'prev_action': self.prev_action.copy(),
             'ep_step': self.ep_step.copy(), 'ep_return': self.ep_return.copy(),
-            'push_timer': self.push_timer.copy(),
+            'push_timer': self.push_timer.copy(), 'cut': self.cut.copy(),
             'pool_params': {k: v.copy() for k, v in self.pool.params.items()},
             'task': self.task.state_dict(), 'curriculum': dict(self.curriculum), 'progress': self.progress,
             'rng': self.rng.bit_generator.state,
@@ -427,8 +441,11 @@ class CreatureEnv:
         self.progress = float(sd['progress'])
         for key in ('state', 'variant', 'last_action', 'prev_action', 'ep_step', 'ep_return', 'push_timer'):
             getattr(self, key)[:] = sd[key]
+        if 'cut' in sd:
+            self.cut[:] = sd['cut']
         self.models = [self.pool.models[v] for v in self.variant]
         self.task.load_state_dict(sd['task'])
+        self._proprio = None
         self.prev_joint_vel[:] = self.qvel()[:, self.idx.joint_dof]
         return True
 
