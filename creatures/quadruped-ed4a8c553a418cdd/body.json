@@ -1,0 +1,779 @@
+{
+ "schema": "creature-body/1",
+ "id": "quadruped-ed4a8c553a418cdd",
+ "name": "Bear",
+ "bodyPlan": "quadruped",
+ "design": {
+  "schema": "creature-design/1",
+  "name": "Bear",
+  "concept": "Draft's heavy quadruped preset with planetary geared actuators.",
+  "bodyPlan": "quadruped",
+  "basePreset": "bear",
+  "skills": [
+   "walk"
+  ]
+ },
+ "resolvedDesign": {
+  "torsoLength": 0.62,
+  "torsoWidth": 0.46,
+  "torsoHeight": 0.3,
+  "shoulderWidth": 0.38,
+  "hipOffset": 0.18,
+  "upperLeg": 0.38,
+  "lowerLeg": 0.36,
+  "actuator": "geared",
+  "strength": 1.0
+ },
+ "xmlFile": "body.xml",
+ "meshFiles": [
+  "torso_mesh.stl"
+ ],
+ "rootBody": "torso_link",
+ "imuSite": "imu",
+ "forwardAxis": [
+  1,
+  0,
+  0
+ ],
+ "legs": [
+  {
+   "name": "fl",
+   "joints": [
+    "fl_hip_roll",
+    "fl_hip_pitch",
+    "fl_knee"
+   ],
+   "roles": [
+    "hip_roll",
+    "hip_pitch",
+    "knee"
+   ],
+   "footGeom": "fl_lower_leg_link_sphere",
+   "footSite": "fl_foot",
+   "mountAngle": 0.549853,
+   "side": "left",
+   "end": "front",
+   "bodies": [
+    "fl_roll_motor_link",
+    "fl_roll_link",
+    "fl_pitch_link",
+    "fl_upper_leg_link",
+    "fl_lower_leg_link"
+   ],
+   "footRadius": 0.054
+  },
+  {
+   "name": "fr",
+   "joints": [
+    "fr_hip_roll",
+    "fr_hip_pitch",
+    "fr_knee"
+   ],
+   "roles": [
+    "hip_roll",
+    "hip_pitch",
+    "knee"
+   ],
+   "footGeom": "fr_lower_leg_link_sphere",
+   "footSite": "fr_foot",
+   "mountAngle": -0.549853,
+   "side": "right",
+   "end": "front",
+   "bodies": [
+    "fr_roll_motor_link",
+    "fr_roll_link",
+    "fr_pitch_link",
+    "fr_upper_leg_link",
+    "fr_lower_leg_link"
+   ],
+   "footRadius": 0.054
+  },
+  {
+   "name": "rl",
+   "joints": [
+    "rl_hip_roll",
+    "rl_hip_pitch",
+    "rl_knee"
+   ],
+   "roles": [
+    "hip_roll",
+    "hip_pitch",
+    "knee"
+   ],
+   "footGeom": "rl_lower_leg_link_sphere",
+   "footSite": "rl_foot",
+   "mountAngle": 2.591739,
+   "side": "left",
+   "end": "rear",
+   "bodies": [
+    "rl_roll_motor_link",
+    "rl_roll_link",
+    "rl_pitch_link",
+    "rl_upper_leg_link",
+    "rl_lower_leg_link"
+   ],
+   "footRadius": 0.054
+  },
+  {
+   "name": "rr",
+   "joints": [
+    "rr_hip_roll",
+    "rr_hip_pitch",
+    "rr_knee"
+   ],
+   "roles": [
+    "hip_roll",
+    "hip_pitch",
+    "knee"
+   ],
+   "footGeom": "rr_lower_leg_link_sphere",
+   "footSite": "rr_foot",
+   "mountAngle": -2.591739,
+   "side": "right",
+   "end": "rear",
+   "bodies": [
+    "rr_roll_motor_link",
+    "rr_roll_link",
+    "rr_pitch_link",
+    "rr_upper_leg_link",
+    "rr_lower_leg_link"
+   ],
+   "footRadius": 0.054
+  }
+ ],
+ "jointNames": [
+  "fl_hip_roll",
+  "fl_hip_pitch",
+  "fl_knee",
+  "fr_hip_roll",
+  "fr_hip_pitch",
+  "fr_knee",
+  "rl_hip_roll",
+  "rl_hip_pitch",
+  "rl_knee",
+  "rr_hip_roll",
+  "rr_hip_pitch",
+  "rr_knee"
+ ],
+ "joints": [
+  {
+   "name": "fl_hip_roll",
+   "role": "hip_roll",
+   "leg": "fl",
+   "range": [
+    -0.8,
+    0.8
+   ],
+   "effort": 450.0,
+   "velocity": 11.31,
+   "gear": 20.25,
+   "armature": 0.528413,
+   "damping": 0.04,
+   "frictionloss": 0.3,
+   "motorClass": "L"
+  },
+  {
+   "name": "fl_hip_pitch",
+   "role": "hip_pitch",
+   "leg": "fl",
+   "range": [
+    -2.5,
+    2.5
+   ],
+   "effort": 450.0,
+   "velocity": 11.31,
+   "gear": 20.25,
+   "armature": 0.528413,
+   "damping": 0.04,
+   "frictionloss": 0.3,
+   "motorClass": "L"
+  },
+  {
+   "name": "fl_knee",
+   "role": "knee",
+   "leg": "fl",
+   "range": [
+    -2.8,
+    0.0
+   ],
+   "effort": 450.0,
+   "velocity": 11.31,
+   "gear": 20.25,
+   "armature": 0.528413,
+   "damping": 0.04,
+   "frictionloss": 0.3,
+   "motorClass": "L"
+  },
+  {
+   "name": "fr_hip_roll",
+   "role": "hip_roll",
+   "leg": "fr",
+   "range": [
+    -0.8,
+    0.8
+   ],
+   "effort": 450.0,
+   "velocity": 11.31,
+   "gear": 20.25,
+   "armature": 0.528413,
+   "damping": 0.04,
+   "frictionloss": 0.3,
+   "motorClass": "L"
+  },
+  {
+   "name": "fr_hip_pitch",
+   "role": "hip_pitch",
+   "leg": "fr",
+   "range": [
+    -2.5,
+    2.5
+   ],
+   "effort": 450.0,
+   "velocity": 11.31,
+   "gear": 20.25,
+   "armature": 0.528413,
+   "damping": 0.04,
+   "frictionloss": 0.3,
+   "motorClass": "L"
+  },
+  {
+   "name": "fr_knee",
+   "role": "knee",
+   "leg": "fr",
+   "range": [
+    -2.8,
+    0.0
+   ],
+   "effort": 450.0,
+   "velocity": 11.31,
+   "gear": 20.25,
+   "armature": 0.528413,
+   "damping": 0.04,
+   "frictionloss": 0.3,
+   "motorClass": "L"
+  },
+  {
+   "name": "rl_hip_roll",
+   "role": "hip_roll",
+   "leg": "rl",
+   "range": [
+    -0.8,
+    0.8
+   ],
+   "effort": 450.0,
+   "velocity": 11.31,
+   "gear": 20.25,
+   "armature": 0.528413,
+   "damping": 0.04,
+   "frictionloss": 0.3,
+   "motorClass": "L"
+  },
+  {
+   "name": "rl_hip_pitch",
+   "role": "hip_pitch",
+   "leg": "rl",
+   "range": [
+    -2.5,
+    2.5
+   ],
+   "effort": 450.0,
+   "velocity": 11.31,
+   "gear": 20.25,
+   "armature": 0.528413,
+   "damping": 0.04,
+   "frictionloss": 0.3,
+   "motorClass": "L"
+  },
+  {
+   "name": "rl_knee",
+   "role": "knee",
+   "leg": "rl",
+   "range": [
+    -2.8,
+    0.0
+   ],
+   "effort": 450.0,
+   "velocity": 11.31,
+   "gear": 20.25,
+   "armature": 0.528413,
+   "damping": 0.04,
+   "frictionloss": 0.3,
+   "motorClass": "L"
+  },
+  {
+   "name": "rr_hip_roll",
+   "role": "hip_roll",
+   "leg": "rr",
+   "range": [
+    -0.8,
+    0.8
+   ],
+   "effort": 450.0,
+   "velocity": 11.31,
+   "gear": 20.25,
+   "armature": 0.528413,
+   "damping": 0.04,
+   "frictionloss": 0.3,
+   "motorClass": "L"
+  },
+  {
+   "name": "rr_hip_pitch",
+   "role": "hip_pitch",
+   "leg": "rr",
+   "range": [
+    -2.5,
+    2.5
+   ],
+   "effort": 450.0,
+   "velocity": 11.31,
+   "gear": 20.25,
+   "armature": 0.528413,
+   "damping": 0.04,
+   "frictionloss": 0.3,
+   "motorClass": "L"
+  },
+  {
+   "name": "rr_knee",
+   "role": "knee",
+   "leg": "rr",
+   "range": [
+    -2.8,
+    0.0
+   ],
+   "effort": 450.0,
+   "velocity": 11.31,
+   "gear": 20.25,
+   "armature": 0.528413,
+   "damping": 0.04,
+   "frictionloss": 0.3,
+   "motorClass": "L"
+  }
+ ],
+ "nominalJointPositions": [
+  0.0,
+  0.533431,
+  -1.1,
+  0.0,
+  0.533431,
+  -1.1,
+  0.0,
+  0.533431,
+  -1.1,
+  0.0,
+  0.533431,
+  -1.1
+ ],
+ "nominalRootHeight": 0.684955,
+ "initialQpos": [
+  0.0,
+  0.0,
+  0.684955,
+  1.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.533431,
+  -1.1,
+  0.0,
+  0.533431,
+  -1.1,
+  0.0,
+  0.533431,
+  -1.1,
+  0.0,
+  0.533431,
+  -1.1
+ ],
+ "stanceCheck": {
+  "footHeightsM": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "maxFootHeightErrorM": 0.0,
+  "rollRad": 0.0,
+  "pitchRad": 0.0,
+  "bellyClearanceM": 0.2861,
+  "minJointMarginFraction": 0.3929,
+  "tolerances": {
+   "footHeightM": 0.0001,
+   "levelRad": 1e-06,
+   "jointMarginFraction": 0.1,
+   "minBellyClearanceM": 0.01
+  },
+  "source": "foot below the hip-pitch axis with a -1.1 rad knee bend",
+  "method": "MuJoCo forward kinematics; root lowered until the lowest foot sphere touches z = 0, then per-leg Newton on hip pitch and knee"
+ },
+ "massKg": 110.05,
+ "dimensions": {
+  "lengthM": 1.3611,
+  "widthM": 0.758,
+  "heightM": 0.835,
+  "legLengthM": 0.74
+ },
+ "gaitHint": {
+  "pattern": "trot",
+  "groups": [
+   [
+    0,
+    3
+   ],
+   [
+    1,
+    2
+   ]
+  ],
+  "phaseOffsets": [
+   0.0,
+   0.5,
+   0.5,
+   0.0
+  ],
+  "dutyFactor": 0.5
+ },
+ "geomRoles": {
+  "feet": [
+   "fl_lower_leg_link_sphere",
+   "fr_lower_leg_link_sphere",
+   "rl_lower_leg_link_sphere",
+   "rr_lower_leg_link_sphere"
+  ],
+  "torso": [
+   "torso_link_mesh"
+  ],
+  "limbs": [
+   "fl_roll_link_link",
+   "fl_pitch_link_link",
+   "fl_upper_leg_link_link",
+   "fl_lower_leg_link_link",
+   "fr_roll_link_link",
+   "fr_pitch_link_link",
+   "fr_upper_leg_link_link",
+   "fr_lower_leg_link_link",
+   "rl_roll_link_link",
+   "rl_pitch_link_link",
+   "rl_upper_leg_link_link",
+   "rl_lower_leg_link_link",
+   "rr_roll_link_link",
+   "rr_pitch_link_link",
+   "rr_upper_leg_link_link",
+   "rr_lower_leg_link_link"
+  ],
+  "motors": [
+   "fl_roll_motor_link_motor",
+   "fl_roll_link_motor",
+   "fl_pitch_link_motor",
+   "fl_upper_leg_link_motor",
+   "fr_roll_motor_link_motor",
+   "fr_roll_link_motor",
+   "fr_pitch_link_motor",
+   "fr_upper_leg_link_motor",
+   "rl_roll_motor_link_motor",
+   "rl_roll_link_motor",
+   "rl_pitch_link_motor",
+   "rl_upper_leg_link_motor",
+   "rr_roll_motor_link_motor",
+   "rr_roll_link_motor",
+   "rr_pitch_link_motor",
+   "rr_upper_leg_link_motor"
+  ],
+  "details": [
+   "fl_roll_motor_link_detail",
+   "fl_roll_link_detail",
+   "fl_pitch_link_detail",
+   "fl_upper_leg_link_detail",
+   "fr_roll_motor_link_detail",
+   "fr_roll_link_detail",
+   "fr_pitch_link_detail",
+   "fr_upper_leg_link_detail",
+   "rl_roll_motor_link_detail",
+   "rl_roll_link_detail",
+   "rl_pitch_link_detail",
+   "rl_upper_leg_link_detail",
+   "rr_roll_motor_link_detail",
+   "rr_roll_link_detail",
+   "rr_pitch_link_detail",
+   "rr_upper_leg_link_detail"
+  ]
+ },
+ "bodyRoles": {
+  "torso": "torso_link",
+  "head": null
+ },
+ "xmlContents": {
+  "actuators": 0,
+  "sensors": 4,
+  "sensorNames": [
+   "imu_ang_vel",
+   "imu_lin_vel",
+   "imu_lin_acc",
+   "root_angmom"
+  ],
+  "keyframes": [],
+  "note": "Generated bodies carry no actuators; the legacy Flower body keeps its 18 direct torque motors and nominal keyframe so its bytes match the legacy policy."
+ },
+ "motors": [
+  {
+   "class": "L",
+   "family": "geared",
+   "familyLabel": "Planetary geared (MyActuator RMD-X15, Bear preset)",
+   "catalogAnchor": "RMD-X15-P20-450-E",
+   "category": "MidGear",
+   "count": 12,
+   "effortNm": 450.0,
+   "velocityRadS": 11.31,
+   "gear": 20.25,
+   "massKg": 3.5,
+   "diameterMm": 166.0,
+   "lengthMm": 90.0,
+   "armatureKgm2": 0.528413429,
+   "peakPowerW": 1272.4,
+   "torqueDensityNmPerKg": 128.6,
+   "powerDensityWPerKg": 363.5,
+   "frontierTorqueMaxNm": 850.3
+  }
+ ],
+ "feasibility": {
+  "passed": true,
+  "strict": true,
+  "allowHypothetical": false,
+  "warnings": [
+   "[L]: torque density 129 Nm/kg is above the MidGear p90 (117 Nm/kg) — best-in-class territory.",
+   "[L]: power density 364 W/kg is above the MidGear p90 (362 W/kg) — best-in-class territory.",
+   "fl_roll_link_link: to weigh its 0.301 kg share of the hip_link trend inside the actuators it joins, the member's density is 2587 kg/m³ against the class's 676",
+   "fl_upper_leg_link_link: to weigh its 1.240 kg share of the thigh trend inside the actuators it joins, the member's density is 765 kg/m³ against the class's 345",
+   "fr_roll_link_link: to weigh its 0.301 kg share of the hip_link trend inside the actuators it joins, the member's density is 2587 kg/m³ against the class's 676",
+   "fr_upper_leg_link_link: to weigh its 1.240 kg share of the thigh trend inside the actuators it joins, the member's density is 765 kg/m³ against the class's 345",
+   "rl_roll_link_link: to weigh its 0.301 kg share of the hip_link trend inside the actuators it joins, the member's density is 2587 kg/m³ against the class's 676",
+   "rl_upper_leg_link_link: to weigh its 1.240 kg share of the thigh trend inside the actuators it joins, the member's density is 765 kg/m³ against the class's 345",
+   "rr_roll_link_link: to weigh its 0.301 kg share of the hip_link trend inside the actuators it joins, the member's density is 2587 kg/m³ against the class's 676",
+   "rr_upper_leg_link_link: to weigh its 1.240 kg share of the thigh trend inside the actuators it joins, the member's density is 765 kg/m³ against the class's 345"
+  ],
+  "overridden": [],
+  "extraGates": [
+   "rigid actuator overlap",
+   "level stance with body clearance"
+  ]
+ },
+ "trainability": {
+  "verdict": {
+   "stand": "ok",
+   "walk": "plausible",
+   "jump": "strong"
+  },
+  "flags": [
+   {
+    "code": "dynamic-gait",
+    "severity": "info",
+    "message": "The trot gait is not statically stable; the policy must balance dynamically (normal for trotting)."
+   }
+  ],
+  "metrics": {
+   "massKg": 110.05,
+   "weightN": 1079.59,
+   "standLoad": 0.1159,
+   "gaitLoad": 0.2318,
+   "gaitStanceLegs": 2,
+   "verticalForceRatio": 8.629,
+   "specificTorqueNmPerKg": 4.089,
+   "staticMarginM": 0.325,
+   "gaitMarginM": -0.0033,
+   "comHeightM": 0.661,
+   "bellyClearanceM": 0.2861,
+   "legLengthM": 0.74,
+   "bodyLengthM": 0.62,
+   "legToBodyRatio": 1.194,
+   "minJointVelocityRadS": 11.31,
+   "maxFootSpeedMS": 8.369,
+   "jumpEstimate": {
+    "takeoffSpeedMS": 1.856,
+    "strokeM": 0.296,
+    "hopHeightM": 0.176,
+    "note": "Rough upper bound from joint torque/speed limits at the nominal pose; not a simulated or trained jump."
+   }
+  },
+  "holdTest": {
+   "passed": true,
+   "finite": true,
+   "seconds": 2.0,
+   "sagFraction": 0.0096,
+   "tiltRad": 0.0004,
+   "peakTorqueFraction": 0.1197,
+   "bodyGroundContacts": 0,
+   "method": "PD hold of the nominal pose, kp = effort/0.15 rad, damping ratio 1, torque capped at the Draft effort, timestep 0.005 implicitfast, plan collision classes"
+  },
+  "notes": "Static and PD-hold heuristics for coaching; only a trained policy's evaluation shows walking or jumping."
+ },
+ "legacy": {
+  "preset": "bear",
+  "controller": null,
+  "note": "Byte-identical to the legacy /api/generate model at original size."
+ },
+ "provenance": {
+  "generator": "Draft RobotGenerator strict=True",
+  "repository": "https://github.com/davidhnguyen2000/draft",
+  "draftRevision": "3b03e144735098ef94b938e85756806f45628f83",
+  "draftPackageVersion": "0.1.0",
+  "mujocoVersion": "3.8.0",
+  "template": "quadruped",
+  "templateDir": "draft:src/draft/robots/quadruped",
+  "family": "geared",
+  "basePreset": "bear",
+  "archetype": "bear",
+  "sourcesSha256": {
+   "quadruped/parameters.yaml": "a22911f8857dfc390532d0ed75d1f4882b2ad2a586a42d95e106beb8f34c199f",
+   "quadruped/tree.yaml": "24b465197e3b15da12cb2ba2845408586ee5e14cc7b64cd58bb0a56a0a4cfada",
+   "quadruped/mesh.yaml": "f415fb84600c0689f8fb001bbfd49ffcf3a37930c7e0eb6c6c03e4764e8220bd"
+  },
+  "draftOverrides": {
+   "hip_roll_link_length": 0.18,
+   "upper_leg_link_length": 0.38,
+   "lower_leg_link_length": 0.36,
+   "hip_roll_mot": "L",
+   "hip_pitch_mot": "L",
+   "knee_mot": "L",
+   "link_render_radius_scale": 1.0,
+   "torso_lx": 0.62,
+   "torso_ly": 0.46,
+   "torso_lz": 0.3,
+   "shoulder_width": 0.38,
+   "motor_rho": 2700.0,
+   "torso_rho": 180.0,
+   "L_motor": "RMD-X15-P20-450-E",
+   "L_motor_effort": 450.0,
+   "L_motor_velocity": 11.31,
+   "L_motor_gear": 20.25,
+   "M_motor": "RMD-X12-P20-320-E",
+   "M_motor_effort": 320.0,
+   "M_motor_velocity": 13.09,
+   "M_motor_gear": 20.0,
+   "S_motor": "RMD-X8-P20-120-E",
+   "S_motor_effort": 120.0,
+   "S_motor_velocity": 16.55,
+   "S_motor_gear": 19.612,
+   "L_motor_friction": 0.3,
+   "M_motor_friction": 0.213,
+   "S_motor_friction": 0.08,
+   "L_motor_damping": 0.04,
+   "M_motor_damping": 0.0284,
+   "S_motor_damping": 0.0107,
+   "link_color": "0.891 0.605 0.444 1.000",
+   "motor_color": "0.451 0.269 0.167 1.000",
+   "mot_detail_color": "0.277 0.166 0.103 1.000",
+   "torso_color": "0.867 0.518 0.322 1.000",
+   "foot_color": "0.302 0.302 0.302 1.000",
+   "allow_hypothetical": false
+  },
+  "assetSha256": {
+   "body.xml": "49900c88c9ef6307609eee109cf588dc65e031a38c445ea0f1deb8f1bbe23100",
+   "torso_mesh.stl": "4825b1832edd8bbb5b030a64aee8211a339b2ac6b67827dbc467eef69bc9e5b1"
+  },
+  "designsVersion": 1,
+  "massModel": "Actuators and structure from Draft trends (quadruped population)"
+ },
+ "specSheet": {
+  "title": "Bear",
+  "bodyId": "quadruped-ed4a8c553a418cdd",
+  "subtitle": "Quadruped · Planetary geared (MyActuator RMD-X15, Bear preset)",
+  "template": "quadruped",
+  "massKg": 110.05,
+  "dimensions": {
+   "lengthM": 1.3611,
+   "widthM": 0.758,
+   "heightM": 0.835,
+   "legLengthM": 0.74
+  },
+  "legCount": 4,
+  "jointCount": 12,
+  "actuatorCount": 12,
+  "motors": [
+   {
+    "class": "L",
+    "family": "geared",
+    "familyLabel": "Planetary geared (MyActuator RMD-X15, Bear preset)",
+    "catalogAnchor": "RMD-X15-P20-450-E",
+    "category": "MidGear",
+    "count": 12,
+    "effortNm": 450.0,
+    "velocityRadS": 11.31,
+    "gear": 20.25,
+    "massKg": 3.5,
+    "diameterMm": 166.0,
+    "lengthMm": 90.0,
+    "armatureKgm2": 0.528413429,
+    "peakPowerW": 1272.4,
+    "torqueDensityNmPerKg": 128.6,
+    "powerDensityWPerKg": 363.5,
+    "frontierTorqueMaxNm": 850.3
+   }
+  ],
+  "feasibility": {
+   "status": "passed",
+   "gate": "Draft strict feasibility gate + lab packing/stance gates",
+   "warnings": [
+    "[L]: torque density 129 Nm/kg is above the MidGear p90 (117 Nm/kg) — best-in-class territory.",
+    "[L]: power density 364 W/kg is above the MidGear p90 (362 W/kg) — best-in-class territory.",
+    "fl_roll_link_link: to weigh its 0.301 kg share of the hip_link trend inside the actuators it joins, the member's density is 2587 kg/m³ against the class's 676",
+    "fl_upper_leg_link_link: to weigh its 1.240 kg share of the thigh trend inside the actuators it joins, the member's density is 765 kg/m³ against the class's 345",
+    "fr_roll_link_link: to weigh its 0.301 kg share of the hip_link trend inside the actuators it joins, the member's density is 2587 kg/m³ against the class's 676",
+    "fr_upper_leg_link_link: to weigh its 1.240 kg share of the thigh trend inside the actuators it joins, the member's density is 765 kg/m³ against the class's 345",
+    "rl_roll_link_link: to weigh its 0.301 kg share of the hip_link trend inside the actuators it joins, the member's density is 2587 kg/m³ against the class's 676",
+    "rl_upper_leg_link_link: to weigh its 1.240 kg share of the thigh trend inside the actuators it joins, the member's density is 765 kg/m³ against the class's 345",
+    "rr_roll_link_link: to weigh its 0.301 kg share of the hip_link trend inside the actuators it joins, the member's density is 2587 kg/m³ against the class's 676",
+    "rr_upper_leg_link_link: to weigh its 1.240 kg share of the thigh trend inside the actuators it joins, the member's density is 765 kg/m³ against the class's 345"
+   ],
+   "warningCount": 10
+  },
+  "trainability": {
+   "verdict": {
+    "stand": "ok",
+    "walk": "plausible",
+    "jump": "strong"
+   },
+   "flags": [
+    {
+     "code": "dynamic-gait",
+     "severity": "info",
+     "message": "The trot gait is not statically stable; the policy must balance dynamically (normal for trotting)."
+    }
+   ],
+   "metrics": {
+    "massKg": 110.05,
+    "weightN": 1079.59,
+    "standLoad": 0.1159,
+    "gaitLoad": 0.2318,
+    "gaitStanceLegs": 2,
+    "verticalForceRatio": 8.629,
+    "specificTorqueNmPerKg": 4.089,
+    "staticMarginM": 0.325,
+    "gaitMarginM": -0.0033,
+    "comHeightM": 0.661,
+    "bellyClearanceM": 0.2861,
+    "legLengthM": 0.74,
+    "bodyLengthM": 0.62,
+    "legToBodyRatio": 1.194,
+    "minJointVelocityRadS": 11.31,
+    "maxFootSpeedMS": 8.369,
+    "jumpEstimate": {
+     "takeoffSpeedMS": 1.856,
+     "strokeM": 0.296,
+     "hopHeightM": 0.176,
+     "note": "Rough upper bound from joint torque/speed limits at the nominal pose; not a simulated or trained jump."
+    }
+   }
+  },
+  "gait": "trot",
+  "provenance": {
+   "generator": "Draft RobotGenerator strict=True",
+   "draftRevision": "3b03e144735098ef94b938e85756806f45628f83",
+   "template": "quadruped",
+   "assetSha256": {
+    "body.xml": "49900c88c9ef6307609eee109cf588dc65e031a38c445ea0f1deb8f1bbe23100",
+    "torso_mesh.stl": "4825b1832edd8bbb5b030a64aee8211a339b2ac6b67827dbc467eef69bc9e5b1"
+   }
+  },
+  "honesty": "Generated mechanism only: no controller exists until a policy is trained and validated for this exact body."
+ }
+}

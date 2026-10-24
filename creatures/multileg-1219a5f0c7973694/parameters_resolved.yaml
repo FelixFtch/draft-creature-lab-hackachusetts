@@ -1,0 +1,126 @@
+L_motor: CyberGear MS01
+L_motor_L: 0.04590536180026388
+L_motor_armature: 0.0034925569868388883
+L_motor_aspect: 0.6
+L_motor_catalog_category: QDD
+L_motor_catalog_name: CyberGear MS01
+L_motor_damping: 0.0036
+L_motor_effort: 14.4
+L_motor_friction: 0.024
+L_motor_gear: 7.75
+L_motor_mass: 0.35793964937079226
+L_motor_mode: torque_speed
+L_motor_power: 90.468
+L_motor_r: 0.03825446816688657
+L_motor_rho: 1696.0247434130117
+L_motor_velocity: 25.13
+_L_motor_catalog: CyberGear MS01
+allow_actuator_in_structure: false
+allow_hypothetical: false
+allow_motor_overlap: false
+body_aspect: 1.7
+body_radius: 0.12
+coxa_length: 0.085
+coxa_link_r: 0.014154153221748029
+design_note: Multileg crawler; actuators trend-sized and gated by Draft, structural
+  densities are stated engineering assumptions (no multileg mass population).
+foot_color: 0.302 0.302 0.302 1.000
+foot_rho: 500.0
+foot_sphere_r: 0.022000000000000002
+geom_friction: 0.8 0.005 0.0001
+hip_pitch_mot: L
+hip_pitch_motor_L: 0.04590536180026388
+hip_pitch_motor_armature: 0.0034925569868388883
+hip_pitch_motor_damping: 0.0036
+hip_pitch_motor_effort: 14.4
+hip_pitch_motor_friction: 0.024
+hip_pitch_motor_r: 0.03825446816688657
+hip_pitch_motor_rho: 1696.0247434130117
+hip_pitch_motor_velocity: 25.13
+hip_pitch_range:
+- -0.65
+- 0.8
+hip_yaw_mot: L
+hip_yaw_motor_L: 0.04590536180026388
+hip_yaw_motor_armature: 0.0034925569868388883
+hip_yaw_motor_damping: 0.0036
+hip_yaw_motor_effort: 14.4
+hip_yaw_motor_friction: 0.024
+hip_yaw_motor_r: 0.03825446816688657
+hip_yaw_motor_rho: 1696.0247434130117
+hip_yaw_motor_velocity: 25.13
+hip_yaw_range:
+- -0.4712
+- 0.4712
+hub_a: 0.204
+hub_b: 0.12
+hub_thickness: 0.0792
+knee_mot: L
+knee_motor_L: 0.04590536180026388
+knee_motor_armature: 0.0034925569868388883
+knee_motor_damping: 0.0036
+knee_motor_effort: 14.4
+knee_motor_friction: 0.024
+knee_motor_r: 0.03825446816688657
+knee_motor_rho: 1696.0247434130117
+knee_motor_velocity: 25.13
+knee_range:
+- 0.35
+- 2.1
+legs:
+- index: 0
+  name: leg0
+  ux: 0.861934215158
+  uy: 0.507020126563
+  nx: 0.707106781187
+  ny: 0.707106781187
+  yaw: 0.785398163397
+- index: 1
+  name: leg1
+  ux: 0.0
+  uy: 1.0
+  nx: 0.0
+  ny: 1.0
+  yaw: 1.570796326795
+- index: 2
+  name: leg2
+  ux: -0.861934215158
+  uy: 0.507020126563
+  nx: -0.707106781187
+  ny: 0.707106781187
+  yaw: 2.356194490192
+- index: 3
+  name: leg3
+  ux: -0.861934215158
+  uy: -0.507020126563
+  nx: -0.707106781187
+  ny: -0.707106781187
+  yaw: -2.356194490192
+- index: 4
+  name: leg4
+  ux: 0.0
+  uy: -1.0
+  nx: 0.0
+  ny: -1.0
+  yaw: -1.570796326795
+- index: 5
+  name: leg5
+  ux: 0.861934215158
+  uy: -0.507020126563
+  nx: 0.707106781187
+  ny: -0.707106781187
+  yaw: -0.785398163397
+link_color: 0.600 0.500 0.760 1.000
+link_rho: 750.0
+lower_leg_length: 0.2
+lower_leg_r: 0.012241429813403702
+mot_detail_color: 0.150 0.120 0.220 1.000
+motor_color: 0.250 0.210 0.360 1.000
+mount_clearance: 0.008
+mount_gap: 0.002
+mount_link_length: 0.04625446816688657
+mount_link_r: 0.016449421311761223
+torso_color: 0.540 0.420 0.720 1.000
+torso_rho: 500.0
+upper_leg_length: 0.16
+upper_leg_r: 0.015301787266754628

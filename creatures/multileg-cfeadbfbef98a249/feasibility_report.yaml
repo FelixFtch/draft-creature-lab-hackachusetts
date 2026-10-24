@@ -1,0 +1,229 @@
+robot: multileg
+actuator_checks:
+  classes:
+    L:
+      anchor: CyberGear MS01
+      category: QDD
+      designed_from: torque_speed
+      gear_ratio: 7.75
+      gear_source: declared
+      effort_Nm: 12.0
+      velocity_rad_s: 25.13
+      mass_kg: 0.317
+      radius_m: 0.036662
+      length_m: 0.043994
+      volume_cm3: 185.77
+      aspect_LD: 0.6
+      aspect_source: declared
+      density_kg_m3: 1706.42
+      rotor_inertia_kgm2: 4.9053418e-05
+      rotor_inertia_from: areal(k*r^4)
+      armature_kgm2: 0.002946271
+      torque_density_Nm_per_kg: 37.9
+      power_density_W_per_kg: 237.8
+      peak_power_W: 75.4
+      frontier_tau_max_Nm: 133.0
+      overridden_by_law: []
+  errors: []
+  warnings:
+  - '32 structural member(s) declare no link_mass_class, so their radius and density
+    are stated rather than derived: leg0_lower_leg_link_link, leg0_mount_link, leg0_upper_leg_link_link,
+    leg0_yaw_link_link, leg1_lower_leg_link_link, leg1_mount_link, leg1_upper_leg_link_link,
+    leg1_yaw_link_link, leg2_lower_leg_link_link, leg2_mount_link, leg2_upper_leg_link_link,
+    leg2_yaw_link_link, leg3_lower_leg_link_link, leg3_mount_link, leg3_upper_leg_link_link,
+    leg3_yaw_link_link, leg4_lower_leg_link_link, leg4_mount_link, leg4_upper_leg_link_link,
+    leg4_yaw_link_link, leg5_lower_leg_link_link, leg5_mount_link, leg5_upper_leg_link_link,
+    leg5_yaw_link_link, leg6_lower_leg_link_link, leg6_mount_link, leg6_upper_leg_link_link,
+    leg6_yaw_link_link, leg7_lower_leg_link_link, leg7_mount_link, leg7_upper_leg_link_link,
+    leg7_yaw_link_link'
+segment_densities:
+  population: null
+  derived: {}
+  warnings: []
+  note: "no measured population declared \u2014 segment densities left as stated"
+actuator_mass_audit:
+  n_joints: 24
+  charged_by_motor_law_kg: 7.608
+  emitted_motor_geom_kg: 7.608
+  emitted_over_charged: 1.0
+actuator_packing:
+  n_actuator_geoms: 24
+  n_exempt: 0
+  n_overlapping_pairs: 0
+  n_neutral_pose_pairs: 0
+  worst_depth_m: 0.0
+  worst_neutral_pose_depth_m: 0.0
+  tolerance_m: 0.0005
+  tolerance_fraction: 0.02
+  pairs: []
+  neutral_pose_pairs: []
+actuator_in_structure:
+  mesh_volume_cm3: 7904.1
+  inside_cm3: 0.0
+  double_charged_kg: 0.0
+  actuators: []
+mass_kg:
+  link: 1.5573
+  motor: 7.608
+  torso: 3.952
+total_mass_kg: 13.1174
+mass_composition_check:
+  reference_population: null
+  total_mass_kg: 13.117364756419096
+  checks: []
+  note: "no measured population declared \u2014 mass composition not audited (set\
+    \ mass_composition_reference to one of humanoid, quadruped)"
+distal_taper: null
+link_render: null
+link_inset:
+  n_links_inset: 24
+  removed_fraction_of_length:
+  - 0.3518
+  - 0.7089
+  rule: "a structural link stops at its actuator housing face plus a bolt flange,\
+    \ rather than running to the joint centre through the motor \u2014 see core/tree_ops.py:link_span"
+  penetration_m: 0.005
+  scope: "the DISTAL end only: this body's own actuator shares its frame so the overlap\
+    \ is fixed, while the actuator at the proximal end is on the far side of a joint\
+    \ and how much it interpenetrates depends on the angle \u2014 core/packing.py\
+    \ governs that pair instead"
+  links:
+    leg0_mount_link:
+      joint_to_joint_m: 0.044662
+      structural_m: 0.013
+      removed_m: 0.031662
+      removed_frac: 0.7089
+    leg0_upper_leg_link_link:
+      joint_to_joint_m: 0.18
+      structural_m: 0.116676
+      removed_m: 0.063324
+      removed_frac: 0.3518
+    leg0_yaw_link_link:
+      joint_to_joint_m: 0.09
+      structural_m: 0.026676
+      removed_m: 0.063324
+      removed_frac: 0.7036
+    leg1_mount_link:
+      joint_to_joint_m: 0.044662
+      structural_m: 0.013
+      removed_m: 0.031662
+      removed_frac: 0.7089
+    leg1_upper_leg_link_link:
+      joint_to_joint_m: 0.18
+      structural_m: 0.116676
+      removed_m: 0.063324
+      removed_frac: 0.3518
+    leg1_yaw_link_link:
+      joint_to_joint_m: 0.09
+      structural_m: 0.026676
+      removed_m: 0.063324
+      removed_frac: 0.7036
+    leg2_mount_link:
+      joint_to_joint_m: 0.044662
+      structural_m: 0.013
+      removed_m: 0.031662
+      removed_frac: 0.7089
+    leg2_upper_leg_link_link:
+      joint_to_joint_m: 0.18
+      structural_m: 0.116676
+      removed_m: 0.063324
+      removed_frac: 0.3518
+    leg2_yaw_link_link:
+      joint_to_joint_m: 0.09
+      structural_m: 0.026676
+      removed_m: 0.063324
+      removed_frac: 0.7036
+    leg3_mount_link:
+      joint_to_joint_m: 0.044662
+      structural_m: 0.013
+      removed_m: 0.031662
+      removed_frac: 0.7089
+    leg3_upper_leg_link_link:
+      joint_to_joint_m: 0.18
+      structural_m: 0.116676
+      removed_m: 0.063324
+      removed_frac: 0.3518
+    leg3_yaw_link_link:
+      joint_to_joint_m: 0.09
+      structural_m: 0.026676
+      removed_m: 0.063324
+      removed_frac: 0.7036
+    leg4_mount_link:
+      joint_to_joint_m: 0.044662
+      structural_m: 0.013
+      removed_m: 0.031662
+      removed_frac: 0.7089
+    leg4_upper_leg_link_link:
+      joint_to_joint_m: 0.18
+      structural_m: 0.116676
+      removed_m: 0.063324
+      removed_frac: 0.3518
+    leg4_yaw_link_link:
+      joint_to_joint_m: 0.09
+      structural_m: 0.026676
+      removed_m: 0.063324
+      removed_frac: 0.7036
+    leg5_mount_link:
+      joint_to_joint_m: 0.044662
+      structural_m: 0.013
+      removed_m: 0.031662
+      removed_frac: 0.7089
+    leg5_upper_leg_link_link:
+      joint_to_joint_m: 0.18
+      structural_m: 0.116676
+      removed_m: 0.063324
+      removed_frac: 0.3518
+    leg5_yaw_link_link:
+      joint_to_joint_m: 0.09
+      structural_m: 0.026676
+      removed_m: 0.063324
+      removed_frac: 0.7036
+    leg6_mount_link:
+      joint_to_joint_m: 0.044662
+      structural_m: 0.013
+      removed_m: 0.031662
+      removed_frac: 0.7089
+    leg6_upper_leg_link_link:
+      joint_to_joint_m: 0.18
+      structural_m: 0.116676
+      removed_m: 0.063324
+      removed_frac: 0.3518
+    leg6_yaw_link_link:
+      joint_to_joint_m: 0.09
+      structural_m: 0.026676
+      removed_m: 0.063324
+      removed_frac: 0.7036
+    leg7_mount_link:
+      joint_to_joint_m: 0.044662
+      structural_m: 0.013
+      removed_m: 0.031662
+      removed_frac: 0.7089
+    leg7_upper_leg_link_link:
+      joint_to_joint_m: 0.18
+      structural_m: 0.116676
+      removed_m: 0.063324
+      removed_frac: 0.3518
+    leg7_yaw_link_link:
+      joint_to_joint_m: 0.09
+      structural_m: 0.026676
+      removed_m: 0.063324
+      removed_frac: 0.7036
+structural_links: null
+foot_render: null
+xml_roundtrip:
+  written_mass_kg: 13.117396
+  in_memory_mass_kg: 13.117365
+  relative_drift: 2.34e-06
+  note: MuJoCo writes 6 significant figures; this is the cost of that rounding, not
+    a modelling difference
+warnings:
+- '32 structural member(s) declare no link_mass_class, so their radius and density
+  are stated rather than derived: leg0_lower_leg_link_link, leg0_mount_link, leg0_upper_leg_link_link,
+  leg0_yaw_link_link, leg1_lower_leg_link_link, leg1_mount_link, leg1_upper_leg_link_link,
+  leg1_yaw_link_link, leg2_lower_leg_link_link, leg2_mount_link, leg2_upper_leg_link_link,
+  leg2_yaw_link_link, leg3_lower_leg_link_link, leg3_mount_link, leg3_upper_leg_link_link,
+  leg3_yaw_link_link, leg4_lower_leg_link_link, leg4_mount_link, leg4_upper_leg_link_link,
+  leg4_yaw_link_link, leg5_lower_leg_link_link, leg5_mount_link, leg5_upper_leg_link_link,
+  leg5_yaw_link_link, leg6_lower_leg_link_link, leg6_mount_link, leg6_upper_leg_link_link,
+  leg6_yaw_link_link, leg7_lower_leg_link_link, leg7_mount_link, leg7_upper_leg_link_link,
+  leg7_yaw_link_link'

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "creature-design/1",
   "title": "DesignSpec",
-  "description": "What Tinker (the AI designer) or the UI proposes. draft-service validates it, maps it onto a Draft template, runs the real Draft generator with its feasibility gate, and returns a body contract. Owner: morphology agent (may tighten/extend bounds; keep this file the single source of truth, ai-service reads it at runtime to build prompts).",
+  "description": "What Tinker (the AI designer) or the UI proposes. draft-service validates it, maps it onto a Draft template, runs the real Draft generator (MIT, Nguyen/Coelho/Kim 2026) with its feasibility gate, and returns a body contract (creature-body/1) with a spec sheet and trainability flags. Infeasible designs return HTTP 422 {error, gate, message, hints:[{field, direction, reason, value?}]}; apply the hints (value, when present, is a schema-valid fix) and resubmit. Owner: morphology agent (may tighten/extend bounds; keep this file the single source of truth, ai-service reads it at runtime to build prompts). Read x-designRules and x-actuatorFamilies before proposing a design. Only bodyPlan, basePreset and the quadruped/multileg block change the body; name, concept, skills and look never do.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema", "name", "bodyPlan"],
@@ -12,42 +12,42 @@
     "concept": { "type": "string", "maxLength": 280, "description": "One-sentence pitch in the user's words." },
     "bodyPlan": {
       "enum": ["quadruped", "multileg"],
-      "description": "quadruped = Draft's official four-legged template (3 joints per leg: hip roll, hip pitch, knee). multileg = radial or bilateral body with 3 to 8 identical three-joint legs (hip yaw, hip pitch, knee), generalised from the Flower crawler."
+      "description": "quadruped = Draft's official four-legged template (3 joints per leg: hip roll, hip pitch, knee; legs fl, fr, rl, rr). multileg = radial or bilateral body with 3 to 8 identical three-joint legs (hip yaw, hip pitch, knee), generalised from the Flower crawler (robots/multileg)."
     },
     "basePreset": {
       "enum": ["cheetah", "bear", "giraffe", "flower"],
-      "description": "Optional: start from a Draft preset's actuators and proportions, then apply the overrides below."
+      "description": "Optional: start from a preset's actuators and proportions, then apply the overrides below. cheetah/bear/giraffe are quadruped presets (Draft's experiment YAML), flower is the multileg preset. A design that gives ONLY basePreset (no overrides) is exactly that legacy preset at original size; cheetah and flower already have validated walking policies. Without basePreset a quadruped borrows its actuator family's archetype proportions (x-archetypes) and a multileg starts from a 6-leg radial crawler."
     },
     "quadruped": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Only for bodyPlan=quadruped. Metres. Omitted fields keep the preset/template value.",
+      "description": "Only for bodyPlan=quadruped. Metres. Omitted fields keep the preset/archetype value. Family-specific minimums for shoulderWidth and hipOffset are in x-actuatorFamilies.quadruped (bigger actuators need more room).",
       "properties": {
-        "torsoLength": { "type": "number", "minimum": 0.25, "maximum": 0.8 },
-        "torsoWidth": { "type": "number", "minimum": 0.14, "maximum": 0.5 },
-        "torsoHeight": { "type": "number", "minimum": 0.08, "maximum": 0.35 },
-        "shoulderWidth": { "type": "number", "minimum": 0.1, "maximum": 0.4 },
-        "hipOffset": { "type": "number", "minimum": 0.06, "maximum": 0.2, "description": "Lateral hip link (Draft hip_roll_link_length)." },
-        "upperLeg": { "type": "number", "minimum": 0.12, "maximum": 0.7 },
-        "lowerLeg": { "type": "number", "minimum": 0.12, "maximum": 0.65 },
-        "actuator": { "enum": ["micro", "qdd", "geared", "harmonic"], "description": "Actuator family; Draft sizes the motors from its fitted trends. qdd = quasi-direct-drive, fast and springy (best for jumping); geared = strong planetary, slower; harmonic = very strong, very slow; micro = small hobby-scale servos for small robots." },
-        "strength": { "type": "number", "minimum": 0.5, "maximum": 1.5, "description": "Multiplier on the family's rated torque. Draft may flag strong/small combinations as infeasible." }
+        "torsoLength": { "type": "number", "minimum": 0.25, "maximum": 0.8, "description": "Trunk length (Draft torso_lx); the hips sit just beyond its ends. Trunk mass follows the measured quadruped trunk density, so big trunks are heavy." },
+        "torsoWidth": { "type": "number", "minimum": 0.14, "maximum": 0.5, "description": "Trunk width (torso_ly); Draft widens the drawn trunk to cover the hip-roll actuators." },
+        "torsoHeight": { "type": "number", "minimum": 0.08, "maximum": 0.35, "description": "Trunk height (torso_lz)." },
+        "shoulderWidth": { "type": "number", "minimum": 0.1, "maximum": 0.4, "description": "Lateral distance between the left and right hip-roll axes (shoulder_width). Must exceed the hip actuator diameter: micro >= 0.1, qdd >= 0.14, harmonic >= 0.13, geared >= 0.19." },
+        "hipOffset": { "type": "number", "minimum": 0.06, "maximum": 0.25, "description": "Lateral hip link from the hip-pitch axis to the leg (Draft hip_roll_link_length); it must hold the hip-pitch and knee actuators apart: micro >= 0.065, qdd >= 0.08, geared >= 0.15, harmonic >= 0.19. Longer offsets widen the stance but add hip load." },
+        "upperLeg": { "type": "number", "minimum": 0.12, "maximum": 0.7, "description": "Thigh length (upper_leg_link_length)." },
+        "lowerLeg": { "type": "number", "minimum": 0.12, "maximum": 0.65, "description": "Shank length (lower_leg_link_length), ending in a sphere foot." },
+        "actuator": { "enum": ["micro", "qdd", "geared", "harmonic"], "description": "Actuator family, anchored on a catalogued part (x-actuatorFamilies.quadruped); Draft sizes mass, envelope and armature from its fitted trends and gates the result. qdd = quasi-direct-drive MIT U12 class, fast and springy (best for jumping, Cheetah-sized robots); geared = planetary RMD-X15 class, very strong and slower (Bear-sized); harmonic = strain-wave eRob110H class, very strong and very slow (Giraffe-sized, tall robots, no jumping); micro = CyberGear class for small robots (torso under ~0.4 m, legs under ~0.25 m each)." },
+        "strength": { "type": "number", "minimum": 0.5, "maximum": 1.5, "description": "Multiplier on the family's rated peak torque (speed and gear stay the part's). qdd must stay <= 1.35: the MIT U12 is already near the best catalogued QDD power density. Other families accept the full range. Stronger actuators are also physically larger." }
       }
     },
     "multileg": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Only for bodyPlan=multileg. Metres.",
+      "description": "Only for bodyPlan=multileg. Metres. Legs are named leg0..legN-1 counter-clockwise from the front (+X). Omitted fields keep the preset/template value (template: 6 radial legs, bodyRadius 0.15, coxa 0.09, upperLeg 0.18, lowerLeg 0.22, micro).",
       "properties": {
-        "legCount": { "type": "integer", "minimum": 3, "maximum": 8 },
-        "arrangement": { "enum": ["radial", "bilateral"], "description": "radial = legs evenly around a round hub (flower, starfish, octopus); bilateral = legs in left/right pairs along an elongated body (insect, crab, millipede-ish)." },
-        "bodyRadius": { "type": "number", "minimum": 0.08, "maximum": 0.25 },
-        "bodyAspect": { "type": "number", "minimum": 1.0, "maximum": 2.2, "description": "Length/width of the hub; >1 elongates bilateral bodies." },
-        "coxa": { "type": "number", "minimum": 0.04, "maximum": 0.14 },
-        "upperLeg": { "type": "number", "minimum": 0.1, "maximum": 0.32 },
-        "lowerLeg": { "type": "number", "minimum": 0.12, "maximum": 0.36 },
-        "actuator": { "enum": ["micro", "qdd"] },
-        "strength": { "type": "number", "minimum": 0.5, "maximum": 1.5 }
+        "legCount": { "type": "integer", "minimum": 3, "maximum": 8, "description": "Number of identical legs. bilateral needs an even count. 6 legs give a tripod gait, 8 a ripple, 4 a trot, odd counts a wave." },
+        "arrangement": { "enum": ["radial", "bilateral"], "description": "radial = legs evenly around a round hub (flower, starfish, octopus); bilateral = legs in left/right pairs along an elongated body, splayed from 45 deg (front) to 135 deg (rear) (insect, crab, millipede-ish). Needs an even legCount." },
+        "bodyRadius": { "type": "number", "minimum": 0.08, "maximum": 0.25, "description": "Hub half-width. Hub mass grows with area; the hip-yaw actuators sit around its wall, so 7-8 legs need a bigger hub (see x-designRules)." },
+        "bodyAspect": { "type": "number", "minimum": 1.0, "maximum": 2.2, "description": "Length/width of the hub; >1 elongates the body forward. Good for bilateral bodies (1.4-1.9; 8 bilateral legs need >= 1.6); radial bodies with 7-8 legs should stay <= 1.2." },
+        "coxa": { "type": "number", "minimum": 0.08, "maximum": 0.14, "description": "Hip-yaw to hip-pitch link; it must hold two actuators apart: micro >= 0.08, qdd >= 0.09 (>= 0.10 when strength > 1.2)." },
+        "upperLeg": { "type": "number", "minimum": 0.1, "maximum": 0.32, "description": "Thigh (hip pitch to knee). Long thighs raise the hip load: keep it at or below lowerLeg." },
+        "lowerLeg": { "type": "number", "minimum": 0.12, "maximum": 0.36, "description": "Shank (knee to sphere foot); sets standing height." },
+        "actuator": { "enum": ["micro", "qdd"], "description": "micro = CyberGear class (12 Nm, light, default); qdd = MIT Mini Cheetah U8 class (17 Nm, faster, heavier). See x-actuatorFamilies.multileg." },
+        "strength": { "type": "number", "minimum": 0.5, "maximum": 1.5, "description": "Multiplier on the family's rated peak torque; stronger actuators are larger (qdd above 1.2 needs coxa >= 0.10)." }
       }
     },
     "skills": {
@@ -55,11 +55,44 @@
       "uniqueItems": true,
       "maxItems": 2,
       "items": { "enum": ["walk", "jump"] },
-      "description": "Skills the user wants to train. walk is always first. jump needs a strong, light body."
+      "description": "Skills the user wants to train. walk is always first. jump needs a strong, light body: the body.json trainability.verdict.jump says whether the legs can push hard enough (qdd quadrupeds with a compact trunk are the best jumpers; harmonic bodies cannot jump)."
     },
     "look": {
       "$ref": "look.schema.json",
       "description": "Optional cosmetic look; never changes physics."
+    }
+  },
+  "x-designRules": [
+    "Give the block that matches bodyPlan (quadruped or multileg), never the other one.",
+    "basePreset must match bodyPlan: quadruped -> cheetah, bear or giraffe; multileg -> flower.",
+    "bilateral arrangements need an even legCount (4, 6 or 8).",
+    "Quadruped actuator families need room: shoulderWidth >= micro 0.10 / qdd 0.14 / harmonic 0.13 / geared 0.19 and hipOffset >= micro 0.065 / qdd 0.08 / geared 0.15 / harmonic 0.19.",
+    "Quadruped qdd strength <= 1.35 (power-density frontier of the best catalogued QDD).",
+    "Multileg coxa >= 0.08 (micro) or >= 0.09 (qdd; >= 0.10 above strength 1.2).",
+    "The hip-yaw actuators sit around the hub wall and must not touch: 7-8 radial legs need bodyRadius >= 0.11 with bodyAspect <= 1.2 (radial legs bunch up at the ends of a long hub); 8 bilateral legs need bodyAspect >= 1.6 with bodyRadius >= 0.11 (or bodyRadius >= 0.17 on a round hub); 6 bilateral qdd legs on a round hub need bodyRadius >= 0.11. Other layouts work from bodyRadius 0.08.",
+    "Standing needs strong legs for the weight: micro quadrupeds should stay small (torso <= 0.4 x 0.25 x 0.15, legs <= 0.25 each); big hubs (bodyRadius > 0.2 or bodyAspect > 1.8) with long legs (upperLeg + lowerLeg > 0.5) are too heavy for multileg actuators. The body's trainability.flags say 'cannot-stand' (error) or 'may-struggle-to-stand' (warning) when this happens.",
+    "For jumping prefer a qdd quadruped with a compact trunk (torsoLength 0.3-0.45), legs 0.18-0.3 each and strength 1.1-1.35.",
+    "A design with only basePreset reproduces the legacy preset exactly; change any field to make a new body."
+  ],
+  "x-archetypes": {
+    "quadruped": {
+      "qdd": "cheetah preset proportions (torso 0.52 x 0.20 x 0.18, shoulder 0.16, hipOffset 0.10, legs 0.25/0.23)",
+      "geared": "bear preset proportions (torso 0.62 x 0.46 x 0.30, shoulder 0.38, hipOffset 0.18, legs 0.38/0.36)",
+      "harmonic": "giraffe preset proportions (torso 0.64 x 0.34 x 0.33, shoulder 0.24, hipOffset 0.18, legs 0.69/0.61)",
+      "micro": "pup proportions (torso 0.30 x 0.16 x 0.10, shoulder 0.10, hipOffset 0.06, legs 0.15/0.15)"
+    },
+    "multileg": "6 radial legs, bodyRadius 0.15, bodyAspect 1.0, coxa 0.09, upperLeg 0.18, lowerLeg 0.22, micro; with basePreset flower: the Flower's bodyRadius 0.145 and its own 12 Nm / 20 rad/s / 12:1 actuator class"
+  },
+  "x-actuatorFamilies": {
+    "quadruped": {
+      "micro": { "label": "Micro QDD (hobby class)", "catalogAnchor": "CyberGear MS01", "category": "QDD", "ratedTorqueNm": 12.0, "noLoadSpeedRadS": 25.13, "gear": 7.75, "actuatorMassKg": 0.317, "diameterMm": 80.5, "strengthMax": 1.5, "minimums": { "shoulderWidth": 0.1, "hipOffset": 0.065 }, "archetype": "pup", "useFor": "small, light robots" },
+      "qdd": { "label": "Quasi-direct drive (MIT U12 class, Cheetah preset)", "catalogAnchor": "MIT U12", "category": "QDD", "ratedTorqueNm": 72.0, "noLoadSpeedRadS": 40.0, "gear": 6.0, "actuatorMassKg": 1.1, "diameterMm": 126.0, "strengthMax": 1.35, "minimums": { "shoulderWidth": 0.14, "hipOffset": 0.08 }, "archetype": "cheetah", "useFor": "agile, fast robots and jumping" },
+      "geared": { "label": "Planetary geared (MyActuator RMD-X15, Bear preset)", "catalogAnchor": "RMD-X15-P20-450-E", "category": "MidGear", "ratedTorqueNm": 450.0, "noLoadSpeedRadS": 11.31, "gear": 20.25, "actuatorMassKg": 3.5, "diameterMm": 166.0, "strengthMax": 1.5, "minimums": { "shoulderWidth": 0.19, "hipOffset": 0.15 }, "archetype": "bear", "useFor": "big, heavy, strong robots" },
+      "harmonic": { "label": "Harmonic strain-wave (ZeroErr eRob110H, Giraffe preset)", "catalogAnchor": "eRob110H-80", "category": "Harmonic", "ratedTorqueNm": 332.0, "noLoadSpeedRadS": 3.93, "gear": 80.0, "actuatorMassKg": 2.88, "diameterMm": 110.0, "strengthMax": 1.5, "minimums": { "shoulderWidth": 0.13, "hipOffset": 0.19 }, "archetype": "giraffe", "useFor": "tall, slow, very strong robots (no jumping)" }
+    },
+    "multileg": {
+      "micro": { "label": "Micro QDD (hobby class)", "catalogAnchor": "CyberGear MS01", "category": "QDD", "ratedTorqueNm": 12.0, "noLoadSpeedRadS": 25.13, "gear": 7.75, "actuatorMassKg": 0.317, "diameterMm": 73.3, "strengthMax": 1.5, "minimums": { "coxa": 0.08 }, "useFor": "most crawlers (default)" },
+      "qdd": { "label": "Quasi-direct drive (MIT Mini Cheetah U8 class)", "catalogAnchor": "MIT Mini Cheetah (U8)", "category": "QDD", "ratedTorqueNm": 17.0, "noLoadSpeedRadS": 40.0, "gear": 6.0, "actuatorMassKg": 0.48, "diameterMm": 85.0, "strengthMax": 1.5, "minimums": { "coxa": 0.09 }, "useFor": "faster or bigger crawlers" }
     }
   }
 }

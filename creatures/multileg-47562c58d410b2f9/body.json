@@ -1,0 +1,893 @@
+{
+ "schema": "creature-body/1",
+ "id": "multileg-47562c58d410b2f9",
+ "name": "Flower crawler",
+ "bodyPlan": "multileg",
+ "design": {
+  "schema": "creature-design/1",
+  "name": "Flower crawler",
+  "concept": "The lab's original six-legged radial Draft design.",
+  "bodyPlan": "multileg",
+  "basePreset": "flower",
+  "skills": [
+   "walk"
+  ]
+ },
+ "resolvedDesign": {
+  "legCount": 6,
+  "arrangement": "radial",
+  "bodyRadius": 0.145,
+  "bodyAspect": 1.0,
+  "coxa": 0.09,
+  "upperLeg": 0.18,
+  "lowerLeg": 0.22,
+  "actuator": "flower",
+  "strength": 1.0
+ },
+ "xmlFile": "body.xml",
+ "meshFiles": [
+  "torso_mesh.stl"
+ ],
+ "rootBody": "torso_link",
+ "imuSite": "imu",
+ "forwardAxis": [
+  1,
+  0,
+  0
+ ],
+ "legs": [
+  {
+   "name": "leg0",
+   "joints": [
+    "leg0_hip_yaw",
+    "leg0_hip_pitch",
+    "leg0_knee"
+   ],
+   "roles": [
+    "hip_yaw",
+    "hip_pitch",
+    "knee"
+   ],
+   "footGeom": "leg0_lower_leg_link_sphere",
+   "footSite": "leg0_foot",
+   "mountAngle": 0.0,
+   "side": "center",
+   "end": "front",
+   "bodies": [
+    "leg0_mount",
+    "leg0_yaw_link",
+    "leg0_upper_leg_link",
+    "leg0_lower_leg_link"
+   ],
+   "footRadius": 0.025
+  },
+  {
+   "name": "leg1",
+   "joints": [
+    "leg1_hip_yaw",
+    "leg1_hip_pitch",
+    "leg1_knee"
+   ],
+   "roles": [
+    "hip_yaw",
+    "hip_pitch",
+    "knee"
+   ],
+   "footGeom": "leg1_lower_leg_link_sphere",
+   "footSite": "leg1_foot",
+   "mountAngle": 1.047198,
+   "side": "left",
+   "end": "front",
+   "bodies": [
+    "leg1_mount",
+    "leg1_yaw_link",
+    "leg1_upper_leg_link",
+    "leg1_lower_leg_link"
+   ],
+   "footRadius": 0.025
+  },
+  {
+   "name": "leg2",
+   "joints": [
+    "leg2_hip_yaw",
+    "leg2_hip_pitch",
+    "leg2_knee"
+   ],
+   "roles": [
+    "hip_yaw",
+    "hip_pitch",
+    "knee"
+   ],
+   "footGeom": "leg2_lower_leg_link_sphere",
+   "footSite": "leg2_foot",
+   "mountAngle": 2.094395,
+   "side": "left",
+   "end": "rear",
+   "bodies": [
+    "leg2_mount",
+    "leg2_yaw_link",
+    "leg2_upper_leg_link",
+    "leg2_lower_leg_link"
+   ],
+   "footRadius": 0.025
+  },
+  {
+   "name": "leg3",
+   "joints": [
+    "leg3_hip_yaw",
+    "leg3_hip_pitch",
+    "leg3_knee"
+   ],
+   "roles": [
+    "hip_yaw",
+    "hip_pitch",
+    "knee"
+   ],
+   "footGeom": "leg3_lower_leg_link_sphere",
+   "footSite": "leg3_foot",
+   "mountAngle": 3.141593,
+   "side": "center",
+   "end": "rear",
+   "bodies": [
+    "leg3_mount",
+    "leg3_yaw_link",
+    "leg3_upper_leg_link",
+    "leg3_lower_leg_link"
+   ],
+   "footRadius": 0.025
+  },
+  {
+   "name": "leg4",
+   "joints": [
+    "leg4_hip_yaw",
+    "leg4_hip_pitch",
+    "leg4_knee"
+   ],
+   "roles": [
+    "hip_yaw",
+    "hip_pitch",
+    "knee"
+   ],
+   "footGeom": "leg4_lower_leg_link_sphere",
+   "footSite": "leg4_foot",
+   "mountAngle": -2.094395,
+   "side": "right",
+   "end": "rear",
+   "bodies": [
+    "leg4_mount",
+    "leg4_yaw_link",
+    "leg4_upper_leg_link",
+    "leg4_lower_leg_link"
+   ],
+   "footRadius": 0.025
+  },
+  {
+   "name": "leg5",
+   "joints": [
+    "leg5_hip_yaw",
+    "leg5_hip_pitch",
+    "leg5_knee"
+   ],
+   "roles": [
+    "hip_yaw",
+    "hip_pitch",
+    "knee"
+   ],
+   "footGeom": "leg5_lower_leg_link_sphere",
+   "footSite": "leg5_foot",
+   "mountAngle": -1.047198,
+   "side": "right",
+   "end": "front",
+   "bodies": [
+    "leg5_mount",
+    "leg5_yaw_link",
+    "leg5_upper_leg_link",
+    "leg5_lower_leg_link"
+   ],
+   "footRadius": 0.025
+  }
+ ],
+ "jointNames": [
+  "leg0_hip_yaw",
+  "leg0_hip_pitch",
+  "leg0_knee",
+  "leg1_hip_yaw",
+  "leg1_hip_pitch",
+  "leg1_knee",
+  "leg2_hip_yaw",
+  "leg2_hip_pitch",
+  "leg2_knee",
+  "leg3_hip_yaw",
+  "leg3_hip_pitch",
+  "leg3_knee",
+  "leg4_hip_yaw",
+  "leg4_hip_pitch",
+  "leg4_knee",
+  "leg5_hip_yaw",
+  "leg5_hip_pitch",
+  "leg5_knee"
+ ],
+ "joints": [
+  {
+   "name": "leg0_hip_yaw",
+   "role": "hip_yaw",
+   "leg": "leg0",
+   "range": [
+    -0.75,
+    0.75
+   ],
+   "effort": 12.0,
+   "velocity": 20.0,
+   "gear": 12.0,
+   "armature": 0.00563174,
+   "damping": 0.003,
+   "frictionloss": 0.02,
+   "motorClass": "L"
+  },
+  {
+   "name": "leg0_hip_pitch",
+   "role": "hip_pitch",
+   "leg": "leg0",
+   "range": [
+    -0.65,
+    0.8
+   ],
+   "effort": 12.0,
+   "velocity": 20.0,
+   "gear": 12.0,
+   "armature": 0.00563174,
+   "damping": 0.003,
+   "frictionloss": 0.02,
+   "motorClass": "L"
+  },
+  {
+   "name": "leg0_knee",
+   "role": "knee",
+   "leg": "leg0",
+   "range": [
+    0.35,
+    2.1
+   ],
+   "effort": 12.0,
+   "velocity": 20.0,
+   "gear": 12.0,
+   "armature": 0.00563174,
+   "damping": 0.003,
+   "frictionloss": 0.02,
+   "motorClass": "L"
+  },
+  {
+   "name": "leg1_hip_yaw",
+   "role": "hip_yaw",
+   "leg": "leg1",
+   "range": [
+    -0.75,
+    0.75
+   ],
+   "effort": 12.0,
+   "velocity": 20.0,
+   "gear": 12.0,
+   "armature": 0.00563174,
+   "damping": 0.003,
+   "frictionloss": 0.02,
+   "motorClass": "L"
+  },
+  {
+   "name": "leg1_hip_pitch",
+   "role": "hip_pitch",
+   "leg": "leg1",
+   "range": [
+    -0.65,
+    0.8
+   ],
+   "effort": 12.0,
+   "velocity": 20.0,
+   "gear": 12.0,
+   "armature": 0.00563174,
+   "damping": 0.003,
+   "frictionloss": 0.02,
+   "motorClass": "L"
+  },
+  {
+   "name": "leg1_knee",
+   "role": "knee",
+   "leg": "leg1",
+   "range": [
+    0.35,
+    2.1
+   ],
+   "effort": 12.0,
+   "velocity": 20.0,
+   "gear": 12.0,
+   "armature": 0.00563174,
+   "damping": 0.003,
+   "frictionloss": 0.02,
+   "motorClass": "L"
+  },
+  {
+   "name": "leg2_hip_yaw",
+   "role": "hip_yaw",
+   "leg": "leg2",
+   "range": [
+    -0.75,
+    0.75
+   ],
+   "effort": 12.0,
+   "velocity": 20.0,
+   "gear": 12.0,
+   "armature": 0.00563174,
+   "damping": 0.003,
+   "frictionloss": 0.02,
+   "motorClass": "L"
+  },
+  {
+   "name": "leg2_hip_pitch",
+   "role": "hip_pitch",
+   "leg": "leg2",
+   "range": [
+    -0.65,
+    0.8
+   ],
+   "effort": 12.0,
+   "velocity": 20.0,
+   "gear": 12.0,
+   "armature": 0.00563174,
+   "damping": 0.003,
+   "frictionloss": 0.02,
+   "motorClass": "L"
+  },
+  {
+   "name": "leg2_knee",
+   "role": "knee",
+   "leg": "leg2",
+   "range": [
+    0.35,
+    2.1
+   ],
+   "effort": 12.0,
+   "velocity": 20.0,
+   "gear": 12.0,
+   "armature": 0.00563174,
+   "damping": 0.003,
+   "frictionloss": 0.02,
+   "motorClass": "L"
+  },
+  {
+   "name": "leg3_hip_yaw",
+   "role": "hip_yaw",
+   "leg": "leg3",
+   "range": [
+    -0.75,
+    0.75
+   ],
+   "effort": 12.0,
+   "velocity": 20.0,
+   "gear": 12.0,
+   "armature": 0.00563174,
+   "damping": 0.003,
+   "frictionloss": 0.02,
+   "motorClass": "L"
+  },
+  {
+   "name": "leg3_hip_pitch",
+   "role": "hip_pitch",
+   "leg": "leg3",
+   "range": [
+    -0.65,
+    0.8
+   ],
+   "effort": 12.0,
+   "velocity": 20.0,
+   "gear": 12.0,
+   "armature": 0.00563174,
+   "damping": 0.003,
+   "frictionloss": 0.02,
+   "motorClass": "L"
+  },
+  {
+   "name": "leg3_knee",
+   "role": "knee",
+   "leg": "leg3",
+   "range": [
+    0.35,
+    2.1
+   ],
+   "effort": 12.0,
+   "velocity": 20.0,
+   "gear": 12.0,
+   "armature": 0.00563174,
+   "damping": 0.003,
+   "frictionloss": 0.02,
+   "motorClass": "L"
+  },
+  {
+   "name": "leg4_hip_yaw",
+   "role": "hip_yaw",
+   "leg": "leg4",
+   "range": [
+    -0.75,
+    0.75
+   ],
+   "effort": 12.0,
+   "velocity": 20.0,
+   "gear": 12.0,
+   "armature": 0.00563174,
+   "damping": 0.003,
+   "frictionloss": 0.02,
+   "motorClass": "L"
+  },
+  {
+   "name": "leg4_hip_pitch",
+   "role": "hip_pitch",
+   "leg": "leg4",
+   "range": [
+    -0.65,
+    0.8
+   ],
+   "effort": 12.0,
+   "velocity": 20.0,
+   "gear": 12.0,
+   "armature": 0.00563174,
+   "damping": 0.003,
+   "frictionloss": 0.02,
+   "motorClass": "L"
+  },
+  {
+   "name": "leg4_knee",
+   "role": "knee",
+   "leg": "leg4",
+   "range": [
+    0.35,
+    2.1
+   ],
+   "effort": 12.0,
+   "velocity": 20.0,
+   "gear": 12.0,
+   "armature": 0.00563174,
+   "damping": 0.003,
+   "frictionloss": 0.02,
+   "motorClass": "L"
+  },
+  {
+   "name": "leg5_hip_yaw",
+   "role": "hip_yaw",
+   "leg": "leg5",
+   "range": [
+    -0.75,
+    0.75
+   ],
+   "effort": 12.0,
+   "velocity": 20.0,
+   "gear": 12.0,
+   "armature": 0.00563174,
+   "damping": 0.003,
+   "frictionloss": 0.02,
+   "motorClass": "L"
+  },
+  {
+   "name": "leg5_hip_pitch",
+   "role": "hip_pitch",
+   "leg": "leg5",
+   "range": [
+    -0.65,
+    0.8
+   ],
+   "effort": 12.0,
+   "velocity": 20.0,
+   "gear": 12.0,
+   "armature": 0.00563174,
+   "damping": 0.003,
+   "frictionloss": 0.02,
+   "motorClass": "L"
+  },
+  {
+   "name": "leg5_knee",
+   "role": "knee",
+   "leg": "leg5",
+   "range": [
+    0.35,
+    2.1
+   ],
+   "effort": 12.0,
+   "velocity": 20.0,
+   "gear": 12.0,
+   "armature": 0.00563174,
+   "damping": 0.003,
+   "frictionloss": 0.02,
+   "motorClass": "L"
+  }
+ ],
+ "nominalJointPositions": [
+  0.0,
+  0.15,
+  1.25,
+  0.0,
+  0.15,
+  1.25,
+  0.0,
+  0.15,
+  1.25,
+  0.0,
+  0.15,
+  1.25,
+  0.0,
+  0.15,
+  1.25,
+  0.0,
+  0.15,
+  1.25
+ ],
+ "nominalRootHeight": 0.268698,
+ "initialQpos": [
+  0.0,
+  0.0,
+  0.268698,
+  1.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.15,
+  1.25,
+  0.0,
+  0.15,
+  1.25,
+  0.0,
+  0.15,
+  1.25,
+  0.0,
+  0.15,
+  1.25,
+  0.0,
+  0.15,
+  1.25,
+  0.0,
+  0.15,
+  1.25
+ ],
+ "stanceCheck": {
+  "footHeightsM": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "maxFootHeightErrorM": 0.0,
+  "rollRad": 0.0,
+  "pitchRad": 0.0,
+  "bellyClearanceM": 0.2024,
+  "minJointMarginFraction": 0.4483,
+  "tolerances": {
+   "footHeightM": 0.0001,
+   "levelRad": 1e-06,
+   "jointMarginFraction": 0.1,
+   "minBellyClearanceM": 0.01
+  },
+  "source": "Flower stance (legacy Flower policy default)",
+  "method": "MuJoCo forward kinematics; root lowered until the lowest foot sphere touches z = 0, then per-leg Newton on hip pitch and knee"
+ },
+ "massKg": 10.1089,
+ "dimensions": {
+  "lengthM": 1.0685,
+  "widthM": 0.9504,
+  "heightM": 0.3237,
+  "legLengthM": 0.4
+ },
+ "gaitHint": {
+  "pattern": "tripod",
+  "groups": [
+   [
+    0,
+    2,
+    4
+   ],
+   [
+    1,
+    3,
+    5
+   ]
+  ],
+  "phaseOffsets": [
+   0.0,
+   0.5,
+   0.0,
+   0.5,
+   0.0,
+   0.5
+  ],
+  "dutyFactor": 0.5
+ },
+ "geomRoles": {
+  "feet": [
+   "leg0_lower_leg_link_sphere",
+   "leg1_lower_leg_link_sphere",
+   "leg2_lower_leg_link_sphere",
+   "leg3_lower_leg_link_sphere",
+   "leg4_lower_leg_link_sphere",
+   "leg5_lower_leg_link_sphere"
+  ],
+  "torso": [
+   "torso_link_mesh"
+  ],
+  "limbs": [
+   "leg0_mount_link",
+   "leg0_yaw_link_link",
+   "leg0_upper_leg_link_link",
+   "leg0_lower_leg_link_link",
+   "leg1_mount_link",
+   "leg1_yaw_link_link",
+   "leg1_upper_leg_link_link",
+   "leg1_lower_leg_link_link",
+   "leg2_mount_link",
+   "leg2_yaw_link_link",
+   "leg2_upper_leg_link_link",
+   "leg2_lower_leg_link_link",
+   "leg3_mount_link",
+   "leg3_yaw_link_link",
+   "leg3_upper_leg_link_link",
+   "leg3_lower_leg_link_link",
+   "leg4_mount_link",
+   "leg4_yaw_link_link",
+   "leg4_upper_leg_link_link",
+   "leg4_lower_leg_link_link",
+   "leg5_mount_link",
+   "leg5_yaw_link_link",
+   "leg5_upper_leg_link_link",
+   "leg5_lower_leg_link_link"
+  ],
+  "motors": [
+   "leg0_mount_motor",
+   "leg0_yaw_link_motor",
+   "leg0_upper_leg_link_motor",
+   "leg1_mount_motor",
+   "leg1_yaw_link_motor",
+   "leg1_upper_leg_link_motor",
+   "leg2_mount_motor",
+   "leg2_yaw_link_motor",
+   "leg2_upper_leg_link_motor",
+   "leg3_mount_motor",
+   "leg3_yaw_link_motor",
+   "leg3_upper_leg_link_motor",
+   "leg4_mount_motor",
+   "leg4_yaw_link_motor",
+   "leg4_upper_leg_link_motor",
+   "leg5_mount_motor",
+   "leg5_yaw_link_motor",
+   "leg5_upper_leg_link_motor"
+  ],
+  "details": [
+   "leg0_mount_detail",
+   "leg0_yaw_link_detail",
+   "leg0_upper_leg_link_detail",
+   "leg1_mount_detail",
+   "leg1_yaw_link_detail",
+   "leg1_upper_leg_link_detail",
+   "leg2_mount_detail",
+   "leg2_yaw_link_detail",
+   "leg2_upper_leg_link_detail",
+   "leg3_mount_detail",
+   "leg3_yaw_link_detail",
+   "leg3_upper_leg_link_detail",
+   "leg4_mount_detail",
+   "leg4_yaw_link_detail",
+   "leg4_upper_leg_link_detail",
+   "leg5_mount_detail",
+   "leg5_yaw_link_detail",
+   "leg5_upper_leg_link_detail"
+  ]
+ },
+ "bodyRoles": {
+  "torso": "torso_link",
+  "head": null
+ },
+ "xmlContents": {
+  "actuators": 18,
+  "sensors": 3,
+  "sensorNames": [
+   "imu_ang_vel",
+   "imu_lin_vel",
+   "imu_lin_acc"
+  ],
+  "keyframes": [
+   "nominal"
+  ],
+  "note": "Generated bodies carry no actuators; the legacy Flower body keeps its 18 direct torque motors and nominal keyframe so its bytes match the legacy policy."
+ },
+ "motors": [
+  {
+   "class": "L",
+   "family": "flower",
+   "familyLabel": "Flower crawler class (trend-sized, no catalogue anchor)",
+   "catalogAnchor": null,
+   "category": "ALL",
+   "count": 18,
+   "effortNm": 12.0,
+   "velocityRadS": 20.0,
+   "gear": 12.0,
+   "massKg": 0.3416,
+   "diameterMm": 69.3,
+   "lengthMm": 41.6,
+   "armatureKgm2": 0.005631739,
+   "peakPowerW": 60.0,
+   "torqueDensityNmPerKg": 35.1,
+   "powerDensityWPerKg": 175.6,
+   "frontierTorqueMaxNm": 1106.0
+  }
+ ],
+ "feasibility": {
+  "passed": true,
+  "strict": true,
+  "allowHypothetical": false,
+  "warnings": [
+   "24 structural member(s) declare no link_mass_class, so their radius and density are stated rather than derived: leg0_lower_leg_link_link, leg0_mount_link, leg0_upper_leg_link_link, leg0_yaw_link_link, leg1_lower_leg_link_link, leg1_mount_link, leg1_upper_leg_link_link, leg1_yaw_link_link, leg2_lower_leg_link_link, leg2_mount_link, leg2_upper_leg_link_link, leg2_yaw_link_link, leg3_lower_leg_link_link, leg3_mount_link, leg3_upper_leg_link_link, leg3_yaw_link_link, leg4_lower_leg_link_link, leg4_mount_link, leg4_upper_leg_link_link, leg4_yaw_link_link, leg5_lower_leg_link_link, leg5_mount_link, leg5_upper_leg_link_link, leg5_yaw_link_link"
+  ],
+  "overridden": [],
+  "extraGates": [
+   "rigid actuator overlap",
+   "level stance with body clearance"
+  ]
+ },
+ "trainability": {
+  "verdict": {
+   "stand": "ok",
+   "walk": "plausible",
+   "jump": "capable"
+  },
+  "flags": [],
+  "metrics": {
+   "massKg": 10.1089,
+   "weightN": 99.168,
+   "standLoad": 0.2966,
+   "gaitLoad": 0.5933,
+   "gaitStanceLegs": 3,
+   "verticalForceRatio": 3.371,
+   "specificTorqueNmPerKg": 1.187,
+   "staticMarginM": 0.4377,
+   "gaitMarginM": 0.2527,
+   "comHeightM": 0.2549,
+   "bellyClearanceM": 0.2024,
+   "legLengthM": 0.4,
+   "bodyLengthM": 0.29,
+   "legToBodyRatio": 1.379,
+   "minJointVelocityRadS": 20.0,
+   "maxFootSpeedMS": 8.0,
+   "jumpEstimate": {
+    "takeoffSpeedMS": 2.528,
+    "strokeM": 0.16,
+    "hopHeightM": 0.326,
+    "note": "Rough upper bound from joint torque/speed limits at the nominal pose; not a simulated or trained jump."
+   }
+  },
+  "holdTest": {
+   "passed": true,
+   "finite": true,
+   "seconds": 2.0,
+   "sagFraction": 0.0333,
+   "tiltRad": 0.0,
+   "peakTorqueFraction": 0.2321,
+   "bodyGroundContacts": 0,
+   "method": "PD hold of the nominal pose, kp = effort/0.15 rad, damping ratio 1, torque capped at the Draft effort, timestep 0.005 implicitfast, plan collision classes"
+  },
+  "notes": "Static and PD-hold heuristics for coaching; only a trained policy's evaluation shows walking or jumping."
+ },
+ "legacy": {
+  "preset": "flower",
+  "controller": "/controller/flower/manifest.json",
+  "note": "Byte-identical to the legacy /api/generate model at original size."
+ },
+ "provenance": {
+  "generator": "Draft RobotGenerator strict=True",
+  "repository": "https://github.com/davidhnguyen2000/draft",
+  "draftRevision": "3b03e144735098ef94b938e85756806f45628f83",
+  "draftPackageVersion": "0.1.0",
+  "mujocoVersion": "3.8.0",
+  "template": "flower-legacy",
+  "templateDir": "repo:robots/flower",
+  "family": "flower",
+  "basePreset": "flower",
+  "archetype": "flower",
+  "sourcesSha256": {
+   "flower-legacy/parameters.yaml": "db0baa6b4b256daa98f61f34eb6db482d1e49a27c415829a86afc46a15b777e7",
+   "flower-legacy/tree.yaml": "4244b90d2a0617511a0955f1ce81b6252d99e1d8036598d0a0e69e4e5328f3b5",
+   "flower-legacy/mesh.yaml": "d9122828f861d18367a3b42173d7e6d8e41c1c033784d9b2348a7f4cfff9ef26",
+   "flower-legacy/generate.py": "075145337defa253d65c45fa14199ea0eacac1871fc86a77deae6a852833bd78"
+  },
+  "draftOverrides": {},
+  "assetSha256": {
+   "body.xml": "63c1b09b73e18372d02fc03eb328aa2e429177ad9fdb058a710fc2529525e683",
+   "torso_mesh.stl": "582fd1714c5fbb7e8c6a915b81d115b84ae3e5a63f52b71609341823fbe8a9ec"
+  },
+  "designsVersion": 1,
+  "massModel": "Actuators from Draft trends; structure stated (no multileg population), as the Flower"
+ },
+ "specSheet": {
+  "title": "Flower crawler",
+  "bodyId": "multileg-47562c58d410b2f9",
+  "subtitle": "6-leg radial crawler · Flower crawler class (trend-sized, no catalogue anchor)",
+  "template": "flower-legacy",
+  "massKg": 10.1089,
+  "dimensions": {
+   "lengthM": 1.0685,
+   "widthM": 0.9504,
+   "heightM": 0.3237,
+   "legLengthM": 0.4
+  },
+  "legCount": 6,
+  "jointCount": 18,
+  "actuatorCount": 18,
+  "motors": [
+   {
+    "class": "L",
+    "family": "flower",
+    "familyLabel": "Flower crawler class (trend-sized, no catalogue anchor)",
+    "catalogAnchor": null,
+    "category": "ALL",
+    "count": 18,
+    "effortNm": 12.0,
+    "velocityRadS": 20.0,
+    "gear": 12.0,
+    "massKg": 0.3416,
+    "diameterMm": 69.3,
+    "lengthMm": 41.6,
+    "armatureKgm2": 0.005631739,
+    "peakPowerW": 60.0,
+    "torqueDensityNmPerKg": 35.1,
+    "powerDensityWPerKg": 175.6,
+    "frontierTorqueMaxNm": 1106.0
+   }
+  ],
+  "feasibility": {
+   "status": "passed",
+   "gate": "Draft strict feasibility gate + lab packing/stance gates",
+   "warnings": [
+    "24 structural member(s) declare no link_mass_class, so their radius and density are stated rather than derived: leg0_lower_leg_link_link, leg0_mount_link, leg0_upper_leg_link_link, leg0_yaw_link_link, leg1_lower_leg_link_link, leg1_mount_link, leg1_upper_leg_link_link, leg1_yaw_link_link, leg2_lower_leg_link_link, leg2_mount_link, leg2_upper_leg_link_link, leg2_yaw_link_link, leg3_lower_leg_link_link, leg3_mount_link, leg3_upper_leg_link_link, leg3_yaw_link_link, leg4_lower_leg_link_link, leg4_mount_link, leg4_upper_leg_link_link, leg4_yaw_link_link, leg5_lower_leg_link_link, leg5_mount_link, leg5_upper_leg_link_link, leg5_yaw_link_link"
+   ],
+   "warningCount": 1
+  },
+  "trainability": {
+   "verdict": {
+    "stand": "ok",
+    "walk": "plausible",
+    "jump": "capable"
+   },
+   "flags": [],
+   "metrics": {
+    "massKg": 10.1089,
+    "weightN": 99.168,
+    "standLoad": 0.2966,
+    "gaitLoad": 0.5933,
+    "gaitStanceLegs": 3,
+    "verticalForceRatio": 3.371,
+    "specificTorqueNmPerKg": 1.187,
+    "staticMarginM": 0.4377,
+    "gaitMarginM": 0.2527,
+    "comHeightM": 0.2549,
+    "bellyClearanceM": 0.2024,
+    "legLengthM": 0.4,
+    "bodyLengthM": 0.29,
+    "legToBodyRatio": 1.379,
+    "minJointVelocityRadS": 20.0,
+    "maxFootSpeedMS": 8.0,
+    "jumpEstimate": {
+     "takeoffSpeedMS": 2.528,
+     "strokeM": 0.16,
+     "hopHeightM": 0.326,
+     "note": "Rough upper bound from joint torque/speed limits at the nominal pose; not a simulated or trained jump."
+    }
+   }
+  },
+  "gait": "tripod",
+  "provenance": {
+   "generator": "Draft RobotGenerator strict=True",
+   "draftRevision": "3b03e144735098ef94b938e85756806f45628f83",
+   "template": "flower-legacy",
+   "assetSha256": {
+    "body.xml": "63c1b09b73e18372d02fc03eb328aa2e429177ad9fdb058a710fc2529525e683",
+    "torso_mesh.stl": "582fd1714c5fbb7e8c6a915b81d115b84ae3e5a63f52b71609341823fbe8a9ec"
+   }
+  },
+  "honesty": "Generated mechanism only: no controller exists until a policy is trained and validated for this exact body."
+ }
+}

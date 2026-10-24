@@ -1,0 +1,128 @@
+L_motor: MIT U12
+L_motor_L: 0.048075001385627356
+L_motor_armature: 0.020351925309628576
+L_motor_aspect: 0.3558495454241371
+L_motor_catalog_category: QDD
+L_motor_catalog_name: MIT U12
+L_motor_damping: 0.01651
+L_motor_effort: 93.6
+L_motor_friction: 0.1651
+L_motor_gear: 6.0
+L_motor_mass: 1.310091854629337
+L_motor_power: 936.0
+L_motor_r: 0.06754961753334089
+L_motor_rho: 1901.0204097799053
+L_motor_velocity: 40.0
+M_motor: AK10-9 V2
+M_motor_L: 0.06170000000000001
+M_motor_armature: 0.012678876186240608
+M_motor_aspect: 0.6295918367346939
+M_motor_catalog_category: QDD
+M_motor_catalog_name: AK10-9 V2
+M_motor_damping: 0.0085
+M_motor_effort: 48.0
+M_motor_friction: 0.085
+M_motor_gear: 9.0
+M_motor_mass: 0.96
+M_motor_power: 373.20000000000005
+M_motor_r: 0.04900000000000001
+M_motor_rho: 2062.737843135585
+M_motor_velocity: 31.1
+S_motor: RS01
+S_motor_L: 0.045500000000000006
+S_motor_armature: 0.003970116119357567
+S_motor_aspect: 0.5759493670886076
+S_motor_catalog_category: QDD
+S_motor_catalog_name: RS01
+S_motor_damping: 0.003
+S_motor_effort: 17.0
+S_motor_friction: 0.03
+S_motor_gear: 7.75
+S_motor_mass: 0.38
+S_motor_power: 122.4
+S_motor_r: 0.03950000000000001
+S_motor_rho: 1703.8373570006274
+S_motor_velocity: 28.8
+_L_motor_catalog: MIT U12
+_M_motor_catalog: AK10-9 V2
+_S_motor_catalog: RS01
+allow_hypothetical: false
+foot_color: 0.302 0.302 0.302 1.000
+foot_sphere_r: 0.028845000831376415
+foot_sphere_scale: 1.5
+hip_abduction_link_length: 0.12237958067230234
+hip_pitch_mot: L
+hip_pitch_motor_L: 0.048075001385627356
+hip_pitch_motor_armature: 0.020351925309628576
+hip_pitch_motor_damping: 0.01651
+hip_pitch_motor_effort: 93.6
+hip_pitch_motor_friction: 0.1651
+hip_pitch_motor_r: 0.06754961753334089
+hip_pitch_motor_rho: 1901.0204097799053
+hip_pitch_motor_velocity: 40.0
+hip_pitch_range:
+- -2.5
+- 2.5
+hip_pitch_x_offset: 0.0
+hip_roll_inset: 0.0
+hip_roll_link_length: 0.08
+hip_roll_mot: L
+hip_roll_motor_L: 0.048075001385627356
+hip_roll_motor_armature: 0.020351925309628576
+hip_roll_motor_damping: 0.01651
+hip_roll_motor_effort: 93.6
+hip_roll_motor_friction: 0.1651
+hip_roll_motor_r: 0.06754961753334089
+hip_roll_motor_rho: 1901.0204097799053
+hip_roll_motor_velocity: 40.0
+hip_roll_range:
+- -0.8
+- 0.8
+knee_mot: L
+knee_motor_L: 0.048075001385627356
+knee_motor_armature: 0.020351925309628576
+knee_motor_damping: 0.01651
+knee_motor_effort: 93.6
+knee_motor_friction: 0.1651
+knee_motor_r: 0.06754961753334089
+knee_motor_rho: 1901.0204097799053
+knee_motor_velocity: 40.0
+knee_pivot_scale: 0.63
+knee_range:
+- -2.8
+- 0.0
+link_color: 0.424 0.547 0.746 1.000
+link_motor_penetration: 0.005
+link_render_radius_scale: 1.0
+lower_leg_link_length: 0.21
+lower_leg_link_render_r: 0.019230000554250944
+lower_leg_render_scale: 0.8
+mass_composition_reference: quadruped
+mot_detail_color: 0.095 0.143 0.221 1.000
+motor_color: 0.155 0.232 0.359 1.000
+motor_rho: 2700.0
+packing_exempt_geoms:
+- fl_upper_leg_link_motor
+- fr_upper_leg_link_motor
+- rl_upper_leg_link_motor
+- rr_upper_leg_link_motor
+shank_rho: 644.16281
+shoulder_width: 0.15
+size_metric_expr: ${upper_leg_link_length + lower_leg_link_length}
+structure_overlap_allowed:
+- hip_roll
+- fl_roll_link_link
+- fr_roll_link_link
+- rl_roll_link_link
+- rr_roll_link_link
+thigh_rho: 345.03575
+torso_chamfer: 0.35
+torso_color: 0.298 0.447 0.690 1.000
+torso_lx: 0.34
+torso_ly: 0.18
+torso_lz: 0.12
+torso_mesh_cover: 1.0
+torso_mesh_standoff: 0.005
+torso_rho: 629.7087886990133
+upper_leg_link_length: 0.21
+upper_leg_link_render_r: 0.024037500692813678
