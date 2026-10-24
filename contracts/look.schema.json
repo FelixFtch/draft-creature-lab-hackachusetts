@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "creature-look/1",
   "title": "AppearanceSpec",
-  "description": "Cosmetic look of a creature. Purely visual: it must never change masses, collisions or the compiled MuJoCo model, so trained policies stay valid. Rendered by play/src/appearance. Owner: look agent (may extend; keep this file the single source of truth, ai-service reads it at runtime). Unknown or missing fields fall back to defaults.",
+  "description": "Cosmetic look of a creature. Purely visual: it must never change masses, collisions or the compiled MuJoCo model, so trained policies stay valid. Rendered by play/src/appearance (normalizeLook fills every missing field from the classic look, so a partial look is fine). Owner: look agent (may extend; keep this file the single source of truth, ai-service reads it at runtime). Unknown or missing fields fall back to defaults. Design tip: pick 2-3 strong palette colours, one pattern, at most one shell, and 1-3 accessories; character beats clutter.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema"],
@@ -12,52 +12,63 @@
     "palette": {
       "type": "object",
       "additionalProperties": false,
+      "description": "sRGB hex colours for the semantic parts. Missing entries are derived from body like the classic look (limbs lighter, joints and accent darker, feet dark green-grey).",
       "properties": {
-        "body": { "$ref": "#/$defs/color" },
-        "limbs": { "$ref": "#/$defs/color" },
-        "joints": { "$ref": "#/$defs/color" },
-        "accent": { "$ref": "#/$defs/color" },
-        "feet": { "$ref": "#/$defs/color" }
+        "body": { "$ref": "#/$defs/color", "description": "Torso and head." },
+        "limbs": { "$ref": "#/$defs/color", "description": "Leg links between the motors." },
+        "joints": { "$ref": "#/$defs/color", "description": "Motor housings at every joint." },
+        "accent": { "$ref": "#/$defs/color", "description": "Small trims, the snout muzzle, and the default colour of accessories and motor caps; glows with finish 'glow'." },
+        "feet": { "$ref": "#/$defs/color", "description": "Feet (balls, paws, hooves or pads)." },
+        "caps": { "$ref": "#/$defs/color", "description": "Optional: the round caps on every motor face (16-18 per body). Defaults to accent; set it close to joints for calm animal looks, or bright for toy looks." }
       }
     },
-    "finish": { "enum": ["matte", "satin", "gloss", "metal", "toon", "glow"], "description": "matte/satin read like printed PLA; metal like machined aluminium; glow adds emissive accents." },
+    "finish": { "enum": ["matte", "satin", "gloss", "metal", "toon", "glow"], "description": "matte/satin read like printed PLA (fine layer lines up close); gloss like lacquer or candy; metal like machined aluminium; toon is cel-shaded with ink outlines; glow makes the accent, the pattern and the eyes emissive (neon, lava)." },
     "pattern": {
       "type": "object",
       "additionalProperties": false,
+      "description": "Procedural surface pattern in the pattern colour over the base colour.",
       "properties": {
-        "kind": { "enum": ["none", "spots", "stripes", "bands", "gradient", "checker", "camo", "panels"] },
+        "kind": { "enum": ["none", "spots", "dots", "stripes", "bands", "gradient", "checker", "camo", "panels", "cracks", "scales", "hex"], "description": "spots: organic patches (cow, ladybug); dots: regular polka dots; stripes: wavy tiger/zebra stripes around the body; bands: clean rings (bee); gradient: base colour at the bottom to pattern colour on top; checker: race flag; camo: two-tone camouflage; panels: panel lines (space suit, robot, neon); cracks: veins/cracks (lava, ice, marble); scales: overlapping scales (dragon, fish); hex: honeycomb lines." },
         "color": { "$ref": "#/$defs/color" },
-        "scale": { "type": "number", "minimum": 0.5, "maximum": 2 }
+        "scale": { "type": "number", "minimum": 0.5, "maximum": 2, "description": "Feature size; 1 = sized to the torso, 2 = twice as large." },
+        "target": { "enum": ["auto", "body", "shell", "limbs", "all"], "description": "Where the pattern goes. auto = the shell if there is one, else the body; all = body, shell and legs." }
       }
     },
     "shell": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Decorative printed shell over the torso.",
+      "description": "Decorative printed shell over the torso, fitted to the real torso with clearance and arches over the hip motors; exportable as STL.",
       "properties": {
-        "kind": { "enum": ["none", "dome", "beetle", "turtle", "petals", "armor", "fluffy", "saddle"] },
+        "kind": { "enum": ["none", "dome", "beetle", "turtle", "petals", "armor", "fluffy", "saddle"], "description": "dome: smooth cap with piping; beetle: split wing cases plus a front plate (ladybug); turtle: carapace with hex scutes; petals: ring of petals (flower); armor: overlapping plates with rivets (toy tank, armadillo); fluffy: cloud of puffs (sheep, moss, fur); saddle: blanket and saddle (pony)." },
         "color": { "$ref": "#/$defs/color" },
-        "size": { "type": "number", "minimum": 0.8, "maximum": 1.3 }
+        "size": { "type": "number", "minimum": 0.8, "maximum": 1.3, "description": "1 = snug fit; larger is puffier and taller." }
       }
     },
     "face": {
       "type": "object",
       "additionalProperties": false,
+      "description": "Face features. Without a head they sit on top of the front edge (Draft quadrupeds have hip motors on the front face).",
       "properties": {
-        "eyes": { "enum": ["none", "round", "cute", "visor", "cyclops", "sleepy", "compound"] },
-        "eyeColor": { "$ref": "#/$defs/color" }
+        "eyes": { "enum": ["none", "round", "cute", "visor", "cyclops", "sleepy", "compound"], "description": "round: white with pupils in eyeColor; cute: big glossy dark eyes with an eyeColor iris and sparkles; visor: glass band with glowing eyeColor eyes (robot, astronaut); cyclops: one big eye; sleepy: half-closed lids; compound: faceted insect eyes in eyeColor. Eyes blink and glance around." },
+        "eyeColor": { "$ref": "#/$defs/color" },
+        "size": { "type": "number", "minimum": 0.7, "maximum": 1.4, "description": "Eye size; above 1 reads younger and cuter." },
+        "head": { "enum": ["none", "round", "boxy", "snout"], "description": "Cosmetic head in front of the torso. round: cute ball head; boxy: robot or helmet head; snout: animal head with a muzzle in the accent colour and a nose (dog, tiger, cow, dragon)." },
+        "mouth": { "enum": ["none", "smile", "grin", "beak", "fangs", "whiskers", "grill"], "description": "beak uses the accent colour; whiskers adds a little nose; grill is a robot vent." },
+        "cheeks": { "type": "boolean", "description": "Rosy blush under the eyes." },
+        "markings": { "enum": ["none", "patches", "mask"], "description": "patches: panda eye patches; mask: bandit mask band." }
       }
     },
     "accessories": {
       "type": "array",
-      "maxItems": 4,
+      "maxItems": 6,
+      "description": "Cosmetic add-ons, each at most once. Head items sit on the head (or on top of the front edge without a head).",
       "items": {
         "type": "object",
         "additionalProperties": false,
         "required": ["kind"],
         "properties": {
-          "kind": { "enum": ["antennae", "horns", "ears", "tail", "spikes", "fin", "wings", "crown", "hat", "bow", "flower", "propeller", "backpack"] },
-          "color": { "$ref": "#/$defs/color" },
+          "kind": { "enum": ["antennae", "horns", "ears", "tail", "spikes", "fin", "wings", "crown", "hat", "bow", "flower", "propeller", "backpack", "sprout", "mushroom", "halo", "goggles", "scarf"], "description": "antennae wobble on springs; ears twitch; tail sways; wings flutter; propeller spins; flower and sprout sway; halo floats. spikes run along the back (mane, dragon spines); fin is a dorsal fin; mushroom sits on the back; goggles rest on the forehead; scarf wraps the neck." },
+          "color": { "$ref": "#/$defs/color", "description": "Defaults to the palette accent." },
           "size": { "type": "number", "minimum": 0.6, "maximum": 1.6 }
         }
       }
@@ -66,8 +77,8 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "style": { "enum": ["classic", "sleek", "chunky", "bones"] },
-        "feet": { "enum": ["ball", "paw", "hoof", "pad"] }
+        "style": { "enum": ["classic", "sleek", "chunky", "bones"], "description": "Visual covers for links and motors (never the physics): classic = Draft's own cylinders; sleek = slim tapered links and rounded motors; chunky = toy-like thick links and big hub caps; bones = bone shafts with ball joints." },
+        "feet": { "enum": ["ball", "paw", "hoof", "pad"], "description": "ball = Draft's sphere; paw = pad with toe beans; hoof = cloven hoof; pad = robot foot pad with tread." }
       }
     }
   },
