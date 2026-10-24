@@ -331,7 +331,9 @@ def main(argv: list[str] | None = None) -> int:
             if args.no_export:
                 raise Stop('no-export')
             if state['phase'] in ('exporting', 'evaluating'):
-                if deadline is not None and time.monotonic() + EXPORT_RESERVE_S > deadline:
+                # Keep the reserve only if this chunk already trained; a chunk that starts at
+                # the export phase always tries (else short chunks would never export).
+                if deadline is not None and chunk_iterations > 0 and time.monotonic() + EXPORT_RESERVE_S > deadline:
                     raise Stop('wall')
                 from .export import export_and_evaluate
                 result = export_and_evaluate(body=body, env=env, model=model, out=out, work=work,
