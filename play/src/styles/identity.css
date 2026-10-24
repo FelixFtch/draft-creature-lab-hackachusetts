@@ -1,0 +1,347 @@
+/* Logo + Tinker. */
+
+/* ---------- Logo ---------- */
+.cl-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--cl-ink-900);
+  text-decoration: none;
+}
+
+.cl-logo-glyph {
+  flex: 0 0 auto;
+}
+
+.cl-logo__words {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1;
+}
+
+/* "Draft" set like a dimensioned label: technical lettering over a
+   dimension line with end ticks. */
+.cl-logo__draft {
+  position: relative;
+  padding: 0 3px 4px;
+  margin-bottom: 3px;
+  color: var(--cl-bp-600);
+  font-family: var(--cl-font-display);
+  font-variation-settings: "CASL" 0, "MONO" 0;
+  font-weight: 700;
+  font-size: 0.72em;
+  letter-spacing: 0.04em;
+}
+
+.cl-logo__draft::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 6px;
+  border: 1.5px solid currentColor;
+  border-top: 0;
+  border-radius: 0 0 1px 1px;
+  clip-path: inset(3px 0 0 0);
+}
+
+.cl-logo__name {
+  font-family: var(--cl-font-display);
+  font-variation-settings: "CASL" 1, "MONO" 0;
+  font-weight: 1000;
+  font-size: 1.32em;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.cl-logo--sm {
+  font-size: 15px;
+  gap: 9px;
+}
+
+.cl-logo--md {
+  font-size: 18px;
+}
+
+.cl-logo--lg {
+  font-size: 40px;
+  gap: 18px;
+}
+
+.cl-logo--lg .cl-logo__draft {
+  padding-bottom: 7px;
+  margin-bottom: 6px;
+}
+
+.cl-logo--lg .cl-logo__draft::after {
+  height: 10px;
+  border-width: 2.5px;
+  clip-path: inset(5px 0 0 0);
+}
+
+@media (max-width: 899px) {
+  .cl-logo--compact .cl-logo__words {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+}
+
+/* ---------- Tinker ---------- */
+.cl-tinker {
+  overflow: visible;
+  flex: 0 0 auto;
+}
+
+.cl-tinker__shell {
+  fill: var(--cl-sun-400);
+  stroke: var(--cl-ink-900);
+  stroke-width: 4;
+}
+
+.cl-tinker__ear {
+  fill: var(--cl-paper-50);
+  stroke: var(--cl-ink-900);
+  stroke-width: 3;
+}
+
+.cl-tinker__ink-line {
+  fill: none;
+  stroke: var(--cl-ink-900);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cl-tinker__ink-line--thin {
+  stroke-width: 2.5;
+}
+
+/* The antenna bulb is a status light; the face says the same thing. */
+.cl-tinker__bulb {
+  fill: var(--cl-tomato-500);
+  stroke: var(--cl-ink-900);
+  stroke-width: 3;
+}
+
+.cl-tinker--thinking .cl-tinker__bulb { fill: var(--cl-sky-400); }
+.cl-tinker--happy .cl-tinker__bulb { fill: var(--cl-leaf-500); }
+.cl-tinker--sleeping .cl-tinker__bulb { fill: var(--cl-ink-200); }
+
+.cl-tinker__bulb-ring {
+  fill: none;
+  stroke: var(--cl-sky-400);
+  stroke-width: 3;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cl-tinker-ring 1.4s var(--cl-ease-enter) infinite;
+}
+
+.cl-tinker__screen {
+  fill: var(--cl-bp-600);
+  stroke: var(--cl-ink-900);
+  stroke-width: 3;
+}
+
+.cl-tinker__grid path,
+.cl-tinker__body-grid {
+  fill: none;
+  stroke: var(--cl-bp-300);
+  stroke-width: 1;
+  opacity: 0.4;
+}
+
+.cl-tinker__glare {
+  fill: none;
+  stroke: var(--cl-bp-100);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  opacity: 0.55;
+}
+
+.cl-tinker__shine {
+  fill: none;
+  stroke: var(--cl-paper-50);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  opacity: 0.8;
+}
+
+.cl-tinker__eye,
+.cl-tinker__mouth,
+.cl-tinker__dots circle {
+  fill: var(--cl-bp-50);
+}
+
+.cl-tinker__line {
+  fill: none;
+  stroke: var(--cl-bp-50);
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cl-tinker__line--thin {
+  stroke-width: 3;
+}
+
+.cl-tinker__cheeks ellipse {
+  fill: var(--cl-bubble-400);
+}
+
+.cl-tinker__drop {
+  fill: var(--cl-sky-400);
+  stroke: var(--cl-ink-900);
+  stroke-width: 2;
+}
+
+.cl-tinker__body {
+  fill: var(--cl-bp-600);
+  stroke: var(--cl-ink-900);
+  stroke-width: 4;
+}
+
+.cl-tinker__chest {
+  fill: var(--cl-sun-400);
+  stroke: var(--cl-ink-900);
+  stroke-width: 3;
+}
+
+.cl-tinker__chest-dot,
+.cl-tinker__foot {
+  fill: var(--cl-ink-900);
+}
+
+.cl-tinker__limbs path {
+  fill: none;
+  stroke: var(--cl-ink-900);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cl-tinker__joint {
+  fill: var(--cl-paper-50);
+  stroke: var(--cl-ink-900);
+  stroke-width: 2.5;
+}
+
+.cl-tinker__hand {
+  fill: var(--cl-sun-400);
+  stroke: var(--cl-ink-900);
+  stroke-width: 2.5;
+}
+
+.cl-tinker__pencil-body {
+  fill: none;
+  stroke: var(--cl-tomato-500);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.cl-tinker__pencil-tip {
+  fill: var(--cl-paper-50);
+  stroke: var(--cl-ink-900);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+/* ---- Tinker motion ---- */
+.cl-tinker__eye--blink {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cl-tinker-blink 5.4s infinite;
+}
+
+.cl-tinker__eye--look {
+  animation: cl-tinker-look 2.6s var(--cl-ease-standard) infinite alternate;
+}
+
+.cl-tinker__dots circle {
+  animation: cl-tinker-dot 1.2s var(--cl-ease-standard) infinite;
+}
+
+.cl-tinker__dots circle:nth-child(2) { animation-delay: 160ms; }
+.cl-tinker__dots circle:nth-child(3) { animation-delay: 320ms; }
+
+.cl-tinker__mouth--talk {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cl-tinker-talk 260ms ease-in-out infinite alternate;
+}
+
+.cl-tinker--happy .cl-tinker__head {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: cl-tinker-hop 760ms var(--cl-ease-bounce) 1;
+}
+
+.cl-tinker--worried .cl-tinker__head {
+  transform-box: fill-box;
+  transform-origin: 50% 90%;
+  transform: rotate(-6deg);
+  animation: cl-tinker-shake 520ms var(--cl-ease-standard) 1;
+}
+
+.cl-tinker--wave .cl-tinker__forearm {
+  transform-box: view-box;
+  transform-origin: 96px 88px;
+  animation: cl-tinker-wave 1.1s var(--cl-ease-standard) 4;
+}
+
+.cl-tinker__zz {
+  animation: cl-tinker-zz 2.4s ease-in-out infinite;
+}
+
+@keyframes cl-tinker-blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.12); }
+}
+
+@keyframes cl-tinker-look {
+  from { transform: translateX(-2px); }
+  to { transform: translateX(2px); }
+}
+
+@keyframes cl-tinker-dot {
+  0%, 60%, 100% { opacity: 0.35; }
+  30% { opacity: 1; }
+}
+
+@keyframes cl-tinker-talk {
+  from { transform: scaleY(1); }
+  to { transform: scaleY(0.35); }
+}
+
+@keyframes cl-tinker-hop {
+  0% { transform: translateY(0); }
+  35% { transform: translateY(-7%); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes cl-tinker-shake {
+  0% { transform: rotate(0deg); }
+  30% { transform: rotate(-9deg); }
+  60% { transform: rotate(-4deg); }
+  100% { transform: rotate(-6deg); }
+}
+
+@keyframes cl-tinker-wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-20deg); }
+  75% { transform: rotate(16deg); }
+}
+
+@keyframes cl-tinker-ring {
+  from { transform: scale(1); opacity: 0.9; }
+  to { transform: scale(2.3); opacity: 0; }
+}
+
+@keyframes cl-tinker-zz {
+  0%, 100% { opacity: 0.35; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-2px); }
+}

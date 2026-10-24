@@ -1,0 +1,216 @@
+/*
+  Creature Lab design tokens — "toybox workshop meets engineering blueprint".
+
+  Two materials carry the whole identity:
+    - Toy: warm paper, thick ink keylines, press-depth, saturated plastic
+      accents and die-cut stickers. Anything the player owns or plays with.
+    - Blueprint: cyanotype blue, white linework, grid, linear lettering.
+      Anything that is real engineering (Draft geometry, motors, hashes).
+  Recursive's CASL axis moves type between the two (1 = toy marker,
+  0 = technical lettering); its MONO axis sets numbers.
+
+  Contrast notes (WCAG 2.x, computed): ink-900/paper-100 14.1:1,
+  ink-600/paper-100 6.2:1, bp-100/bp-600 6.6:1, sun-400/bp-600 5.2:1,
+  paper-50/tomato-600 5.5:1. Sun/leaf/sky faces are never text colors on
+  paper; they always sit inside an ink keyline.
+*/
+
+@property --cl-casl {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 1;
+}
+
+:root {
+  /* ---------- Raw palette ---------- */
+  --cl-ink-900: #1c2440;
+  --cl-ink-800: #2a3354;
+  --cl-ink-700: #3d4566;
+  --cl-ink-600: #525b7e;
+  --cl-ink-400: #8a91ad;
+  --cl-ink-200: #c9cddc;
+
+  --cl-paper-50: #fffcf5;
+  --cl-paper-100: #fbf6ea;
+  --cl-paper-200: #f4ecda;
+  --cl-paper-300: #e8dcc2;
+  --cl-paper-400: #d3c29f;
+  --cl-kraft-400: #c9a36a;
+  --cl-kraft-200: #e7d3ad;
+  --cl-tape: #efe2b4;
+
+  --cl-bp-900: #0c2550;
+  --cl-bp-800: #102f5e;
+  --cl-bp-700: #163e7a;
+  --cl-bp-600: #1e4e95;
+  --cl-bp-500: #2b63b4;
+  --cl-bp-300: #7fa6e0;
+  --cl-bp-200: #b9d0f2;
+  --cl-bp-100: #dce8fb;
+  --cl-bp-50: #eef4fd;
+
+  --cl-sun-600: #c98a00;
+  --cl-sun-500: #f2ae00;
+  --cl-sun-400: #ffc63a;
+  --cl-sun-200: #ffe39a;
+  --cl-sun-100: #fff3cf;
+
+  --cl-tomato-600: #c3301c;
+  --cl-tomato-500: #ec4d37;
+  --cl-tomato-100: #fde2dc;
+
+  --cl-leaf-700: #17703f;
+  --cl-leaf-500: #2bae68;
+  --cl-leaf-100: #d8f2e2;
+
+  --cl-sky-700: #14659e;
+  --cl-sky-400: #49b6f0;
+  --cl-sky-100: #ddf1fd;
+
+  --cl-bubble-600: #b8285a;
+  --cl-bubble-400: #ff6f95;
+  --cl-bubble-100: #ffe1ea;
+
+  --cl-grape-600: #5a3ed4;
+  --cl-grape-400: #8c73ff;
+  --cl-grape-100: #ece7ff;
+
+  /* ---------- Semantic: toy / paper surfaces ---------- */
+  --cl-surface: var(--cl-paper-100);
+  --cl-surface-raised: var(--cl-paper-50);
+  --cl-surface-sunken: var(--cl-paper-200);
+  --cl-surface-strong: var(--cl-paper-300);
+  --cl-text: var(--cl-ink-900);
+  --cl-text-2: var(--cl-ink-700);
+  --cl-text-muted: var(--cl-ink-600);
+  --cl-keyline: var(--cl-ink-900);
+  --cl-hairline: var(--cl-paper-300);
+  --cl-divider: var(--cl-paper-400);
+  --cl-accent: var(--cl-sun-400);
+  --cl-accent-soft: var(--cl-sun-100);
+  --cl-focus: var(--cl-bp-600);
+  --cl-focus-halo: var(--cl-paper-50);
+
+  /* status: always paired with an icon + words, never color alone */
+  --cl-good: var(--cl-leaf-700);
+  --cl-good-fill: var(--cl-leaf-500);
+  --cl-good-soft: var(--cl-leaf-100);
+  --cl-warn: #8a5a00;
+  --cl-warn-fill: var(--cl-sun-400);
+  --cl-warn-soft: var(--cl-sun-100);
+  --cl-bad: var(--cl-tomato-600);
+  --cl-bad-fill: var(--cl-tomato-500);
+  --cl-bad-soft: var(--cl-tomato-100);
+  --cl-info: var(--cl-sky-700);
+  --cl-info-soft: var(--cl-sky-100);
+
+  /* ---------- Semantic: blueprint surfaces ---------- */
+  --cl-bp-surface: var(--cl-bp-600);
+  --cl-bp-surface-deep: var(--cl-bp-700);
+  --cl-bp-line: var(--cl-bp-100);
+  --cl-bp-text: var(--cl-bp-50);
+  --cl-bp-text-dim: var(--cl-bp-200);
+  --cl-bp-grid-minor: rgb(220 232 251 / 0.075);
+  --cl-bp-grid-major: rgb(220 232 251 / 0.16);
+  --cl-bp-mark: var(--cl-sun-400);
+
+  /* ---------- Type ---------- */
+  --cl-font-display: "Recursive Variable", "Recursive", ui-rounded, system-ui, sans-serif;
+  --cl-font-ui: "Atkinson Hyperlegible Next Variable", "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --cl-font-mono: "Recursive Variable", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --cl-mono-axes: "MONO" 1, "CASL" 0;
+
+  /* Modular scale, ratio ~1.2 from a 15px UI base. */
+  --cl-text-2xs: 0.6875rem; /* 11 — keycaps only */
+  --cl-text-xs: 0.75rem;    /* 12 */
+  --cl-text-sm: 0.84375rem; /* 13.5 */
+  --cl-text-md: 0.9375rem;  /* 15 — UI base */
+  --cl-text-lg: 1.0625rem;  /* 17 */
+  --cl-text-xl: 1.25rem;    /* 20 */
+  --cl-text-2xl: 1.5rem;    /* 24 */
+  --cl-text-3xl: 1.875rem;  /* 30 */
+  --cl-text-4xl: 2.5rem;    /* 40 */
+  --cl-text-5xl: 3.5rem;    /* 56 */
+  --cl-text-6xl: 4.75rem;   /* 76 */
+
+  --cl-leading-tight: 1.04;
+  --cl-leading-snug: 1.2;
+  --cl-leading-ui: 1.45;
+  --cl-leading-read: 1.55;
+
+  /* ---------- Space (4px grid) ---------- */
+  --cl-space-1: 4px;
+  --cl-space-2: 8px;
+  --cl-space-3: 12px;
+  --cl-space-4: 16px;
+  --cl-space-5: 20px;
+  --cl-space-6: 24px;
+  --cl-space-8: 32px;
+  --cl-space-10: 40px;
+  --cl-space-12: 48px;
+  --cl-gutter: 16px;
+
+  /* ---------- Radius (by material, not one size for all) ---------- */
+  --cl-radius-panel: 22px;   /* floating paper panels */
+  --cl-radius-card: 16px;    /* cards inside panels */
+  --cl-radius-key: 14px;     /* toy buttons / keycaps */
+  --cl-radius-field: 12px;   /* inputs */
+  --cl-radius-sheet: 6px;    /* blueprint sheets: crisp, technical */
+  --cl-radius-pill: 999px;
+
+  /* ---------- Keylines & depth ---------- */
+  --cl-line: 2px;
+  --cl-line-thin: 1.5px;
+  --cl-depth-sm: 0 2px 0 var(--cl-ink-900);
+  --cl-depth: 0 4px 0 var(--cl-ink-900);
+  --cl-depth-lg: 0 6px 0 var(--cl-ink-900);
+  --cl-lift-1: 0 1px 2px rgb(28 36 64 / 0.10), 0 6px 14px rgb(28 36 64 / 0.10);
+  --cl-lift-2: 0 2px 4px rgb(28 36 64 / 0.10), 0 14px 36px rgb(28 36 64 / 0.20);
+  --cl-lift-3: 0 4px 10px rgb(28 36 64 / 0.14), 0 26px 60px rgb(28 36 64 / 0.28);
+  --cl-sticker-shadow: drop-shadow(0 2px 0 rgb(28 36 64 / 0.22)) drop-shadow(0 8px 12px rgb(28 36 64 / 0.20));
+
+  /* ---------- Motion ---------- */
+  --cl-dur-press: 90ms;
+  --cl-dur-fast: 140ms;
+  --cl-dur-base: 220ms;
+  --cl-dur-slow: 360ms;
+  --cl-dur-celebrate: 620ms;
+  --cl-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --cl-ease-enter: cubic-bezier(0, 0, 0.2, 1);
+  --cl-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  /* Springy overshoot (~8%) for toy parts: pops, toggles, stickers. */
+  --cl-ease-spring: linear(0, 0.06 3.2%, 0.25 7%, 0.6 13.2%, 0.95 19.6%, 1.07 23.8%, 1.1 27.5%, 1.085 31.9%, 1.02 41%, 0.99 48.5%, 0.995 61%, 1.001 76%, 1);
+  /* Bouncier landing for celebrations only. */
+  --cl-ease-bounce: linear(0, 0.12 4%, 0.5 12%, 1.12 24%, 0.94 33%, 1.03 43%, 0.99 55%, 1.005 68%, 1);
+
+  /* ---------- Layers ---------- */
+  --cl-z-stage: 0;
+  --cl-z-scrim: 5;
+  --cl-z-overlay: 10;
+  --cl-z-hud: 20;
+  --cl-z-sheet: 30;
+  --cl-z-toast: 40;
+  --cl-z-modal: 50;
+  --cl-z-title: 60;
+
+  /* ---------- Layout ---------- */
+  --cl-topbar-h: 64px;
+  --cl-chat-w: 372px;
+  --cl-inspector-w: 408px;
+}
+
+@media (max-width: 1199px) {
+  :root {
+    --cl-chat-w: 324px;
+    --cl-inspector-w: 360px;
+    --cl-gutter: 12px;
+  }
+}
+
+@media (max-width: 899px) {
+  :root {
+    --cl-topbar-h: 56px;
+    --cl-gutter: 10px;
+    --cl-radius-panel: 20px;
+  }
+}

@@ -1,0 +1,349 @@
+/* Title screen: a toy box lid lying on a blueprint. */
+
+.cl-title {
+  position: absolute;
+  inset: 0;
+  z-index: var(--cl-z-title);
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(420px, 0.92fr);
+  overflow: auto;
+  background-color: var(--cl-bp-surface);
+  background-image:
+    linear-gradient(var(--cl-bp-grid-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--cl-bp-grid-major) 1px, transparent 1px),
+    linear-gradient(var(--cl-bp-grid-minor) 1px, transparent 1px),
+    linear-gradient(90deg, var(--cl-bp-grid-minor) 1px, transparent 1px);
+  background-size: 64px 64px, 64px 64px, 16px 16px, 16px 16px;
+  color: var(--cl-ink-900);
+  --cl-focus: var(--cl-bp-600);
+}
+
+.cl-title__sheet {
+  position: absolute;
+  inset: 16px;
+  border: 1.5px solid rgb(220 232 251 / 0.35);
+  pointer-events: none;
+}
+
+.cl-title__corner {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border: 0 solid var(--cl-bp-100);
+}
+
+.cl-title__corner--tl { left: -1px; top: -1px; border-left-width: 3px; border-top-width: 3px; }
+.cl-title__corner--br { right: -1px; bottom: -1px; border-right-width: 3px; border-bottom-width: 3px; }
+
+.cl-title__hero {
+  position: relative;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 10px;
+  min-height: 0;
+  padding: 48px 32px 48px 56px;
+}
+
+.cl-title__drawing {
+  position: relative;
+  width: min(640px, 100%);
+  aspect-ratio: 120 / 84;
+}
+
+.cl-title__lines,
+.cl-title__toy {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.cl-title__lines :is(path, circle, rect, ellipse) {
+  stroke-dasharray: 420;
+  stroke-dashoffset: 420;
+  animation: cl-title-draw 1300ms var(--cl-ease-standard) forwards;
+}
+
+.cl-title__lines text {
+  opacity: 0;
+  animation: cl-title-fade 400ms 900ms forwards;
+}
+
+.cl-title__toy {
+  opacity: 0;
+  transform: translateY(6px) scale(0.985);
+  animation: cl-title-fill 700ms var(--cl-ease-spring) 1150ms forwards;
+}
+
+.cl-title__annot {
+  color: var(--cl-bp-200);
+  font-size: var(--cl-text-md);
+}
+
+.cl-title__annot span {
+  margin-right: 8px;
+  padding: 1px 7px;
+  border: 1.5px solid currentColor;
+  border-radius: 4px;
+  font-family: var(--cl-font-mono);
+  font-variation-settings: var(--cl-mono-axes);
+  font-size: var(--cl-text-xs);
+}
+
+/* the lid */
+.cl-title__panel {
+  position: relative;
+  display: grid;
+  align-content: center;
+  gap: 18px;
+  margin: 28px 28px 28px 0;
+  padding: 36px 40px 28px;
+  border: var(--cl-line) solid var(--cl-ink-900);
+  border-radius: 30px;
+  background: var(--cl-paper-100);
+  box-shadow: 0 8px 0 var(--cl-ink-900), var(--cl-lift-3);
+  animation: cl-title-lid 700ms var(--cl-ease-spring) both;
+}
+
+.cl-title__logo {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+/* Lettering slides from technical (CASL 0) to toy (CASL 1). */
+.cl-title .cl-logo__name {
+  --cl-casl: 1;
+  font-variation-settings: "CASL" var(--cl-casl), "MONO" 0;
+  animation: cl-title-casl 1100ms var(--cl-ease-standard) 650ms both;
+}
+
+.cl-title__lede {
+  max-width: 34ch;
+  color: var(--cl-ink-700);
+  font-size: var(--cl-text-xl);
+  line-height: 1.35;
+}
+
+.cl-title__tinker {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.cl-title__bubble {
+  position: relative;
+  padding: 14px 16px;
+  border: var(--cl-line) solid var(--cl-ink-900);
+  border-radius: 20px;
+  background: var(--cl-paper-50);
+  box-shadow: 0 3px 0 var(--cl-ink-900);
+  font-size: var(--cl-text-md);
+  line-height: var(--cl-leading-read);
+}
+
+.cl-title__bubble::before {
+  content: "";
+  position: absolute;
+  left: -11px;
+  top: 34px;
+  width: 18px;
+  height: 18px;
+  border-left: var(--cl-line) solid var(--cl-ink-900);
+  border-bottom: var(--cl-line) solid var(--cl-ink-900);
+  background: var(--cl-paper-50);
+  transform: rotate(45deg) skew(10deg, 10deg);
+}
+
+.cl-title__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-bottom: 6px;
+}
+
+.cl-title__h2 {
+  margin-bottom: 8px;
+  font-weight: 700;
+  font-size: var(--cl-text-sm);
+  color: var(--cl-ink-700);
+}
+
+.cl-title__starters ul {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cl-starter {
+  position: relative;
+  display: grid;
+  gap: 1px;
+  width: 100%;
+  padding: 6px 6px 8px;
+  border: var(--cl-line) solid var(--cl-ink-900);
+  border-radius: 14px;
+  background: var(--cl-paper-50);
+  box-shadow: 0 3px 0 var(--cl-ink-900);
+  color: var(--cl-ink-900);
+  text-align: left;
+  transition: transform var(--cl-dur-base) var(--cl-ease-spring), box-shadow var(--cl-dur-base) var(--cl-ease-spring);
+}
+
+.cl-starter:hover {
+  transform: translateY(-3px) rotate(-1.5deg);
+  box-shadow: 0 6px 0 var(--cl-ink-900);
+}
+
+.cl-starter:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--cl-ink-900);
+}
+
+.cl-starter__art {
+  display: block;
+  aspect-ratio: 120 / 84;
+  border-radius: 9px;
+  background: radial-gradient(circle at 50% 70%, #fff, var(--cl-paper-200));
+}
+
+.cl-starter__art svg {
+  width: 100%;
+  height: 100%;
+}
+
+.cl-starter__name {
+  font-family: var(--cl-font-display);
+  font-variation-settings: "CASL" 1, "MONO" 0;
+  font-weight: 900;
+  font-size: var(--cl-text-md);
+}
+
+.cl-starter__blurb {
+  color: var(--cl-text-muted);
+  font-size: 11.5px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.cl-starter__walks {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 6px;
+  border: 1.5px solid var(--cl-ink-900);
+  border-radius: 999px;
+  background: var(--cl-leaf-500);
+  font-size: 10.5px;
+  font-weight: 800;
+}
+
+.cl-title__small {
+  color: var(--cl-text-muted);
+  font-size: var(--cl-text-xs);
+}
+
+@keyframes cl-title-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes cl-title-fade {
+  to { opacity: 1; }
+}
+
+@keyframes cl-title-fill {
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes cl-title-casl {
+  from { --cl-casl: 0; }
+  to { --cl-casl: 1; }
+}
+
+@keyframes cl-title-lid {
+  from { opacity: 0; transform: translateY(24px) rotate(1.5deg); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (max-width: 1199px) {
+  .cl-title {
+    grid-template-columns: minmax(0, 0.9fr) minmax(400px, 1.1fr);
+  }
+
+  .cl-title__panel {
+    padding: 28px 28px 22px;
+  }
+
+  .cl-title__hero {
+    padding: 32px 16px 32px 32px;
+  }
+}
+
+@media (max-width: 899px) {
+  .cl-title {
+    display: block;
+    grid-template-columns: none;
+  }
+
+  .cl-title__sheet {
+    inset: 8px;
+  }
+
+  .cl-title__hero {
+    padding: 22px 26px 4px;
+  }
+
+  .cl-title__drawing {
+    width: min(330px, 92%);
+  }
+
+  .cl-title__annot {
+    display: none;
+  }
+
+  .cl-title__panel {
+    gap: 14px;
+    margin: 0 10px 14px;
+    padding: 22px 18px 18px;
+    border-radius: 24px;
+  }
+
+  .cl-title .cl-logo--lg {
+    font-size: 30px;
+    gap: 12px;
+  }
+
+  .cl-title .cl-logo--lg .cl-logo-glyph {
+    width: 56px;
+    height: 56px;
+  }
+
+  .cl-title__lede {
+    font-size: var(--cl-text-lg);
+  }
+
+  .cl-title__tinker .cl-tinker {
+    width: 82px;
+    height: auto;
+  }
+
+  .cl-title__bubble {
+    font-size: var(--cl-text-sm);
+  }
+
+  .cl-title__actions .cl-btn {
+    flex: 1 1 100%;
+  }
+
+  .cl-title__starters ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

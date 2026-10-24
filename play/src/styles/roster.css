@@ -1,0 +1,647 @@
+/* Robot Roster (toy pick cards) and Terrain Lab (blueprint matrix). */
+
+.cl-modal--xl.cl-modal--center { width: min(1240px, calc(100vw - 24px)); }
+
+/* ---------- Roster ---------- */
+.cl-roster__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+}
+
+.cl-rcard {
+  --rc: var(--cl-sky-400);
+  display: flex;
+  flex-direction: column;
+  border: var(--cl-line) solid var(--cl-ink-900);
+  border-radius: var(--cl-radius-card);
+  background: var(--cl-paper-50);
+  box-shadow: var(--cl-depth);
+  transition: transform var(--cl-dur-fast) var(--cl-ease-spring), box-shadow var(--cl-dur-fast);
+}
+
+.cl-rcard.is-on {
+  outline: 4px solid var(--cl-sun-400);
+  outline-offset: 2px;
+  transform: translateY(-3px);
+  box-shadow: var(--cl-depth-lg), var(--cl-lift-2);
+}
+
+.cl-rcard__pick {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  padding: 0;
+  border: 0;
+  border-radius: calc(var(--cl-radius-card) - 2px);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.cl-rcard__stage {
+  display: grid;
+  place-items: center;
+  height: 150px;
+  border-bottom: var(--cl-line) solid var(--cl-ink-900);
+  border-radius: calc(var(--cl-radius-card) - 2px) calc(var(--cl-radius-card) - 2px) 0 0;
+  background:
+    radial-gradient(circle at 50% 120%, color-mix(in srgb, var(--rc) 55%, white) 0 45%, transparent 46%),
+    color-mix(in srgb, var(--rc) 22%, var(--cl-paper-50));
+}
+
+.cl-rcard__stage .cl-glyph {
+  width: 86%;
+  height: 132px;
+}
+
+.cl-rcard__pick:hover .cl-rcard__stage .cl-glyph {
+  transform: translateY(-3px) rotate(-1.5deg);
+  transition: transform var(--cl-dur-base) var(--cl-ease-spring);
+}
+
+.cl-rcard__kind {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 3px 9px;
+  border: var(--cl-line-thin) solid var(--cl-ink-900);
+  border-radius: var(--cl-radius-pill);
+  background: var(--cl-paper-50);
+  font-size: var(--cl-text-xs);
+  font-weight: 700;
+  transform: rotate(-2deg);
+}
+
+.cl-rcard__picked {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border: var(--cl-line-thin) solid var(--cl-ink-900);
+  border-radius: var(--cl-radius-pill);
+  background: var(--cl-sun-400);
+  font-size: var(--cl-text-xs);
+  font-weight: 800;
+  transform: rotate(3deg);
+}
+
+.cl-rcard__body {
+  display: grid;
+  gap: 8px;
+  padding: 12px 14px 14px;
+}
+
+.cl-rcard__name {
+  font-family: var(--cl-font-display);
+  font-variation-settings: "CASL" 1, "MONO" 0;
+  font-size: var(--cl-text-3xl);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.cl-rcard__tagline {
+  color: var(--cl-text-2);
+  font-size: var(--cl-text-sm);
+  line-height: var(--cl-leading-snug);
+}
+
+.cl-rcard__size {
+  color: var(--cl-text-muted);
+  font-size: var(--cl-text-xs);
+}
+
+.cl-rcard__best {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.cl-rcard__best-label {
+  font-size: var(--cl-text-xs);
+  font-weight: 700;
+  color: var(--cl-text-muted);
+}
+
+.cl-terrainchip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border: var(--cl-line-thin) solid var(--cl-bp-600);
+  border-radius: var(--cl-radius-sheet);
+  background: var(--cl-bp-50);
+  color: var(--cl-bp-700);
+  font-size: var(--cl-text-xs);
+  font-weight: 700;
+}
+
+.cl-rcard__more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  margin: 0 12px 12px;
+  border: var(--cl-line-thin) dashed var(--cl-ink-600);
+  border-radius: var(--cl-radius-field);
+  background: transparent;
+  color: var(--cl-ink-800);
+  font: inherit;
+  font-size: var(--cl-text-sm);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cl-rcard__more:hover {
+  background: var(--cl-paper-200);
+}
+
+/* Honest skill badges */
+.cl-skillbadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cl-skillbadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px 3px 6px;
+  border: var(--cl-line-thin) solid var(--cl-ink-900);
+  border-radius: var(--cl-radius-pill);
+  background: var(--cl-paper-50);
+  font-size: var(--cl-text-xs);
+  font-weight: 700;
+}
+
+.cl-skillbadge__state {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-weight: 600;
+}
+
+.cl-skillbadge.is-good { background: var(--cl-good-soft); }
+.cl-skillbadge.is-good .cl-skillbadge__state { color: var(--cl-good); }
+.cl-skillbadge.is-info { background: var(--cl-info-soft); }
+.cl-skillbadge.is-info .cl-skillbadge__state { color: var(--cl-info); }
+.cl-skillbadge.is-bad { background: var(--cl-bad-soft); }
+.cl-skillbadge.is-bad .cl-skillbadge__state { color: var(--cl-bad); }
+.cl-skillbadge.is-none { border-style: dashed; color: var(--cl-ink-600); }
+
+/* ---------- Terrain Lab ---------- */
+.cl-tlab {
+  display: grid;
+  gap: 14px;
+}
+
+.cl-tlab__intro,
+.cl-tlab__method {
+  max-width: 72ch;
+  color: var(--cl-text-2);
+  font-size: var(--cl-text-sm);
+}
+
+.cl-tlab__method {
+  color: var(--cl-text-muted);
+  font-size: var(--cl-text-xs);
+}
+
+.cl-tlab__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--cl-text-xs);
+  font-weight: 600;
+}
+
+.cl-tlab__legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cl-tlab__legend .cl-tcell__pred,
+.cl-tlab__legend .cl-tcell__flag {
+  position: static;
+}
+
+.cl-tlab__scroll {
+  overflow-x: auto;
+  border: var(--cl-line) solid var(--cl-bp-900);
+  border-radius: var(--cl-radius-sheet);
+  background-color: var(--cl-bp-surface);
+  background-image: linear-gradient(var(--cl-bp-grid-minor) 1px, transparent 1px), linear-gradient(90deg, var(--cl-bp-grid-minor) 1px, transparent 1px);
+  background-size: 12px 12px;
+  color: var(--cl-bp-text);
+}
+
+.cl-tmatrix {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 4px;
+  padding: 6px;
+}
+
+.cl-tmatrix th {
+  font-family: var(--cl-font-display);
+  font-variation-settings: "CASL" 0, "MONO" 0;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.cl-tmatrix__group {
+  padding: 4px 6px;
+  border-bottom: 1px solid rgb(185 208 242 / 0.45);
+  color: var(--cl-sun-400);
+  font-size: var(--cl-text-sm);
+  text-align: center;
+}
+
+.cl-tmatrix__group svg {
+  vertical-align: -3px;
+}
+
+.cl-tmatrix__lane {
+  padding: 2px 4px 4px;
+  color: var(--cl-bp-200);
+  font-size: var(--cl-text-xs);
+  font-weight: 600;
+  text-align: center;
+}
+
+.cl-tmatrix__robot {
+  padding-right: 8px;
+  font-size: var(--cl-text-md);
+  text-align: left;
+}
+
+.cl-tmatrix__glyph {
+  display: inline-block;
+  width: 44px;
+  height: 31px;
+  margin-right: 6px;
+  padding: 1px;
+  border-radius: 8px;
+  background: var(--cl-paper-50);
+  vertical-align: middle;
+}
+
+.cl-tmatrix__glyph .cl-glyph {
+  width: 100%;
+  height: 100%;
+}
+
+.cl-tcell {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  width: 100%;
+  min-width: 62px;
+  min-height: 52px;
+  padding: 6px 4px 5px;
+  border: 1.5px solid rgb(220 232 251 / 0.4);
+  border-radius: 8px;
+  background: rgb(12 37 80 / 0.35);
+  color: var(--cl-bp-50);
+  font: inherit;
+  cursor: pointer;
+}
+
+.cl-tcell:hover {
+  border-color: var(--cl-bp-100);
+}
+
+.cl-tcell.is-on {
+  border: 2px solid var(--cl-sun-400);
+  background: rgb(255 198 58 / 0.16);
+}
+
+.cl-tcell__res {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid var(--cl-ink-900);
+  border-radius: 50%;
+  color: var(--cl-ink-900);
+}
+
+.cl-tcell__res.is-pass { background: var(--cl-leaf-500); }
+.cl-tcell__res.is-fail { background: var(--cl-sun-400); border-radius: 6px; }
+.cl-tcell__res.is-fall { background: var(--cl-tomato-500); color: var(--cl-paper-50); border-radius: 6px 6px 50% 50%; }
+.cl-tcell__res.is-none { background: transparent; border-color: var(--cl-bp-200); color: var(--cl-bp-200); }
+
+.cl-tcell__time {
+  font-size: var(--cl-text-xs);
+  font-weight: 600;
+}
+
+.cl-tcell__pred {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: inline-grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  border: 1.5px dashed currentColor;
+  border-radius: 50%;
+  color: var(--cl-bp-100);
+}
+
+.cl-tlab__legend .cl-tcell__pred {
+  color: var(--cl-ink-700);
+}
+
+.cl-tcell__flag {
+  position: absolute;
+  top: -7px;
+  left: -5px;
+  display: inline-grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  border: 1.5px solid var(--cl-ink-900);
+  border-radius: 50%;
+  background: var(--cl-sun-400);
+  color: var(--cl-ink-900);
+  font-size: 11px;
+  font-weight: 900;
+  transform: rotate(-8deg);
+}
+
+.cl-tlab__detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+@media (max-width: 899px) {
+  .cl-tlab__detail {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cl-tdetail {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border: var(--cl-line) solid var(--cl-bp-900);
+  border-radius: var(--cl-radius-sheet);
+}
+
+.cl-tdetail__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--cl-font-display);
+  font-variation-settings: "CASL" 0, "MONO" 0;
+  font-size: var(--cl-text-lg);
+  font-weight: 800;
+}
+
+.cl-tdetail__why {
+  padding: 8px 10px;
+  border-left: 3px solid var(--cl-sun-400);
+  background: rgb(12 37 80 / 0.4);
+  font-weight: 700;
+}
+
+.cl-tdetail__facts {
+  display: grid;
+  gap: 6px;
+  font-size: var(--cl-text-sm);
+}
+
+.cl-tdetail__facts dt {
+  color: var(--cl-bp-200);
+  font-size: var(--cl-text-xs);
+  font-weight: 700;
+}
+
+.cl-tdetail__surprise {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: var(--cl-text-sm);
+}
+
+.cl-tdetail__surprise .cl-tcell__flag {
+  position: static;
+  flex: 0 0 auto;
+}
+
+.cl-tdetail__method {
+  color: var(--cl-bp-200);
+  font-size: var(--cl-text-xs);
+}
+
+.cl-tdraw {
+  width: 100%;
+  height: auto;
+  max-height: 220px;
+}
+
+.cl-tdraw__terrain { fill: none; stroke: var(--cl-bp-50); stroke-width: 2; stroke-linejoin: round; }
+.cl-tdraw__terrain--fill { fill: rgb(220 232 251 / 0.1); }
+.cl-tdraw__block { fill: rgb(220 232 251 / 0.18); stroke: var(--cl-bp-50); stroke-width: 1.4; }
+.cl-tdraw__break { fill: none; stroke: var(--cl-bp-200); stroke-width: 1.2; }
+.cl-tdraw__dimline { fill: none; stroke: var(--cl-bp-200); stroke-width: 1; stroke-dasharray: 3 3; }
+.cl-tdraw__dim { fill: var(--cl-bp-100); font-family: var(--cl-font-mono); font-variation-settings: var(--cl-mono-axes); font-size: 11px; }
+.cl-tdraw__mark { fill: var(--cl-sun-400); font-family: var(--cl-font-mono); font-variation-settings: var(--cl-mono-axes); font-size: 11.5px; font-weight: 700; }
+.cl-tdraw__robot { fill: none; stroke: var(--cl-sun-400); stroke-width: 2.4; stroke-linecap: round; }
+.cl-tdraw__robot--dash { stroke-dasharray: 6 5; }
+.cl-tdraw__foot { fill: var(--cl-sun-400); stroke: var(--cl-ink-900); stroke-width: 1.2; }
+
+/* Structure card (paper with a blueprint thumbnail) */
+.cl-struct {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border: var(--cl-line) solid var(--cl-ink-900);
+  border-radius: var(--cl-radius-card);
+  background: var(--cl-paper-50);
+  box-shadow: var(--cl-depth-sm);
+}
+
+.cl-struct__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cl-struct__art {
+  flex: 0 0 auto;
+  width: 72px;
+  height: 50px;
+  border-radius: var(--cl-radius-sheet);
+  background: var(--cl-bp-600);
+}
+
+.cl-struct__art .cl-glyph {
+  width: 100%;
+  height: 100%;
+}
+
+.cl-struct__title {
+  font-family: var(--cl-font-display);
+  font-variation-settings: "CASL" 1, "MONO" 0;
+  font-size: var(--cl-text-xl);
+  font-weight: 900;
+}
+
+.cl-struct__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 3px;
+}
+
+.cl-struct__tags span {
+  padding: 1px 8px;
+  border: var(--cl-line-thin) solid var(--cl-ink-900);
+  border-radius: var(--cl-radius-pill);
+  font-size: var(--cl-text-xs);
+  font-weight: 700;
+}
+
+.cl-struct__grid {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.cl-struct__stats {
+  display: grid;
+  gap: 8px;
+}
+
+.cl-struct__stats > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0 8px;
+}
+
+.cl-struct__stats dt {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--cl-text-sm);
+  font-weight: 700;
+}
+
+.cl-struct__stats dd {
+  font-size: var(--cl-text-sm);
+  font-weight: 600;
+  text-align: right;
+}
+
+.cl-struct__stats .cl-struct__why {
+  grid-column: 1 / -1;
+  color: var(--cl-text-muted);
+  font-size: var(--cl-text-xs);
+  font-weight: 400;
+  text-align: left;
+}
+
+.cl-struct__formulas summary {
+  cursor: pointer;
+  font-size: var(--cl-text-sm);
+  font-weight: 700;
+}
+
+.cl-struct__formulas ul {
+  display: grid;
+  gap: 4px;
+  margin: 8px 0 0;
+  padding-left: 18px;
+  font-size: var(--cl-text-xs);
+  color: var(--cl-text-2);
+}
+
+.cl-struct__formulas code {
+  font-family: var(--cl-font-mono);
+  font-variation-settings: var(--cl-mono-axes);
+  font-weight: 700;
+}
+
+.cl-foot {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--cl-radius-sheet);
+  background: var(--cl-bp-600);
+}
+
+.cl-foot__poly { fill: rgb(43 174 104 / 0.35); stroke: var(--cl-bp-50); stroke-width: 2; }
+.cl-foot__line { stroke: var(--cl-bp-50); stroke-width: 6; stroke-linecap: round; }
+.cl-foot__margin { fill: none; stroke: var(--cl-sun-400); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.cl-foot__com { fill: var(--cl-sun-400); stroke: var(--cl-ink-900); stroke-width: 1.4; }
+.cl-foot__note { fill: var(--cl-bp-100); font-family: var(--cl-font-mono); font-variation-settings: var(--cl-mono-axes); font-size: 10px; }
+
+@media (max-width: 520px) {
+  .cl-struct__grid {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+  .cl-struct__stats {
+    width: 100%;
+  }
+}
+
+/* HUD: jump lock reason + gamepad hints */
+.cl-dock__reason {
+  max-width: 132px;
+  margin-top: 2px;
+  color: var(--cl-ink-700);
+  font-size: var(--cl-text-xs);
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.cl-padkey {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 5px;
+  border: 1.5px solid var(--cl-ink-900);
+  border-radius: 50%;
+  background: var(--cl-paper-50);
+  font-size: var(--cl-text-2xs);
+  font-weight: 900;
+}
+
+.cl-padkey--a { background: var(--cl-leaf-500); }
+.cl-padkey--b { background: var(--cl-tomato-500); color: var(--cl-paper-50); }
+.cl-padkey--y { background: var(--cl-sun-400); }
+.cl-padkey--wide { border-radius: 8px; }
+
+.cl-jumpbtn__why {
+  max-width: 96px;
+  font-size: var(--cl-text-2xs);
+  font-weight: 700;
+  text-align: center;
+}

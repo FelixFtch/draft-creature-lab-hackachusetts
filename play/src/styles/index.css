@@ -1,0 +1,21 @@
+/*
+  Creature Lab UI kit stylesheet. Import once from the app entry:
+    import "./styles/index.css";
+  Fonts are bundled from npm (OFL-1.1), never fetched from a CDN.
+*/
+@import "@fontsource-variable/recursive/full.css";
+@import "@fontsource-variable/atkinson-hyperlegible-next/index.css";
+@import "./tokens.css";
+@import "./base.css";
+@import "./primitives.css";
+@import "./identity.css";
+@import "./shell.css";
+@import "./chat.css";
+@import "./blueprint.css";
+@import "./look.css";
+@import "./training.css";
+@import "./shelf.css";
+@import "./overlays.css";
+@import "./play.css";
+@import "./title.css";
+@import "./roster.css";
