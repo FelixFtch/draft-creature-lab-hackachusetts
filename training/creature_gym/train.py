@@ -234,7 +234,11 @@ def main(argv: list[str] | None = None) -> int:
                 print('note: env state not restored (different env count); envs re-initialised', file=sys.stderr)
                 obs, critic_obs = env.actor_obs(), env.critic_obs()
             env.set_progress(state['env_steps'] / target)
-            if args.reexport and state['phase'] in ('done', 'evaluating'):
+            if state['phase'] != 'training' and state['env_steps'] < target:
+                # A larger budget on a finished run means "train more" (the old bundle stays
+                # in place until the new export replaces it).
+                state['phase'], state['eval_pass'] = 'training', None
+            elif args.reexport and state['phase'] in ('done', 'evaluating'):
                 state['phase'], state['eval_pass'] = 'exporting', None
 
         def save_checkpoint():

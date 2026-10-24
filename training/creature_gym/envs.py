@@ -597,6 +597,79 @@ class WalkTask:
         self.phase[:] = sd['phase']
 
 
+@dataclass
+class JumpReference:
+    """Body-scaled vertical profile the jump policy is rewarded to follow (training only).
+
+    crouch (cosine) -> constant-acceleration push to take-off -> ballistic flight
+    with apex ``flight_rise`` above the take-off height -> landing absorb -> stand.
+    Everything scales with the nominal root height, leg length and gravity, so any
+    body gets a physically consistent target without motion capture.
+    """
+    duration: float
+    h_stand: float
+    crouch: float
+    extend: float
+    flight_rise: float
+    t_crouch: float
+    t_push: float
+    t_takeoff: float
+    t_land: float
+    t_absorb: float
+    v_takeoff: float
+
+    @classmethod
+    def for_scaling(cls, sc: Scaling, duration: float) -> 'JumpReference':
+        h_stand = 0.96 * sc.h0
+        crouch = 0.15 * sc.h0
+        extend = 0.04 * sc.leg
+        rise = 0.15 * sc.leg
+        v_to = math.sqrt(2 * GRAVITY * rise)
+        t_push = 2 * (crouch + extend) / v_to          # from rest with constant acceleration
+        t_crouch = 0.08 * duration
+        t_takeoff = t_crouch + 0.22 + t_push
+        t_land = t_takeoff + 2 * v_to / GRAVITY
+        t_absorb = t_land + 0.25
+        if t_absorb > duration - 0.15:
+            raise ValueError('jump window too short for this body')
+        return cls(duration, h_stand, crouch, extend, rise, t_crouch, t_push, t_takeoff, t_land, t_absorb, v_to)
+
+    def __call__(self, t: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+        h = np.full(t.shape, self.h_stand)
+        vz = np.zeros(t.shape)
+        h_c = self.h_stand - self.crouch
+        h_to = self.h_stand + self.extend
+        c0, c1 = self.t_crouch, self.t_crouch + 0.22
+        m = (t >= c0) & (t < c1)
+        u = (t[m] - c0) / (c1 - c0)
+        h[m] = self.h_stand - self.crouch * (1 - np.cos(np.pi * u)) / 2
+        vz[m] = -self.crouch * np.pi / (2 * (c1 - c0)) * np.sin(np.pi * u)
+        m = (t >= c1) & (t < self.t_takeoff)
+        tau = t[m] - c1
+        a = self.v_takeoff / self.t_push
+        h[m] = h_c + 0.5 * a * tau ** 2
+        vz[m] = a * tau
+        m = (t >= self.t_takeoff) & (t < self.t_land)
+        tau = t[m] - self.t_takeoff
+        h[m] = h_to + self.v_takeoff * tau - 0.5 * GRAVITY * tau ** 2
+        vz[m] = self.v_takeoff - GRAVITY * tau
+        m = (t >= self.t_land) & (t < self.t_absorb)
+        u = (t[m] - self.t_land) / (self.t_absorb - self.t_land)
+        low = self.h_stand - 0.5 * self.crouch
+        # Two half-cosines: give way from take-off height to `low`, then rise to standing.
+        first = u < 0.5
+        h_m = np.where(first, h_to + (low - h_to) * (1 - np.cos(np.pi * 2 * u)) / 2,
+                       low + (self.h_stand - low) * (1 - np.cos(np.pi * (2 * u - 1))) / 2)
+        h[m] = h_m
+        span = self.t_absorb - self.t_land
+        vz[m] = np.where(first, (low - h_to) * np.pi / span * np.sin(np.pi * 2 * u),
+                         (self.h_stand - low) * np.pi / span * np.sin(np.pi * (2 * u - 1)))
+        return h, vz
+
+    def to_dict(self) -> dict:
+        return {k: round(float(v), 5) for k, v in self.__dict__.items()}
+
+
 class JumpTask:
     """Episodic one-shot jump: crouch -> takeoff -> flight -> landing -> settle."""
 
@@ -606,8 +679,11 @@ class JumpTask:
         self.env = env
         sc = env.scaling
         self.action_scale = 0.3 * np.ones(env.nu)
-        self.duration = float(np.clip(1.4 * sc.sqrt_s, 1.2, 1.6))
-        self.max_steps = int(round(self.duration / CONTROL_DT))
+        # A whole number of control steps, so phase reaches exactly 1 on the last
+        # step here and in the controller (both stop at phase >= 1 - 1e-9).
+        self.max_steps = int(round(float(np.clip(1.4 * sc.sqrt_s, 1.2, 1.6)) / CONTROL_DT))
+        self.duration = round(self.max_steps * CONTROL_DT, 6)
+        self.reference = JumpReference.for_scaling(sc, self.duration)
         self.terms = O.jump_terms(env.nu)
         self.phase = np.zeros(env.n)
         self.max_height = np.zeros(env.n)
@@ -675,30 +751,33 @@ class JumpTask:
         self._feet, self._contact = feet_z, s['contact']
         self.max_height = np.maximum(self.max_height, height)
         self.air_steps += airborne
-        gain = np.clip(height - sc.h0, 0, 0.5 * sc.leg) / (0.5 * sc.leg)
-        vz_world = qvel[:, 2]
-        takeoff = (phase > 0.1) & (phase < 0.5)
-        flight = (phase > 0.2) & (phase < 0.65)
-        settle = phase > 0.7
+        ref = self.reference
+        t = phase * self.duration
+        h_ref, vz_ref = ref(t)
+        err_h, err_v = height - h_ref, qvel[:, 2] - vz_ref
+        rise, v_to = ref.flight_rise, ref.v_takeoff
+        flight = (t > ref.t_takeoff + 0.02) & (t < ref.t_land - 0.02)
+        stance = (t < ref.t_takeoff - 0.02) | (t > ref.t_land + 0.06)
+        settle = t > ref.t_absorb
         joint_err = qpos[:, env.idx.joint_qpos] - env.default
         q = qpos[:, env.idx.joint_qpos]
         limit = np.maximum(q - env.soft_hi, 0) + np.maximum(env.soft_lo - q, 0)
         upright = np.exp(-(g[:, 0] ** 2 + g[:, 1] ** 2) / 0.1)
         r = {
+            # Broad + tight kernels: gradient from the first iteration, precision later.
+            'track_height': 2.0 * np.exp(-(err_h / rise) ** 2) + 1.0 * np.exp(-(err_h / (0.3 * rise)) ** 2),
+            'track_vz': 1.0 * np.exp(-(err_v / v_to) ** 2) + 0.5 * np.exp(-(err_v / (0.3 * v_to)) ** 2),
+            'airborne': 3.0 * flight * airborne * upright,
+            'stance_contact': 0.5 * stance * np.mean(s['contact'], axis=1),
             'upright': 1.0 * upright,
-            'lift_velocity': 1.5 * takeoff * np.clip(vz_world / (2.0 * sc.sqrt_s), 0, 1),
-            'height_gain': 4.0 * flight * gain * upright,
-            'airborne': 2.0 * flight * airborne * upright,
-            'settle_pose': 1.5 * settle * np.exp(-np.mean(joint_err ** 2, axis=1) / 0.05),
+            'settle_pose': 1.0 * settle * np.exp(-np.mean(joint_err ** 2, axis=1) / 0.05),
             'settle_still': 1.0 * settle * np.exp(-(v[:, 0] ** 2 + v[:, 1] ** 2 + v[:, 2] ** 2) / (0.1 * sc.s)),
-            'settle_feet': 1.0 * settle * np.mean(s['contact'], axis=1),
-            'settle_height': 1.0 * settle * np.exp(-((height - 0.96 * sc.h0) / (0.15 * sc.h0)) ** 2),
             'ang_vel_xy': -0.05 * (w[:, 0] ** 2 + w[:, 1] ** 2),
-            'action_rate': -0.3 * np.mean((env.last_action - env.prev_action) ** 2, axis=1),
-            'torque': -0.1 * np.mean((s['force'] / env.effort) ** 2, axis=1),
+            'yaw_rate': -0.05 * w[:, 2] ** 2,
+            'action_rate': -0.1 * np.mean((env.last_action - env.prev_action) ** 2, axis=1),
+            'torque': -0.05 * np.mean((s['force'] / env.effort) ** 2, axis=1),
             'joint_limits': -2.0 * np.mean(limit, axis=1),
             'thigh_contact': -1.0 * np.mean(s['thigh_contact'], axis=1),
-            'drift': -0.5 * (v[:, 0] ** 2 + v[:, 1] ** 2) * (phase < 0.2),
         }
         total = sum(r.values()) * CONTROL_DT
         tilt_bad = g[:, 2] > -math.cos(1.0)

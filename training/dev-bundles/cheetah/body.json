@@ -1,0 +1,461 @@
+{
+  "schema": "creature-body/1",
+  "id": "quadruped-329a735927fa8b37",
+  "name": "Cheetah (dev)",
+  "bodyPlan": "quadruped",
+  "design": {
+    "dev": true,
+    "note": "Development body converted by creature_gym.dev_bodies; no DesignSpec."
+  },
+  "xmlFile": "body.xml",
+  "meshFiles": [
+    "torso_mesh.stl"
+  ],
+  "rootBody": "torso_link",
+  "imuSite": "imu",
+  "forwardAxis": [
+    1,
+    0,
+    0
+  ],
+  "legs": [
+    {
+      "name": "fl",
+      "joints": [
+        "fl_hip_roll",
+        "fl_hip_pitch",
+        "fl_knee"
+      ],
+      "footGeom": "fl_lower_leg_link_sphere",
+      "footSite": "fl_foot",
+      "footRadius": 0.0276,
+      "mountAngle": 0.2984989315861793,
+      "side": "left",
+      "end": "front",
+      "bodies": [
+        "fl_roll_motor_link",
+        "fl_roll_link",
+        "fl_pitch_link",
+        "fl_upper_leg_link",
+        "fl_lower_leg_link"
+      ]
+    },
+    {
+      "name": "fr",
+      "joints": [
+        "fr_hip_roll",
+        "fr_hip_pitch",
+        "fr_knee"
+      ],
+      "footGeom": "fr_lower_leg_link_sphere",
+      "footSite": "fr_foot",
+      "footRadius": 0.0276,
+      "mountAngle": -0.2984989315861793,
+      "side": "right",
+      "end": "front",
+      "bodies": [
+        "fr_roll_motor_link",
+        "fr_roll_link",
+        "fr_pitch_link",
+        "fr_upper_leg_link",
+        "fr_lower_leg_link"
+      ]
+    },
+    {
+      "name": "rl",
+      "joints": [
+        "rl_hip_roll",
+        "rl_hip_pitch",
+        "rl_knee"
+      ],
+      "footGeom": "rl_lower_leg_link_sphere",
+      "footSite": "rl_foot",
+      "footRadius": 0.0276,
+      "mountAngle": 2.843093722003614,
+      "side": "left",
+      "end": "rear",
+      "bodies": [
+        "rl_roll_motor_link",
+        "rl_roll_link",
+        "rl_pitch_link",
+        "rl_upper_leg_link",
+        "rl_lower_leg_link"
+      ]
+    },
+    {
+      "name": "rr",
+      "joints": [
+        "rr_hip_roll",
+        "rr_hip_pitch",
+        "rr_knee"
+      ],
+      "footGeom": "rr_lower_leg_link_sphere",
+      "footSite": "rr_foot",
+      "footRadius": 0.0276,
+      "mountAngle": -2.843093722003614,
+      "side": "right",
+      "end": "rear",
+      "bodies": [
+        "rr_roll_motor_link",
+        "rr_roll_link",
+        "rr_pitch_link",
+        "rr_upper_leg_link",
+        "rr_lower_leg_link"
+      ]
+    }
+  ],
+  "jointNames": [
+    "fl_hip_roll",
+    "fl_hip_pitch",
+    "fl_knee",
+    "fr_hip_roll",
+    "fr_hip_pitch",
+    "fr_knee",
+    "rl_hip_roll",
+    "rl_hip_pitch",
+    "rl_knee",
+    "rr_hip_roll",
+    "rr_hip_pitch",
+    "rr_knee"
+  ],
+  "joints": [
+    {
+      "name": "fl_hip_roll",
+      "range": [
+        -0.8,
+        0.8
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": null,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "role": "hip_roll"
+    },
+    {
+      "name": "fl_hip_pitch",
+      "range": [
+        -2.5,
+        2.5
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": null,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "role": "hip_pitch"
+    },
+    {
+      "name": "fl_knee",
+      "range": [
+        -2.8,
+        0.0
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": null,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "role": "knee"
+    },
+    {
+      "name": "fr_hip_roll",
+      "range": [
+        -0.8,
+        0.8
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": null,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "role": "hip_roll"
+    },
+    {
+      "name": "fr_hip_pitch",
+      "range": [
+        -2.5,
+        2.5
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": null,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "role": "hip_pitch"
+    },
+    {
+      "name": "fr_knee",
+      "range": [
+        -2.8,
+        0.0
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": null,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "role": "knee"
+    },
+    {
+      "name": "rl_hip_roll",
+      "range": [
+        -0.8,
+        0.8
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": null,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "role": "hip_roll"
+    },
+    {
+      "name": "rl_hip_pitch",
+      "range": [
+        -2.5,
+        2.5
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": null,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "role": "hip_pitch"
+    },
+    {
+      "name": "rl_knee",
+      "range": [
+        -2.8,
+        0.0
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": null,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "role": "knee"
+    },
+    {
+      "name": "rr_hip_roll",
+      "range": [
+        -0.8,
+        0.8
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": null,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "role": "hip_roll"
+    },
+    {
+      "name": "rr_hip_pitch",
+      "range": [
+        -2.5,
+        2.5
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": null,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "role": "hip_pitch"
+    },
+    {
+      "name": "rr_knee",
+      "range": [
+        -2.8,
+        0.0
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": null,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "role": "knee"
+    }
+  ],
+  "nominalJointPositions": [
+    0.0,
+    0.5,
+    -1.0,
+    0.0,
+    0.5,
+    -1.0,
+    0.0,
+    0.5,
+    -1.0,
+    0.0,
+    0.5,
+    -1.0
+  ],
+  "nominalRootHeight": 0.4488396297073789,
+  "nominalStanceTolerance": {
+    "footHeightBandM": 0.005,
+    "torsoTiltRad": 0.0
+  },
+  "initialQpos": [
+    0.0,
+    0.0,
+    0.4488396297073789,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.5,
+    -1.0,
+    0.0,
+    0.5,
+    -1.0,
+    0.0,
+    0.5,
+    -1.0,
+    0.0,
+    0.5,
+    -1.0
+  ],
+  "massKg": 32.63809926450245,
+  "dimensions": {
+    "lengthM": 1.0098075464908387,
+    "widthM": 0.3691999999999999,
+    "heightM": 0.5486930568573085,
+    "legLengthM": 0.48
+  },
+  "gaitHint": {
+    "pattern": "trot",
+    "groups": [
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        2
+      ]
+    ]
+  },
+  "geomRoles": {
+    "feet": [
+      "fl_lower_leg_link_sphere",
+      "fr_lower_leg_link_sphere",
+      "rl_lower_leg_link_sphere",
+      "rr_lower_leg_link_sphere"
+    ],
+    "torso": [
+      "torso_link_mesh"
+    ],
+    "limbs": [
+      "fl_roll_link_link",
+      "fl_pitch_link_link",
+      "fl_upper_leg_link_link",
+      "fl_lower_leg_link_link",
+      "fr_roll_link_link",
+      "fr_pitch_link_link",
+      "fr_upper_leg_link_link",
+      "fr_lower_leg_link_link",
+      "rl_roll_link_link",
+      "rl_pitch_link_link",
+      "rl_upper_leg_link_link",
+      "rl_lower_leg_link_link",
+      "rr_roll_link_link",
+      "rr_pitch_link_link",
+      "rr_upper_leg_link_link",
+      "rr_lower_leg_link_link"
+    ],
+    "motors": [
+      "fl_roll_motor_link_motor",
+      "fl_roll_link_motor",
+      "fl_pitch_link_motor",
+      "fl_upper_leg_link_motor",
+      "fr_roll_motor_link_motor",
+      "fr_roll_link_motor",
+      "fr_pitch_link_motor",
+      "fr_upper_leg_link_motor",
+      "rl_roll_motor_link_motor",
+      "rl_roll_link_motor",
+      "rl_pitch_link_motor",
+      "rl_upper_leg_link_motor",
+      "rr_roll_motor_link_motor",
+      "rr_roll_link_motor",
+      "rr_pitch_link_motor",
+      "rr_upper_leg_link_motor"
+    ],
+    "details": [
+      "fl_roll_motor_link_detail",
+      "fl_roll_link_detail",
+      "fl_pitch_link_detail",
+      "fl_upper_leg_link_detail",
+      "fr_roll_motor_link_detail",
+      "fr_roll_link_detail",
+      "fr_pitch_link_detail",
+      "fr_upper_leg_link_detail",
+      "rl_roll_motor_link_detail",
+      "rl_roll_link_detail",
+      "rl_pitch_link_detail",
+      "rl_upper_leg_link_detail",
+      "rr_roll_motor_link_detail",
+      "rr_roll_link_detail",
+      "rr_pitch_link_detail",
+      "rr_upper_leg_link_detail"
+    ]
+  },
+  "bodyRoles": {
+    "torso": "torso_link",
+    "head": null
+  },
+  "motors": [
+    {
+      "class": "L",
+      "family": "unknown",
+      "effortNm": 72.0,
+      "velocityRadS": 40.0,
+      "gear": null,
+      "massKg": null,
+      "catalogAnchor": null
+    }
+  ],
+  "feasibility": {
+    "passed": true,
+    "warnings": [
+      "[L]: torque density 65 Nm/kg is above the QDD p90 (64 Nm/kg) \u2014 best-in-class territory.",
+      "[L]: power density 655 W/kg is above the QDD p90 (532 W/kg) \u2014 best-in-class territory.",
+      "fl_roll_link_link: to weigh its 0.202 kg share of the hip_link trend inside the actuators it joins, the member's density is 7439 kg/m\u00b3 against the class's 676",
+      "fl_upper_leg_link_link: to weigh its 0.486 kg share of the thigh trend inside the actuators it joins, the member's density is 1860 kg/m\u00b3 against the class's 345",
+      "fr_roll_link_link: to weigh its 0.202 kg share of the hip_link trend inside the actuators it joins, the member's density is 7439 kg/m\u00b3 against the class's 676",
+      "fr_upper_leg_link_link: to weigh its 0.486 kg share of the thigh trend inside the actuators it joins, the member's density is 1860 kg/m\u00b3 against the class's 345",
+      "rl_roll_link_link: to weigh its 0.202 kg share of the hip_link trend inside the actuators it joins, the member's density is 7439 kg/m\u00b3 against the class's 676",
+      "rl_upper_leg_link_link: to weigh its 0.486 kg share of the thigh trend inside the actuators it joins, the member's density is 1860 kg/m\u00b3 against the class's 345",
+      "rr_roll_link_link: to weigh its 0.202 kg share of the hip_link trend inside the actuators it joins, the member's density is 7439 kg/m\u00b3 against the class's 676",
+      "rr_upper_leg_link_link: to weigh its 0.486 kg share of the thigh trend inside the actuators it joins, the member's density is 1860 kg/m\u00b3 against the class's 345"
+    ],
+    "overridden": []
+  },
+  "provenance": {
+    "generator": "Draft RobotGenerator strict=True (via creature_gym.dev_bodies)",
+    "draftRevision": "3b03e144735098ef94b938e85756806f45628f83",
+    "template": "quadruped",
+    "sourcesSha256": {
+      "play/public/draft/cheetah-31f2a9bfec7b90a8/quadruped.xml": "bb4fcf76d7462b588c11cad35632164956d87e8ae27dba97c9973175492ebf17",
+      "play/public/controller/cheetah/manifest.json": "e05561a642cc9e922e5f6e0192afed9e68d6a6528436626afe7a59e627a38a46"
+    },
+    "assetSha256": {
+      "body.xml": "9f7cfa2f062754c5bf360a27a5c5f86f36ec15775b9f7c559de715ce546fdbdf",
+      "torso_mesh.stl": "a6eede2c727d2953b97987605d0defb9f320614969ab05bbd96f925a8f28cf2d"
+    },
+    "preset": "cheetah"
+  }
+}

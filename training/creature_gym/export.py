@@ -151,6 +151,10 @@ def manifest_for(body: Body, env, scene_xml: bytes, onnx_bytes: bytes, run: dict
                      'terrain': 'flat + smooth bump patches (protrusion up to 8% of leg length)' if skill == 'walk' else 'flat'},
         'honesty': honesty(skill, body, skill == 'walk'),
     }
+    if skill == 'jump':
+        manifest['training']['jumpReference'] = task.reference.to_dict()
+        manifest['training']['jumpReferenceNote'] = ('Training-only vertical target (crouch, push, ballistic flight, '
+                                                     'absorb, stand); validation uses the absolute criteria in eval.json.')
     if MUJOCO_VERSION != mujoco.__version__:
         manifest['training']['warning'] = f'trained with mujoco {mujoco.__version__}, browser uses {MUJOCO_VERSION}'
     return manifest
