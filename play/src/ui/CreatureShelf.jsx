@@ -6,13 +6,14 @@ import { CreatureGlyph } from "./CreatureGlyph.jsx";
 import { Icon } from "./icons.jsx";
 import { IconButton, cx } from "./primitives.jsx";
 import { rovingKeyDown } from "./hooks.js";
+import { skillName } from "./format.js";
 
-const SKILL_ICON = { walk: "walk", jump: "jump" };
+const SKILL_ICON = { walk: "walk", drive: "wheel", jump: "jump" };
 
 function SkillPips({ skills = {} }) {
   const entries = Object.entries(skills).filter(([skill]) => SKILL_ICON[skill]);
   if (!entries.length) return null;
-  const label = entries.map(([skill, state]) => `${skill === "jump" ? "Jump" : "Walk"}: ${state === "ready" ? "verified" : state === "training" ? "learning" : "untrained"}`).join(", ");
+  const label = entries.map(([skill, state]) => `${skillName(skill)}: ${state === "ready" ? "verified" : state === "training" ? "learning" : "untrained"}`).join(", ");
   return (
     <span className="cl-pips" role="img" aria-label={label} title={label}>
       {entries.map(([skill, state]) => (
@@ -27,7 +28,7 @@ function SkillPips({ skills = {} }) {
 function skillSummary(skills = {}) {
   const parts = Object.entries(skills)
     .filter(([skill]) => SKILL_ICON[skill])
-    .map(([skill, state]) => `${skill === "jump" ? "jump" : "walk"} ${state === "ready" ? "verified" : state === "training" ? "learning" : "untrained"}`);
+    .map(([skill, state]) => `${skillName(skill).toLowerCase()} ${state === "ready" ? "verified" : state === "training" ? "learning" : "untrained"}`);
   return parts.length ? `: ${parts.join(", ")}` : "";
 }
 

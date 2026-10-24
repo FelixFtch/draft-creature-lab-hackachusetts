@@ -13,7 +13,7 @@ import { Icon } from "./icons.jsx";
 import { Badge, Button, Chip, IconButton, cx } from "./primitives.jsx";
 import { DesignCard } from "./DesignCard.jsx";
 import { CreatureGlyph } from "./CreatureGlyph.jsx";
-import { aboutMinutes, fixed, isNum } from "./format.js";
+import { aboutMinutes, fixed, isNum, skillIcon, skillName } from "./format.js";
 
 /** Who is designing: offline rules, a model on this Mac, or a cloud model. */
 export function ProviderBadge({ provider, compact = false }) {
@@ -108,8 +108,8 @@ export function TrainingOfferCard({ training, creatureName = "your creature", on
       <ul className="cl-offer__skills">
         {skills.map(item => (
           <li key={item.skill} className={cx(item.available === false && "is-unavailable")}>
-            <Icon name={item.skill === "jump" ? "jump" : "walk"} size={18} />
-            <span className="cl-offer__skill">{item.skill === "jump" ? "Jump" : "Walk"}</span>
+            <Icon name={skillIcon(item.skill)} size={18} />
+            <span className="cl-offer__skill">{skillName(item.skill)}</span>
             <span className="cl-offer__eta">{item.available === false ? item.reason || "Not yet" : aboutMinutes(item.minutes) || "time unknown"}</span>
           </li>
         ))}
@@ -180,7 +180,7 @@ export function PlayOfferCard({ creatureName = "Your creature", skills = ["walk"
         </span>
         <div>
           <h3 className="cl-offer__title">{creatureName} passed its checks</h3>
-          <p className="cl-hint">Learned and verified: {skills.map(s => (s === "jump" ? "jump" : "walk")).join(" and ")}. Time for the playground.</p>
+          <p className="cl-hint">Learned and verified: {skills.map(s => skillName(s).toLowerCase()).join(" and ")}. Time for the playground.</p>
         </div>
       </div>
       {onPlay && (

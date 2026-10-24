@@ -3,7 +3,7 @@
 // and eval summary, the look (cosmetic only), and raw JSON to copy.
 // Render inside <Modal placement="right"> (a drawer) or inline.
 import { CopyButton } from "./primitives.jsx";
-import { DASH, duration, grouped, isNum, shortHash } from "./format.js";
+import { DASH, duration, grouped, isNum, shortHash, skillName } from "./format.js";
 
 function Rows({ rows }) {
   const list = rows.filter(r => r && r.value !== undefined && r.value !== null && r.value !== "");
@@ -62,7 +62,7 @@ export function LabNotes({ body, look, policies = {}, extra = [], json }) {
         const rows = info?.eval?.rows || [];
         return (
           <section className="cl-notes__group" key={skill}>
-            <h3>{skill === "jump" ? "Jump" : "Walk"} skill</h3>
+            <h3>{skillName(skill)} skill</h3>
             <Rows
               rows={[
                 { label: "Status", value: info?.state || "untrained" },

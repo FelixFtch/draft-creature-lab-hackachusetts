@@ -6,7 +6,7 @@
 // It only shows what the body contract says. The drawing is a sketch from
 // the design's proportions ("Not to scale"); the numbers are Draft's.
 import { useId } from "react";
-import { normalizeShape, quadLayout, multiLayout } from "./CreatureGlyph.jsx";
+import { normalizeShape, quadLayout, multiLayout, wheeledLayout, humanoidLayout } from "./CreatureGlyph.jsx";
 import { Icon } from "./icons.jsx";
 import { Button, CopyButton, cx } from "./primitives.jsx";
 import { ACTUATORS } from "./DesignCard.jsx";
@@ -77,6 +77,63 @@ export function BlueprintDrawing({ body, design }) {
         <text x={g.cx + g.rx + 26} y={g.cy + 4} className="cl-bpdraw__tag">front</text>
         <DimLine x1={left} y1={H - 16} x2={right} y2={H - 16} label={isNum(dims.lengthM) ? `body ${fixed(dims.lengthM, 2, "m")}` : null} side={-1} />
         {isNum(dims.widthM) && <DimLine x1={26} y1={g.cy - span} x2={26} y2={g.cy + span} label={`${fixed(dims.widthM, 2, "m")}`} side={1} />}
+      </svg>
+    );
+  }
+  if (shape.plan === "wheeled") {
+    const g = wheeledLayout(shape, W, H, [70, 40, 26], true);
+    const t = g.body;
+    const wheelR = isNum(body?.terrainProfile?.wheelRadiusM) ? body.terrainProfile.wheelRadiusM : shape.wheelRadius;
+    return (
+      <svg className="cl-bpdraw" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Side view sketch: two wheel-legs, wheel radius ${fixed(wheelR, 2, "m")}, height ${fixed(dims.heightM, 2, "m")}.`}>
+        <path d={`M14 ${g.ground}H${W - 14}`} stroke={DIM} strokeWidth="1" />
+        <path d={`M14 ${g.ground + 5}H${W - 14}`} stroke={DIM} strokeOpacity=".35" strokeDasharray="2 5" strokeWidth="1" />
+        <path d={`M${g.hip[0] + 8} ${g.hip[1] - 5}L${g.knee[0] + 8} ${g.knee[1] - 5}L${g.wheel[0] + 8} ${g.wheel[1] - 5}`} fill="none" stroke={INK} strokeOpacity=".35" strokeWidth="1.6" strokeDasharray="4 3" />
+        <circle cx={g.wheel[0] + 8} cy={g.wheel[1] - 5} r={g.r} fill="none" stroke={INK} strokeOpacity=".35" strokeDasharray="4 3" />
+        <rect x={t.x} y={t.y} width={t.w} height={t.h} rx={Math.min(t.h * 0.45, t.w * 0.22)} fill="rgb(220 232 251 / 0.08)" stroke={INK} strokeWidth="1.8" />
+        <path d={`M${g.hip[0]} ${g.hip[1]}L${g.knee[0]} ${g.knee[1]}L${g.wheel[0]} ${g.wheel[1]}`} fill="none" stroke={INK} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+        <circle cx={g.hip[0]} cy={g.hip[1]} r="4.2" fill="#1e4e95" stroke={MARK} strokeWidth="1.6" />
+        <circle cx={g.knee[0]} cy={g.knee[1]} r="4.2" fill="#1e4e95" stroke={INK} strokeWidth="1.5" />
+        <circle cx={g.wheel[0]} cy={g.wheel[1]} r={g.r} fill="rgb(220 232 251 / 0.06)" stroke={INK} strokeWidth="1.8" />
+        <circle cx={g.wheel[0]} cy={g.wheel[1]} r="4.2" fill="#1e4e95" stroke={MARK} strokeWidth="1.6" />
+        <path d={`M${g.wheel[0]} ${g.wheel[1]}L${g.wheel[0] + g.r * 0.71} ${g.wheel[1] - g.r * 0.71}`} stroke={MARK} strokeWidth="1.2" />
+        <text x={g.wheel[0] + g.r * 0.71 + 5} y={g.wheel[1] - g.r * 0.71 - 3} className="cl-bpdraw__label">{`r ${fixed(wheelR, 2, "m")}`}</text>
+        <path d={`M${t.x + t.w + 6} ${t.y - 14}h20m-5 -4 5 4-5 4`} stroke={MARK} strokeWidth="1.4" fill="none" strokeLinecap="round" />
+        <text x={t.x + t.w + 16} y={t.y - 23} textAnchor="middle" className="cl-bpdraw__tag">front</text>
+        <DimLine x1={t.x} y1={t.y - 14} x2={t.x + t.w} y2={t.y - 14} label={isNum(dims.lengthM) ? fixed(dims.lengthM, 2, "m") : null} side={-1} />
+        <DimLine x1={t.x + t.w + 30} y1={t.y} x2={t.x + t.w + 30} y2={g.ground} label={isNum(dims.heightM) ? `height ${fixed(dims.heightM, 2, "m")}` : null} side={1} offset={4} />
+        <text x="16" y={H - 9} className="cl-bpdraw__tag">wheel joint: continuous, velocity-controlled</text>
+      </svg>
+    );
+  }
+  if (shape.plan === "humanoid") {
+    const g = humanoidLayout(shape, W, H, [110, 22, 24]);
+    const t = g.torso;
+    return (
+      <svg className="cl-bpdraw" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Front view sketch: two legs with flat feet, arms locked. Height ${fixed(dims.heightM, 2, "m")}.`}>
+        <path d={`M14 ${g.ground}H${W - 14}`} stroke={DIM} strokeWidth="1" />
+        <path d={`M${g.cx} 10V${g.ground + 6}`} stroke={DIM} strokeOpacity=".4" strokeDasharray="10 4 2 4" strokeWidth="1" />
+        {g.arms.map((a, i) => (
+          <path key={i} d={`M${a.shoulder[0]} ${a.shoulder[1]}L${a.hand[0]} ${a.hand[1]}`} stroke={INK} strokeOpacity=".6" strokeWidth="1.6" strokeDasharray="4 3" strokeLinecap="round" />
+        ))}
+        <rect x={t.x} y={t.y} width={t.w} height={t.h} rx={Math.min(t.w * 0.3, t.h * 0.25)} fill="rgb(220 232 251 / 0.08)" stroke={INK} strokeWidth="1.8" />
+        <rect x={g.head.cx - g.head.r} y={g.head.cy - g.head.r} width={g.head.r * 2} height={g.head.r * 2} rx={g.head.r * 0.6} fill="rgb(220 232 251 / 0.08)" stroke={INK} strokeWidth="1.6" />
+        <rect x={g.pelvis.x} y={g.pelvis.y} width={g.pelvis.w} height={g.pelvis.h} rx={g.pelvis.h / 2} fill="none" stroke={INK} strokeWidth="1.4" />
+        {g.legs.map((l, i) => (
+          <g key={i}>
+            <path d={`M${l.hip[0]} ${l.hip[1]}L${l.knee[0]} ${l.knee[1]}L${l.ankle[0]} ${l.ankle[1]}`} fill="none" stroke={INK} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+            <rect x={l.foot.x} y={l.foot.y} width={l.foot.w} height={l.foot.h} rx="1.5" fill="none" stroke={INK} strokeWidth="1.5" />
+            <circle cx={l.hip[0]} cy={l.hip[1]} r="4" fill="#1e4e95" stroke={MARK} strokeWidth="1.5" />
+            <circle cx={l.knee[0]} cy={l.knee[1]} r="4" fill="#1e4e95" stroke={INK} strokeWidth="1.4" />
+            <circle cx={l.ankle[0]} cy={l.ankle[1]} r="3.4" fill="#1e4e95" stroke={MARK} strokeWidth="1.4" />
+          </g>
+        ))}
+        <text x={g.arms[1].hand[0] + 8} y={g.arms[1].hand[1]} className="cl-bpdraw__tag">arms locked</text>
+        <DimLine x1={t.x + t.w + 58} y1={g.head.cy - g.head.r} x2={t.x + t.w + 58} y2={g.ground} label={isNum(dims.heightM) ? `height ${fixed(dims.heightM, 2, "m")}` : null} side={1} offset={4} />
+        <text x="16" y={H - 9} className="cl-bpdraw__tag">
+          <tspan>6 joints per leg</tspan>
+          <tspan dx="12">flat feet</tspan>
+        </text>
       </svg>
     );
   }
@@ -167,10 +224,13 @@ const SKILL_STATE = {
   unavailable: { tone: "neutral", icon: "lock", label: "Not available" },
 };
 
+const SKILL_NAME = { walk: "Walk", drive: "Drive", jump: "Jump" };
+const SKILL_ICON = { walk: "walk", drive: "wheel", jump: "jump" };
+
 function SkillRow({ skill, info, onTrain, device = "your computer" }) {
   const state = info?.state || "untrained";
   const meta = SKILL_STATE[state] || SKILL_STATE.untrained;
-  const name = skill === "jump" ? "Jump" : "Walk";
+  const name = SKILL_NAME[skill] || skill;
   const detail =
     state === "untrained"
       ? info?.reason || `Teach it to ${skill}${aboutMinutes(info?.estimateMinutes) ? `, ${aboutMinutes(info.estimateMinutes)} on ${device}` : ""}`
@@ -181,7 +241,7 @@ function SkillRow({ skill, info, onTrain, device = "your computer" }) {
         : info?.reason || null;
   return (
     <li className={cx("cl-spec__skill", `is-${meta.tone}`)}>
-      <Icon name={skill === "jump" ? "jump" : "walk"} size={20} />
+      <Icon name={SKILL_ICON[skill] || "walk"} size={20} />
       <div className="cl-spec__skill-text">
         <strong>
           {name}: {meta.label}
@@ -249,7 +309,7 @@ export function SpecSheet({ body, design, policies = {}, skills, onTrain, onOpen
   const prov = body.provenance || {};
   const dims = body.dimensions || {};
   const skillList = skills || (Array.isArray(d.skills) && d.skills.length ? d.skills : ["walk"]);
-  const params = (body.bodyPlan === "multileg" ? d.multileg : d.quadruped) || {};
+  const params = { multileg: d.multileg, wheeled: d.wheeled, humanoid: d.humanoid }[body.bodyPlan] || d.quadruped || {};
   const actuator = ACTUATORS[params.actuator] || ACTUATORS[motors[0]?.family];
   const assets = prov.assetSha256 && typeof prov.assetSha256 === "object" ? Object.entries(prov.assetSha256) : [];
 
@@ -268,7 +328,7 @@ export function SpecSheet({ body, design, policies = {}, skills, onTrain, onOpen
           </div>
           <div>
             <dt>Plan</dt>
-            <dd>{body.bodyPlan === "multileg" ? `${legs.length || d.multileg?.legCount || "?"}-leg` : "quadruped"}</dd>
+            <dd>{body.bodyPlan === "multileg" ? `${legs.length || d.multileg?.legCount || "?"}-leg` : body.bodyPlan === "wheeled" ? "wheel-leg" : body.bodyPlan === "humanoid" ? "humanoid" : "quadruped"}</dd>
           </div>
           <div>
             <dt>Draft rev</dt>

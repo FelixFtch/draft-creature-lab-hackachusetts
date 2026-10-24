@@ -84,6 +84,22 @@ const PATHS = {
   note: <><path d="M6 3.5h9l4 4v13H6v-17Z" /><path d="M14.5 3.5V8h4.5M9 12.5h6.5M9 16h4.5" /></>,
   door: <><path d="M5 21V4.5a1 1 0 0 1 1-1h9.5V21" /><path d="M15.5 6 19 7v14" /><circle cx="12.5" cy="12.5" r="1" {...F} /><path d="M3 21h18" /></>,
   pin: <><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.4" /></>,
+  wheel: <><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="5.6" /><circle cx="12" cy="12" r="1.5" {...F} /><path d="M12 6.4v4.1M7.2 14.8l3.5-2M16.8 14.8l-3.5-2" /></>,
+  "terrain-flat": <><path d="M3 18.5h18" /><path d="M5 13.5h7M8.5 9.5h9" /></>,
+  "terrain-rubble": <><path d="M2.5 19.5h19" /><path d="M4.5 19.5V16h3.5v3.5M10 19.5v-5.5l3.6.6v4.9M15.6 19.5v-2.8h3.4v2.8" /></>,
+  "terrain-step": <path d="M3 19.5h6v-5h6v-5h6" />,
+  "terrain-gap": <><path d="M2.5 14.5H9v6M15 20.5v-6h6.5" /><path d="M6 11c2.2-5 9.8-5 12 0" strokeDasharray="2 2.6" /></>,
+  "terrain-slope": <><path d="M3 19.5h18V8.5L3 19.5Z" /><path d="M8.6 19.5a5.6 5.6 0 0 0-.8-2.9" /></>,
+  tower: <><path d="M8 21V8.5l4-5 4 5V21" /><path d="M5.5 21h13M10.5 12.5h3M10.5 16.5h3" /></>,
+  "turn-left": <><path d="M9 6.5 4.5 11 9 15.5" /><path d="M4.5 11H14a5 5 0 0 1 5 5v3.5" /></>,
+  "turn-right": <><path d="m15 6.5 4.5 4.5-4.5 4.5" /><path d="M19.5 11H10a5 5 0 0 0-5 5v3.5" /></>,
+  "arrow-up": <path d="M12 20V5M5.5 11 12 4.5l6.5 6.5" />,
+  "arrow-down": <path d="M12 4v15M5.5 13l6.5 6.5 6.5-6.5" />,
+  stick: <><circle cx="12" cy="7.5" r="3.5" /><path d="M12 11v5" /><rect x="5" y="16" width="14" height="4.5" rx="2.2" /></>,
+  footprint: <><path d="M5 7.5 12 4l7 3.5v8L12 20l-7-4.5v-8Z" /><circle cx="12" cy="12" r="1.6" {...F} /></>,
+  com: <><circle cx="12" cy="12" r="7.5" /><path d="M12 4.5A7.5 7.5 0 0 1 19.5 12H12V4.5ZM12 19.5A7.5 7.5 0 0 1 4.5 12H12v7.5Z" {...F} /></>,
+  span: <><path d="M3.5 12h17" /><path d="M6.5 8.5 3 12l3.5 3.5M17.5 8.5 21 12l-3.5 3.5" /><path d="M3.5 19h17" strokeDasharray="1.5 2.5" /></>,
+  clearance: <><path d="M4 7h16M4 19.5h16" /><path d="M12 9v8.5M9.8 11.2 12 9l2.2 2.2M9.8 15.3l2.2 2.2 2.2-2.2" /></>,
 };
 
 export const ICON_NAMES = Object.keys(PATHS);

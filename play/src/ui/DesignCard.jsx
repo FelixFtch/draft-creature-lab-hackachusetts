@@ -3,10 +3,10 @@
 // built: "built" only appears when draft-service returned a body.
 //
 // status: "proposed" | "building" | "built" | "infeasible" | "superseded"
-import { CreatureGlyph, normalizeShape } from "./CreatureGlyph.jsx";
+import { CreatureGlyph, normalizeShape, describePlan } from "./CreatureGlyph.jsx";
 import { Icon } from "./icons.jsx";
 import { Badge, Button, cx } from "./primitives.jsx";
-import { fixed, isNum } from "./format.js";
+import { fixed, isNum, skillIcon } from "./format.js";
 
 export const ACTUATORS = {
   micro: { label: "Micro servos", short: "Micro", hint: "Small hobby servos for small, light robots." },
@@ -15,13 +15,13 @@ export const ACTUATORS = {
   harmonic: { label: "Mighty harmonic", short: "Harmonic", hint: "Harmonic drives: very strong, very slow." },
 };
 
-const SKILL_LABEL = { walk: "Walk", jump: "Jump" };
+const SKILL_LABEL = { walk: "Walk", drive: "Drive", jump: "Jump" };
 
 export function designFacts(design, body) {
   const shape = normalizeShape(design);
-  const params = (shape.plan === "multileg" ? design?.multileg : design?.quadruped) || {};
+  const params = { multileg: design?.multileg, wheeled: design?.wheeled, humanoid: design?.humanoid }[shape.plan] || design?.quadruped || {};
   const facts = [];
-  facts.push({ icon: "leg", text: shape.plan === "multileg" ? `${shape.legCount} legs, ${shape.arrangement === "bilateral" ? "in pairs" : "all around"}` : "4 legs" });
+  facts.push({ icon: shape.plan === "wheeled" ? "wheel" : "leg", text: describePlan(design) });
   const act = ACTUATORS[params.actuator];
   if (act) facts.push({ icon: "motor", text: act.label, hint: act.hint });
   const length = isNum(body?.dimensions?.lengthM) ? body.dimensions.lengthM : shape.plan === "quadruped" ? shape.torsoLength : null;
@@ -78,7 +78,7 @@ export function DesignCard({ design, body, status = "proposed", onBuild, onTweak
           <div className="cl-design__skills">
             <span className="cl-design__skills-label">Wants to learn</span>
             {skills.map(skill => (
-              <Badge key={skill} tone="outline" icon={skill === "jump" ? "jump" : "walk"}>
+              <Badge key={skill} tone="outline" icon={skillIcon(skill)}>
                 {SKILL_LABEL[skill] || skill}
               </Badge>
             ))}

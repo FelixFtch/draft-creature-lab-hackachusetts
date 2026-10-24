@@ -6,10 +6,11 @@
 //   <CreatureGlyph design={design | "cheetah"} look={look | "#1f8c80"}
 //                  mode="toy" | "blueprint" | "ghost" dims title="Hopper" />
 //
-// Quadrupeds are drawn from the side (knees back, like Draft's template);
-// multileg bodies from above. Proportions come from the design; anything
-// missing falls back to the base preset. It is an illustration, not a
-// measurement: the SpecSheet blueprint is the engineering drawing.
+// Quadrupeds and wheel-legs are drawn from the side (knees back, like Draft's
+// template); multileg bodies from above; humanoids from the front.
+// Proportions come from the design; anything missing falls back to the base
+// preset. It is an illustration, not a measurement: the SpecSheet blueprint
+// is the engineering drawing.
 import { useId } from "react";
 
 const VB_W = 120;
@@ -20,7 +21,14 @@ export const PRESET_SHAPES = {
   bear: { plan: "quadruped", torsoLength: 0.5, torsoHeight: 0.2, upperLeg: 0.19, lowerLeg: 0.18 },
   giraffe: { plan: "quadruped", torsoLength: 0.44, torsoHeight: 0.13, upperLeg: 0.42, lowerLeg: 0.45 },
   flower: { plan: "multileg", legCount: 6, arrangement: "radial", bodyRadius: 0.14, bodyAspect: 1, coxa: 0.07, upperLeg: 0.16, lowerLeg: 0.2 },
+  spider: { plan: "multileg", legCount: 8, arrangement: "radial", bodyRadius: 0.13, bodyAspect: 1, coxa: 0.06, upperLeg: 0.18, lowerLeg: 0.22 },
+  wheel_biped: { plan: "wheeled", bodyLength: 0.3, bodyHeight: 0.12, thigh: 0.15, shin: 0.15, wheelRadius: 0.08 },
+  humanoid: { plan: "humanoid", torsoHeight: 0.19, torsoWidth: 0.17, hipWidth: 0.11, upperLeg: 0.15, lowerLeg: 0.15, footLength: 0.1, headSize: 0.085 },
 };
+PRESET_SHAPES.rollo = PRESET_SHAPES.wheel_biped;
+PRESET_SHAPES.octo = PRESET_SHAPES.spider;
+PRESET_SHAPES.bipo = PRESET_SHAPES.humanoid;
+PRESET_SHAPES.dog = PRESET_SHAPES.cheetah;
 
 export const DEFAULT_PALETTE = { body: "#1f8c80", limbs: "#d9e8e2", joints: "#2a3354", accent: "#ffc63a", feet: "#2a3354" };
 const HEX = /^#[0-9a-f]{6}$/i;
@@ -31,8 +39,34 @@ const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 export function normalizeShape(design) {
   if (typeof design === "string") return { ...(PRESET_SHAPES[design] || PRESET_SHAPES.cheetah) };
   const d = design && typeof design === "object" ? design : {};
-  const plan = d.bodyPlan === "multileg" || (!d.bodyPlan && d.basePreset === "flower") ? "multileg" : "quadruped";
-  const base = PRESET_SHAPES[d.basePreset] && PRESET_SHAPES[d.basePreset].plan === plan ? PRESET_SHAPES[d.basePreset] : plan === "multileg" ? PRESET_SHAPES.flower : PRESET_SHAPES.cheetah;
+  const presetPlan = PRESET_SHAPES[d.basePreset]?.plan;
+  const plan = ["multileg", "wheeled", "humanoid", "quadruped"].includes(d.bodyPlan) ? d.bodyPlan : presetPlan || "quadruped";
+  const fallback = { multileg: PRESET_SHAPES.flower, wheeled: PRESET_SHAPES.wheel_biped, humanoid: PRESET_SHAPES.humanoid, quadruped: PRESET_SHAPES.cheetah }[plan];
+  const base = PRESET_SHAPES[d.basePreset] && presetPlan === plan ? PRESET_SHAPES[d.basePreset] : fallback;
+  if (plan === "wheeled") {
+    const w = d.wheeled || d.wheelLeg || {};
+    return {
+      plan,
+      bodyLength: clamp(num(w.bodyLength ?? w.torsoLength, base.bodyLength), 0.12, 0.8),
+      bodyHeight: clamp(num(w.bodyHeight ?? w.torsoHeight, base.bodyHeight), 0.05, 0.4),
+      thigh: clamp(num(w.thigh ?? w.upperLeg, base.thigh), 0.05, 0.5),
+      shin: clamp(num(w.shin ?? w.lowerLeg, base.shin), 0.05, 0.5),
+      wheelRadius: clamp(num(w.wheelRadius ?? w.wheelRadiusM, base.wheelRadius), 0.03, 0.25),
+    };
+  }
+  if (plan === "humanoid") {
+    const h = d.humanoid || {};
+    return {
+      plan,
+      torsoHeight: clamp(num(h.torsoHeight, base.torsoHeight), 0.08, 0.5),
+      torsoWidth: clamp(num(h.torsoWidth, base.torsoWidth), 0.08, 0.4),
+      hipWidth: clamp(num(h.hipWidth, base.hipWidth), 0.05, 0.3),
+      upperLeg: clamp(num(h.upperLeg ?? h.thigh, base.upperLeg), 0.06, 0.5),
+      lowerLeg: clamp(num(h.lowerLeg ?? h.shin, base.lowerLeg), 0.06, 0.5),
+      footLength: clamp(num(h.footLength, base.footLength), 0.04, 0.25),
+      headSize: clamp(num(h.headSize, base.headSize), 0.04, 0.2),
+    };
+  }
   if (plan === "multileg") {
     const m = d.multileg || {};
     return {
@@ -413,11 +447,231 @@ function Multileg({ shape, look, mode, uid }) {
   );
 }
 
+/* ---------------- wheel-leg (side view) ---------------- */
+/** Side-view layout for a two-wheel-leg balancer (Ollie / Diablo style). */
+export function wheeledLayout(shape, vbW = VB_W, vbH = VB_H, pad = [6, 4, 3], tight = false) {
+  const { bodyLength: L, bodyHeight: H, thigh: T, shin: S, wheelRadius: r } = shape;
+  const bend = 0.62; // knee angle from vertical (radians), knee pointing forward
+  const kneeX = T * Math.sin(bend);
+  const kneeY = T * Math.cos(bend);
+  const wheelY = kneeY + S * Math.cos(Math.asin(Math.min(1, kneeX / S)));
+  const groundY = wheelY + r;
+  const minX = Math.min(-L / 2, -r) - (tight ? 0.01 : Math.max(0.04, L * 0.1));
+  const maxX = Math.max(L / 2, kneeX + 0.03, r) + (tight ? 0.01 : Math.max(0.05, L * 0.14));
+  const minY = -H - (tight ? H * 0.1 : Math.max(0.08, H * 0.9));
+  const maxY = groundY + 0.01;
+  const s = Math.min((vbW - pad[0] * 2) / (maxX - minX), (vbH - pad[1] - pad[2]) / (maxY - minY));
+  const ox = vbW / 2 - ((minX + maxX) / 2) * s;
+  const oy = vbH - pad[2] - maxY * s;
+  const P = (x, y) => [ox + x * s, oy + y * s];
+  return {
+    s,
+    P,
+    body: { x: ox - (L / 2) * s, y: oy - H * s, w: L * s, h: H * s },
+    hip: P(0, -H * 0.12),
+    knee: P(kneeX, kneeY - H * 0.12),
+    wheel: P(0, wheelY - H * 0.12),
+    r: r * s,
+    ground: oy + (groundY - H * 0.12) * s,
+  };
+}
+
+function Wheel({ cx, cy, r, tire, hub, spoke, ink, bp, ghost, far = false }) {
+  if (bp || ghost) {
+    return (
+      <g opacity={far ? 0.45 : 1}>
+        <circle cx={cx} cy={cy} r={r} fill="none" stroke={ink} strokeWidth={1.5} />
+        <circle cx={cx} cy={cy} r={r * 0.32} fill="none" stroke={ink} strokeWidth={1.1} />
+        {!far && <path d={`M${cx - r} ${cy}h${r * 2}M${cx} ${cy - r}v${r * 2}`} stroke={ink} strokeWidth={0.6} strokeDasharray="2 2" />}
+      </g>
+    );
+  }
+  const spokes = [0, 60, 120].map(deg => {
+    const a = (deg * Math.PI) / 180;
+    return `M${cx - Math.cos(a) * r * 0.58} ${cy - Math.sin(a) * r * 0.58}L${cx + Math.cos(a) * r * 0.58} ${cy + Math.sin(a) * r * 0.58}`;
+  });
+  return (
+    <g>
+      <circle cx={cx} cy={cy} r={r} fill={far ? shade(tire, -0.25) : tire} stroke="#1c2440" strokeWidth={1.6} />
+      <circle cx={cx} cy={cy} r={r * 0.68} fill={far ? shade(hub, -0.25) : hub} stroke="#1c2440" strokeWidth={1.2} />
+      {!far && <path d={spokes.join("")} stroke={spoke} strokeWidth={Math.max(1.2, r * 0.14)} strokeLinecap="round" />}
+      <circle cx={cx} cy={cy} r={Math.max(1.4, r * 0.18)} fill="#1c2440" />
+      {!far && <path d={`M${cx - r * 0.62} ${cy - r * 0.5}a${r * 0.82} ${r * 0.82} 0 0 1 ${r * 0.58} -${r * 0.34}`} stroke="#fff" strokeOpacity=".4" strokeWidth={1.4} fill="none" strokeLinecap="round" />}
+    </g>
+  );
+}
+
+function Wheeled({ shape, look, mode, uid }) {
+  const g = wheeledLayout(shape);
+  const bp = mode === "blueprint";
+  const ghost = mode === "ghost";
+  const t = g.body;
+  const u = t.h;
+  const pal = look.palette;
+  const ink = bp ? "#dce8fb" : ghost ? "currentColor" : "#1c2440";
+  const limbW = bp ? 1.7 : clamp(u * 0.34, 3.6, 7);
+  const jointR = bp ? 2.4 : clamp(u * 0.26, 2.6, 4.8);
+  const far = 3.4;
+  const rx = Math.min(t.h * 0.45, t.w * 0.22);
+  const patternId = `cg-p-${uid}`;
+  const clipId = `cg-c-${uid}`;
+  const leg = (dx = 0, dy = 0) => `M${g.hip[0] + dx} ${g.hip[1] + dy}L${g.knee[0] + dx} ${g.knee[1] + dy}L${g.wheel[0] + dx} ${g.wheel[1] + dy}`;
+  const wheelProps = { r: g.r, tire: pal.feet, hub: pal.joints, spoke: pal.accent, ink, bp, ghost };
+  return (
+    <g>
+      <defs>
+        {!bp && !ghost && <Pattern id={patternId} pattern={look.pattern} u={u} />}
+        <clipPath id={clipId}>
+          <rect x={t.x} y={t.y} width={t.w} height={t.h} rx={rx} />
+        </clipPath>
+      </defs>
+      {(bp || ghost) && <path d={`M4 ${g.ground}H${VB_W - 4}`} stroke={ink} strokeOpacity=".5" strokeWidth={1} strokeDasharray={bp ? "3 3" : undefined} />}
+      {!bp && !ghost && <ellipse cx={g.wheel[0]} cy={g.ground + 1.6} rx={Math.max(t.w * 0.42, g.r * 1.6)} ry={2.4} fill="#1c2440" opacity=".14" />}
+      {/* far leg + wheel */}
+      <path d={leg(far, -far * 0.6)} fill="none" stroke={bp || ghost ? ink : shade(pal.limbs, -0.28)} strokeOpacity={bp || ghost ? 0.45 : 1} strokeWidth={limbW} strokeLinecap="round" strokeLinejoin="round" />
+      <Wheel cx={g.wheel[0] + far} cy={g.wheel[1] - far * 0.6} far {...wheelProps} />
+      {!bp && !ghost && look.accessories.filter(a => a.kind === "wings" || a.kind === "tail").map((a, i) => <Accessory key={`b${i}`} item={a} t={t} u={u} />)}
+      {/* body */}
+      <rect x={t.x} y={t.y} width={t.w} height={t.h} rx={rx} fill={ghost ? "none" : bp ? "rgb(220 232 251 / 0.08)" : pal.body} stroke={ink} strokeWidth={bp ? 1.6 : 2} />
+      {!bp && !ghost && look.pattern && <rect x={t.x} y={t.y} width={t.w} height={t.h} rx={rx} fill={`url(#${patternId})`} clipPath={`url(#${clipId})`} />}
+      {!bp && !ghost && <path d={`M${t.x + rx} ${t.y + t.h * 0.28}h${t.w * 0.46}`} stroke="#fff" strokeOpacity=".4" strokeWidth={clamp(u * 0.12, 1.2, 2.6)} strokeLinecap="round" />}
+      {!bp && !ghost && <Shell shell={look.shell} t={t} u={u} />}
+      {/* near leg + wheel */}
+      <path d={leg()} fill="none" stroke={bp || ghost ? ink : "#1c2440"} strokeWidth={bp || ghost ? limbW : limbW + 2.4} strokeLinecap="round" strokeLinejoin="round" />
+      {!bp && !ghost && <path d={leg()} fill="none" stroke={pal.limbs} strokeWidth={limbW} strokeLinecap="round" strokeLinejoin="round" />}
+      <circle cx={g.hip[0]} cy={g.hip[1]} r={jointR} fill={bp ? "#1e4e95" : ghost ? "none" : pal.joints} stroke={ink} strokeWidth={1.5} />
+      <circle cx={g.knee[0]} cy={g.knee[1]} r={jointR} fill={bp ? "#1e4e95" : ghost ? "none" : pal.joints} stroke={ink} strokeWidth={1.5} />
+      <Wheel cx={g.wheel[0]} cy={g.wheel[1]} {...wheelProps} />
+      {!bp && !ghost && <Eyes kind={look.eyes} x={t.x + t.w - rx * 0.4} y={t.y + t.h * 0.46} u={u} color={look.eyeColor} />}
+      {!bp && !ghost && look.accessories.filter(a => a.kind !== "wings" && a.kind !== "tail").map((a, i) => <Accessory key={`a${i}`} item={a} t={t} u={u} />)}
+    </g>
+  );
+}
+
+/* ---------------- humanoid (front view) ---------------- */
+/** Front-view layout for a biped with flat feet (arms locked by design). */
+export function humanoidLayout(shape, vbW = VB_W, vbH = VB_H, pad = [6, 4, 3]) {
+  const { torsoHeight: TH, torsoWidth: TW, hipWidth: HW, upperLeg: U, lowerLeg: Lw, footLength: F, headSize: HS } = shape;
+  const neck = HS * 0.18;
+  const footH = Math.max(0.018, F * 0.22);
+  const totalH = HS * 1.05 + neck + TH + TH * 0.16 + U + Lw + footH;
+  const totalW = Math.max(TW * 1.55, HW + F * 0.9);
+  const s = Math.min((vbW - pad[0] * 2) / totalW, (vbH - pad[1] - pad[2]) / (totalH + 0.08 * (totalH > 0 ? 1 : 0)));
+  const cx = vbW / 2;
+  const groundY = vbH - pad[2];
+  const y = m => groundY - m * s; // meters above ground -> svg y
+  const ankleZ = footH;
+  const kneeZ = ankleZ + Lw;
+  const hipZ = kneeZ + U;
+  const pelvisTop = hipZ + TH * 0.16;
+  const torsoTop = pelvisTop + TH;
+  const headBottom = torsoTop + neck;
+  const legX = (HW / 2) * s;
+  return {
+    s,
+    cx,
+    ground: groundY,
+    head: { cx, cy: y(headBottom + HS * 0.52), r: (HS * 0.52) * s },
+    torso: { x: cx - (TW / 2) * s, y: y(torsoTop), w: TW * s, h: TH * s },
+    pelvis: { x: cx - (HW * 0.75) * s, y: y(pelvisTop), w: HW * 1.5 * s, h: TH * 0.2 * s },
+    legs: [-1, 1].map(side => ({
+      hip: [cx + side * legX, y(hipZ)],
+      knee: [cx + side * legX * 1.08, y(kneeZ)],
+      ankle: [cx + side * legX, y(ankleZ)],
+      foot: { x: cx + side * legX - (F * 0.42) * s, y: y(footH), w: F * 0.84 * s, h: footH * s },
+    })),
+    arms: [-1, 1].map(side => ({
+      shoulder: [cx + side * (TW / 2 + 0.012) * s, y(torsoTop - TH * 0.12)],
+      hand: [cx + side * (TW / 2 + 0.03) * s, y(torsoTop - TH * 1.02)],
+    })),
+  };
+}
+
+function FrontEyes({ kind, cx, cy, r, color }) {
+  const white = "#fffcf5";
+  const gap = r * 0.95;
+  switch (kind) {
+    case "none":
+      return null;
+    case "visor":
+      return <rect x={cx - r * 1.7} y={cy - r * 0.55} width={r * 3.4} height={r * 1.1} rx={r * 0.55} fill="#1c2440" stroke={white} strokeOpacity=".6" strokeWidth={0.8} />;
+    case "cyclops":
+      return <g><circle cx={cx} cy={cy} r={r * 1.05} fill={white} stroke="#1c2440" strokeWidth={1.1} /><circle cx={cx} cy={cy} r={r * 0.55} fill={color} /></g>;
+    case "sleepy":
+      return <path d={`M${cx - gap - r * 0.6} ${cy}q${r * 0.6} ${r * 0.6} ${r * 1.2} 0M${cx + gap - r * 0.6} ${cy}q${r * 0.6} ${r * 0.6} ${r * 1.2} 0`} stroke="#1c2440" strokeWidth={1.3} fill="none" strokeLinecap="round" />;
+    case "cute":
+    case "compound":
+      return <g>{[-1, 1].map(sd => <g key={sd}><circle cx={cx + sd * gap} cy={cy} r={r * 0.62} fill={color} /><circle cx={cx + sd * gap + r * 0.18} cy={cy - r * 0.22} r={r * 0.2} fill={white} /></g>)}</g>;
+    default:
+      return <g>{[-1, 1].map(sd => <g key={sd}><circle cx={cx + sd * gap} cy={cy} r={r * 0.6} fill={white} stroke="#1c2440" strokeWidth={0.9} /><circle cx={cx + sd * gap} cy={cy + r * 0.05} r={r * 0.3} fill={color} /></g>)}</g>;
+  }
+}
+
+function Humanoid({ shape, look, mode, uid }) {
+  const g = humanoidLayout(shape);
+  const bp = mode === "blueprint";
+  const ghost = mode === "ghost";
+  const pal = look.palette;
+  const ink = bp ? "#dce8fb" : ghost ? "currentColor" : "#1c2440";
+  const t = g.torso;
+  const u = t.w * 0.55;
+  const limbW = bp ? 1.7 : clamp(t.w * 0.2, 3, 6);
+  const armW = bp ? 1.3 : clamp(t.w * 0.14, 2.4, 4.4);
+  const jointR = bp ? 2.2 : clamp(t.w * 0.13, 2, 3.8);
+  const patternId = `cg-p-${uid}`;
+  const clipId = `cg-c-${uid}`;
+  const rx = Math.min(t.w * 0.3, t.h * 0.25);
+  const fill = (c) => (ghost ? "none" : bp ? "rgb(220 232 251 / 0.08)" : c);
+  const legPath = l => `M${l.hip[0]} ${l.hip[1]}L${l.knee[0]} ${l.knee[1]}L${l.ankle[0]} ${l.ankle[1]}`;
+  const headRect = { x: g.head.cx - g.head.r, y: g.head.cy - g.head.r, w: g.head.r * 2, h: g.head.r * 2 };
+  return (
+    <g>
+      <defs>
+        {!bp && !ghost && <Pattern id={patternId} pattern={look.pattern} u={u} />}
+        <clipPath id={clipId}>
+          <rect x={t.x} y={t.y} width={t.w} height={t.h} rx={rx} />
+        </clipPath>
+      </defs>
+      {(bp || ghost) && <path d={`M4 ${g.ground}H${VB_W - 4}`} stroke={ink} strokeOpacity=".5" strokeWidth={1} strokeDasharray={bp ? "3 3" : undefined} />}
+      {!bp && !ghost && <ellipse cx={g.cx} cy={g.ground + 1.2} rx={t.w * 0.95} ry={2.4} fill="#1c2440" opacity=".14" />}
+      {/* arms: joints locked by design, drawn hanging */}
+      {g.arms.map((a, i) => (
+        <g key={`arm${i}`}>
+          <path d={`M${a.shoulder[0]} ${a.shoulder[1]}L${a.hand[0]} ${a.hand[1]}`} stroke={bp || ghost ? ink : "#1c2440"} strokeWidth={bp || ghost ? armW : armW + 2.2} strokeLinecap="round" strokeDasharray={bp ? "3 2.4" : undefined} />
+          {!bp && !ghost && <path d={`M${a.shoulder[0]} ${a.shoulder[1]}L${a.hand[0]} ${a.hand[1]}`} stroke={shade(pal.limbs, -0.08)} strokeWidth={armW} strokeLinecap="round" />}
+        </g>
+      ))}
+      {/* legs */}
+      {g.legs.map((l, i) => (
+        <g key={`leg${i}`}>
+          <path d={legPath(l)} fill="none" stroke={bp || ghost ? ink : "#1c2440"} strokeWidth={bp || ghost ? limbW : limbW + 2.4} strokeLinecap="round" strokeLinejoin="round" />
+          {!bp && !ghost && <path d={legPath(l)} fill="none" stroke={pal.limbs} strokeWidth={limbW} strokeLinecap="round" strokeLinejoin="round" />}
+          <rect x={l.foot.x} y={l.foot.y} width={l.foot.w} height={l.foot.h} rx={Math.min(2, l.foot.h / 2)} fill={fill(pal.feet)} stroke={ink} strokeWidth={1.4} />
+          <circle cx={l.knee[0]} cy={l.knee[1]} r={jointR} fill={bp ? "#1e4e95" : ghost ? "none" : pal.joints} stroke={ink} strokeWidth={1.3} />
+          <circle cx={l.hip[0]} cy={l.hip[1]} r={jointR} fill={bp ? "#1e4e95" : ghost ? "none" : pal.joints} stroke={ink} strokeWidth={1.3} />
+          <circle cx={l.ankle[0]} cy={l.ankle[1]} r={jointR * 0.8} fill={bp ? "#1e4e95" : ghost ? "none" : pal.joints} stroke={ink} strokeWidth={1.2} />
+        </g>
+      ))}
+      <rect x={g.pelvis.x} y={g.pelvis.y} width={g.pelvis.w} height={g.pelvis.h} rx={g.pelvis.h / 2} fill={fill(pal.joints)} stroke={ink} strokeWidth={1.4} />
+      {/* torso */}
+      <rect x={t.x} y={t.y} width={t.w} height={t.h} rx={rx} fill={fill(pal.body)} stroke={ink} strokeWidth={bp ? 1.6 : 2} />
+      {!bp && !ghost && look.pattern && <rect x={t.x} y={t.y} width={t.w} height={t.h} rx={rx} fill={`url(#${patternId})`} clipPath={`url(#${clipId})`} />}
+      {!bp && !ghost && look.shell && <rect x={t.x + t.w * 0.16} y={t.y + t.h * 0.14} width={t.w * 0.68 * look.shell.size} height={t.h * 0.5} rx={t.w * 0.16} fill={look.shell.color} stroke="#1c2440" strokeWidth={1.3} />}
+      {!bp && !ghost && <path d={`M${t.x + t.w * 0.2} ${t.y + t.h * 0.16}v${t.h * 0.42}`} stroke="#fff" strokeOpacity=".4" strokeWidth={clamp(t.w * 0.07, 1.2, 2.4)} strokeLinecap="round" />}
+      {/* head */}
+      <rect x={headRect.x} y={headRect.y} width={headRect.w} height={headRect.h} rx={g.head.r * 0.62} fill={fill(pal.body)} stroke={ink} strokeWidth={bp ? 1.5 : 1.8} />
+      {!bp && !ghost && <FrontEyes kind={look.eyes} cx={g.head.cx} cy={g.head.cy + g.head.r * 0.05} r={g.head.r * 0.42} color={look.eyeColor} />}
+      {bp && <path d={`M${g.head.cx - 3} ${g.head.cy}h6M${g.head.cx} ${g.head.cy - 3}v6`} stroke={ink} strokeWidth={0.9} />}
+      {!bp && !ghost && look.accessories.filter(a => a.kind !== "wings" && a.kind !== "tail").map((a, i) => <Accessory key={`a${i}`} item={a} t={headRect} u={headRect.h} />)}
+    </g>
+  );
+}
+
 export function CreatureGlyph({ design, look, mode = "toy", dims = false, exact = false, title, className = "", width, height, ...rest }) {
   const real = normalizeShape(design);
   // Toy thumbnails get friendlier proportions (shorter legs, chunkier body)
   // so they read at 60px; blueprint mode (and `exact`) keep the design's.
-  const shape = real.plan === "quadruped" && mode !== "blueprint" && !exact ? { ...real, upperLeg: real.upperLeg * 0.74, lowerLeg: real.lowerLeg * 0.74, torsoHeight: real.torsoHeight * 1.4 } : real;
+  const shape = real.plan === "quadruped" && mode !== "blueprint" && !exact ? { ...real, upperLeg: real.upperLeg * 0.74, lowerLeg: real.lowerLeg * 0.74, torsoHeight: real.torsoHeight * 1.4 } : real.plan === "wheeled" && mode !== "blueprint" && !exact ? { ...real, bodyHeight: real.bodyHeight * 1.25, wheelRadius: real.wheelRadius * 1.08 } : real;
   const lk = lookForGlyph(look);
   const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
   const labelled = typeof title === "string" && title;
@@ -433,15 +687,25 @@ export function CreatureGlyph({ design, look, mode = "toy", dims = false, exact 
       focusable="false"
       {...rest}
     >
-      {shape.plan === "multileg" ? <Multileg shape={shape} look={lk} mode={mode} uid={uid} /> : <Quadruped shape={shape} look={lk} mode={mode} uid={uid} dims={dims} />}
+      {shape.plan === "multileg" ? (
+        <Multileg shape={shape} look={lk} mode={mode} uid={uid} />
+      ) : shape.plan === "wheeled" ? (
+        <Wheeled shape={shape} look={lk} mode={mode} uid={uid} />
+      ) : shape.plan === "humanoid" ? (
+        <Humanoid shape={shape} look={lk} mode={mode} uid={uid} />
+      ) : (
+        <Quadruped shape={shape} look={lk} mode={mode} uid={uid} dims={dims} />
+      )}
     </svg>
   );
 }
 
-/** One-line description of a design's body plan, e.g. "4 legs · springy QDD motors". */
+/** One-line description of a design's body plan, e.g. "6 legs, all around". */
 export function describePlan(design) {
   const shape = normalizeShape(design);
   if (shape.plan === "multileg") return `${shape.legCount} legs, ${shape.arrangement === "bilateral" ? "in pairs" : "all around"}`;
+  if (shape.plan === "wheeled") return "2 wheel-legs, self-balancing";
+  if (shape.plan === "humanoid") return "2 legs, flat feet";
   return "4 legs";
 }
 

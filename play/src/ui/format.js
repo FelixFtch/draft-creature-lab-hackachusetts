@@ -60,7 +60,13 @@ export function plural(count, one, many = `${one}s`) {
   return `${count} ${count === 1 ? one : many}`;
 }
 
-const ROLE_LABEL = { hip_roll: "hip roll", hip_yaw: "hip yaw", hip_pitch: "hip pitch", knee: "knee" };
+const SKILL_NAMES = { walk: "Walk", drive: "Drive", jump: "Jump" };
+const SKILL_ICONS = { walk: "walk", drive: "wheel", jump: "jump" };
+/** "Walk" / "Drive" / "Jump" (capitalised raw id for anything new). */
+export const skillName = skill => SKILL_NAMES[skill] || (skill ? `${String(skill)[0].toUpperCase()}${String(skill).slice(1)}` : "Skill");
+export const skillIcon = skill => SKILL_ICONS[skill] || "sparkle";
+
+const ROLE_LABEL = { hip_roll: "hip roll", hip_yaw: "hip yaw", hip_pitch: "hip pitch", knee: "knee", ankle_pitch: "ankle pitch", ankle_roll: "ankle roll", wheel: "wheel" };
 export const roleLabel = role => ROLE_LABEL[role] || String(role || "joint").replace(/_/g, " ");
 
 const SIDE = { left: "left", right: "right", center: "middle" };

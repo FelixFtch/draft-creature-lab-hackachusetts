@@ -360,3 +360,242 @@ export const PLAY_SNAPSHOT = {
   skills: { walk: "ready", jump: "ready" },
   explore: { state: "idle" },
 };
+
+// ---------- showcase roster (docs/v2/ROSTER-AND-TERRAIN.md) ----------
+// Mock numbers, physically plausible and internally consistent: every
+// predicted limit below follows from the profile's own formulas. The real
+// values come from body.json terrainProfile and qa/terrain-trials.json.
+const ROSTER_FORMULAS = {
+  groundClearanceM: "Lowest torso point above the ground at the nominal stance.",
+  legSpanM: "Distance between the front-most and rear-most ground contacts at the nominal stance.",
+  strideM: "Longest foot travel per step inside the joint limits.",
+  comHeightM: "Whole-body center of mass height at the nominal stance.",
+  supportPolygon: "Convex hull of the ground contacts. Margin = shortest distance from the center of mass (projected down) to the hull edge.",
+  torqueToWeight: "Peak torque of each joint class ÷ total mass.",
+  maxStepUpM: "Highest foot lift inside the joint limits with the other feet planted, capped at 0.8 × ground clearance.",
+  jumpApexM: "v_z² ÷ 2g, from the jump policy's take-off speed in validation.",
+  maxGapWalkM: "Longest gap the contacts can straddle while the rest of the support polygon stays on solid ground.",
+  maxGapJumpM: "Take-off speed × flight time − body length.",
+  maxSlopeDeg: "min(grip limit atan μ, tipping limit atan(margin ÷ COM height)).",
+  maxRubbleM: "Tallest block the contacts can cross without the torso touching it.",
+};
+
+export const ROSTER = [
+  {
+    id: "rollo",
+    name: "Rollo",
+    kind: "Wheel-leg",
+    tagline: "Balances on two wheels like a segway, then springs into the air.",
+    design: { schema: "creature-design/1", name: "Rollo", bodyPlan: "wheeled", basePreset: "wheel_biped", wheeled: { bodyLength: 0.3, bodyHeight: 0.12, thigh: 0.15, shin: 0.15, wheelRadius: 0.08 }, skills: ["drive", "jump"] },
+    look: look("tangerine", { body: "#f07c2a", limbs: "#ffe2c2", joints: "#2a3354", accent: "#49b6f0", feet: "#2b2d3a" }, { finish: "gloss", face: { eyes: "visor", eyeColor: "#8cf0ff" } }),
+    skills: { drive: "ready", jump: "ready" },
+    massKg: 6.2,
+    dimensions: { lengthM: 0.34, widthM: 0.36, heightM: 0.42 },
+    terrainProfile: {
+      contactType: "wheels",
+      stability: "dynamic",
+      groundClearanceM: 0.17,
+      legSpanM: 0,
+      trackWidthM: 0.34,
+      strideM: null,
+      comHeightM: 0.29,
+      wheelRadiusM: 0.08,
+      supportPolygon: { areaM2: 0, marginM: 0 },
+      torqueToWeight: { hip: 2.6, knee: 3.4, wheel: 0.32 },
+      predicted: { maxStepUpM: 0.03, jumpApexM: 0.14, maxGapWalkM: 0.06, maxGapJumpM: 0.42, maxSlopeDeg: 24, maxRubbleM: 0.04, frictionMu: 0.8 },
+      formulas: {
+        ...ROSTER_FORMULAS,
+        legSpanM: "Both wheels touch the ground side by side, so there is no front-to-rear span.",
+        supportPolygon: "Two wheel contacts make a line, not an area: Rollo has to balance actively.",
+        maxSlopeDeg: "Balancers can't lean on a footprint: asin(wheel torque ÷ (mass × g × wheel radius)).",
+        maxStepUpM: "A driven wheel climbs about 0.4 × its radius without a hop.",
+        maxGapWalkM: "A rolling wheel bridges about 0.75 × its diameter.",
+        maxRubbleM: "Half the wheel radius.",
+      },
+    },
+  },
+  {
+    id: "dog",
+    name: "Dog",
+    kind: "Robot dog",
+    tagline: "The all-rounder: trots over rough ground and jumps small gaps.",
+    design: { schema: "creature-design/1", name: "Dog", bodyPlan: "quadruped", basePreset: "cheetah", quadruped: { torsoLength: 0.56, torsoHeight: 0.12, upperLeg: 0.24, lowerLeg: 0.26, actuator: "qdd" }, skills: ["walk", "jump"] },
+    look: lookById("classic"),
+    skills: { walk: "ready", jump: "ready" },
+    massKg: 9.0,
+    dimensions: { lengthM: 0.62, widthM: 0.31, heightM: 0.38 },
+    terrainProfile: {
+      contactType: "point-feet",
+      stability: "dynamic",
+      groundClearanceM: 0.19,
+      legSpanM: 0.42,
+      stanceWidthM: 0.24,
+      strideM: 0.21,
+      comHeightM: 0.27,
+      wheelRadiusM: null,
+      supportPolygon: { areaM2: 0.1, marginM: 0.115 },
+      torqueToWeight: { hip: 2.0, knee: 3.1 },
+      predicted: { maxStepUpM: 0.13, jumpApexM: 0.16, maxGapWalkM: 0.15, maxGapJumpM: 0.45, maxSlopeDeg: 23, maxRubbleM: 0.09, frictionMu: 0.8 },
+      formulas: ROSTER_FORMULAS,
+    },
+  },
+  {
+    id: "octo",
+    name: "Octo",
+    kind: "Spider",
+    tagline: "Eight long legs, always four on the ground. Slow, but very hard to tip.",
+    design: { schema: "creature-design/1", name: "Octo", bodyPlan: "multileg", basePreset: "spider", multileg: { legCount: 8, arrangement: "radial", bodyRadius: 0.13, coxa: 0.06, upperLeg: 0.18, lowerLeg: 0.22, actuator: "micro" }, skills: ["walk", "jump"] },
+    look: look("grape", { body: "#7b5cf5", limbs: "#e9e2ff", joints: "#2a3354", accent: "#ffc63a", feet: "#2a3354" }, { pattern: { kind: "spots", color: "#b9a6ff", scale: 0.9 } }),
+    skills: { walk: "ready", jump: "failed" },
+    skillNotes: { jump: "Trained, but it didn't pass its checks: the micro servos can't swing its long legs fast enough." },
+    massKg: 5.1,
+    dimensions: { lengthM: 0.7, widthM: 0.7, heightM: 0.18 },
+    terrainProfile: {
+      contactType: "point-feet",
+      stability: "static",
+      groundClearanceM: 0.08,
+      legSpanM: 0.62,
+      strideM: 0.12,
+      comHeightM: 0.12,
+      wheelRadiusM: null,
+      supportPolygon: { areaM2: 0.21, marginM: 0.17 },
+      torqueToWeight: { hip: 1.5, knee: 1.9 },
+      predicted: { maxStepUpM: 0.07, jumpApexM: null, maxGapWalkM: 0.4, maxGapJumpM: null, maxSlopeDeg: 31, maxRubbleM: 0.07, frictionMu: 0.6 },
+      formulas: ROSTER_FORMULAS,
+    },
+  },
+  {
+    id: "bipo",
+    name: "Bipo",
+    kind: "Humanoid",
+    tagline: "Walks on two flat feet with its arms locked. Steps over small things.",
+    design: { schema: "creature-design/1", name: "Bipo", bodyPlan: "humanoid", basePreset: "humanoid", humanoid: { torsoHeight: 0.19, torsoWidth: 0.17, hipWidth: 0.11, upperLeg: 0.15, lowerLeg: 0.15, footLength: 0.1, headSize: 0.085 }, skills: ["walk"] },
+    look: look("sky", { body: "#49b6f0", limbs: "#e4f4ff", joints: "#1c2440", accent: "#e2513b", feet: "#1c2440" }, { face: { eyes: "cute", eyeColor: "#1c2440" } }),
+    skills: { walk: "ready", jump: "untrained" },
+    skillNotes: { jump: "Not trained. A hop is only added if it passes validation." },
+    massKg: 7.4,
+    dimensions: { lengthM: 0.2, widthM: 0.24, heightM: 0.56 },
+    terrainProfile: {
+      contactType: "flat-feet",
+      stability: "dynamic",
+      groundClearanceM: 0.05,
+      legSpanM: 0.11,
+      stanceWidthM: 0.11,
+      footLengthM: 0.1,
+      strideM: 0.22,
+      comHeightM: 0.33,
+      wheelRadiusM: null,
+      supportPolygon: { areaM2: 0.018, marginM: 0.03 },
+      torqueToWeight: { hip: 2.4, knee: 3.0, ankle: 0.8 },
+      predicted: { maxStepUpM: 0.08, jumpApexM: null, maxGapWalkM: 0.18, maxGapJumpM: null, maxSlopeDeg: 14, maxRubbleM: 0.03, frictionMu: 0.8 },
+      formulas: {
+        ...ROSTER_FORMULAS,
+        groundClearanceM: "Swing-foot lift at the nominal gait (a biped's body clears whatever its feet clear).",
+        legSpanM: "Heel to toe of the planted foot: both feet stand side by side.",
+        maxSlopeDeg: "Dynamic walker: atan(ankle torque ÷ (mass × g × COM height)).",
+      },
+    },
+  },
+];
+
+// qa/terrain-trials.json shape (mock).
+const trial = (result, seconds, extra = {}) => ({ result, seconds, ...extra });
+export const TERRAIN_TRIALS = {
+  schema: "terrain-trials/1",
+  generatedAt: "2026-10-24T21:40:00Z",
+  source: "qa/terrain-trials.json",
+  method: "Headless MuJoCo WASM + ONNX Runtime with each robot's own validated policies. Fixed command at 60% of its top speed; an approach-and-jump trigger at edges only when it has a validated jump. One run per lane, same start and finish lines.",
+  lanes: [
+    { id: "flat", kind: "flat", lengthM: 5 },
+    { id: "rubble", kind: "rubble", minHeightM: 0.02, maxHeightM: 0.06 },
+    { id: "step-6", kind: "step", heightM: 0.06 },
+    { id: "step-12", kind: "step", heightM: 0.12 },
+    { id: "step-18", kind: "step", heightM: 0.18 },
+    { id: "gap-20", kind: "gap", widthM: 0.2, pitDepthM: 0.6 },
+    { id: "gap-35", kind: "gap", widthM: 0.35, pitDepthM: 0.6 },
+    { id: "gap-50", kind: "gap", widthM: 0.5, pitDepthM: 0.6 },
+    { id: "slope-12", kind: "slope", deg: 12 },
+    { id: "slope-20", kind: "slope", deg: 20 },
+  ],
+  robots: {
+    rollo: {
+      trials: {
+        flat: trial("pass", 3.2),
+        rubble: trial("fall", 2.1, { progress: 0.34, failedAt: "6 cm block", note: "A wheel hit a 6 cm block at speed and the body pitched over." }),
+        "step-6": trial("pass", 3.9, { usedJump: true }),
+        "step-12": trial("pass", 4.6, { usedJump: true }),
+        "step-18": trial("fail", 12, { progress: 0.48, failedAt: "18 cm step edge", usedJump: true, why: "Rollo: blocked at 18 cm — wheel radius 0.08 m, jump apex 0.14 m" }),
+        "gap-20": trial("pass", 3.6, { usedJump: true }),
+        "gap-35": trial("pass", 3.8, { usedJump: true }),
+        "gap-50": trial("fall", 2.9, { progress: 0.5, failedAt: "gap", usedJump: true, note: "Landed 7 cm short of the far edge." }),
+        "slope-12": trial("pass", 3.4),
+        "slope-20": trial("pass", 4.1),
+      },
+    },
+    dog: {
+      trials: {
+        flat: trial("pass", 9.9),
+        rubble: trial("pass", 12.6),
+        "step-6": trial("pass", 10.4),
+        "step-12": trial("pass", 11.2, { usedJump: true }),
+        "step-18": trial("fail", 15, { progress: 0.46, failedAt: "18 cm step edge", usedJump: true }),
+        "gap-20": trial("pass", 9.6, { usedJump: true }),
+        "gap-35": trial("pass", 10.1, { usedJump: true }),
+        "gap-50": trial("fall", 6.8, { progress: 0.49, failedAt: "gap", usedJump: true, note: "Front feet reached; the rear feet dropped in." }),
+        "slope-12": trial("pass", 10.8),
+        "slope-20": trial("fail", 15, { progress: 0.62, failedAt: "upper half of the 20° ramp", note: "Point feet slipped. The walk policy never saw a ramp this steep in training." }),
+      },
+    },
+    octo: {
+      trials: {
+        flat: trial("pass", 15.4),
+        rubble: trial("pass", 17.9),
+        "step-6": trial("pass", 16.8),
+        "step-12": trial("fail", 20, { progress: 0.47, failedAt: "12 cm step edge" }),
+        "step-18": trial("fail", 20, { progress: 0.46, failedAt: "18 cm step edge" }),
+        "gap-20": trial("pass", 15.9),
+        "gap-35": trial("pass", 17.2, { why: "Octo: walked across — leg span 0.62 m > gap 0.35 m" }),
+        "gap-50": trial("fall", 9.4, { progress: 0.5, failedAt: "gap", note: "Front legs dropped in before the rear legs crossed." }),
+        "slope-12": trial("pass", 16.1),
+        "slope-20": trial("pass", 19.4),
+      },
+    },
+    bipo: {
+      trials: {
+        flat: trial("pass", 13.6),
+        rubble: trial("fall", 4.3, { progress: 0.22, failedAt: "4 cm block", note: "A flat foot landed half on a block and it tipped sideways." }),
+        "step-6": trial("pass", 14.9),
+        "step-12": trial("fail", 20, { progress: 0.48, failedAt: "12 cm step edge" }),
+        "step-18": trial("fail", 20, { progress: 0.47, failedAt: "18 cm step edge" }),
+        "gap-20": trial("pass", 15.2, { note: "A long final stride landed 3 cm past the far edge." }),
+        "gap-35": trial("fall", 7.1, { progress: 0.5, failedAt: "gap" }),
+        "gap-50": trial("fall", 7.0, { progress: 0.5, failedAt: "gap" }),
+        "slope-12": trial("pass", 15.8),
+        "slope-20": trial("fall", 9.2, { progress: 0.41, failedAt: "20° ramp", note: "Toes lifted and it tipped backward." }),
+      },
+    },
+  },
+};
+
+// ---------- AI Explore goals and decisions ----------
+export const EXPLORE_GOALS = [
+  { id: "flag-gap", label: "Reach the flag beyond the gap", icon: "flag", instruction: "Reach the yellow flag beyond the gap" },
+  { id: "ball-goal", label: "Push the ball into the goal", icon: "ball", instruction: "Push the ball into the goal" },
+  { id: "platform", label: "Climb onto the platform", icon: "terrain-step", instruction: "Climb onto the platform" },
+  { id: "tower", label: "Visit the blue tower", icon: "tower", instruction: "Visit the blue tower" },
+];
+
+export const EXPLORE_HISTORY = [
+  { step: 1, operation: "turn_left", durationSeconds: 0.6 },
+  { step: 2, operation: "forward", durationSeconds: 1.5 },
+  { step: 3, operation: "forward", durationSeconds: 1.2 },
+  { step: 4, operation: "jump", durationSeconds: 0 },
+];
+
+export const EXPLORE_HISTORY_REFUSED = [
+  { step: 1, operation: "forward", durationSeconds: 1.5 },
+  { step: 2, operation: "jump", durationSeconds: 0, refused: true, note: "Octo has no verified jump" },
+  { step: 3, operation: "turn_right", durationSeconds: 0.8 },
+];
+
+export const GAMEPAD_ID = "Xbox Wireless Controller (STANDARD GAMEPAD Vendor: 045e Product: 0b13)";

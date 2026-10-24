@@ -5,17 +5,25 @@
 import { useId, useState } from "react";
 import { CreatureGlyph } from "./CreatureGlyph.jsx";
 import { Icon } from "./icons.jsx";
-import { Button, Segmented, Slider, Swatch, cx } from "./primitives.jsx";
+import { Button, Segmented, Slider, Swatch, Switch, cx } from "./primitives.jsx";
 import { rovingKeyDown } from "./hooks.js";
 
+// Mirrors contracts/look.schema.json as extended by the look agent
+// (appearance/schema.js exports the same lists; pass them via `options`
+// to stay in lockstep). Unknown values are simply not offered.
 export const LOOK_OPTIONS = {
   finish: ["matte", "satin", "gloss", "metal", "toon", "glow"],
-  pattern: ["none", "spots", "stripes", "bands", "gradient", "checker", "camo", "panels"],
+  pattern: ["none", "spots", "dots", "stripes", "bands", "gradient", "checker", "camo", "panels", "cracks", "scales", "hex"],
+  patternTarget: ["auto", "body", "shell", "limbs", "all"],
   shell: ["none", "dome", "beetle", "turtle", "petals", "armor", "fluffy", "saddle"],
   eyes: ["none", "round", "cute", "visor", "cyclops", "sleepy", "compound"],
-  accessories: ["antennae", "horns", "ears", "tail", "spikes", "fin", "wings", "crown", "hat", "bow", "flower", "propeller", "backpack"],
+  head: ["none", "round", "boxy", "snout"],
+  mouth: ["none", "smile", "grin", "beak", "fangs", "whiskers", "grill"],
+  markings: ["none", "patches", "mask"],
+  accessories: ["antennae", "horns", "ears", "tail", "spikes", "fin", "wings", "crown", "hat", "bow", "flower", "propeller", "backpack", "sprout", "mushroom", "halo", "goggles", "scarf"],
   limbStyle: ["classic", "sleek", "chunky", "bones"],
   feet: ["ball", "paw", "hoof", "pad"],
+  maxAccessories: 6,
 };
 
 export const TOY_COLORS = ["#e23b2e", "#ff8a3d", "#ffc63a", "#43b05c", "#1f8c80", "#49b6f0", "#1e4e95", "#7b5cf5", "#ff6f95", "#fffcf5", "#8a91ad", "#2b2d3a"];
@@ -26,25 +34,28 @@ const SLOTS = [
   { key: "joints", label: "Joints" },
   { key: "accent", label: "Accent" },
   { key: "feet", label: "Feet" },
+  { key: "caps", label: "Caps" },
 ];
 
 const NAMES = {
   matte: "Matte", satin: "Satin", gloss: "Gloss", metal: "Metal", toon: "Toon", glow: "Glow",
-  none: "None", spots: "Spots", stripes: "Stripes", bands: "Bands", gradient: "Fade", checker: "Checks", camo: "Camo", panels: "Panels",
+  none: "None", spots: "Spots", dots: "Dots", stripes: "Stripes", bands: "Bands", gradient: "Fade", checker: "Checks", camo: "Camo", panels: "Panels", cracks: "Cracks", scales: "Scales", hex: "Honeycomb",
+  auto: "Auto", body: "Body", shell: "Shell", limbs: "Legs", all: "All over",
   dome: "Dome", beetle: "Beetle", turtle: "Turtle", petals: "Petals", armor: "Armor", fluffy: "Fluffy", saddle: "Saddle",
   round: "Round", cute: "Cute", visor: "Visor", cyclops: "Cyclops", sleepy: "Sleepy", compound: "Bug eyes",
-  antennae: "Antennae", horns: "Horns", ears: "Ears", tail: "Tail", spikes: "Spikes", fin: "Fin", wings: "Wings", crown: "Crown", hat: "Hat", bow: "Bow", flower: "Flower", propeller: "Propeller", backpack: "Backpack",
+  boxy: "Boxy", snout: "Snout", smile: "Smile", grin: "Grin", beak: "Beak", fangs: "Fangs", whiskers: "Whiskers", grill: "Grill", patches: "Patches", mask: "Mask",
+  antennae: "Antennae", horns: "Horns", ears: "Ears", tail: "Tail", spikes: "Spikes", fin: "Fin", wings: "Wings", crown: "Crown", hat: "Hat", bow: "Bow", flower: "Flower", propeller: "Propeller", backpack: "Backpack", sprout: "Sprout", mushroom: "Mushroom", halo: "Halo", goggles: "Goggles", scarf: "Scarf",
   classic: "Classic", sleek: "Sleek", chunky: "Chunky", bones: "Bones", ball: "Ball", paw: "Paw", hoof: "Hoof", pad: "Pad",
 };
-export const optionName = value => NAMES[value] || value;
+export const optionName = value => NAMES[value] || String(value || "").replace(/^\w/, c => c.toUpperCase());
 
 const DEFAULT_LOOK = {
   schema: "creature-look/1",
   palette: { body: "#1f8c80", limbs: "#d9e8e2", joints: "#2a3354", accent: "#ffc63a", feet: "#2a3354" },
   finish: "satin",
-  pattern: { kind: "none", color: "#ffc63a", scale: 1 },
+  pattern: { kind: "none", color: "#ffc63a", scale: 1, target: "auto" },
   shell: { kind: "none", color: "#ffc63a", size: 1 },
-  face: { eyes: "round", eyeColor: "#1c2440" },
+  face: { eyes: "round", eyeColor: "#1c2440", size: 1, head: "none", mouth: "none", cheeks: false, markings: "none" },
   accessories: [],
   limbs: { style: "classic", feet: "ball" },
 };
@@ -60,7 +71,7 @@ export function lookWithDefaults(look) {
     pattern: { ...DEFAULT_LOOK.pattern, ...(l.pattern || {}) },
     shell: { ...DEFAULT_LOOK.shell, ...(l.shell || {}) },
     face: { ...DEFAULT_LOOK.face, ...(l.face || {}) },
-    accessories: Array.isArray(l.accessories) ? l.accessories.slice(0, 4) : [],
+    accessories: Array.isArray(l.accessories) ? l.accessories.slice(0, LOOK_OPTIONS.maxAccessories) : [],
     limbs: { ...DEFAULT_LOOK.limbs, ...(l.limbs || {}) },
   };
 }
@@ -100,6 +111,26 @@ const ACC_ART = {
   flower: <><circle cx="12" cy="7" r="2.6" {...S} /><circle cx="7.2" cy="10.5" r="2.6" {...S} /><circle cx="16.8" cy="10.5" r="2.6" {...S} /><circle cx="9" cy="16" r="2.6" {...S} /><circle cx="15" cy="16" r="2.6" {...S} /><circle cx="12" cy="11.5" r="1.8" fill="currentColor" /></>,
   propeller: <><path d="M12 13v7" {...S} /><ellipse cx="7" cy="9" rx="5" ry="2" {...S} /><ellipse cx="17" cy="9" rx="5" ry="2" {...S} /><circle cx="12" cy="9" r="1.4" fill="currentColor" /></>,
   backpack: <><rect x="6" y="7" width="12" height="13" rx="3" {...S} /><path d="M9 7V5.5a3 3 0 0 1 6 0V7M9 13h6" {...S} /></>,
+  sprout: <><path d="M12 20v-8" {...S} /><path d="M12 12C12 8 9 6 5 6c0 4 3 6 7 6ZM12 12c0-3 2.5-5.5 6.5-5.5 0 3.5-2.5 5.5-6.5 5.5Z" {...S} fill="currentColor" fillOpacity=".25" /></>,
+  mushroom: <><path d="M4 12a8 7 0 0 1 16 0H4Z" {...S} fill="currentColor" fillOpacity=".25" /><path d="M9 12v6a3 3 0 0 0 6 0v-6" {...S} /><circle cx="9" cy="8.5" r="1.2" fill="currentColor" /><circle cx="14.5" cy="7.5" r="1.2" fill="currentColor" /></>,
+  halo: <><ellipse cx="12" cy="8" rx="8" ry="3" {...S} /><path d="M7 17c1.5 2 8.5 2 10 0" {...S} /></>,
+  goggles: <><circle cx="7.5" cy="12" r="4" {...S} /><circle cx="16.5" cy="12" r="4" {...S} /><path d="M11.5 12h1M2 11h1.5M20.5 11H22" {...S} /></>,
+  scarf: <><path d="M4 9c5 3 11 3 16 0v4c-5 3-11 3-16 0V9Z" {...S} fill="currentColor" fillOpacity=".25" /><path d="M15 14l1 7 3-1-1-6.5" {...S} /></>,
+};
+const HEAD_ART = {
+  none: SHELL_ART.none,
+  round: <><circle cx="12" cy="11" r="7" {...S} /><circle cx="9.5" cy="10.5" r="1.3" fill="currentColor" /><circle cx="14.5" cy="10.5" r="1.3" fill="currentColor" /></>,
+  boxy: <><rect x="5" y="5" width="14" height="12" rx="2.5" {...S} /><rect x="8" y="8.5" width="8" height="3.5" rx="1.5" fill="currentColor" /><path d="M12 5V2.5" {...S} /></>,
+  snout: <><circle cx="10" cy="11" r="6.5" {...S} /><path d="M14 10.5h4.5a2.5 2.5 0 0 1 0 5H14" {...S} /><circle cx="19" cy="12.4" r="1" fill="currentColor" /><circle cx="9" cy="9.5" r="1.2" fill="currentColor" /></>,
+};
+const MOUTH_ART = {
+  none: SHELL_ART.none,
+  smile: <path d="M6 11c3 4.5 9 4.5 12 0" {...S} />,
+  grin: <><path d="M5 10h14c0 5-3.5 7-7 7s-7-2-7-7Z" {...S} /><path d="M8 10v2.5M12 10v3M16 10v2.5" {...S} /></>,
+  beak: <path d="M5 9h10l5 3-5 3H5l3-3-3-3Z" {...S} fill="currentColor" fillOpacity=".25" />,
+  fangs: <><path d="M5 10c3 3 11 3 14 0" {...S} /><path d="M8.5 11.5 9.5 15l1-3.3M15.5 11.5 14.5 15l-1-3.3" {...S} /></>,
+  whiskers: <><circle cx="12" cy="11" r="1.6" fill="currentColor" /><path d="M10 12 3 10M10 13l-7 2M14 12l7-2M14 13l7 2" {...S} /></>,
+  grill: <><rect x="5" y="8" width="14" height="8" rx="2" {...S} /><path d="M9 8v8M12 8v8M15 8v8" {...S} /></>,
 };
 
 function Art({ children }) {
@@ -173,21 +204,27 @@ function Group({ title, icon, open = false, children, summary }) {
 /**
  * LookPanel props:
  *  look (creature-look/1), onChange(nextLook)
- *  presets: [{ id, name, look }], presetId, onPreset(id, look)
+ *  presets: [{ id, name | label, look, blurb? }] (appearance LOOK_PRESETS work as-is),
+ *  presetId, onPreset(id, look)
  *  design: for preview thumbnails
+ *  options: override LOOK_OPTIONS lists (e.g. from appearance/schema.js)
  *  onExportPrintKit(), exportState: "idle" | "working" | "done" | "error", exportNote
  *  onAskTinker(text): optional suggestion chips ("Make it a ladybug")
  */
-export function LookPanel({ look: rawLook, onChange, presets = [], presetId, onPreset, design, onExportPrintKit, exportState = "idle", exportNote, onAskTinker }) {
+export function LookPanel({ look: rawLook, onChange, presets = [], presetId, onPreset, design, options, onExportPrintKit, exportState = "idle", exportNote, onAskTinker }) {
+  const opt = { ...LOOK_OPTIONS, ...(options || {}) };
+  const max = opt.maxAccessories || 6;
   const look = lookWithDefaults(rawLook);
   const [slot, setSlot] = useState("body");
   const set = patch => onChange?.({ ...look, ...patch });
+  const setFace = patch => set({ face: { ...look.face, ...patch } });
   const accKinds = look.accessories.map(a => a.kind);
+  const slotColor = key => (key === "caps" ? look.palette.caps || look.palette.accent : look.palette[key]);
 
   function toggleAccessory(kind) {
     const has = accKinds.includes(kind);
     if (has) set({ accessories: look.accessories.filter(a => a.kind !== kind) });
-    else if (look.accessories.length < 4) set({ accessories: [...look.accessories, { kind, color: look.palette.accent, size: 1 }] });
+    else if (look.accessories.length < max) set({ accessories: [...look.accessories, { kind, color: look.palette.accent, size: 1 }] });
   }
 
   return (
@@ -212,6 +249,7 @@ export function LookPanel({ look: rawLook, onChange, presets = [], presetId, onP
             {presets.map((preset, index) => {
               const on = preset.id === presetId;
               const stop = on || (!presets.some(p => p.id === presetId) && index === 0);
+              const name = preset.name || preset.label || preset.id;
               return (
                 <button
                   key={preset.id}
@@ -220,13 +258,14 @@ export function LookPanel({ look: rawLook, onChange, presets = [], presetId, onP
                   data-id={preset.id}
                   aria-checked={on}
                   tabIndex={stop ? 0 : -1}
+                  title={preset.blurb}
                   className={cx("cl-preset", on && "is-on")}
                   onClick={() => onPreset?.(preset.id, preset.look)}
                 >
                   <span className="cl-preset__art">
                     <CreatureGlyph design={design} look={preset.look} />
                   </span>
-                  <span className="cl-preset__name">{preset.name}</span>
+                  <span className="cl-preset__name">{name}</span>
                 </button>
               );
             })}
@@ -245,7 +284,7 @@ export function LookPanel({ look: rawLook, onChange, presets = [], presetId, onP
         </div>
       )}
 
-      <Group title="Colors and finish" icon="palette" open summary={<span className="cl-look__dots">{SLOTS.map(s => <i key={s.key} style={{ background: look.palette[s.key] }} />)}</span>}>
+      <Group title="Colors and finish" icon="palette" open summary={<span className="cl-look__dots">{SLOTS.slice(0, 5).map(s => <i key={s.key} style={{ background: slotColor(s.key) }} />)}</span>}>
         <div
           className="cl-slots"
           role="radiogroup"
@@ -257,50 +296,83 @@ export function LookPanel({ look: rawLook, onChange, presets = [], presetId, onP
         >
           {SLOTS.map(s => (
             <button key={s.key} type="button" role="radio" data-slot={s.key} aria-checked={slot === s.key} tabIndex={slot === s.key ? 0 : -1} className={cx("cl-slot", slot === s.key && "is-on")} onClick={() => setSlot(s.key)}>
-              <span className="cl-slot__chip" style={{ background: look.palette[s.key] }} />
+              <span className="cl-slot__chip" style={{ background: slotColor(s.key) }} />
               <span>{s.label}</span>
             </button>
           ))}
         </div>
-        <ColorRow label={`${SLOTS.find(s => s.key === slot)?.label} color`} value={look.palette[slot]} onChange={color => set({ palette: { ...look.palette, [slot]: color } })} />
+        <ColorRow label={`${SLOTS.find(s => s.key === slot)?.label} color`} value={slotColor(slot)} onChange={color => set({ palette: { ...look.palette, [slot]: color } })} />
+        {slot === "caps" && !look.palette.caps && <p className="cl-hint">Motor caps follow the accent color until you pick one.</p>}
         <div className="cl-look__field">
           <span className="cl-tweaks__group-label">Finish</span>
-          <TileGroup label="Finish" options={LOOK_OPTIONS.finish} value={look.finish} onChange={finish => set({ finish })} className="cl-tiles--finish" render={kind => <span className={`cl-finish cl-finish--${kind}`} style={{ "--fc": look.palette.body }} />} />
+          <TileGroup label="Finish" options={opt.finish} value={look.finish} onChange={finish => set({ finish })} className="cl-tiles--finish" render={kind => <span className={`cl-finish cl-finish--${kind}`} style={{ "--fc": look.palette.body }} />} />
         </div>
       </Group>
 
       <Group title="Pattern" icon="grid" summary={optionName(look.pattern.kind)}>
-        <TileGroup label="Pattern" options={LOOK_OPTIONS.pattern} value={look.pattern.kind} onChange={kind => set({ pattern: { ...look.pattern, kind } })} render={kind => <span className={`cl-pattern cl-pattern--${kind}`} style={{ "--pb": look.palette.body, "--pc": look.pattern.color }} />} />
+        <TileGroup label="Pattern" options={opt.pattern} value={look.pattern.kind} onChange={kind => set({ pattern: { ...look.pattern, kind } })} render={kind => <span className={`cl-pattern cl-pattern--${kind}`} style={{ "--pb": look.palette.body, "--pc": look.pattern.color }} />} />
         {look.pattern.kind !== "none" && (
           <>
             <ColorRow label="Pattern color" value={look.pattern.color} onChange={color => set({ pattern: { ...look.pattern, color } })} />
             <Slider label="Pattern size" value={look.pattern.scale} min={0.5} max={2} step={0.05} format={v => `${v.toFixed(2)}×`} onChange={scale => set({ pattern: { ...look.pattern, scale } })} />
+            {opt.patternTarget?.length > 0 && (
+              <div className="cl-look__field">
+                <span className="cl-tweaks__group-label">Where</span>
+                <Segmented label="Pattern goes on" value={look.pattern.target || "auto"} onChange={target => set({ pattern: { ...look.pattern, target } })} options={opt.patternTarget.map(v => ({ value: v, label: optionName(v) }))} size="sm" block />
+              </div>
+            )}
           </>
         )}
       </Group>
 
-      <Group title="Shell and face" icon="sparkle" summary={`${optionName(look.shell.kind)}, ${optionName(look.face.eyes).toLowerCase()} eyes`}>
-        <span className="cl-tweaks__group-label">Shell</span>
-        <TileGroup label="Shell" options={LOOK_OPTIONS.shell} value={look.shell.kind} onChange={kind => set({ shell: { ...look.shell, kind } })} render={kind => <Art>{SHELL_ART[kind]}</Art>} />
+      <Group title="Shell" icon="sparkle" summary={optionName(look.shell.kind)}>
+        <TileGroup label="Shell" options={opt.shell} value={look.shell.kind} onChange={kind => set({ shell: { ...look.shell, kind } })} render={kind => <Art>{SHELL_ART[kind]}</Art>} />
         {look.shell.kind !== "none" && (
           <>
             <ColorRow label="Shell color" value={look.shell.color} onChange={color => set({ shell: { ...look.shell, color } })} />
             <Slider label="Shell size" value={look.shell.size} min={0.8} max={1.3} step={0.01} format={v => `${Math.round(v * 100)}%`} onChange={size => set({ shell: { ...look.shell, size } })} />
           </>
         )}
-        <span className="cl-tweaks__group-label">Eyes</span>
-        <TileGroup label="Eyes" options={LOOK_OPTIONS.eyes} value={look.face.eyes} onChange={eyes => set({ face: { ...look.face, eyes } })} render={kind => <Art>{EYES_ART[kind]}</Art>} />
-        {look.face.eyes !== "none" && <ColorRow label="Eye color" value={look.face.eyeColor} onChange={eyeColor => set({ face: { ...look.face, eyeColor } })} />}
       </Group>
 
-      <Group title="Accessories" icon="star" summary={`${look.accessories.length} of 4`}>
-        <TileGroup label="Accessories, up to 4" options={LOOK_OPTIONS.accessories} value={accKinds} multiple max={4} onChange={toggleAccessory} render={kind => <Art>{ACC_ART[kind]}</Art>} className="cl-tiles--acc" />
-        <p className="cl-hint">{look.accessories.length >= 4 ? "That's the max of 4. Remove one to add another." : `Pick up to 4. ${4 - look.accessories.length} left.`}</p>
+      <Group title="Face" icon="eye" summary={`${optionName(look.face.eyes)} eyes${look.face.head && look.face.head !== "none" ? `, ${optionName(look.face.head).toLowerCase()} head` : ""}`}>
+        {opt.head?.length > 0 && (
+          <>
+            <span className="cl-tweaks__group-label">Head</span>
+            <TileGroup label="Head" options={opt.head} value={look.face.head || "none"} onChange={head => setFace({ head })} render={kind => <Art>{HEAD_ART[kind] || HEAD_ART.none}</Art>} />
+          </>
+        )}
+        <span className="cl-tweaks__group-label">Eyes</span>
+        <TileGroup label="Eyes" options={opt.eyes} value={look.face.eyes} onChange={eyes => setFace({ eyes })} render={kind => <Art>{EYES_ART[kind]}</Art>} />
+        {look.face.eyes !== "none" && (
+          <>
+            <ColorRow label="Eye color" value={look.face.eyeColor} onChange={eyeColor => setFace({ eyeColor })} />
+            <Slider label="Eye size" value={look.face.size ?? 1} min={0.7} max={1.4} step={0.05} format={v => `${Math.round(v * 100)}%`} onChange={size => setFace({ size })} />
+          </>
+        )}
+        {opt.mouth?.length > 0 && (
+          <>
+            <span className="cl-tweaks__group-label">Mouth</span>
+            <TileGroup label="Mouth" options={opt.mouth} value={look.face.mouth || "none"} onChange={mouth => setFace({ mouth })} render={kind => <Art>{MOUTH_ART[kind] || MOUTH_ART.none}</Art>} />
+          </>
+        )}
+        {opt.markings?.length > 0 && (
+          <div className="cl-look__field">
+            <span className="cl-tweaks__group-label">Markings</span>
+            <Segmented label="Markings" value={look.face.markings || "none"} onChange={markings => setFace({ markings })} options={opt.markings.map(v => ({ value: v, label: optionName(v) }))} size="sm" block />
+          </div>
+        )}
+        <Switch label="Rosy cheeks" checked={!!look.face.cheeks} onChange={cheeks => setFace({ cheeks })} />
+      </Group>
+
+      <Group title="Accessories" icon="star" summary={`${look.accessories.length} of ${max}`}>
+        <TileGroup label={`Accessories, up to ${max}`} options={opt.accessories} value={accKinds} multiple max={max} onChange={toggleAccessory} render={kind => <Art>{ACC_ART[kind] || ACC_ART.flower}</Art>} className="cl-tiles--acc" />
+        <p className="cl-hint">{look.accessories.length >= max ? `That's the max of ${max}. Remove one to add another.` : `Pick up to ${max}. ${max - look.accessories.length} left.`}</p>
       </Group>
 
       <Group title="Legs and feet" icon="leg" summary={`${optionName(look.limbs.style)}, ${optionName(look.limbs.feet).toLowerCase()} feet`}>
-        <Segmented label="Leg style" value={look.limbs.style} onChange={style => set({ limbs: { ...look.limbs, style } })} options={LOOK_OPTIONS.limbStyle.map(v => ({ value: v, label: optionName(v) }))} block />
-        <Segmented label="Feet" value={look.limbs.feet} onChange={feet => set({ limbs: { ...look.limbs, feet } })} options={LOOK_OPTIONS.feet.map(v => ({ value: v, label: optionName(v) }))} block />
+        <Segmented label="Leg style" value={look.limbs.style} onChange={style => set({ limbs: { ...look.limbs, style } })} options={opt.limbStyle.map(v => ({ value: v, label: optionName(v) }))} block />
+        <Segmented label="Feet" value={look.limbs.feet} onChange={feet => set({ limbs: { ...look.limbs, feet } })} options={opt.feet.map(v => ({ value: v, label: optionName(v) }))} block />
         <p className="cl-hint">Leg covers are cosmetic. The collision shapes Draft generated don't change.</p>
       </Group>
 
