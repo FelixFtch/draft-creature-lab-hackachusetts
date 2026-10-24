@@ -259,8 +259,8 @@ Flower XML `63c1b09b…`, matching the legacy policy manifests).
 ## Commands
 
 ```bash
-export DRAFT_ROOT=$PWD/.deps/draft
-PY=$PWD/.venv/bin/python
+export DRAFT_ROOT="$PWD/.deps/draft"
+PY="$PWD/.venv/bin/python"
 $PY -m unittest draft-service/test_designs.py            # tests (~1 min)
 $PY draft-service/designs.py build-showcase               # regenerate creatures/
 $PY draft-service/designs.py evaluate my-design.json      # one design, not stored

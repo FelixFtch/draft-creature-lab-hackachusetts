@@ -115,7 +115,7 @@ final report ("integration notes") and the main agent applies it.
 ## 5. Environment & etiquette (shared 2-core / 7 GB container)
 
 - You work in your own git worktree. Heavy shared deps live in the main checkout
-  `<repo>`:
+  (the repo root, written `<repo>` below):
   - Draft checkout: `export DRAFT_ROOT=<repo>/.deps/draft`
   - Generator python: `<repo>/.venv/bin/python` (mujoco 3.8.0, Draft installed)
   - Frontend deps: `ln -s <repo>/play/node_modules play/node_modules`
