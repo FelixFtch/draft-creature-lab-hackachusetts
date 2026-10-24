@@ -1,0 +1,234 @@
+<mujoco model="creature-quadruped-329a735927fa8b37">
+  <compiler angle="radian" />
+  <option timestep="0.005" integrator="implicitfast" cone="pyramidal" solver="Newton" iterations="10" ls_iterations="20" tolerance="1e-8" impratio="1" gravity="0 0 -9.81" />
+  <default>
+    <joint damping="0.01" />
+    <geom friction="0.7 0.1 0.1" />
+    <default class="visual">
+      <geom contype="0" conaffinity="0" group="2" />
+    </default>
+  </default>
+  <custom>
+    <numeric name="fl_hip_roll_velocity_limit" size="1" data="40" />
+    <numeric name="fl_hip_pitch_velocity_limit" size="1" data="40" />
+    <numeric name="fl_knee_velocity_limit" size="1" data="40" />
+    <numeric name="fr_hip_roll_velocity_limit" size="1" data="40" />
+    <numeric name="fr_hip_pitch_velocity_limit" size="1" data="40" />
+    <numeric name="fr_knee_velocity_limit" size="1" data="40" />
+    <numeric name="rl_hip_roll_velocity_limit" size="1" data="40" />
+    <numeric name="rl_hip_pitch_velocity_limit" size="1" data="40" />
+    <numeric name="rl_knee_velocity_limit" size="1" data="40" />
+    <numeric name="rr_hip_roll_velocity_limit" size="1" data="40" />
+    <numeric name="rr_hip_pitch_velocity_limit" size="1" data="40" />
+    <numeric name="rr_knee_velocity_limit" size="1" data="40" />
+  </custom>
+  <asset>
+    <mesh name="torso_mesh" file="torso_mesh.stl" />
+  </asset>
+  <worldbody>
+    <geom name="cg_floor" type="plane" size="0 0 0.05" contype="1" conaffinity="15" condim="3" friction="1 0.005 0.0001" rgba="0.55 0.6 0.55 1" />
+    <body name="torso_link" pos="0 0 0.5076">
+      <joint name="torso_link_freejoint" type="free" damping="0" />
+      <geom name="torso_link_mesh" type="mesh" density="627.268" rgba="0.298 0.447 0.69 1" mesh="torso_mesh" contype="4" conaffinity="9" />
+      <site name="imu" pos="0 0 0" group="5" />
+      <body name="fl_roll_motor_link" pos="0.26 0.08 0">
+        <geom name="fl_roll_motor_link_motor" size="0.063 0.023" pos="0.023 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="1917.8" rgba="0.155 0.232 0.359 1" contype="0" conaffinity="0" />
+        <geom name="fl_roll_motor_link_detail" class="visual" size="0.0504 0.0253" pos="0.023 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+        <body name="fl_roll_link">
+          <joint name="fl_hip_roll" pos="0 0 0" axis="1 0 0" limited="true" range="-0.8 0.8" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+          <geom name="fl_roll_link_link" size="0.023 0.00815" pos="0.04915 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="7438.57" rgba="0.424 0.547 0.746 1" contype="4" conaffinity="9" />
+          <geom name="fl_roll_link_motor" size="0.063 0.023" pos="0.1153 0 0" quat="0.707107 0.707107 0 0" type="cylinder" density="1917.8" rgba="0.155 0.232 0.359 1" contype="0" conaffinity="0" />
+          <geom name="fl_roll_link_detail" class="visual" size="0.0504 0.0253" pos="0.1153 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+          <body name="fl_pitch_link" pos="0.1153 0 0">
+            <joint name="fl_hip_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="-2.5 2.5" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+            <geom name="fl_pitch_link_link" size="0.023 0.0205" pos="0 0.0385 0" quat="0.707107 0.707107 0 0" type="cylinder" density="2854.92" rgba="0.424 0.547 0.746 1" contype="4" conaffinity="9" />
+            <geom name="fl_pitch_link_motor" size="0.063 0.023" pos="0 0.077 0" quat="0.707107 0.707107 0 0" type="cylinder" density="1917.8" rgba="0.155 0.232 0.359 1" contype="0" conaffinity="0" />
+            <geom name="fl_pitch_link_detail" class="visual" size="0.0504 0.0253" pos="0 0.077 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+            <body name="fl_upper_leg_link" pos="0 0.077 0">
+              <geom name="fl_upper_leg_link_link" size="0.023 0.078655" pos="0 0 -0.136655" type="cylinder" density="1860.21" rgba="0.424 0.547 0.746 1" contype="4" conaffinity="9" />
+              <geom name="fl_upper_leg_link_motor" size="0.03969 0.023" pos="0 0 -0.25" quat="0.707107 0.707107 0 0" type="cylinder" density="0" rgba="0.155 0.232 0.359 1" contype="0" conaffinity="0" />
+              <geom name="fl_upper_leg_link_detail" class="visual" size="0.031752 0.0253" pos="0 0 -0.25" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+              <body name="fl_lower_leg_link" pos="0 0 -0.25">
+                <joint name="fl_knee" pos="0 0 0" axis="0 1 0" limited="true" range="-2.8 0" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+                <geom name="fl_lower_leg_link_link" size="0.0184 0.115" pos="0 0 -0.115" type="cylinder" density="911.733" rgba="0.424 0.547 0.746 1" contype="4" conaffinity="9" />
+                <geom name="fl_lower_leg_link_sphere" size="0.0276" pos="0 0 -0.23" density="644.163" rgba="0.302 0.302 0.302 1" contype="2" conaffinity="9" condim="3" priority="1" />
+                <site name="fl_foot" pos="0 0 -0.23" group="5" />
+                <site name="cg_touch_site_fl" type="sphere" size="0.03374" pos="0 0 -0.23" group="5" rgba="1 0.5 0 0.3" />
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="fr_roll_motor_link" pos="0.26 -0.08 0">
+        <geom name="fr_roll_motor_link_motor" size="0.063 0.023" pos="0.023 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="1917.8" rgba="0.155 0.232 0.359 1" contype="0" conaffinity="0" />
+        <geom name="fr_roll_motor_link_detail" class="visual" size="0.0504 0.0253" pos="0.023 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+        <body name="fr_roll_link">
+          <joint name="fr_hip_roll" pos="0 0 0" axis="1 0 0" limited="true" range="-0.8 0.8" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+          <geom name="fr_roll_link_link" size="0.023 0.00815" pos="0.04915 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="7438.57" rgba="0.424 0.547 0.746 1" contype="4" conaffinity="9" />
+          <geom name="fr_roll_link_motor" size="0.063 0.023" pos="0.1153 0 0" quat="0.707107 0.707107 0 0" type="cylinder" density="1917.8" rgba="0.155 0.232 0.359 1" contype="0" conaffinity="0" />
+          <geom name="fr_roll_link_detail" class="visual" size="0.0504 0.0253" pos="0.1153 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+          <body name="fr_pitch_link" pos="0.1153 0 0">
+            <joint name="fr_hip_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="-2.5 2.5" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+            <geom name="fr_pitch_link_link" size="0.023 0.0205" pos="0 -0.0385 0" quat="0.707107 0.707107 0 0" type="cylinder" density="2854.92" rgba="0.424 0.547 0.746 1" contype="4" conaffinity="9" />
+            <geom name="fr_pitch_link_motor" size="0.063 0.023" pos="0 -0.077 0" quat="0.707107 0.707107 0 0" type="cylinder" density="1917.8" rgba="0.155 0.232 0.359 1" contype="0" conaffinity="0" />
+            <geom name="fr_pitch_link_detail" class="visual" size="0.0504 0.0253" pos="0 -0.077 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+            <body name="fr_upper_leg_link" pos="0 -0.077 0">
+              <geom name="fr_upper_leg_link_link" size="0.023 0.078655" pos="0 0 -0.136655" type="cylinder" density="1860.21" rgba="0.424 0.547 0.746 1" contype="4" conaffinity="9" />
+              <geom name="fr_upper_leg_link_motor" size="0.03969 0.023" pos="0 0 -0.25" quat="0.707107 0.707107 0 0" type="cylinder" density="0" rgba="0.155 0.232 0.359 1" contype="0" conaffinity="0" />
+              <geom name="fr_upper_leg_link_detail" class="visual" size="0.031752 0.0253" pos="0 0 -0.25" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+              <body name="fr_lower_leg_link" pos="0 0 -0.25">
+                <joint name="fr_knee" pos="0 0 0" axis="0 1 0" limited="true" range="-2.8 0" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+                <geom name="fr_lower_leg_link_link" size="0.0184 0.115" pos="0 0 -0.115" type="cylinder" density="911.733" rgba="0.424 0.547 0.746 1" contype="4" conaffinity="9" />
+                <geom name="fr_lower_leg_link_sphere" size="0.0276" pos="0 0 -0.23" density="644.163" rgba="0.302 0.302 0.302 1" contype="2" conaffinity="9" condim="3" priority="1" />
+                <site name="fr_foot" pos="0 0 -0.23" group="5" />
+                <site name="cg_touch_site_fr" type="sphere" size="0.03374" pos="0 0 -0.23" group="5" rgba="1 0.5 0 0.3" />
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="rl_roll_motor_link" pos="-0.26 0.08 0">
+        <geom name="rl_roll_motor_link_motor" size="0.063 0.023" pos="-0.023 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="1917.8" rgba="0.155 0.232 0.359 1" contype="0" conaffinity="0" />
+        <geom name="rl_roll_motor_link_detail" class="visual" size="0.0504 0.0253" pos="-0.023 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+        <body name="rl_roll_link">
+          <joint name="rl_hip_roll" pos="0 0 0" axis="1 0 0" limited="true" range="-0.8 0.8" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+          <geom name="rl_roll_link_link" size="0.023 0.00815" pos="-0.04915 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="7438.57" rgba="0.424 0.547 0.746 1" contype="4" conaffinity="9" />
+          <geom name="rl_roll_link_motor" size="0.063 0.023" pos="-0.1153 0 0" quat="0.707107 0.707107 0 0" type="cylinder" density="1917.8" rgba="0.155 0.232 0.359 1" contype="0" conaffinity="0" />
+          <geom name="rl_roll_link_detail" class="visual" size="0.0504 0.0253" pos="-0.1153 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+          <body name="rl_pitch_link" pos="-0.1153 0 0">
+            <joint name="rl_hip_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="-2.5 2.5" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+            <geom name="rl_pitch_link_link" size="0.023 0.0205" pos="0 0.0385 0" quat="0.707107 0.707107 0 0" type="cylinder" density="2854.92" rgba="0.424 0.547 0.746 1" contype="4" conaffinity="9" />
+            <geom name="rl_pitch_link_motor" size="0.063 0.023" pos="0 0.077 0" quat="0.707107 0.707107 0 0" type="cylinder" density="1917.8" rgba="0.155 0.232 0.359 1" contype="0" conaffinity="0" />
+            <geom name="rl_pitch_link_detail" class="visual" size="0.0504 0.0253" pos="0 0.077 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+            <body name="rl_upper_leg_link" pos="0 0.077 0">
+              <geom name="rl_upper_leg_link_link" size="0.023 0.078655" pos="0 0 -0.136655" type="cylinder" density="1860.21" rgba="0.424 0.547 0.746 1" contype="4" conaffinity="9" />
+              <geom name="rl_upper_leg_link_motor" size="0.03969 0.023" pos="0 0 -0.25" quat="0.707107 0.707107 0 0" type="cylinder" density="0" rgba="0.155 0.232 0.359 1" contype="0" conaffinity="0" />
+              <geom name="rl_upper_leg_link_detail" class="visual" size="0.031752 0.0253" pos="0 0 -0.25" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+              <body name="rl_lower_leg_link" pos="0 0 -0.25">
+                <joint name="rl_knee" pos="0 0 0" axis="0 1 0" limited="true" range="-2.8 0" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+                <geom name="rl_lower_leg_link_link" size="0.0184 0.115" pos="0 0 -0.115" type="cylinder" density="911.733" rgba="0.424 0.547 0.746 1" contype="4" conaffinity="9" />
+                <geom name="rl_lower_leg_link_sphere" size="0.0276" pos="0 0 -0.23" density="644.163" rgba="0.302 0.302 0.302 1" contype="2" conaffinity="9" condim="3" priority="1" />
+                <site name="rl_foot" pos="0 0 -0.23" group="5" />
+                <site name="cg_touch_site_rl" type="sphere" size="0.03374" pos="0 0 -0.23" group="5" rgba="1 0.5 0 0.3" />
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="rr_roll_motor_link" pos="-0.26 -0.08 0">
+        <geom name="rr_roll_motor_link_motor" size="0.063 0.023" pos="-0.023 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="1917.8" rgba="0.155 0.232 0.359 1" contype="0" conaffinity="0" />
+        <geom name="rr_roll_motor_link_detail" class="visual" size="0.0504 0.0253" pos="-0.023 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+        <body name="rr_roll_link">
+          <joint name="rr_hip_roll" pos="0 0 0" axis="1 0 0" limited="true" range="-0.8 0.8" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+          <geom name="rr_roll_link_link" size="0.023 0.00815" pos="-0.04915 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="7438.57" rgba="0.424 0.547 0.746 1" contype="4" conaffinity="9" />
+          <geom name="rr_roll_link_motor" size="0.063 0.023" pos="-0.1153 0 0" quat="0.707107 0.707107 0 0" type="cylinder" density="1917.8" rgba="0.155 0.232 0.359 1" contype="0" conaffinity="0" />
+          <geom name="rr_roll_link_detail" class="visual" size="0.0504 0.0253" pos="-0.1153 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+          <body name="rr_pitch_link" pos="-0.1153 0 0">
+            <joint name="rr_hip_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="-2.5 2.5" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+            <geom name="rr_pitch_link_link" size="0.023 0.0205" pos="0 -0.0385 0" quat="0.707107 0.707107 0 0" type="cylinder" density="2854.92" rgba="0.424 0.547 0.746 1" contype="4" conaffinity="9" />
+            <geom name="rr_pitch_link_motor" size="0.063 0.023" pos="0 -0.077 0" quat="0.707107 0.707107 0 0" type="cylinder" density="1917.8" rgba="0.155 0.232 0.359 1" contype="0" conaffinity="0" />
+            <geom name="rr_pitch_link_detail" class="visual" size="0.0504 0.0253" pos="0 -0.077 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+            <body name="rr_upper_leg_link" pos="0 -0.077 0">
+              <geom name="rr_upper_leg_link_link" size="0.023 0.078655" pos="0 0 -0.136655" type="cylinder" density="1860.21" rgba="0.424 0.547 0.746 1" contype="4" conaffinity="9" />
+              <geom name="rr_upper_leg_link_motor" size="0.03969 0.023" pos="0 0 -0.25" quat="0.707107 0.707107 0 0" type="cylinder" density="0" rgba="0.155 0.232 0.359 1" contype="0" conaffinity="0" />
+              <geom name="rr_upper_leg_link_detail" class="visual" size="0.031752 0.0253" pos="0 0 -0.25" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+              <body name="rr_lower_leg_link" pos="0 0 -0.25">
+                <joint name="rr_knee" pos="0 0 0" axis="0 1 0" limited="true" range="-2.8 0" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+                <geom name="rr_lower_leg_link_link" size="0.0184 0.115" pos="0 0 -0.115" type="cylinder" density="911.733" rgba="0.424 0.547 0.746 1" contype="4" conaffinity="9" />
+                <geom name="rr_lower_leg_link_sphere" size="0.0276" pos="0 0 -0.23" density="644.163" rgba="0.302 0.302 0.302 1" contype="2" conaffinity="9" condim="3" priority="1" />
+                <site name="rr_foot" pos="0 0 -0.23" group="5" />
+                <site name="cg_touch_site_rr" type="sphere" size="0.03374" pos="0 0 -0.23" group="5" rgba="1 0.5 0 0.3" />
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <contact>
+    <exclude name="torso_link__fl_roll_motor_link" body1="torso_link" body2="fl_roll_motor_link" />
+    <exclude name="torso_link__fl_roll_link" body1="torso_link" body2="fl_roll_link" />
+    <exclude name="torso_link__fr_roll_motor_link" body1="torso_link" body2="fr_roll_motor_link" />
+    <exclude name="torso_link__fr_roll_link" body1="torso_link" body2="fr_roll_link" />
+    <exclude name="torso_link__rl_roll_motor_link" body1="torso_link" body2="rl_roll_motor_link" />
+    <exclude name="torso_link__rl_roll_link" body1="torso_link" body2="rl_roll_link" />
+    <exclude name="torso_link__rr_roll_motor_link" body1="torso_link" body2="rr_roll_motor_link" />
+    <exclude name="torso_link__rr_roll_link" body1="torso_link" body2="rr_roll_link" />
+    <exclude name="fl_roll_motor_link__fl_roll_link" body1="fl_roll_motor_link" body2="fl_roll_link" />
+    <exclude name="fl_roll_motor_link__fl_pitch_link" body1="fl_roll_motor_link" body2="fl_pitch_link" />
+    <exclude name="fl_roll_link__fl_pitch_link" body1="fl_roll_link" body2="fl_pitch_link" />
+    <exclude name="fl_roll_link__fl_upper_leg_link" body1="fl_roll_link" body2="fl_upper_leg_link" />
+    <exclude name="fl_pitch_link__fl_upper_leg_link" body1="fl_pitch_link" body2="fl_upper_leg_link" />
+    <exclude name="fl_pitch_link__fl_lower_leg_link" body1="fl_pitch_link" body2="fl_lower_leg_link" />
+    <exclude name="fl_upper_leg_link__fl_lower_leg_link" body1="fl_upper_leg_link" body2="fl_lower_leg_link" />
+    <exclude name="fr_roll_motor_link__fr_roll_link" body1="fr_roll_motor_link" body2="fr_roll_link" />
+    <exclude name="fr_roll_motor_link__fr_pitch_link" body1="fr_roll_motor_link" body2="fr_pitch_link" />
+    <exclude name="fr_roll_link__fr_pitch_link" body1="fr_roll_link" body2="fr_pitch_link" />
+    <exclude name="fr_roll_link__fr_upper_leg_link" body1="fr_roll_link" body2="fr_upper_leg_link" />
+    <exclude name="fr_pitch_link__fr_upper_leg_link" body1="fr_pitch_link" body2="fr_upper_leg_link" />
+    <exclude name="fr_pitch_link__fr_lower_leg_link" body1="fr_pitch_link" body2="fr_lower_leg_link" />
+    <exclude name="fr_upper_leg_link__fr_lower_leg_link" body1="fr_upper_leg_link" body2="fr_lower_leg_link" />
+    <exclude name="rl_roll_motor_link__rl_roll_link" body1="rl_roll_motor_link" body2="rl_roll_link" />
+    <exclude name="rl_roll_motor_link__rl_pitch_link" body1="rl_roll_motor_link" body2="rl_pitch_link" />
+    <exclude name="rl_roll_link__rl_pitch_link" body1="rl_roll_link" body2="rl_pitch_link" />
+    <exclude name="rl_roll_link__rl_upper_leg_link" body1="rl_roll_link" body2="rl_upper_leg_link" />
+    <exclude name="rl_pitch_link__rl_upper_leg_link" body1="rl_pitch_link" body2="rl_upper_leg_link" />
+    <exclude name="rl_pitch_link__rl_lower_leg_link" body1="rl_pitch_link" body2="rl_lower_leg_link" />
+    <exclude name="rl_upper_leg_link__rl_lower_leg_link" body1="rl_upper_leg_link" body2="rl_lower_leg_link" />
+    <exclude name="rr_roll_motor_link__rr_roll_link" body1="rr_roll_motor_link" body2="rr_roll_link" />
+    <exclude name="rr_roll_motor_link__rr_pitch_link" body1="rr_roll_motor_link" body2="rr_pitch_link" />
+    <exclude name="rr_roll_link__rr_pitch_link" body1="rr_roll_link" body2="rr_pitch_link" />
+    <exclude name="rr_roll_link__rr_upper_leg_link" body1="rr_roll_link" body2="rr_upper_leg_link" />
+    <exclude name="rr_pitch_link__rr_upper_leg_link" body1="rr_pitch_link" body2="rr_upper_leg_link" />
+    <exclude name="rr_pitch_link__rr_lower_leg_link" body1="rr_pitch_link" body2="rr_lower_leg_link" />
+    <exclude name="rr_upper_leg_link__rr_lower_leg_link" body1="rr_upper_leg_link" body2="rr_lower_leg_link" />
+  </contact>
+  <actuator>
+    <position name="fl_hip_roll" joint="fl_hip_roll" kp="102.8571429" kv="5.142857143" ctrllimited="true" ctrlrange="-0.8 0.8" forcelimited="true" forcerange="-72 72" />
+    <position name="fl_hip_pitch" joint="fl_hip_pitch" kp="102.8571429" kv="5.142857143" ctrllimited="true" ctrlrange="-2.5 2.5" forcelimited="true" forcerange="-72 72" />
+    <position name="fl_knee" joint="fl_knee" kp="102.8571429" kv="5.142857143" ctrllimited="true" ctrlrange="-2.8 0" forcelimited="true" forcerange="-72 72" />
+    <position name="fr_hip_roll" joint="fr_hip_roll" kp="102.8571429" kv="5.142857143" ctrllimited="true" ctrlrange="-0.8 0.8" forcelimited="true" forcerange="-72 72" />
+    <position name="fr_hip_pitch" joint="fr_hip_pitch" kp="102.8571429" kv="5.142857143" ctrllimited="true" ctrlrange="-2.5 2.5" forcelimited="true" forcerange="-72 72" />
+    <position name="fr_knee" joint="fr_knee" kp="102.8571429" kv="5.142857143" ctrllimited="true" ctrlrange="-2.8 0" forcelimited="true" forcerange="-72 72" />
+    <position name="rl_hip_roll" joint="rl_hip_roll" kp="102.8571429" kv="5.142857143" ctrllimited="true" ctrlrange="-0.8 0.8" forcelimited="true" forcerange="-72 72" />
+    <position name="rl_hip_pitch" joint="rl_hip_pitch" kp="102.8571429" kv="5.142857143" ctrllimited="true" ctrlrange="-2.5 2.5" forcelimited="true" forcerange="-72 72" />
+    <position name="rl_knee" joint="rl_knee" kp="102.8571429" kv="5.142857143" ctrllimited="true" ctrlrange="-2.8 0" forcelimited="true" forcerange="-72 72" />
+    <position name="rr_hip_roll" joint="rr_hip_roll" kp="102.8571429" kv="5.142857143" ctrllimited="true" ctrlrange="-0.8 0.8" forcelimited="true" forcerange="-72 72" />
+    <position name="rr_hip_pitch" joint="rr_hip_pitch" kp="102.8571429" kv="5.142857143" ctrllimited="true" ctrlrange="-2.5 2.5" forcelimited="true" forcerange="-72 72" />
+    <position name="rr_knee" joint="rr_knee" kp="102.8571429" kv="5.142857143" ctrllimited="true" ctrlrange="-2.8 0" forcelimited="true" forcerange="-72 72" />
+  </actuator>
+  <sensor>
+    <gyro name="cg_imu_gyro" site="imu" />
+    <velocimeter name="cg_imu_vel" site="imu" />
+    <accelerometer name="cg_imu_acc" site="imu" />
+    <touch name="cg_touch_fl" site="cg_touch_site_fl" />
+    <framepos name="cg_foot_pos_fl" objtype="site" objname="fl_foot" />
+    <framelinvel name="cg_foot_vel_fl" objtype="site" objname="fl_foot" />
+    <touch name="cg_touch_fr" site="cg_touch_site_fr" />
+    <framepos name="cg_foot_pos_fr" objtype="site" objname="fr_foot" />
+    <framelinvel name="cg_foot_vel_fr" objtype="site" objname="fr_foot" />
+    <touch name="cg_touch_rl" site="cg_touch_site_rl" />
+    <framepos name="cg_foot_pos_rl" objtype="site" objname="rl_foot" />
+    <framelinvel name="cg_foot_vel_rl" objtype="site" objname="rl_foot" />
+    <touch name="cg_touch_rr" site="cg_touch_site_rr" />
+    <framepos name="cg_foot_pos_rr" objtype="site" objname="rr_foot" />
+    <framelinvel name="cg_foot_vel_rr" objtype="site" objname="rr_foot" />
+    <contact name="cg_torso_contact" body1="torso_link" data="found" reduce="netforce" />
+    <contact name="cg_thigh_contact_fl" body1="fl_upper_leg_link" data="found" reduce="netforce" />
+    <contact name="cg_thigh_contact_fr" body1="fr_upper_leg_link" data="found" reduce="netforce" />
+    <contact name="cg_thigh_contact_rl" body1="rl_upper_leg_link" data="found" reduce="netforce" />
+    <contact name="cg_thigh_contact_rr" body1="rr_upper_leg_link" data="found" reduce="netforce" />
+    <actuatorfrc name="cg_frc_fl_hip_roll" actuator="fl_hip_roll" />
+    <actuatorfrc name="cg_frc_fl_hip_pitch" actuator="fl_hip_pitch" />
+    <actuatorfrc name="cg_frc_fl_knee" actuator="fl_knee" />
+    <actuatorfrc name="cg_frc_fr_hip_roll" actuator="fr_hip_roll" />
+    <actuatorfrc name="cg_frc_fr_hip_pitch" actuator="fr_hip_pitch" />
+    <actuatorfrc name="cg_frc_fr_knee" actuator="fr_knee" />
+    <actuatorfrc name="cg_frc_rl_hip_roll" actuator="rl_hip_roll" />
+    <actuatorfrc name="cg_frc_rl_hip_pitch" actuator="rl_hip_pitch" />
+    <actuatorfrc name="cg_frc_rl_knee" actuator="rl_knee" />
+    <actuatorfrc name="cg_frc_rr_hip_roll" actuator="rr_hip_roll" />
+    <actuatorfrc name="cg_frc_rr_hip_pitch" actuator="rr_hip_pitch" />
+    <actuatorfrc name="cg_frc_rr_knee" actuator="rr_knee" />
+  </sensor>
+</mujoco>

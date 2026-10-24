@@ -1,0 +1,228 @@
+<mujoco model="flower">
+  <compiler angle="radian" />
+  <option tolerance="1e-10" iterations="50" />
+  <default>
+    <joint damping="0.01" />
+    <geom friction="0.8" />
+    <default class="visual">
+      <geom contype="0" conaffinity="0" group="2" friction="0.7 0.1 0.1" />
+    </default>
+  </default>
+  <custom>
+    <numeric name="leg0_hip_yaw_velocity_limit" size="1" data="20" />
+    <numeric name="leg0_hip_pitch_velocity_limit" size="1" data="20" />
+    <numeric name="leg0_knee_velocity_limit" size="1" data="20" />
+    <numeric name="leg1_hip_yaw_velocity_limit" size="1" data="20" />
+    <numeric name="leg1_hip_pitch_velocity_limit" size="1" data="20" />
+    <numeric name="leg1_knee_velocity_limit" size="1" data="20" />
+    <numeric name="leg2_hip_yaw_velocity_limit" size="1" data="20" />
+    <numeric name="leg2_hip_pitch_velocity_limit" size="1" data="20" />
+    <numeric name="leg2_knee_velocity_limit" size="1" data="20" />
+    <numeric name="leg3_hip_yaw_velocity_limit" size="1" data="20" />
+    <numeric name="leg3_hip_pitch_velocity_limit" size="1" data="20" />
+    <numeric name="leg3_knee_velocity_limit" size="1" data="20" />
+    <numeric name="leg4_hip_yaw_velocity_limit" size="1" data="20" />
+    <numeric name="leg4_hip_pitch_velocity_limit" size="1" data="20" />
+    <numeric name="leg4_knee_velocity_limit" size="1" data="20" />
+    <numeric name="leg5_hip_yaw_velocity_limit" size="1" data="20" />
+    <numeric name="leg5_hip_pitch_velocity_limit" size="1" data="20" />
+    <numeric name="leg5_knee_velocity_limit" size="1" data="20" />
+  </custom>
+  <asset>
+    <mesh name="torso_mesh" file="torso_mesh.stl" />
+  </asset>
+  <worldbody>
+    <body name="torso_link" pos="0 0 0.475">
+      <joint name="torso_link_freejoint" type="free" damping="0" />
+      <geom name="torso_link_mesh" type="mesh" density="500" rgba="0.84 0.4 0.48 1" mesh="torso_mesh" />
+      <site name="imu" pos="0 0 0" group="5" />
+      <body name="leg0_mount" pos="0.156 0 0">
+        <geom name="leg0_mount_link" size="0.015 0.00717843" pos="0.00717843 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+        <geom name="leg0_mount_motor" size="0.0346431 0.0207859" pos="0.044 0 0" type="cylinder" density="2179.63" rgba="0.22 0.29 0.29 1" />
+        <geom name="leg0_mount_detail" class="visual" size="0.0277145 0.0228645" pos="0.044 0 0" type="cylinder" contype="1" conaffinity="1" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+        <body name="leg0_yaw_link" pos="0.044 0 0">
+          <joint name="leg0_hip_yaw" pos="0 0 0" axis="0 0 1" limited="true" range="-0.75 0.75" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+          <geom name="leg0_yaw_link_link" size="0.013 0.0153569" pos="0.045 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+          <geom name="leg0_yaw_link_motor" size="0.0346431 0.0207859" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" density="2179.63" rgba="0.22 0.29 0.29 1" />
+          <geom name="leg0_yaw_link_detail" class="visual" size="0.0277145 0.0228645" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="1" conaffinity="1" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+          <body name="leg0_upper_leg_link" pos="0.09 0 0">
+            <joint name="leg0_hip_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="-0.65 0.8" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+            <geom name="leg0_upper_leg_link_link" size="0.014 0.0603569" pos="0.09 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+            <geom name="leg0_upper_leg_link_motor" size="0.0346431 0.0207859" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" density="2179.63" rgba="0.22 0.29 0.29 1" />
+            <geom name="leg0_upper_leg_link_detail" class="visual" size="0.0277145 0.0228645" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="1" conaffinity="1" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+            <body name="leg0_lower_leg_link" pos="0.18 0 0">
+              <joint name="leg0_knee" pos="0 0 0" axis="0 1 0" limited="true" range="0.35 2.1" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+              <geom name="leg0_lower_leg_link_link" size="0.011 0.11" pos="0.11 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+              <geom name="leg0_lower_leg_link_sphere" size="0.025" pos="0.22 0 0" density="500" rgba="0.25 0.31 0.3 1" />
+              <site name="leg0_foot" pos="0.22 0 0" group="5" />
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="leg1_mount" pos="0.078 0.1351 0" quat="0.866025 0 0 0.5">
+        <geom name="leg1_mount_link" size="0.015 0.00717843" pos="0.00717843 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+        <geom name="leg1_mount_motor" size="0.0346431 0.0207859" pos="0.044 0 0" type="cylinder" density="2179.63" rgba="0.22 0.29 0.29 1" />
+        <geom name="leg1_mount_detail" class="visual" size="0.0277145 0.0228645" pos="0.044 0 0" type="cylinder" contype="1" conaffinity="1" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+        <body name="leg1_yaw_link" pos="0.044 0 0">
+          <joint name="leg1_hip_yaw" pos="0 0 0" axis="0 0 1" limited="true" range="-0.75 0.75" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+          <geom name="leg1_yaw_link_link" size="0.013 0.0153569" pos="0.045 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+          <geom name="leg1_yaw_link_motor" size="0.0346431 0.0207859" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" density="2179.63" rgba="0.22 0.29 0.29 1" />
+          <geom name="leg1_yaw_link_detail" class="visual" size="0.0277145 0.0228645" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="1" conaffinity="1" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+          <body name="leg1_upper_leg_link" pos="0.09 0 0">
+            <joint name="leg1_hip_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="-0.65 0.8" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+            <geom name="leg1_upper_leg_link_link" size="0.014 0.0603569" pos="0.09 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+            <geom name="leg1_upper_leg_link_motor" size="0.0346431 0.0207859" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" density="2179.63" rgba="0.22 0.29 0.29 1" />
+            <geom name="leg1_upper_leg_link_detail" class="visual" size="0.0277145 0.0228645" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="1" conaffinity="1" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+            <body name="leg1_lower_leg_link" pos="0.18 0 0">
+              <joint name="leg1_knee" pos="0 0 0" axis="0 1 0" limited="true" range="0.35 2.1" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+              <geom name="leg1_lower_leg_link_link" size="0.011 0.11" pos="0.11 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+              <geom name="leg1_lower_leg_link_sphere" size="0.025" pos="0.22 0 0" density="500" rgba="0.25 0.31 0.3 1" />
+              <site name="leg1_foot" pos="0.22 0 0" group="5" />
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="leg2_mount" pos="-0.078 0.1351 0" quat="0.5 0 0 0.866025">
+        <geom name="leg2_mount_link" size="0.015 0.00717843" pos="0.00717843 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+        <geom name="leg2_mount_motor" size="0.0346431 0.0207859" pos="0.044 0 0" type="cylinder" density="2179.63" rgba="0.22 0.29 0.29 1" />
+        <geom name="leg2_mount_detail" class="visual" size="0.0277145 0.0228645" pos="0.044 0 0" type="cylinder" contype="1" conaffinity="1" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+        <body name="leg2_yaw_link" pos="0.044 0 0">
+          <joint name="leg2_hip_yaw" pos="0 0 0" axis="0 0 1" limited="true" range="-0.75 0.75" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+          <geom name="leg2_yaw_link_link" size="0.013 0.0153569" pos="0.045 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+          <geom name="leg2_yaw_link_motor" size="0.0346431 0.0207859" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" density="2179.63" rgba="0.22 0.29 0.29 1" />
+          <geom name="leg2_yaw_link_detail" class="visual" size="0.0277145 0.0228645" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="1" conaffinity="1" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+          <body name="leg2_upper_leg_link" pos="0.09 0 0">
+            <joint name="leg2_hip_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="-0.65 0.8" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+            <geom name="leg2_upper_leg_link_link" size="0.014 0.0603569" pos="0.09 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+            <geom name="leg2_upper_leg_link_motor" size="0.0346431 0.0207859" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" density="2179.63" rgba="0.22 0.29 0.29 1" />
+            <geom name="leg2_upper_leg_link_detail" class="visual" size="0.0277145 0.0228645" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="1" conaffinity="1" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+            <body name="leg2_lower_leg_link" pos="0.18 0 0">
+              <joint name="leg2_knee" pos="0 0 0" axis="0 1 0" limited="true" range="0.35 2.1" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+              <geom name="leg2_lower_leg_link_link" size="0.011 0.11" pos="0.11 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+              <geom name="leg2_lower_leg_link_sphere" size="0.025" pos="0.22 0 0" density="500" rgba="0.25 0.31 0.3 1" />
+              <site name="leg2_foot" pos="0.22 0 0" group="5" />
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="leg3_mount" pos="-0.156 0 0" quat="0 0 0 1">
+        <geom name="leg3_mount_link" size="0.015 0.00717843" pos="0.00717843 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+        <geom name="leg3_mount_motor" size="0.0346431 0.0207859" pos="0.044 0 0" type="cylinder" density="2179.63" rgba="0.22 0.29 0.29 1" />
+        <geom name="leg3_mount_detail" class="visual" size="0.0277145 0.0228645" pos="0.044 0 0" type="cylinder" contype="1" conaffinity="1" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+        <body name="leg3_yaw_link" pos="0.044 0 0">
+          <joint name="leg3_hip_yaw" pos="0 0 0" axis="0 0 1" limited="true" range="-0.75 0.75" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+          <geom name="leg3_yaw_link_link" size="0.013 0.0153569" pos="0.045 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+          <geom name="leg3_yaw_link_motor" size="0.0346431 0.0207859" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" density="2179.63" rgba="0.22 0.29 0.29 1" />
+          <geom name="leg3_yaw_link_detail" class="visual" size="0.0277145 0.0228645" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="1" conaffinity="1" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+          <body name="leg3_upper_leg_link" pos="0.09 0 0">
+            <joint name="leg3_hip_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="-0.65 0.8" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+            <geom name="leg3_upper_leg_link_link" size="0.014 0.0603569" pos="0.09 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+            <geom name="leg3_upper_leg_link_motor" size="0.0346431 0.0207859" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" density="2179.63" rgba="0.22 0.29 0.29 1" />
+            <geom name="leg3_upper_leg_link_detail" class="visual" size="0.0277145 0.0228645" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="1" conaffinity="1" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+            <body name="leg3_lower_leg_link" pos="0.18 0 0">
+              <joint name="leg3_knee" pos="0 0 0" axis="0 1 0" limited="true" range="0.35 2.1" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+              <geom name="leg3_lower_leg_link_link" size="0.011 0.11" pos="0.11 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+              <geom name="leg3_lower_leg_link_sphere" size="0.025" pos="0.22 0 0" density="500" rgba="0.25 0.31 0.3 1" />
+              <site name="leg3_foot" pos="0.22 0 0" group="5" />
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="leg4_mount" pos="-0.078 -0.1351 0" quat="-0.5 0 0 0.866025">
+        <geom name="leg4_mount_link" size="0.015 0.00717843" pos="0.00717843 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+        <geom name="leg4_mount_motor" size="0.0346431 0.0207859" pos="0.044 0 0" type="cylinder" density="2179.63" rgba="0.22 0.29 0.29 1" />
+        <geom name="leg4_mount_detail" class="visual" size="0.0277145 0.0228645" pos="0.044 0 0" type="cylinder" contype="1" conaffinity="1" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+        <body name="leg4_yaw_link" pos="0.044 0 0">
+          <joint name="leg4_hip_yaw" pos="0 0 0" axis="0 0 1" limited="true" range="-0.75 0.75" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+          <geom name="leg4_yaw_link_link" size="0.013 0.0153569" pos="0.045 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+          <geom name="leg4_yaw_link_motor" size="0.0346431 0.0207859" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" density="2179.63" rgba="0.22 0.29 0.29 1" />
+          <geom name="leg4_yaw_link_detail" class="visual" size="0.0277145 0.0228645" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="1" conaffinity="1" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+          <body name="leg4_upper_leg_link" pos="0.09 0 0">
+            <joint name="leg4_hip_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="-0.65 0.8" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+            <geom name="leg4_upper_leg_link_link" size="0.014 0.0603569" pos="0.09 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+            <geom name="leg4_upper_leg_link_motor" size="0.0346431 0.0207859" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" density="2179.63" rgba="0.22 0.29 0.29 1" />
+            <geom name="leg4_upper_leg_link_detail" class="visual" size="0.0277145 0.0228645" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="1" conaffinity="1" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+            <body name="leg4_lower_leg_link" pos="0.18 0 0">
+              <joint name="leg4_knee" pos="0 0 0" axis="0 1 0" limited="true" range="0.35 2.1" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+              <geom name="leg4_lower_leg_link_link" size="0.011 0.11" pos="0.11 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+              <geom name="leg4_lower_leg_link_sphere" size="0.025" pos="0.22 0 0" density="500" rgba="0.25 0.31 0.3 1" />
+              <site name="leg4_foot" pos="0.22 0 0" group="5" />
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="leg5_mount" pos="0.078 -0.1351 0" quat="-0.866025 0 0 0.5">
+        <geom name="leg5_mount_link" size="0.015 0.00717843" pos="0.00717843 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+        <geom name="leg5_mount_motor" size="0.0346431 0.0207859" pos="0.044 0 0" type="cylinder" density="2179.63" rgba="0.22 0.29 0.29 1" />
+        <geom name="leg5_mount_detail" class="visual" size="0.0277145 0.0228645" pos="0.044 0 0" type="cylinder" contype="1" conaffinity="1" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+        <body name="leg5_yaw_link" pos="0.044 0 0">
+          <joint name="leg5_hip_yaw" pos="0 0 0" axis="0 0 1" limited="true" range="-0.75 0.75" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+          <geom name="leg5_yaw_link_link" size="0.013 0.0153569" pos="0.045 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+          <geom name="leg5_yaw_link_motor" size="0.0346431 0.0207859" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" density="2179.63" rgba="0.22 0.29 0.29 1" />
+          <geom name="leg5_yaw_link_detail" class="visual" size="0.0277145 0.0228645" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="1" conaffinity="1" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+          <body name="leg5_upper_leg_link" pos="0.09 0 0">
+            <joint name="leg5_hip_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="-0.65 0.8" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+            <geom name="leg5_upper_leg_link_link" size="0.014 0.0603569" pos="0.09 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+            <geom name="leg5_upper_leg_link_motor" size="0.0346431 0.0207859" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" density="2179.63" rgba="0.22 0.29 0.29 1" />
+            <geom name="leg5_upper_leg_link_detail" class="visual" size="0.0277145 0.0228645" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="1" conaffinity="1" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+            <body name="leg5_lower_leg_link" pos="0.18 0 0">
+              <joint name="leg5_knee" pos="0 0 0" axis="0 1 0" limited="true" range="0.35 2.1" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+              <geom name="leg5_lower_leg_link_link" size="0.011 0.11" pos="0.11 0 0" quat="0.707107 0 0.707107 0" type="cylinder" density="750" rgba="0.25 0.56 0.44 1" />
+              <geom name="leg5_lower_leg_link_sphere" size="0.025" pos="0.22 0 0" density="500" rgba="0.25 0.31 0.3 1" />
+              <site name="leg5_foot" pos="0.22 0 0" group="5" />
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <contact>
+    <exclude name="torso_link__leg0_mount" body1="torso_link" body2="leg0_mount" />
+    <exclude name="torso_link__leg0_yaw_link" body1="torso_link" body2="leg0_yaw_link" />
+    <exclude name="torso_link__leg1_mount" body1="torso_link" body2="leg1_mount" />
+    <exclude name="torso_link__leg1_yaw_link" body1="torso_link" body2="leg1_yaw_link" />
+    <exclude name="torso_link__leg2_mount" body1="torso_link" body2="leg2_mount" />
+    <exclude name="torso_link__leg2_yaw_link" body1="torso_link" body2="leg2_yaw_link" />
+    <exclude name="torso_link__leg3_mount" body1="torso_link" body2="leg3_mount" />
+    <exclude name="torso_link__leg3_yaw_link" body1="torso_link" body2="leg3_yaw_link" />
+    <exclude name="torso_link__leg4_mount" body1="torso_link" body2="leg4_mount" />
+    <exclude name="torso_link__leg4_yaw_link" body1="torso_link" body2="leg4_yaw_link" />
+    <exclude name="torso_link__leg5_mount" body1="torso_link" body2="leg5_mount" />
+    <exclude name="torso_link__leg5_yaw_link" body1="torso_link" body2="leg5_yaw_link" />
+    <exclude name="leg0_mount__leg0_yaw_link" body1="leg0_mount" body2="leg0_yaw_link" />
+    <exclude name="leg0_mount__leg0_upper_leg_link" body1="leg0_mount" body2="leg0_upper_leg_link" />
+    <exclude name="leg0_yaw_link__leg0_upper_leg_link" body1="leg0_yaw_link" body2="leg0_upper_leg_link" />
+    <exclude name="leg0_yaw_link__leg0_lower_leg_link" body1="leg0_yaw_link" body2="leg0_lower_leg_link" />
+    <exclude name="leg0_upper_leg_link__leg0_lower_leg_link" body1="leg0_upper_leg_link" body2="leg0_lower_leg_link" />
+    <exclude name="leg1_mount__leg1_yaw_link" body1="leg1_mount" body2="leg1_yaw_link" />
+    <exclude name="leg1_mount__leg1_upper_leg_link" body1="leg1_mount" body2="leg1_upper_leg_link" />
+    <exclude name="leg1_yaw_link__leg1_upper_leg_link" body1="leg1_yaw_link" body2="leg1_upper_leg_link" />
+    <exclude name="leg1_yaw_link__leg1_lower_leg_link" body1="leg1_yaw_link" body2="leg1_lower_leg_link" />
+    <exclude name="leg1_upper_leg_link__leg1_lower_leg_link" body1="leg1_upper_leg_link" body2="leg1_lower_leg_link" />
+    <exclude name="leg2_mount__leg2_yaw_link" body1="leg2_mount" body2="leg2_yaw_link" />
+    <exclude name="leg2_mount__leg2_upper_leg_link" body1="leg2_mount" body2="leg2_upper_leg_link" />
+    <exclude name="leg2_yaw_link__leg2_upper_leg_link" body1="leg2_yaw_link" body2="leg2_upper_leg_link" />
+    <exclude name="leg2_yaw_link__leg2_lower_leg_link" body1="leg2_yaw_link" body2="leg2_lower_leg_link" />
+    <exclude name="leg2_upper_leg_link__leg2_lower_leg_link" body1="leg2_upper_leg_link" body2="leg2_lower_leg_link" />
+    <exclude name="leg3_mount__leg3_yaw_link" body1="leg3_mount" body2="leg3_yaw_link" />
+    <exclude name="leg3_mount__leg3_upper_leg_link" body1="leg3_mount" body2="leg3_upper_leg_link" />
+    <exclude name="leg3_yaw_link__leg3_upper_leg_link" body1="leg3_yaw_link" body2="leg3_upper_leg_link" />
+    <exclude name="leg3_yaw_link__leg3_lower_leg_link" body1="leg3_yaw_link" body2="leg3_lower_leg_link" />
+    <exclude name="leg3_upper_leg_link__leg3_lower_leg_link" body1="leg3_upper_leg_link" body2="leg3_lower_leg_link" />
+    <exclude name="leg4_mount__leg4_yaw_link" body1="leg4_mount" body2="leg4_yaw_link" />
+    <exclude name="leg4_mount__leg4_upper_leg_link" body1="leg4_mount" body2="leg4_upper_leg_link" />
+    <exclude name="leg4_yaw_link__leg4_upper_leg_link" body1="leg4_yaw_link" body2="leg4_upper_leg_link" />
+    <exclude name="leg4_yaw_link__leg4_lower_leg_link" body1="leg4_yaw_link" body2="leg4_lower_leg_link" />
+    <exclude name="leg4_upper_leg_link__leg4_lower_leg_link" body1="leg4_upper_leg_link" body2="leg4_lower_leg_link" />
+    <exclude name="leg5_mount__leg5_yaw_link" body1="leg5_mount" body2="leg5_yaw_link" />
+    <exclude name="leg5_mount__leg5_upper_leg_link" body1="leg5_mount" body2="leg5_upper_leg_link" />
+    <exclude name="leg5_yaw_link__leg5_upper_leg_link" body1="leg5_yaw_link" body2="leg5_upper_leg_link" />
+    <exclude name="leg5_yaw_link__leg5_lower_leg_link" body1="leg5_yaw_link" body2="leg5_lower_leg_link" />
+    <exclude name="leg5_upper_leg_link__leg5_lower_leg_link" body1="leg5_upper_leg_link" body2="leg5_lower_leg_link" />
+  </contact>
+  <sensor>
+    <gyro site="imu" name="imu_ang_vel" />
+    <velocimeter site="imu" name="imu_lin_vel" />
+    <accelerometer site="imu" name="imu_lin_acc" />
+  </sensor>
+</mujoco>
