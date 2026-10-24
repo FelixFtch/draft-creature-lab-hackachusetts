@@ -1,7 +1,931 @@
 {
   "schema": "terrain-trials/1",
-  "createdAt": null,
-  "source": "qa/terrain-trials.mjs (not yet run)",
-  "pilots": [],
-  "matrix": {}
+  "createdAt": "2026-10-24T22:07:50.082Z",
+  "source": "qa/terrain-trials.json",
+  "protocol": {
+    "commandFraction": 0.7,
+    "settleSeconds": 0.6,
+    "headingGain": 2.2,
+    "lateralGain": 1.1,
+    "maxHeadingCorrection": 0.45,
+    "jumpLeadM": 0.1,
+    "jumpLeadS": 0.15,
+    "stuckSeconds": 8,
+    "stuckProgressM": 0.05,
+    "description": "Forward command fixed at commandFraction x the pilot max forward speed, ramped like the game; yaw command = heading hold toward the lane axis; jump triggered at gap/step edges only when the pilot lists a validated jump skill. Full runs start behind the start line; grade trials start on the surface just before the grade."
+  },
+  "lab": {
+    "start": 0,
+    "finish": 6,
+    "sprintMark": 5,
+    "laneWidth": 1.4,
+    "pitDepth": 0.6,
+    "lanes": [
+      {
+        "id": "flat",
+        "title": "Flat sprint",
+        "grades": [
+          {
+            "id": "sprint-5m",
+            "label": "5 m sprint",
+            "kind": "sprint",
+            "value": 5,
+            "unit": "m",
+            "at": 0,
+            "clear": 5
+          }
+        ]
+      },
+      {
+        "id": "rubble",
+        "title": "Rubble",
+        "grades": [
+          {
+            "id": "rubble-2-6cm",
+            "label": "2–6 cm rubble",
+            "kind": "rubble",
+            "value": 0.06,
+            "unit": "m",
+            "at": 0.8,
+            "clear": 5.5
+          }
+        ]
+      },
+      {
+        "id": "step",
+        "title": "Step-up",
+        "grades": [
+          {
+            "id": "step-6cm",
+            "label": "6 cm step",
+            "kind": "step",
+            "value": 0.06,
+            "unit": "m",
+            "at": 1,
+            "clear": 1.75
+          },
+          {
+            "id": "step-12cm",
+            "label": "12 cm step",
+            "kind": "step",
+            "value": 0.12,
+            "unit": "m",
+            "at": 2.6,
+            "clear": 3.35
+          },
+          {
+            "id": "step-18cm",
+            "label": "18 cm step",
+            "kind": "step",
+            "value": 0.18,
+            "unit": "m",
+            "at": 4.2,
+            "clear": 4.95
+          }
+        ]
+      },
+      {
+        "id": "gap",
+        "title": "Gap",
+        "grades": [
+          {
+            "id": "gap-20cm",
+            "label": "0.20 m gap",
+            "kind": "gap",
+            "value": 0.2,
+            "unit": "m",
+            "at": 1,
+            "clear": 1.8
+          },
+          {
+            "id": "gap-35cm",
+            "label": "0.35 m gap",
+            "kind": "gap",
+            "value": 0.35,
+            "unit": "m",
+            "at": 2.7,
+            "clear": 3.65
+          },
+          {
+            "id": "gap-50cm",
+            "label": "0.50 m gap",
+            "kind": "gap",
+            "value": 0.5,
+            "unit": "m",
+            "at": 4.5,
+            "clear": 5.6
+          }
+        ]
+      },
+      {
+        "id": "slope",
+        "title": "Slope",
+        "grades": [
+          {
+            "id": "slope-12deg",
+            "label": "12° slope",
+            "kind": "slope",
+            "value": 12,
+            "unit": "deg",
+            "at": 0.9,
+            "clear": 2.8
+          },
+          {
+            "id": "slope-20deg",
+            "label": "20° slope",
+            "kind": "slope",
+            "value": 20,
+            "unit": "deg",
+            "at": 3.5,
+            "clear": 5
+          }
+        ]
+      }
+    ]
+  },
+  "pilots": [
+    {
+      "id": "legacy-cheetah",
+      "kind": "legacy-cheetah",
+      "label": "Draft Cheetah",
+      "skills": [
+        "walk"
+      ],
+      "structure": {
+        "lengthM": 1.01,
+        "widthM": 0.369,
+        "heightM": 0.549,
+        "rootHeightM": 0.459,
+        "massKg": 32.638,
+        "frontReachM": 0.461,
+        "rearReachM": 0.549,
+        "source": "measured from the compiled MuJoCo model at the spawn pose"
+      },
+      "runs": {
+        "flat": {
+          "outcome": "pass",
+          "timeS": 16.72,
+          "sprintS": 12.18,
+          "failure": null,
+          "observation": "passed in 16.72 s"
+        },
+        "rubble": {
+          "outcome": "fail",
+          "timeS": null,
+          "sprintS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 3.787,
+            "grade": "rubble-2-6cm"
+          },
+          "observation": "stalled with its front -3.488 m from the 2–6 cm rubble edge (u=3.827 m)"
+        },
+        "step": {
+          "outcome": "fail",
+          "timeS": null,
+          "sprintS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 2.263,
+            "grade": "step-12cm"
+          },
+          "observation": "stalled with its front -0.239 m from the 12 cm step edge (u=2.378 m)"
+        },
+        "gap": {
+          "outcome": "fail",
+          "timeS": null,
+          "sprintS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 0.359,
+            "grade": "gap-20cm"
+          },
+          "observation": "stalled with its front 0.166 m from the 0.20 m gap edge (u=0.373 m)"
+        },
+        "slope": {
+          "outcome": "fall",
+          "timeS": null,
+          "sprintS": null,
+          "failure": {
+            "reason": "splash",
+            "u": 1.393,
+            "grade": "slope-12deg"
+          },
+          "observation": "stepped off the pier near the 12° slope"
+        }
+      },
+      "grades": {
+        "sprint-5m": {
+          "lane": "flat",
+          "outcome": "pass",
+          "timeS": 16.84,
+          "failure": null,
+          "observation": "passed in 16.84 s",
+          "jumps": 0
+        },
+        "rubble-2-6cm": {
+          "lane": "rubble",
+          "outcome": "fall",
+          "timeS": null,
+          "failure": {
+            "reason": "tumble",
+            "u": 2.759,
+            "grade": "rubble-2-6cm"
+          },
+          "observation": "tipped over at the 2–6 cm rubble (u=2.759 m)",
+          "jumps": 0
+        },
+        "step-6cm": {
+          "lane": "step",
+          "outcome": "pass",
+          "timeS": 5.54,
+          "failure": null,
+          "observation": "passed in 5.54 s",
+          "jumps": 0
+        },
+        "step-12cm": {
+          "lane": "step",
+          "outcome": "pass",
+          "timeS": 7.88,
+          "failure": null,
+          "observation": "passed in 7.88 s",
+          "jumps": 0
+        },
+        "step-18cm": {
+          "lane": "step",
+          "outcome": "fall",
+          "timeS": null,
+          "failure": {
+            "reason": "tumble",
+            "u": 3.413,
+            "grade": "step-18cm"
+          },
+          "observation": "tipped over at the 18 cm step (u=3.413 m)",
+          "jumps": 0
+        },
+        "gap-20cm": {
+          "lane": "gap",
+          "outcome": "fail",
+          "timeS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 0.319,
+            "grade": "gap-20cm"
+          },
+          "observation": "stalled with its front 0.17 m from the 0.20 m gap edge (u=0.369 m)",
+          "jumps": 0
+        },
+        "gap-35cm": {
+          "lane": "gap",
+          "outcome": "fail",
+          "timeS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 1.976,
+            "grade": "gap-35cm"
+          },
+          "observation": "stalled with its front 0.214 m from the 0.35 m gap edge (u=2.025 m)",
+          "jumps": 0
+        },
+        "gap-50cm": {
+          "lane": "gap",
+          "outcome": "fail",
+          "timeS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 3.725,
+            "grade": "gap-50cm"
+          },
+          "observation": "stalled with its front 0.22 m from the 0.50 m gap edge (u=3.819 m)",
+          "jumps": 0
+        },
+        "slope-12deg": {
+          "lane": "slope",
+          "outcome": "pass",
+          "timeS": 8.18,
+          "failure": null,
+          "observation": "passed in 8.18 s",
+          "jumps": 0
+        },
+        "slope-20deg": {
+          "lane": "slope",
+          "outcome": "pass",
+          "timeS": 6.18,
+          "failure": null,
+          "observation": "passed in 6.18 s",
+          "jumps": 0
+        }
+      }
+    },
+    {
+      "id": "legacy-flower",
+      "kind": "legacy-flower",
+      "label": "Flower crawler",
+      "skills": [
+        "walk"
+      ],
+      "structure": {
+        "lengthM": 1.069,
+        "widthM": 0.95,
+        "heightM": 0.328,
+        "rootHeightM": 0.273,
+        "massKg": 10.109,
+        "frontReachM": 0.534,
+        "rearReachM": 0.534,
+        "source": "measured from the compiled MuJoCo model at the spawn pose"
+      },
+      "runs": {
+        "flat": {
+          "outcome": "fall",
+          "timeS": null,
+          "sprintS": null,
+          "failure": {
+            "reason": "splash",
+            "u": 4.054,
+            "grade": "sprint-5m"
+          },
+          "observation": "stepped off the pier near the 5 m sprint"
+        },
+        "rubble": {
+          "outcome": "pass",
+          "timeS": 24.26,
+          "sprintS": null,
+          "failure": null,
+          "observation": "passed in 24.26 s"
+        },
+        "step": {
+          "outcome": "fail",
+          "timeS": null,
+          "sprintS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 0.626,
+            "grade": "step-6cm"
+          },
+          "observation": "stalled with its front -0.121 m from the 6 cm step edge (u=0.587 m)"
+        },
+        "gap": {
+          "outcome": "fail",
+          "timeS": null,
+          "sprintS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 1.093,
+            "grade": "gap-20cm"
+          },
+          "observation": "stalled with its front -0.624 m from the 0.20 m gap edge (u=1.09 m)"
+        },
+        "slope": {
+          "outcome": "fail",
+          "timeS": null,
+          "sprintS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 0.746,
+            "grade": "slope-12deg"
+          },
+          "observation": "stalled with its front -0.404 m from the 12° slope edge (u=0.77 m)"
+        }
+      },
+      "grades": {
+        "sprint-5m": {
+          "lane": "flat",
+          "outcome": "pass",
+          "timeS": 22.5,
+          "failure": null,
+          "observation": "passed in 22.5 s",
+          "jumps": 0
+        },
+        "rubble-2-6cm": {
+          "lane": "rubble",
+          "outcome": "pass",
+          "timeS": 24.12,
+          "failure": null,
+          "observation": "passed in 24.12 s",
+          "jumps": 0
+        },
+        "step-6cm": {
+          "lane": "step",
+          "outcome": "fail",
+          "timeS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 0.614,
+            "grade": "step-6cm"
+          },
+          "observation": "stalled with its front -0.139 m from the 6 cm step edge (u=0.605 m)",
+          "jumps": 0
+        },
+        "step-12cm": {
+          "lane": "step",
+          "outcome": "fail",
+          "timeS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 2.26,
+            "grade": "step-12cm"
+          },
+          "observation": "stalled with its front -0.16 m from the 12 cm step edge (u=2.226 m)",
+          "jumps": 0
+        },
+        "step-18cm": {
+          "lane": "step",
+          "outcome": "fail",
+          "timeS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 3.839,
+            "grade": "step-18cm"
+          },
+          "observation": "stalled with its front -0.159 m from the 18 cm step edge (u=3.825 m)",
+          "jumps": 0
+        },
+        "gap-20cm": {
+          "lane": "gap",
+          "outcome": "fail",
+          "timeS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 1.064,
+            "grade": "gap-20cm"
+          },
+          "observation": "stalled with its front -0.555 m from the 0.20 m gap edge (u=1.021 m)",
+          "jumps": 0
+        },
+        "gap-35cm": {
+          "lane": "gap",
+          "outcome": "fall",
+          "timeS": null,
+          "failure": {
+            "reason": "tumble",
+            "u": 2.519,
+            "grade": "gap-35cm"
+          },
+          "observation": "tipped over at the 0.35 m gap (u=2.519 m)",
+          "jumps": 0
+        },
+        "gap-50cm": {
+          "lane": "gap",
+          "outcome": "fall",
+          "timeS": null,
+          "failure": {
+            "reason": "tumble",
+            "u": 4.299,
+            "grade": "gap-50cm"
+          },
+          "observation": "tipped over at the 0.50 m gap (u=4.299 m)",
+          "jumps": 0
+        },
+        "slope-12deg": {
+          "lane": "slope",
+          "outcome": "fail",
+          "timeS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 0.785,
+            "grade": "slope-12deg"
+          },
+          "observation": "stalled with its front -0.445 m from the 12° slope edge (u=0.811 m)",
+          "jumps": 0
+        },
+        "slope-20deg": {
+          "lane": "slope",
+          "outcome": "fail",
+          "timeS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 3.235,
+            "grade": "slope-20deg"
+          },
+          "observation": "stalled with its front -0.3 m from the 20° slope edge (u=3.266 m)",
+          "jumps": 0
+        }
+      }
+    },
+    {
+      "id": "creature:quadruped-329a735927fa8b37",
+      "kind": "creature",
+      "label": "Cheetah (dev)",
+      "skills": [
+        "walk",
+        "jump"
+      ],
+      "structure": {
+        "lengthM": 1.01,
+        "widthM": 0.369,
+        "heightM": 0.544,
+        "rootHeightM": 0.454,
+        "massKg": 32.638,
+        "frontReachM": 0.461,
+        "rearReachM": 0.549,
+        "source": "measured from the compiled MuJoCo model at the spawn pose"
+      },
+      "runs": {
+        "flat": {
+          "outcome": "fall",
+          "timeS": null,
+          "sprintS": null,
+          "failure": {
+            "reason": "splash",
+            "u": 2.694,
+            "grade": "sprint-5m"
+          },
+          "observation": "stepped off the pier near the 5 m sprint"
+        },
+        "rubble": {
+          "outcome": "fall",
+          "timeS": null,
+          "sprintS": null,
+          "failure": {
+            "reason": "splash",
+            "u": 5.95,
+            "grade": null
+          },
+          "observation": "stepped off the pier near the u=5.95"
+        },
+        "step": {
+          "outcome": "fall",
+          "timeS": null,
+          "sprintS": null,
+          "failure": {
+            "reason": "tumble",
+            "u": 2.571,
+            "grade": "step-12cm"
+          },
+          "observation": "tipped over at the 12 cm step (u=2.571 m)"
+        },
+        "gap": {
+          "outcome": "fall",
+          "timeS": null,
+          "sprintS": null,
+          "failure": {
+            "reason": "tumble",
+            "u": 0.864,
+            "grade": "gap-20cm"
+          },
+          "observation": "tipped over at the 0.20 m gap (u=0.864 m)"
+        },
+        "slope": {
+          "outcome": "fall",
+          "timeS": null,
+          "sprintS": null,
+          "failure": {
+            "reason": "tumble",
+            "u": 2.023,
+            "grade": "slope-12deg"
+          },
+          "observation": "tipped over at the 12° slope (u=2.023 m)"
+        }
+      },
+      "grades": {
+        "sprint-5m": {
+          "lane": "flat",
+          "outcome": "fall",
+          "timeS": null,
+          "failure": {
+            "reason": "splash",
+            "u": 2.915,
+            "grade": "sprint-5m"
+          },
+          "observation": "stepped off the pier near the 5 m sprint",
+          "jumps": 0
+        },
+        "rubble-2-6cm": {
+          "lane": "rubble",
+          "outcome": "pass",
+          "timeS": 9.38,
+          "failure": null,
+          "observation": "passed in 9.38 s",
+          "jumps": 0
+        },
+        "step-6cm": {
+          "lane": "step",
+          "outcome": "fall",
+          "timeS": null,
+          "failure": {
+            "reason": "tumble",
+            "u": 1.014,
+            "grade": "step-6cm"
+          },
+          "observation": "tipped over at the 6 cm step (u=1.014 m)",
+          "jumps": 1
+        },
+        "step-12cm": {
+          "lane": "step",
+          "outcome": "fall",
+          "timeS": null,
+          "failure": {
+            "reason": "tumble",
+            "u": 2.488,
+            "grade": "step-12cm"
+          },
+          "observation": "tipped over at the 12 cm step (u=2.488 m)",
+          "jumps": 1
+        },
+        "step-18cm": {
+          "lane": "step",
+          "outcome": "fail",
+          "timeS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 3.998,
+            "grade": "step-18cm"
+          },
+          "observation": "stalled with its front -0.274 m from the 18 cm step edge (u=4.013 m)",
+          "jumps": 1
+        },
+        "gap-20cm": {
+          "lane": "gap",
+          "outcome": "fall",
+          "timeS": null,
+          "failure": {
+            "reason": "tumble",
+            "u": 0.864,
+            "grade": "gap-20cm"
+          },
+          "observation": "tipped over at the 0.20 m gap (u=0.864 m)",
+          "jumps": 1
+        },
+        "gap-35cm": {
+          "lane": "gap",
+          "outcome": "fall",
+          "timeS": null,
+          "failure": {
+            "reason": "tumble",
+            "u": 2.612,
+            "grade": "gap-35cm"
+          },
+          "observation": "tipped over at the 0.35 m gap (u=2.612 m)",
+          "jumps": 1
+        },
+        "gap-50cm": {
+          "lane": "gap",
+          "outcome": "fall",
+          "timeS": null,
+          "failure": {
+            "reason": "tumble",
+            "u": 4.405,
+            "grade": "gap-50cm"
+          },
+          "observation": "tipped over at the 0.50 m gap (u=4.405 m)",
+          "jumps": 1
+        },
+        "slope-12deg": {
+          "lane": "slope",
+          "outcome": "pass",
+          "timeS": 6.6,
+          "failure": null,
+          "observation": "passed in 6.6 s",
+          "jumps": 0
+        },
+        "slope-20deg": {
+          "lane": "slope",
+          "outcome": "fall",
+          "timeS": null,
+          "failure": {
+            "reason": "tumble",
+            "u": 3.572,
+            "grade": "slope-20deg"
+          },
+          "observation": "tipped over at the 20° slope (u=3.572 m)",
+          "jumps": 0
+        }
+      }
+    },
+    {
+      "id": "creature:multileg-cfeadbfbef98a249",
+      "kind": "creature",
+      "label": "Octo",
+      "skills": [
+        "walk"
+      ],
+      "structure": {
+        "lengthM": 1.092,
+        "widthM": 1.092,
+        "heightM": 0.355,
+        "rootHeightM": 0.294,
+        "massKg": 13.117,
+        "frontReachM": 0.546,
+        "rearReachM": 0.546,
+        "source": "measured from the compiled MuJoCo model at the spawn pose"
+      },
+      "runs": {
+        "flat": {
+          "outcome": "fall",
+          "timeS": null,
+          "sprintS": 7.3,
+          "failure": {
+            "reason": "splash",
+            "u": 5.286,
+            "grade": null
+          },
+          "observation": "stepped off the pier near the u=5.286"
+        },
+        "rubble": {
+          "outcome": "fail",
+          "timeS": null,
+          "sprintS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 0.82,
+            "grade": "rubble-2-6cm"
+          },
+          "observation": "stalled with its front -0.592 m from the 2–6 cm rubble edge (u=0.846 m)"
+        },
+        "step": {
+          "outcome": "fail",
+          "timeS": null,
+          "sprintS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 2.273,
+            "grade": "step-12cm"
+          },
+          "observation": "stalled with its front -0.199 m from the 12 cm step edge (u=2.253 m)"
+        },
+        "gap": {
+          "outcome": "fall",
+          "timeS": null,
+          "sprintS": null,
+          "failure": {
+            "reason": "tumble",
+            "u": 2.591,
+            "grade": "gap-35cm"
+          },
+          "observation": "tipped over at the 0.35 m gap (u=2.591 m)"
+        },
+        "slope": {
+          "outcome": "fail",
+          "timeS": null,
+          "sprintS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 2.579,
+            "grade": "slope-12deg"
+          },
+          "observation": "stalled with its front -2.352 m from the 12° slope edge (u=2.706 m)"
+        }
+      },
+      "grades": {
+        "sprint-5m": {
+          "lane": "flat",
+          "outcome": "pass",
+          "timeS": 9.6,
+          "failure": null,
+          "observation": "passed in 9.6 s",
+          "jumps": 0
+        },
+        "rubble-2-6cm": {
+          "lane": "rubble",
+          "outcome": "fail",
+          "timeS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 0.883,
+            "grade": "rubble-2-6cm"
+          },
+          "observation": "stalled with its front -0.616 m from the 2–6 cm rubble edge (u=0.87 m)",
+          "jumps": 0
+        },
+        "step-6cm": {
+          "lane": "step",
+          "outcome": "pass",
+          "timeS": 6.92,
+          "failure": null,
+          "observation": "passed in 6.92 s",
+          "jumps": 0
+        },
+        "step-12cm": {
+          "lane": "step",
+          "outcome": "fail",
+          "timeS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 2.275,
+            "grade": "step-12cm"
+          },
+          "observation": "stalled with its front -0.218 m from the 12 cm step edge (u=2.272 m)",
+          "jumps": 0
+        },
+        "step-18cm": {
+          "lane": "step",
+          "outcome": "fail",
+          "timeS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 3.821,
+            "grade": "step-18cm"
+          },
+          "observation": "stalled with its front -0.164 m from the 18 cm step edge (u=3.818 m)",
+          "jumps": 0
+        },
+        "gap-20cm": {
+          "lane": "gap",
+          "outcome": "fail",
+          "timeS": null,
+          "failure": {
+            "reason": "stuck",
+            "u": 0.944,
+            "grade": "gap-20cm"
+          },
+          "observation": "stalled with its front -0.533 m from the 0.20 m gap edge (u=0.987 m)",
+          "jumps": 0
+        },
+        "gap-35cm": {
+          "lane": "gap",
+          "outcome": "fall",
+          "timeS": null,
+          "failure": {
+            "reason": "tumble",
+            "u": 2.605,
+            "grade": "gap-35cm"
+          },
+          "observation": "tipped over at the 0.35 m gap (u=2.605 m)",
+          "jumps": 0
+        },
+        "gap-50cm": {
+          "lane": "gap",
+          "outcome": "fall",
+          "timeS": null,
+          "failure": {
+            "reason": "tumble",
+            "u": 4.44,
+            "grade": "gap-50cm"
+          },
+          "observation": "tipped over at the 0.50 m gap (u=4.44 m)",
+          "jumps": 0
+        },
+        "slope-12deg": {
+          "lane": "slope",
+          "outcome": "pass",
+          "timeS": 5.92,
+          "failure": null,
+          "observation": "passed in 5.92 s",
+          "jumps": 0
+        },
+        "slope-20deg": {
+          "lane": "slope",
+          "outcome": "fall",
+          "timeS": null,
+          "failure": {
+            "reason": "tumble",
+            "u": 4.158,
+            "grade": "slope-20deg"
+          },
+          "observation": "tipped over at the 20° slope (u=4.158 m)",
+          "jumps": 0
+        }
+      }
+    }
+  ],
+  "matrix": {
+    "legacy-cheetah": {
+      "sprint-5m": "pass",
+      "rubble-2-6cm": "fall",
+      "step-6cm": "pass",
+      "step-12cm": "pass",
+      "step-18cm": "fall",
+      "gap-20cm": "fail",
+      "gap-35cm": "fail",
+      "gap-50cm": "fail",
+      "slope-12deg": "pass",
+      "slope-20deg": "pass"
+    },
+    "legacy-flower": {
+      "sprint-5m": "pass",
+      "rubble-2-6cm": "pass",
+      "step-6cm": "fail",
+      "step-12cm": "fail",
+      "step-18cm": "fail",
+      "gap-20cm": "fail",
+      "gap-35cm": "fall",
+      "gap-50cm": "fall",
+      "slope-12deg": "fail",
+      "slope-20deg": "fail"
+    },
+    "creature:quadruped-329a735927fa8b37": {
+      "sprint-5m": "fall",
+      "rubble-2-6cm": "pass",
+      "step-6cm": "fall",
+      "step-12cm": "fall",
+      "step-18cm": "fail",
+      "gap-20cm": "fall",
+      "gap-35cm": "fall",
+      "gap-50cm": "fall",
+      "slope-12deg": "pass",
+      "slope-20deg": "fall"
+    },
+    "creature:multileg-cfeadbfbef98a249": {
+      "sprint-5m": "pass",
+      "rubble-2-6cm": "fail",
+      "step-6cm": "pass",
+      "step-12cm": "fail",
+      "step-18cm": "fail",
+      "gap-20cm": "fail",
+      "gap-35cm": "fall",
+      "gap-50cm": "fall",
+      "slope-12deg": "pass",
+      "slope-20deg": "fall"
+    }
+  }
 }
