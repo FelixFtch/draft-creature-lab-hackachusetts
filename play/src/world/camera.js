@@ -40,7 +40,8 @@ function rayCylinder(o, d, s) {
 
 export function createCameraRig({ camera, dom, terrain, obstacles = [], size, onModeChange = () => {} }) {
   const h = Math.max(.2, size?.height ?? .45);
-  const chase = { dist: 1.15 + 3.1 * h, pitch: .38, lift: .3 * h, ahead: .3 };
+  // Close third-person view from behind the robot's back, looking at the robot.
+  const chase = { dist: 1.0 + 2.6 * h, pitch: .3, lift: .35 * h, ahead: .1 };
   let mode = 'chase', zoom = 1, intro = null, lastInteract = -1e9, disposed = false;
   let yawSmooth = 0, yawFollow = 0, tracking = false;
   const orbit = { yaw: 0, pitch: .45 };
@@ -113,7 +114,7 @@ export function createCameraRig({ camera, dom, terrain, obstacles = [], size, on
     const dist = chase.dist * zoom * distScale;
     return desired.set(target.x - Math.cos(yaw) * dist * Math.cos(pitch), target.y + dist * Math.sin(pitch), target.z + Math.sin(yaw) * dist * Math.cos(pitch));
   }
-  function startIntro(heading, seconds = 4.4) {
+  function startIntro(heading, seconds = 3) {
     intro = { t: 0, seconds, a0: heading + 2.4, a1: heading, from: new THREE.Vector3(0, .6, 0) };
     mode = 'chase';
   }

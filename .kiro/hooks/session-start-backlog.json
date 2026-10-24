@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Pick up where the last session stopped",
+      "description": "At the start of a session, orient the agent: current branch and changes, the next open spec task, and the backlog in product.md.",
+      "trigger": "SessionStart",
+      "action": {
+        "type": "agent",
+        "prompt": "Before starting, orient yourself in Draft Creature Lab: run `git status --short` and `git log --oneline -5`, open the backlog in .kiro/steering/product.md, and find the first unchecked task in .kiro/specs/*/tasks.md (in backlog order). Reply with one short paragraph: what changed recently, and the next task you would work on. Do not start editing until the user agrees."
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Keep the README terrain table in sync",
+      "description": "When new terrain trial results are written, refresh the README's Terrain Lab table and explanations.",
+      "trigger": "PostFileSave",
+      "matcher": "qa/terrain-trials\\.json$",
+      "action": {
+        "type": "agent",
+        "prompt": "qa/terrain-trials.json changed. Update the 'Terrain Lab: how each body meets the ground' table in README.md from its pilots[].runs/matrix (pass / stalled / fell, with times for passes). Then check that each robot's structural explanation still matches the measured results, using the numbers in creatures/<bodyId>/body.json (trainability.metrics, dimensions) and eval.json; fix any sentence the new data contradicts. Keep the table columns Dog, Octo, Flower, Cheetah and add a column for any new robot."
+      }
+    }
+  ]
+}

@@ -8,6 +8,8 @@ This is an independent learning prototype. It is not an official Draft, Google D
 - **Three.js**: [mrdoob/three.js](https://github.com/mrdoob/three.js), MIT, version 0.164.1.
 - **React and ReactDOM**: Meta and contributors, [facebook/react](https://github.com/facebook/react), MIT, version 19.2.8.
 - **Vite** and its React plugin: [vitejs/vite](https://github.com/vitejs/vite), MIT, versions 8.2.2 and 6.1.0.
+- **Fonts** (bundled into the web build through Fontsource): Inter (The Inter Project Authors), Atkinson Hyperlegible Next (Braille Institute of America) and Recursive (The Recursive Project Authors), all under the SIL Open Font License 1.1. The packages under `play/node_modules/@fontsource-variable/` carry the full license texts.
+- **Training** (optional `.venv-train`): PyTorch (BSD-3-Clause), ONNX (Apache-2.0) and ONNX Runtime (MIT), installed from their packages, not vendored.
 - Python generation dependencies are installed from their packages, not vendored: NumPy, PyYAML, trimesh, mapbox-earcut, Rtree and SciPy. Their distributions carry their own notices.
 
 The Flower YAML body plan, lab integration and bundled locomotion policies were authored/trained locally for this prototype. Cheetah training used the pinned Draft training configuration; Flower used its own 18-joint task. The included weights are small exported inference policies, not third-party VLM weights.

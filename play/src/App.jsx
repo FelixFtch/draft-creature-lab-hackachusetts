@@ -380,7 +380,8 @@ export default function App() {
         landmarks={['red ball', 'goal', 'yellow flag', 'blue tower', 'jump pad']} onStart={() => game.current?.startExplore?.(exploreText)}
         onStop={() => game.current?.stopExplore?.()} onClose={() => setExploreOpen(false)} lastDecision={snapshot?.explore?.lastDecision}
         eyes={health?.roles?.eyes?.configured ? { model: health.roles.eyes.model, kind: health.roles.eyes.kind } : undefined} />}
-      cameraMode={snapshot?.camera?.mode || 'chase'} onCamera={next => game.current?.setCameraMode?.(next)}
+      cameraMode={snapshot?.camera?.mode === 'intro' ? 'chase' : snapshot?.camera?.mode || 'chase'}
+      onCamera={() => game.current?.setCameraMode?.(snapshot?.camera?.mode === 'chase' ? 'overview' : 'chase')}
       onOpenChallenges={() => setModal('terrain')} onOpenStickers={() => {}} onReset={() => game.current?.reset?.()}
       touchControls={<TouchControls onCommand={({ x = 0, y = 0 }) => game.current?.setCommand?.({ vx: -y, wz: -x, normalized: true })} onJump={() => game.current?.trigger?.('jump')} canJump={canJump} />} />
   );

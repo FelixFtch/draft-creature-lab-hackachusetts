@@ -99,7 +99,8 @@ All four policies were trained on flat ground, so the table shows how each body 
 
 ```bash
 ./training/setup-train-env.sh                     # once
-.venv-train/bin/python -m creature_gym.train --body creatures/<bodyId> --skill walk --budget quick --out creatures/<bodyId>/policies/walk
+cd training
+../.venv-train/bin/python -m creature_gym.train --body ../creatures/<bodyId> --skill walk --budget quick --out ../creatures/<bodyId>/policies/walk
 ```
 
 See [training/README.md](training/README.md) for budgets, resuming long runs in chunks, evaluation and measured speeds.
@@ -114,6 +115,25 @@ node qa/terrain-trials.mjs --pilot legacy-cheetah --bundle /creatures/quadruped-
 ```
 
 The terrain trials run real MuJoCo WASM and ONNX Runtime headlessly, using the same playground modules as the browser.
+
+## Working on the project in Kiro
+
+The repository includes a `.kiro/` folder, so you can open it in Kiro and keep developing:
+- **Steering** (`.kiro/steering/`) gives the agent persistent context:
+  - `product.md`: the product, roster status and backlog.
+  - `tech.md`: stack, commands, ports and physics constants.
+  - `structure.md`: repository map and contracts.
+  - `whitebox-style.md`: the visual direction, applied to `play/src/**` files.
+  - `draft-and-training.md`: rules for bodies, policies and Tinker, applied to the service and training folders.
+- **Specs** (`.kiro/specs/`) hold the next work items, each with requirements, a design and a task list:
+  - `fix-ai-service-tests`: stale tests plus property-based tests.
+  - `dog-running-jump`: a forward leap so the Dog can cross gaps.
+- **Hooks** (`.kiro/hooks/`):
+  - At session start, orient the agent on the backlog.
+  - After each spec task, run the web build, the Python tests and a style check.
+  - On save, run the Python unit tests.
+  - When the terrain trials change, keep the README's terrain table in sync.
+- **MCP** (`.kiro/settings/mcp.json`): a Playwright server, so the agent can open the running app and take screenshots.
 
 ## Project layout
 

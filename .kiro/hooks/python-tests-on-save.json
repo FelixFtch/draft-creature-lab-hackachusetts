@@ -1,0 +1,21 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "draft-service tests on save",
+      "description": "Run the draft-service unit tests whenever a draft-service Python file is saved.",
+      "trigger": "PostFileSave",
+      "matcher": "draft-service/.*\\.py$",
+      "action": { "type": "command", "command": ".venv/bin/python -m unittest discover -s draft-service -p 'test_*.py'" },
+      "timeout": 240
+    },
+    {
+      "name": "ai-service tests on save",
+      "description": "Run the ai-service unit tests whenever an ai-service Python file is saved.",
+      "trigger": "PostFileSave",
+      "matcher": "ai-service/.*\\.py$",
+      "action": { "type": "command", "command": "cd ai-service && ../.venv/bin/python -m unittest discover -s tests" },
+      "timeout": 180
+    }
+  ]
+}

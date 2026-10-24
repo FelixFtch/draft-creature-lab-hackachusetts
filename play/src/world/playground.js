@@ -350,6 +350,7 @@ export async function createPlayground(container, options = {}) {
     const gap = (now - last) / 1000 || 0, dt = Math.min(gap, .05); last = now;
     if (gap > 0) fpsEMA = fpsEMA * .9 + Math.min(240, 1 / gap) * .1;
     inputState = paused ? { ...inputState, vx: 0, wz: 0, active: false } : input.read();
+    if (inputState.active) rig?.skipIntro();   // driving ends the intro sweep: straight to the chase view
     creatureView.sync(sim.data); creatureView.update?.(dt);
     // "No jump skill" feedback: a short sideways head-shake of the whole body view.
     if (now < shakeUntil) {

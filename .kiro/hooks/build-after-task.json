@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Quality gate after each spec task",
+      "description": "After a spec task finishes, check the web build, the Python tests and the white-box style before the task counts as done.",
+      "trigger": "PostTaskExec",
+      "action": {
+        "type": "agent",
+        "prompt": "Quality gate for the task you just finished. 1) If anything under play/ changed, run `cd play && npm run build` and fix any error. 2) If anything under draft-service/ changed, run `.venv/bin/python -m unittest discover -s draft-service -p 'test_*.py'`; if anything under ai-service/ changed, run `cd ai-service && ../.venv/bin/python -m unittest discover -s tests`. Fix failures you caused. 3) For visual changes, re-read the whitebox-style steering file and check the change follows it (low saturation, robot as the hero, no signage). 4) If an interface changed, update its file in contracts/. Report the results in two or three lines."
+      }
+    }
+  ]
+}
