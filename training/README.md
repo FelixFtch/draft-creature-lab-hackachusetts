@@ -70,8 +70,9 @@ normalisers, adaptive learning rate, iteration/env-step counters, curriculum,
 the complete env state (simulation states, commands, gait clocks, episode
 counters, push timers, the domain-randomisation pool) and all RNG states are in
 the checkpoint, so a run split into chunks is bit-identical to one continuous
-run (tested: `ResumeEquivalenceTest`). If the env count changes between chunks
-the envs are re-initialised (stated in stderr). `--resume` with no checkpoint
+run (tested: `ResumeEquivalenceTest`). `--envs`, `--seed` and the PPO settings
+are fixed by the first chunk (`.work/run.json`); `--threads` may change between
+chunks (physics results do not depend on it). `--resume` with no checkpoint
 starts fresh, so a driver can always pass it:
 
 ```bash
