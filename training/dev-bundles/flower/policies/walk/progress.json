@@ -1,0 +1,36 @@
+{
+  "schema": "creature-train-progress/1",
+  "bodyId": "multileg-6c5ec373323f7916",
+  "skill": "walk",
+  "budget": "quick",
+  "phase": "done",
+  "running": false,
+  "done": true,
+  "iteration": 977,
+  "envSteps": 6002688,
+  "envStepsTarget": 6000000,
+  "fraction": 1.0,
+  "stepsPerSecond": null,
+  "meanReward": 67.3003,
+  "meanEpisodeLengthS": 20.0,
+  "tracking": {
+    "vx_abs_err": 0.0565,
+    "wz_abs_err": 0.1787
+  },
+  "etaSeconds": 0,
+  "wallSeconds": 1154.7,
+  "machine": {
+    "platform": "Linux-6.18.44-fc-v153-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+    "cpuCount": 2,
+    "threads": 2,
+    "python": "3.12.3",
+    "torchThreads": 1
+  },
+  "updatedAt": "2026-10-24T21:09:02+00:00",
+  "message": "done: validation passed",
+  "evalPass": true,
+  "chunks": 1,
+  "maxWallSeconds": null
+}
