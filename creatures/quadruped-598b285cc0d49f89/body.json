@@ -405,7 +405,14 @@
    "minBellyClearanceM": 0.01
   },
   "source": "legacy Cheetah policy default stance",
-  "method": "MuJoCo forward kinematics; root lowered until the lowest foot sphere touches z = 0, then per-leg Newton on hip pitch and knee"
+  "candidates": [
+   {
+    "source": "legacy Cheetah policy default stance",
+    "standLoad": 0.1226
+   }
+  ],
+  "comfortLoad": 0.45,
+  "method": "Candidate stances from most crouched to straightest; the first whose equal-share stand load is comfortable (else the least loaded) is kept. Each is posed with MuJoCo forward kinematics: root lowered until the lowest foot sphere touches z = 0, then per-leg Newton on hip pitch and knee."
  },
  "massKg": 32.6381,
  "dimensions": {
@@ -502,6 +509,19 @@
  "bodyRoles": {
   "torso": "torso_link",
   "head": null
+ },
+ "poseHints": {
+  "crouchDelta": [
+   0.0,
+   0.475,
+   -0.95
+  ],
+  "waveLeg": "fl",
+  "waveDelta": [
+   0.0,
+   -1.25,
+   -0.3
+  ]
  },
  "xmlContents": {
   "actuators": 0,

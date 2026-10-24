@@ -87,7 +87,9 @@ XML/STL are `immutable` (content-addressed); JSON/YAML and policies `no-store`.
     "feet": ["…"], "torso": ["…"], "limbs": ["…"], "motors": ["…"], "details": ["…"]
   },
   "bodyRoles": { "torso": "torso_link", "head": null },
-  "xmlContents": { "actuators": 0, "sensors": 3, "keyframes": [], "note": "…" },
+  "poseHints": { "crouchDelta": [0, 0.475, -0.95], "waveLeg": "fl", "waveDelta": [0, -1.25, -0.3] },
+                                          // workshop pose experiments only: per-role deltas (leg joint order)
+  "xmlContents": { "actuators": 0, "sensors": 3, "sensorNames": ["imu_ang_vel", "…"], "keyframes": [], "note": "…" },
   "motors": [ { "class": "L", "family": "qdd", "familyLabel": "…", "catalogAnchor": "MIT U12",
                 "category": "QDD", "count": 12, "effortNm": 72, "velocityRadS": 40, "gear": 6,
                 "massKg": 1.1, "diameterMm": 126, "lengthMm": 46, "armatureKgm2": 0.0154,

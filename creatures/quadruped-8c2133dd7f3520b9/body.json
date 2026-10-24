@@ -403,8 +403,15 @@
    "jointMarginFraction": 0.1,
    "minBellyClearanceM": 0.01
   },
-  "source": "foot below the hip-pitch axis with a -1.1 rad knee bend",
-  "method": "MuJoCo forward kinematics; root lowered until the lowest foot sphere touches z = 0, then per-leg Newton on hip pitch and knee"
+  "source": "foot below the hip-pitch axis, knee bent 1.1 rad",
+  "candidates": [
+   {
+    "source": "foot below the hip-pitch axis, knee bent 1.1 rad",
+    "standLoad": 0.228
+   }
+  ],
+  "comfortLoad": 0.45,
+  "method": "Candidate stances from most crouched to straightest; the first whose equal-share stand load is comfortable (else the least loaded) is kept. Each is posed with MuJoCo forward kinematics: root lowered until the lowest foot sphere touches z = 0, then per-leg Newton on hip pitch and knee."
  },
  "massKg": 91.2642,
  "dimensions": {
@@ -501,6 +508,19 @@
  "bodyRoles": {
   "torso": "torso_link",
   "head": null
+ },
+ "poseHints": {
+  "crouchDelta": [
+   0.0,
+   0.475,
+   -0.95
+  ],
+  "waveLeg": "fl",
+  "waveDelta": [
+   0.0,
+   -1.25,
+   -0.3
+  ]
  },
  "xmlContents": {
   "actuators": 0,

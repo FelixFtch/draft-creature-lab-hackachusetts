@@ -43,6 +43,11 @@ and passes them as overrides, as the Flower does; the YAML stays declarative.
 - Legs are named `leg0..legN-1` counter-clockwise from +X.
 - Hip-yaw half range = 0.6 × the angular gap to the nearest leg, clamped to
   0.30–0.75 rad, so neighbours cannot be commanded through each other.
+- Hub thickness = 0.66 × `bodyRadius` (the Flower's proportion), capped at
+  0.11 m: big hubs stay flat instead of becoming drums no leg can lift (the first
+  bounds probe found 35–44 kg hubs at radius 0.25 / aspect 2.2).
+- The hip-yaw housing sits at the tip of a mount link whose length is derived
+  from the actuator radius (`L_motor_r + 8 mm`), so it always clears the hub wall.
 - Mass model: actuators from Draft's trends (mass, envelope, armature, gate);
   structure is stated (link radii as fractions of the actuator radius, densities
   750/500 kg/m³ as the Flower) because no multileg mass population exists. Draft
@@ -72,8 +77,11 @@ actuator past the best catalogued part of its category is refused with a 422 and
 a "decrease strength" hint instead of being promoted to an imaginary motor. Only
 the MIT U12 starts close to its frontier (its power density is above the QDD p90
 already), so quadruped `qdd` is the one family with a strength ceiling below 1.5
-(see Bounds). Multileg families anchor on smaller QDDs than the quadruped `qdd`
-because a crawler's coxa must hold two actuators apart.
+(see Bounds). Multileg `qdd` anchors on the MIT Mini Cheetah U8 rather than the
+U12 because a crawler's coxa must hold two actuators apart side by side (a U12
+pair would need a 13 cm coxa); both multileg families are drawn slimmer (L/D
+0.6, as the Flower's class) for the same reason — Draft keeps their mass and
+volume and adjusts radius and armature.
 
 Without `basePreset`, a quadruped borrows its family's archetype proportions
 (qdd → Cheetah, geared → Bear, harmonic → Giraffe, micro → pup: torso
@@ -120,8 +128,8 @@ A refusal is HTTP 422:
 
 ```json
 { "error": "infeasible-design", "gate": "actuator-frontier",
-  "message": "[L]: power density 749 W/kg beats the best catalogued QDD actuator ...",
-  "hints": [ { "field": "quadruped.strength", "direction": "decrease", "reason": "..." },
+  "message": "[L]: power density 749 W/kg beats the best catalogued QDD actuator (728 W/kg, RS06). ...",
+  "hints": [ { "field": "quadruped.strength", "direction": "decrease", "reason": "...", "value": 1.35 },
              { "field": "quadruped.actuator", "direction": "change", "reason": "..." } ],
   "violations": [ "... every message ..." ], "design": { "...": "the normalised request" } }
 ```
@@ -132,16 +140,38 @@ geometry), `draft` (anything else). `direction` is `increase`, `decrease` or
 `change`; `field` is a dotted DesignSpec path. Invalid requests are HTTP 400
 `{error: "invalid-design", message, issues: [{field, message}]}`.
 
+When the pipeline can compute it, a hint carries `value`: a schema-valid value
+that clears the gate (the tests apply each one and expect HTTP 200):
+- frontier: the largest strength (0.05 steps) whose actuator passes Draft's own
+  frontier check (re-run through `size_actuators`);
+- Draft packing: the reported interpenetration depth plus 3 mm added to the
+  link that separates the pair (`hipOffset`, `coxa` or `upperLeg`), on a 5 mm grid;
+- rigid overlap: `shoulderWidth`/`torsoLength` plus the depth (quadrupeds), or the
+  smallest `bodyRadius` whose hip-yaw housings all clear (multileg; same
+  oriented-box test on the analytic hub layout).
+A hint without `value` means no single field fixes it inside the schema.
+
 ## Nominal stance
 
-1. Guess: quadrupeds put the foot straight below the hip-pitch axis at 85% leg
-   extension (closed form, hip roll 0); the legacy Cheetah keeps its policy's
-   `[0, 0.5, -1.0]`. Multileg bodies use the Flower stance (hip yaw 0, hip pitch
-   0.15, knee 1.25 rad: thigh slightly down, shank ~80° below horizontal).
-2. MuJoCo forward kinematics with the root at identity orientation; the root is
-   lowered until the lowest foot sphere touches z = 0.
-3. Per leg, Newton on hip pitch and knee puts the foot sphere exactly on z = 0
-   at the guessed horizontal position.
+1. Candidates, most crouched (preferred) first. Quadrupeds put the foot straight
+   below the hip-pitch axis with a knee bend of 1.1, 0.9, 0.7 or 0.5 rad (closed
+   form, hip roll 0; equal segments at 1.1 rad stand at ~85% extension — the
+   workshop's legacy pose uses the same 0.55/-1.10). A fixed bend, unlike a fixed
+   extension, keeps the knee off the ground for any thigh/shank ratio — the first
+   bounds probe found 85% extension driving long-thigh/short-shank knees into the
+   floor. Multileg bodies start from the Flower stance (hip yaw 0, hip pitch 0.15,
+   knee 1.25 rad: thigh slightly down, shank ~80° below horizontal), then lower
+   the thigh (0.35/1.05, 0.55/0.85), which shortens the hip-pitch lever arm. The
+   legacy Cheetah and Flower keep their policies' stances (`[0, 0.5, -1.0]`,
+   `[0, 0.15, 1.25]`).
+2. Each candidate is posed with MuJoCo forward kinematics with the root at
+   identity orientation; the root is lowered until the lowest foot sphere
+   touches z = 0, then per leg a Newton step on hip pitch and knee puts the foot
+   sphere exactly on z = 0 at the candidate's horizontal position.
+3. The first candidate that passes the checks below with an equal-share stand
+   load ≤ 45% of peak torque is kept ("comfortable"); otherwise the least loaded
+   passing candidate. Strong bodies (all showcase bodies) keep the crouch; weak or
+   tall ones stand straighter. `stanceCheck.candidates` lists what was tried.
 4. Checks (failures are the `stance` gate): foot heights within **0.1 mm**,
    torso exactly level (identity quaternion; `|roll|, |pitch| ≤ 1e-6 rad`
    recorded), every joint at least **10%** of its range from a limit, every
@@ -166,6 +196,7 @@ Computed at the nominal pose (`body.json` `trainability`):
 | `standLoad` | largest joint-torque fraction of peak needed to stand with weight shared equally by all feet (foot Jacobian transpose) |
 | `gaitLoad` | the same with only the stance feet of the gait hint loaded |
 | `verticalForceRatio` | Σ legs of the largest vertical foot force the joint limits allow ÷ weight (the geometric torque-to-weight figure) |
+| `specificTorqueNmPerKg` | one joint's peak torque ÷ robot mass (raw torque-to-weight) |
 | `staticMarginM` / `gaitMarginM` | COM ground projection to the support-polygon edge, all feet / worst gait phase |
 | `bellyClearanceM`, `legToBodyRatio`, `minJointVelocityRadS`, `maxFootSpeedMS` | geometry and speed |
 | `jumpEstimate` | rough hop height: min(v²/2g, (verticalForceRatio − 1) × 0.4 leg length), v from half no-load joint speeds |
@@ -175,7 +206,8 @@ Flags (`{code, severity, message}`) and thresholds:
 
 | code | severity | when |
 | --- | --- | --- |
-| `cannot-stand` | error | `standLoad > 1.0`, or the hold test sags > 25%, tilts > 0.35 rad or the body touches the ground |
+| `cannot-stand` | error | `standLoad > 1.0` even in the least loaded candidate stance |
+| `unstable-stance` | error | the hold test sags > 25%, tips > 0.35 rad or the body touches the ground (typically tall bodies on a short base: compliant joints let the COM drift onto one pair of legs until they yield) |
 | `may-struggle-to-stand` | warning | `standLoad > 0.5` or hold-test sag > 8% |
 | `may-struggle-to-walk` | warning | `gaitLoad > 0.9` |
 | `tippy` | warning | `staticMarginM < 0.02` |
@@ -203,7 +235,26 @@ BOUNDS_PLACEHOLDER
 
 ## Showcase bodies
 
-SHOWCASE_PLACEHOLDER
+Committed under `creatures/<bodyId>/` (body only; the trainer adds
+`policies/`). Designs live in `draft-service/templates/showcase.json`;
+`python draft-service/designs.py build-showcase` rebuilds them and
+`ShowcaseTests` fails if a committed body no longer matches its design.
+
+| name | bodyId | body | mass | stand / gait load | vertical force ratio | verdict (stand/walk/jump) | Draft warnings |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Cheetah (legacy) | `quadruped-598b285cc0d49f89` | Draft cheetah preset, MIT U12 72 N·m | 32.6 kg | 0.12 / 0.25 | 8.2 | ok / plausible / strong | 10: U12 above QDD p90 torque and power density; hip/thigh members densified to carry their trend mass |
+| Bear (legacy) | `quadruped-ed4a8c553a418cdd` | Draft bear preset, RMD-X15 450 N·m | 110.1 kg | 0.12 / 0.23 | 8.6 | ok / plausible / strong | 10: as above for MidGear |
+| Giraffe (legacy) | `quadruped-8c2133dd7f3520b9` | Draft giraffe preset, eRob110H 332 N·m | 91.3 kg | 0.23 / 0.46 | 4.4 | ok / plausible / weak (3.9 rad/s joints) | 11: incl. leg length beyond the measured population (mass-vs-size extrapolated) |
+| Flower crawler (legacy) | `multileg-47562c58d410b2f9` | robots/flower, 18 × 12 N·m | 10.1 kg | 0.30 / 0.59 | 3.4 | ok / plausible / capable | 1: structure stated (no multileg population) |
+| **Hopper** | `quadruped-f2817f611779785c` | compact qdd quadruped, torso 0.34×0.18×0.12, legs 0.21/0.21, U12 at 1.3 (93.6 N·m) | 27.2 kg | 0.08 / 0.16 | 12.8 (hop estimate 0.56 m) | ok / plausible / strong | 11: U12 near the QDD power-density frontier (714 of 728 W/kg); trunk mass fraction 0.30, below the measured quadrupeds (a light trunk for its motors) |
+| **Octo** | `multileg-cfeadbfbef98a249` | 8 radial legs, hub r 0.16, coxa 0.09, legs 0.18/0.24, micro | 13.1 kg | 0.29 / 0.39 (ripple, 6 feet down) | 3.4 | ok / plausible / capable | 1: structure stated |
+| **Beetle** | `multileg-1219a5f0c7973694` | 6 bilateral legs, hub 0.12 × aspect 1.7, coxa 0.085, legs 0.16/0.20, micro at 1.2 | 10.2 kg | 0.22 / 0.45 (tripod) | 4.5 | ok / plausible / capable | 1: structure stated |
+
+All seven pass Draft's strict gate and the lab gates, stand with every foot
+within 0.1 mm of the ground and the torso exactly level, and hold their stance in
+the PD test (sag 1–3%, peak torque 8–26% of effort). Legacy bodies are
+byte-identical to the legacy `/api/generate` assets (Cheetah XML `bb4fcf76…`,
+Flower XML `63c1b09b…`, matching the legacy policy manifests).
 
 ## Commands
 

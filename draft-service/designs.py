@@ -104,11 +104,19 @@ FOOT_HEIGHT_TOL_M = 1e-4
 LEVEL_TOL_RAD = 1e-6
 JOINT_MARGIN_FRACTION = 0.10
 MIN_BELLY_CLEARANCE_M = 0.01
-# Quadruped stance: foot straight below the hip-pitch axis with this knee bend (rad).
-# A fixed bend (not a fixed extension) keeps the knee clear of the ground for any
-# thigh/shank ratio; equal segments stand at ~85% extension. Legacy Cheetah policy: -1.0.
-QUADRUPED_KNEE = -1.1
-MULTILEG_STANCE = (0.15, 1.25)   # Flower stance: hip pitch, knee (rad)
+# Nominal stance candidates, most crouched (preferred) first. The solver keeps the
+# first whose equal-share stand load is comfortable, else the least loaded, so strong
+# bodies keep a springy crouch and weak or tall ones stand straighter.
+# Quadruped: foot straight below the hip-pitch axis with this knee bend (rad); a fixed
+# bend (not a fixed extension) keeps the knee clear of the ground for any thigh/shank
+# ratio (equal segments at -1.1 stand at ~85% extension; legacy Cheetah policy: -1.0).
+QUADRUPED_KNEES = (-1.1, -0.9, -0.7, -0.5)
+QUADRUPED_KNEE = QUADRUPED_KNEES[0]
+# Multileg (hip pitch, knee): the Flower stance first, then the thigh lowered with the
+# shank kept ~80 deg below horizontal, which shortens the hip-pitch lever arm.
+MULTILEG_STANCES = ((0.15, 1.25), (0.35, 1.05), (0.55, 0.85))
+MULTILEG_STANCE = MULTILEG_STANCES[0]
+STANCE_COMFORT_LOAD = 0.45
 
 # Collision classes from docs/v2/PLAN.md, used by the PD hold test only.
 CONTACT_BITS = {'feet': (2, 9), 'torso': (4, 9), 'limbs': (4, 9), 'motors': (4, 9), 'details': (0, 0)}
@@ -923,16 +931,36 @@ def _quadruped_angles(upper: float, lower: float, knee: float = QUADRUPED_KNEE) 
     return hip, knee
 
 
-def _guess(plan: dict, legs: list[dict], resolved_params: dict) -> list[float]:
+def _stance_candidates(plan: dict, legs: list[dict], resolved_params: dict) -> list[tuple[str, list[float]]]:
+    """(label, joint angles) in order of preference; legacy bodies keep their policy's stance."""
+    count = len(legs)
     if plan.get('legacy') == 'cheetah':
-        per_leg = [0.0, 0.5, -1.0]          # the legacy Cheetah policy's default stance
-    elif plan['kind'] == 'quadruped':
-        hip, knee = _quadruped_angles(float(resolved_params['upper_leg_link_length']),
-                                      float(resolved_params['lower_leg_link_length']))
-        per_leg = [0.0, hip, knee]
-    else:
-        per_leg = [0.0, *MULTILEG_STANCE]   # Flower stance (legacy Flower policy default)
-    return per_leg * len(legs)
+        return [('legacy Cheetah policy default stance', [0.0, 0.5, -1.0] * count)]
+    if plan.get('legacy') == 'flower':
+        return [('legacy Flower policy default stance', [0.0, *MULTILEG_STANCE] * count)]
+    if plan['kind'] == 'quadruped':
+        upper = float(resolved_params['upper_leg_link_length'])
+        lower = float(resolved_params['lower_leg_link_length'])
+        return [(f'foot below the hip-pitch axis, knee bent {-knee:.1f} rad',
+                 [0.0, _quadruped_angles(upper, lower, knee)[0], knee] * count) for knee in QUADRUPED_KNEES]
+    return [(f'hip pitch {pitch:.2f} rad, knee {knee:.2f} rad (shank ~80 deg below horizontal)',
+             [0.0, pitch, knee] * count) for pitch, knee in MULTILEG_STANCES]
+
+
+def _static_loads(model, data, legs: list[dict], joints: list[dict]) -> dict:
+    """Equal-share standing load and per-leg vertical force limits at the posed state."""
+    weight = float(model.body_mass.sum()) * GRAVITY
+    jacp, jacr = np.zeros((3, model.nv)), np.zeros((3, model.nv))
+    forces, takeoff, stand = [], [], 0.0
+    for leg in legs:
+        mujoco.mj_jacSite(model, data, jacp, jacr, _id(model, mujoco.mjtObj.mjOBJ_SITE, leg['footSite']))
+        rows = [row for row in joints if row['leg'] == leg['name']]
+        lever = [abs(float(jacp[2, row['dofAdr']])) for row in rows]
+        limits = [row['effort'] / l for row, l in zip(rows, lever) if l > 1e-6]
+        forces.append(min(limits) if limits else math.inf)
+        stand = max(stand, max(l * weight / len(legs) / row['effort'] for row, l in zip(rows, lever)))
+        takeoff.append(sum(0.5 * (row['velocity'] or 0.0) * l for row, l in zip(rows, lever)))
+    return {'weight': weight, 'perLegForce': forces, 'standLoad': stand, 'takeoff': takeoff}
 
 
 def _set_pose(model, data, joints: list[dict], angles, root_z: float) -> None:
@@ -972,9 +1000,32 @@ def _geom_bottom(model, data, g: int) -> float:
 
 def solve_stance(model, legs: list[dict], joints: list[dict], plan: dict, resolved_params: dict,
                  roles: dict) -> dict:
-    """Level-torso standing pose with every foot on z = 0, checked by forward kinematics."""
+    """Most crouched comfortable level stance; every candidate is checked by forward kinematics."""
+    tried, best, first_bad = [], None, None
+    for label, angles in _stance_candidates(plan, legs, resolved_params):
+        stance = _try_stance(model, legs, joints, list(angles), roles)
+        stance['source'] = label
+        if stance['problems']:
+            tried.append({'source': label, 'problems': stance['problems']})
+            first_bad = first_bad or stance
+            continue
+        data = mujoco.MjData(model)
+        _set_pose(model, data, joints, stance['angles'], stance['rootZ'])
+        stance['standLoad'] = _static_loads(model, data, legs, joints)['standLoad']
+        tried.append({'source': label, 'standLoad': round(stance['standLoad'], 4)})
+        if best is None or stance['standLoad'] < best['standLoad'] - 1e-9:
+            best = stance
+        if stance['standLoad'] <= STANCE_COMFORT_LOAD:
+            best = stance
+            break
+    result = best or first_bad
+    result['candidates'] = tried
+    return result
+
+
+def _try_stance(model, legs: list[dict], joints: list[dict], angles: list[float], roles: dict) -> dict:
+    """Level-torso pose for one candidate with every foot on z = 0, plus its checks."""
     data = mujoco.MjData(model)
-    angles = _guess(plan, legs, resolved_params)
     _set_pose(model, data, joints, angles, 1.0)
     sites = [_id(model, mujoco.mjtObj.mjOBJ_SITE, leg['footSite']) for leg in legs]
     radii = [leg['footRadius'] for leg in legs]
@@ -1139,22 +1190,13 @@ def trainability(model, body_xml: Path, legs: list[dict], joints: list[dict], st
     data = mujoco.MjData(model)
     _set_pose(model, data, joints, stance['angles'], stance['rootZ'])
     mass = float(model.body_mass.sum())
-    weight = mass * GRAVITY
     com = data.subtree_com[1].copy()
     sites = [_id(model, mujoco.mjtObj.mjOBJ_SITE, leg['footSite']) for leg in legs]
     feet_xy = [(float(data.site_xpos[s][0]), float(data.site_xpos[s][1])) for s in sites]
-    jacp, jacr = np.zeros((3, model.nv)), np.zeros((3, model.nv))
     count = len(legs)
-    per_leg_force, stand_load, takeoff = [], 0.0, []
-    for leg, site in zip(legs, sites):
-        mujoco.mj_jacSite(model, data, jacp, jacr, site)
-        rows = [row for row in joints if row['leg'] == leg['name']]
-        lever = [abs(float(jacp[2, row['dofAdr']])) for row in rows]
-        limits = [row['effort'] / l for row, l in zip(rows, lever) if l > 1e-6]
-        per_leg_force.append(min(limits) if limits else math.inf)
-        stand_load = max(stand_load, max(l * weight / count / row['effort'] for row, l in zip(rows, lever)))
-        takeoff.append(sum(0.5 * (row['velocity'] or 0.0) * l for row, l in zip(rows, lever)))
-    vertical_ratio = sum(per_leg_force) / weight
+    loads = _static_loads(model, data, legs, joints)
+    weight, stand_load, takeoff = loads['weight'], loads['standLoad'], loads['takeoff']
+    vertical_ratio = sum(loads['perLegForce']) / weight
     stance_legs = count - max(len(group) for group in gait['groups'])
     gait_load = stand_load * count / max(stance_legs, 1)
     margin_all = support_margin((float(com[0]), float(com[1])), feet_xy)
@@ -1174,15 +1216,28 @@ def trainability(model, body_xml: Path, legs: list[dict], joints: list[dict], st
     def flag(code, severity, message):
         flags.append({'code': code, 'severity': severity, 'message': message})
 
-    if stand_load > STAND_LOAD_FAIL or not hold['passed']:
-        why = (f'holding the stance needs {stand_load:.0%} of peak torque' if stand_load > STAND_LOAD_FAIL
-               else f"a torque-limited PD hold sagged {hold.get('sagFraction', 0):.0%} / tilted "
-                    f"{hold.get('tiltRad', 0):.2f} rad" + (' and the body touched the ground'
-                                                          if hold.get('bodyGroundContacts') else ''))
-        flag('cannot-stand', 'error', f'Cannot stand: {why}. Lighter body, shorter legs or stronger actuators.')
+    if stand_load > STAND_LOAD_FAIL:
+        flag('cannot-stand', 'error', f'Cannot stand: holding even its most comfortable stance needs '
+                                      f'{stand_load:.0%} of peak torque. Lighter body, shorter legs or stronger '
+                                      'actuators.')
+    elif not hold['passed']:
+        parts = []
+        if not hold.get('finite', True):
+            parts.append('the simulation diverged')
+        if hold.get('tiltRad', 0) >= SETTLE_TILT_FAIL:
+            parts.append(f"it tipped over ({hold['tiltRad']:.2f} rad)")
+        if hold.get('sagFraction', 0) >= SETTLE_SAG_FAIL:
+            parts.append(f"it sagged {hold['sagFraction']:.0%}")
+        if hold.get('bodyGroundContacts'):
+            parts.append('its body hit the ground')
+        flag('unstable-stance', 'error',
+             'Falls over when its joints simply hold the stance (' + ', '.join(parts or ['it failed']) +
+             ' within 2 s): a learned policy would have to balance from the first step. Widen the stance, '
+             'shorten the legs, lighten the body or use stronger actuators.')
     elif stand_load > STAND_LOAD_WARN or hold.get('sagFraction', 0) > SETTLE_SAG_WARN:
-        flag('may-struggle-to-stand', 'warning',
-             f'May struggle to stand: standing on all feet already needs {stand_load:.0%} of peak torque.')
+        detail = (f'standing on all feet already needs {stand_load:.0%} of peak torque' if stand_load > STAND_LOAD_WARN
+                  else f"it sags {hold['sagFraction']:.0%} while its joints hold the stance")
+        flag('may-struggle-to-stand', 'warning', f'May struggle to stand: {detail}.')
     if gait_load > GAIT_LOAD_WARN and stand_load <= STAND_LOAD_FAIL:
         flag('may-struggle-to-walk', 'warning',
              f'May struggle to walk: with {stance_legs} feet down the stance legs need {min(gait_load, 9.99):.0%} '
@@ -1374,16 +1429,22 @@ def analyse(directory: Path, plan: dict, design: dict, identifier: str) -> dict:
                         'tolerances': {'footHeightM': FOOT_HEIGHT_TOL_M, 'levelRad': LEVEL_TOL_RAD,
                                        'jointMarginFraction': JOINT_MARGIN_FRACTION,
                                        'minBellyClearanceM': MIN_BELLY_CLEARANCE_M},
-                        'source': ('legacy Cheetah policy default stance' if plan.get('legacy') == 'cheetah' else
-                                   'Flower stance (legacy Flower policy default)' if plan['kind'] == 'multileg' else
-                                   f'foot below the hip-pitch axis with a {QUADRUPED_KNEE} rad knee bend'),
-                        'method': 'MuJoCo forward kinematics; root lowered until the lowest foot sphere touches '
-                                  'z = 0, then per-leg Newton on hip pitch and knee'},
+                        'source': stance['source'], 'candidates': stance['candidates'],
+                        'comfortLoad': STANCE_COMFORT_LOAD,
+                        'method': 'Candidate stances from most crouched to straightest; the first whose '
+                                  'equal-share stand load is comfortable (else the least loaded) is kept. Each is '
+                                  'posed with MuJoCo forward kinematics: root lowered until the lowest foot sphere '
+                                  'touches z = 0, then per-leg Newton on hip pitch and knee.'},
         'massKg': round(float(model.body_mass.sum()), 4),
         'dimensions': {'lengthM': round(float(hi[0] - lo[0]), 4), 'widthM': round(float(hi[1] - lo[1]), 4),
                        'heightM': round(float(hi[2]), 4), 'legLengthM': round(leg_length, 4)},
         'gaitHint': gait, 'geomRoles': roles,
         'bodyRoles': {'torso': 'torso_link', 'head': None},
+        # Workshop pose experiments only (never physics or training): per-role joint
+        # deltas, indexed like each leg's joints, matching play/src/draft-lab.js.
+        'poseHints': ({'crouchDelta': [0.0, 0.475, -0.95], 'waveLeg': 'fl', 'waveDelta': [0.0, -1.25, -0.3]}
+                      if plan['kind'] == 'quadruped' else
+                      {'crouchDelta': [0.0, -0.30, 0.45], 'waveLeg': 'leg0', 'waveDelta': [0.0, -0.35, 0.35]}),
         'xmlContents': {'actuators': int(model.nu), 'sensors': int(model.nsensor),
                         'sensorNames': [_name(model, mujoco.mjtObj.mjOBJ_SENSOR, s) for s in range(model.nsensor)],
                         'keyframes': [_name(model, mujoco.mjtObj.mjOBJ_KEY, k) for k in range(model.nkey)],

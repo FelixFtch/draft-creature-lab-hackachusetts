@@ -502,6 +502,58 @@ def _class_report(family: dict, strength: float) -> dict:
     return report
 
 
+WASM_CHECK = r"""
+import fs from 'node:fs/promises';
+import path from 'node:path';
+const [factory, root, ids] = [process.argv[2], process.argv[3], process.argv.slice(4)];
+const mj = await (await import(factory)).default();
+const out = [];
+for (const id of ids) {
+  const dir = path.join(root, id), body = JSON.parse(await fs.readFile(path.join(dir, 'body.json'), 'utf8'));
+  const vfs = new mj.MjVFS();
+  for (const mesh of body.meshFiles) vfs.addBuffer(mesh, new Uint8Array(await fs.readFile(path.join(dir, mesh))));
+  const model = mj.MjModel.from_xml_string(await fs.readFile(path.join(dir, 'body.xml'), 'utf8'), vfs);
+  const data = new mj.MjData(model);
+  data.qpos.set(body.initialQpos);
+  mj.mj_forward(model, data);
+  let mass = 0;
+  for (let i = 0; i < model.nbody; i++) mass += model.body_mass[i];
+  const feet = body.legs.map(leg => data.site_xpos[mj.mj_name2id(model, mj.mjtObj.mjOBJ_SITE.value, leg.footSite) * 3 + 2] - leg.footRadius);
+  out.push({ id, version: mj.mj_versionString(), nq: model.nq, mass, feet });
+  data.delete(); model.delete(); vfs.delete();
+}
+console.log(JSON.stringify(out));
+"""
+
+
+class BrowserEngineTests(unittest.TestCase):
+    """Committed bodies load in the browser's MuJoCo WASM build with the same mass and stance."""
+
+    def test_bodies_load_in_mujoco_wasm(self):
+        factory = PROJECT / 'play/node_modules/@mujoco/mujoco/mujoco.js'
+        node = shutil.which('node')
+        if not node or not factory.is_file():
+            self.skipTest('node or play/node_modules/@mujoco/mujoco not installed')
+        import subprocess
+        ids = sorted(p.name for p in designs.SHOWCASE_DIR.iterdir() if designs._store_dir(designs.SHOWCASE_DIR, p.name))
+        self.assertTrue(ids)
+        with tempfile.NamedTemporaryFile('w', suffix='.mjs', delete=False) as script:
+            script.write(WASM_CHECK)
+        try:
+            result = subprocess.run([node, script.name, str(factory), str(designs.SHOWCASE_DIR), *ids],
+                                    capture_output=True, text=True, timeout=300)
+            self.assertEqual(result.returncode, 0, result.stderr[-2000:])
+        finally:
+            os.unlink(script.name)
+        rows = json.loads(result.stdout.strip().splitlines()[-1])
+        for row in rows:
+            body = json.loads((designs.SHOWCASE_DIR / row['id'] / 'body.json').read_text())
+            with self.subTest(body['name']):
+                self.assertEqual(row['nq'], len(body['initialQpos']))
+                self.assertAlmostEqual(row['mass'], body['massKg'], places=3)
+                self.assertLess(max(abs(z) for z in row['feet']), 1e-4)
+
+
 class SchemaTests(StoreMixin, unittest.TestCase):
     def test_family_table_documented_in_schema(self):
         documented = designs.design_schema()['x-actuatorFamilies']

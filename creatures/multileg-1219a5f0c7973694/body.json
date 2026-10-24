@@ -575,8 +575,15 @@
    "jointMarginFraction": 0.1,
    "minBellyClearanceM": 0.01
   },
-  "source": "Flower stance (legacy Flower policy default)",
-  "method": "MuJoCo forward kinematics; root lowered until the lowest foot sphere touches z = 0, then per-leg Newton on hip pitch and knee"
+  "source": "hip pitch 0.15 rad, knee 1.25 rad (shank ~80 deg below horizontal)",
+  "candidates": [
+   {
+    "source": "hip pitch 0.15 rad, knee 1.25 rad (shank ~80 deg below horizontal)",
+    "standLoad": 0.2236
+   }
+  ],
+  "comfortLoad": 0.45,
+  "method": "Candidate stances from most crouched to straightest; the first whose equal-share stand load is comfortable (else the least loaded) is kept. Each is posed with MuJoCo forward kinematics: root lowered until the lowest foot sphere touches z = 0, then per-leg Newton on hip pitch and knee."
  },
  "massKg": 10.2463,
  "dimensions": {
@@ -691,6 +698,19 @@
  "bodyRoles": {
   "torso": "torso_link",
   "head": null
+ },
+ "poseHints": {
+  "crouchDelta": [
+   0.0,
+   -0.3,
+   0.45
+  ],
+  "waveLeg": "leg0",
+  "waveDelta": [
+   0.0,
+   -0.35,
+   0.35
+  ]
  },
  "xmlContents": {
   "actuators": 0,
