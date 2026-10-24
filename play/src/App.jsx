@@ -33,11 +33,24 @@ const DEFAULT_LOOK = PRODUCT_LOOKS[0].look;
 // a skill is only offered when its bundle passed validation for that exact body.
 const ROSTER = [
   { id: 'rollo', name: 'Rollo', kind: 'Wheel-leg', plan: 'wheeled', tagline: 'Balances on two wheels like a segway and springs into the air.' },
-  { id: 'dog', name: 'Dog', kind: 'Robot dog', bodyId: 'quadruped-329a735927fa8b37', tagline: "Draft's Cheetah: trots, turns and jumps gaps." },
-  { id: 'spider', name: 'Flower', kind: 'Six-legged crawler', legacy: 'flower', tagline: 'Pretrained six-legged crawler: always three feet down.' },
-  { id: 'octo', name: 'Octo', kind: 'Spider', bodyId: 'multileg-cfeadbfbef98a249', tagline: 'Eight long legs: wide stance, bridges small gaps by walking.' },
+  { id: 'dog', name: 'Dog', kind: 'Robot dog', bodyId: 'quadruped-329a735927fa8b37', tagline: "Draft's Cheetah preset: trots, turns and hops. Strongest joints in the park." },
+  { id: 'spider', name: 'Flower', kind: 'Six-legged crawler', legacy: 'flower', tagline: 'Pretrained six-legged crawler: low and steady, crosses rubble.' },
+  { id: 'octo', name: 'Octo', kind: 'Spider', bodyId: 'multileg-cfeadbfbef98a249', tagline: 'Eight legs, six always down: the most stable and fastest walker.' },
   { id: 'bipo', name: 'Bipo', kind: 'Humanoid', plan: 'humanoid', tagline: "Draft's humanoid: narrow footprint, steps over obstacles." },
 ];
+
+// qa/terrain-trials.mjs writes one entry per pilot with per-grade results;
+// the Terrain Lab UI reads { robots: { rosterId: { laneId: trial } } }.
+const TERRAIN_TRIALS = (() => {
+  const robots = {};
+  for (const pilot of terrainResults.pilots || []) {
+    const robot = ROSTER.find(r => (r.bodyId && pilot.id === `creature:${r.bodyId}`) || (r.legacy && pilot.id === `legacy-${r.legacy}`));
+    if (!robot || !pilot.grades) continue;
+    robots[robot.id] = Object.fromEntries(Object.entries(pilot.grades).map(([grade, r]) => [grade,
+      { outcome: r.outcome, timeS: r.timeS, reason: r.failure?.reason ?? null, note: r.observation ?? null, usedJump: (r.jumps || 0) > 0 }]));
+  }
+  return { schema: terrainResults.schema, generatedAt: terrainResults.createdAt, source: 'qa/terrain-trials.mjs', robots };
+})();
 const LEGACY_PRESETS = ['cheetah', 'bear', 'giraffe', 'flower'];
 const GREETING = { id: 'hello', role: 'tinker', kind: 'text', text: "Hi, I'm Tinker! Tell me about a robot — a wheel-leg jumper, a robot dog, a spider, a humanoid, anything. I'll draft a real body for it with Draft: joints, motors and all." };
 const STARTER_CHIPS = ['A wheel-leg robot that jumps', 'A robot dog', 'An eight-legged spider', 'A small humanoid'];
@@ -411,10 +424,10 @@ export default function App() {
         <PauseMenu open={modal === 'pause'} onResume={() => setModal(null)} onRestart={() => { game.current?.reset?.(); setModal(null); }}
           onChallenges={() => setModal('terrain')} onStickers={() => setModal(null)} onSettings={() => setModal('settings')} onWorkshop={leavePlayground} creature={creature} stats={{}} />
         <Modal open={modal === 'roster'} onClose={() => setModal(null)} title="Pick a robot" icon="gamepad" description="Real Draft bodies. Badges show only what passed its checks." size="xl" placement={phone ? 'bottom' : 'center'}>
-          <RobotRoster robots={rosterEntries} selectedId={current?.rosterId} onSelect={id => openRoster(id)} trials={terrainResults} onOpenTerrain={() => setModal('terrain')} />
+          <RobotRoster robots={rosterEntries} selectedId={current?.rosterId} onSelect={id => openRoster(id)} trials={TERRAIN_TRIALS} onOpenTerrain={() => setModal('terrain')} />
         </Modal>
         <Modal open={modal === 'terrain'} onClose={() => setModal(null)} title="Terrain Lab" icon="terrain-step" description="How each robot's structure meets the terrain" size="xl" placement={phone ? 'bottom' : 'center'}>
-          <TerrainLab robots={rosterEntries} trials={terrainResults} initial={{ robotId: current?.rosterId || 'dog', laneId: 'gap-35' }} onTryLane={() => { setModal(null); enterPlayground(); }} />
+          <TerrainLab robots={rosterEntries} trials={TERRAIN_TRIALS} initial={{ robotId: current?.rosterId || 'dog', laneId: 'gap-35' }} onTryLane={() => { setModal(null); enterPlayground(); }} />
         </Modal>
       </>}
     >

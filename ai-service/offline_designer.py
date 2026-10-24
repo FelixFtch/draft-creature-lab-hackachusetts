@@ -827,6 +827,9 @@ class OfflineDesigner:
         if archetype and not intent.arch_strong and has_design and not intent.it_ref and intent.new_words and \
                 _re(intent.text, r"\b(a|an|some|something)\b[a-z' -]{0,24}?\b" + re.escape(intent.arch_keyword)):
             return self._new_design(ctx, archetype)  # "make a fast runner" while another design is on the bench
+        if archetype and has_design and not intent.it_ref and \
+                _re(intent.text, r"^\s*(a|an)\b[a-z' -]{0,24}?\b" + re.escape(intent.arch_keyword)):
+            return self._new_design(ctx, archetype)  # "an eight-legged spider that ..." describes a new robot
         if restyle_only or (intent.theme and has_design and not intent.body_mods and not archetype):
             return self._restyle(ctx, intent.theme)
         if intent.theme and not has_design and not archetype:
