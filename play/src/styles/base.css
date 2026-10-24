@@ -1,0 +1,172 @@
+/*
+  Base layer. Everything is scoped under .cl-root so the kit can live next to
+  legacy styles without resetting them.
+*/
+
+.cl-root {
+  --cl-casl: 1;
+  font-family: var(--cl-font-ui);
+  font-size: var(--cl-text-md);
+  line-height: var(--cl-leading-ui);
+  font-weight: 400;
+  color: var(--cl-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+.cl-root *,
+.cl-root *::before,
+.cl-root *::after {
+  box-sizing: border-box;
+}
+
+.cl-root :where(h1, h2, h3, h4, h5, p, figure, blockquote, dl, dd) {
+  margin: 0;
+}
+
+.cl-root :where(ul[class], ol[class]) {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cl-root :where(button, input, textarea, select) {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+
+.cl-root :where(button) {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cl-root :where(button:disabled) {
+  cursor: not-allowed;
+}
+
+.cl-root :where(img, svg, canvas, video) {
+  display: block;
+  max-width: 100%;
+}
+
+.cl-root :where(table) {
+  border-collapse: collapse;
+}
+
+/* Focus: a thick, high-contrast ring with a paper halo so it reads on the
+   3D stage, on paper and (redefined below) on blueprint. */
+.cl-root :where(:focus-visible) {
+  outline: 3px solid var(--cl-focus);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px var(--cl-focus-halo);
+}
+
+.cl-root ::selection {
+  background: var(--cl-sun-200);
+  color: var(--cl-ink-900);
+}
+
+/* Blueprint surfaces flip the focus ring to sun so it stays visible. */
+.cl-bp {
+  --cl-focus: var(--cl-sun-400);
+  --cl-focus-halo: var(--cl-bp-800);
+}
+
+/* ---------- Type roles ---------- */
+.cl-display {
+  font-family: var(--cl-font-display);
+  font-variation-settings: "CASL" var(--cl-casl), "MONO" 0;
+  font-weight: 850;
+  line-height: var(--cl-leading-tight);
+  letter-spacing: -0.012em;
+}
+
+/* Technical lettering for blueprint titles: same family, casual axis off. */
+.cl-tech {
+  --cl-casl: 0;
+  font-family: var(--cl-font-display);
+  font-variation-settings: "CASL" 0, "MONO" 0;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.cl-mono {
+  font-family: var(--cl-font-mono);
+  font-variation-settings: var(--cl-mono-axes);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.cl-muted {
+  color: var(--cl-text-muted);
+}
+
+.cl-sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip link: hidden until focused, then a toy tag top-left. */
+.cl-skip {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  z-index: calc(var(--cl-z-title) + 1);
+  padding: 10px 14px;
+  border: var(--cl-line) solid var(--cl-ink-900);
+  border-radius: var(--cl-radius-key);
+  background: var(--cl-sun-400);
+  color: var(--cl-ink-900);
+  font-weight: 700;
+  text-decoration: none;
+  transform: translateY(-160%);
+}
+
+.cl-skip:focus-visible {
+  transform: none;
+}
+
+/* ---------- Motion preferences ----------
+   Respect the OS setting; the Settings panel can also force it with
+   data-motion="reduce" on the root. Opacity fades stay; travel, scale,
+   bounce and loops stop. */
+@media (prefers-reduced-motion: reduce) {
+  .cl-root:not([data-motion="full"]) *,
+  .cl-root:not([data-motion="full"]) *::before,
+  .cl-root:not([data-motion="full"]) *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.cl-root[data-motion="reduce"] *,
+.cl-root[data-motion="reduce"] *::before,
+.cl-root[data-motion="reduce"] *::after {
+  animation-duration: 1ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 1ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Forced colors (Windows high contrast): keep keylines and focus visible. */
+@media (forced-colors: active) {
+  .cl-root :where(button, [role="tab"], [role="radio"]) {
+    border: 2px solid ButtonText;
+  }
+  .cl-root :where(:focus-visible) {
+    outline: 3px solid Highlight;
+  }
+}

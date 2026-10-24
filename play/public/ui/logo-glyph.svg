@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <title>Draft Creature Lab</title>
+  <rect x="2" y="2" width="44" height="44" rx="12" fill="#1e4e95" stroke="#1c2440" stroke-width="2.5"/>
+  <path d="M13 3v42M24 3v42M35 3v42M3 13h42M3 24h42M3 35h42" stroke="#dce8fb" stroke-opacity=".16" stroke-width="1"/>
+  <path d="M9 8.5v4.5M39 8.5v4.5M9 10.75h30" stroke="#dce8fb" stroke-opacity=".9" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M14.5 27 11 33.5l3.5 6.5M32.5 27 29 33.5l3.5 6.5" fill="none" stroke="#fffcf5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="11" cy="33.5" r="2.6" fill="#fffcf5"/>
+  <circle cx="29" cy="33.5" r="2.6" fill="#fffcf5"/>
+  <rect x="7.5" y="15.5" width="33" height="13.5" rx="6.75" fill="#ffc63a" stroke="#1c2440" stroke-width="2.4"/>
+  <circle cx="35" cy="21.5" r="2.2" fill="#1c2440"/>
+</svg>

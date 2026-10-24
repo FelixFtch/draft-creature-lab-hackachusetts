@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#f4ecda" />
+    <title>Creature Lab UI kit — harness</title>
+    <link rel="icon" href="/ui/logo-glyph.svg" type="image/svg+xml" />
+    <style>
+      html, body, #root { margin: 0; height: 100%; }
+      body { background: #e9dfc8; overflow: hidden; }
+      /* Harness-only chrome (not part of the kit). */
+      .cl-devbar { position: fixed; left: 50%; bottom: 6px; transform: translateX(-50%); z-index: 99; padding: 6px 10px; border-radius: 10px; background: rgb(28 36 64 / 0.86); color: #fffcf5; font: 600 12px system-ui; }
+      .cl-devbar select { margin-left: 6px; font: inherit; }
+      .cl-kit { height: 100%; overflow: auto; display: grid; gap: 22px; align-content: start; padding: 24px; background: #f4ecda; }
+      .cl-kit__row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+      .cl-kit__row--end { align-items: end; }
+      .cl-kit__fig { display: grid; justify-items: center; gap: 4px; margin: 0; }
+      .cl-kit__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 320px)); gap: 20px; }
+      .cl-kit__glyph { display: inline-block; width: 150px; padding: 6px; border: 2px solid #1c2440; border-radius: 14px; background: #fffcf5; }
+      .cl-kit__glyph--bp { background: #1e4e95; }
+      .cl-kit__icons { display: flex; flex-wrap: wrap; gap: 12px; }
+      .cl-kit__icons span { display: grid; justify-items: center; gap: 2px; width: 64px; font: 10px system-ui; color: #3d4566; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/ui/dev-main.jsx"></script>
+  </body>
+</html>

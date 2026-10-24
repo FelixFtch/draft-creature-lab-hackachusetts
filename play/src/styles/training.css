@@ -1,0 +1,416 @@
+/* Train: TrainingPanel, chart, eval table. */
+
+.cl-train {
+  display: grid;
+  gap: 12px;
+}
+
+.cl-train__foot {
+  display: flex;
+  gap: 7px;
+  color: var(--cl-text-muted);
+  font-size: var(--cl-text-xs);
+  line-height: var(--cl-leading-ui);
+}
+
+.cl-train__foot svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.cl-skill {
+  display: grid;
+  gap: 0;
+  overflow: hidden;
+  border: var(--cl-line) solid var(--cl-ink-900);
+  border-radius: var(--cl-radius-card);
+  background: var(--cl-paper-50);
+  box-shadow: var(--cl-depth-sm);
+}
+
+.cl-skill__head {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 11px;
+  padding: 12px 12px 10px;
+}
+
+.cl-skill__icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: var(--cl-line) solid var(--cl-ink-900);
+  border-radius: 14px;
+  background: var(--cl-paper-200);
+}
+
+.cl-skill.is-training .cl-skill__icon,
+.cl-skill.is-validating .cl-skill__icon {
+  border: 0;
+  background: transparent;
+}
+
+.cl-skill.is-ready .cl-skill__icon {
+  background: var(--cl-leaf-500);
+}
+
+.cl-skill.is-failed .cl-skill__icon {
+  background: var(--cl-tomato-100);
+}
+
+.cl-skill__titles {
+  display: grid;
+  min-width: 0;
+}
+
+.cl-skill__title {
+  font-family: var(--cl-font-display);
+  font-variation-settings: "CASL" 1, "MONO" 0;
+  font-weight: 900;
+  font-size: var(--cl-text-xl);
+  line-height: 1.05;
+}
+
+.cl-skill__titles .cl-hint {
+  font-size: var(--cl-text-xs);
+}
+
+.cl-skill__body {
+  display: grid;
+  gap: 12px;
+  padding: 2px 12px 14px;
+}
+
+.cl-skill__body > .cl-btn {
+  justify-self: start;
+}
+
+.cl-skill__lede {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: var(--cl-text-sm);
+  line-height: var(--cl-leading-ui);
+}
+
+.cl-skill__locked {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 11px;
+  border-radius: 10px;
+  background: var(--cl-paper-200);
+  color: var(--cl-text-2);
+  font-size: var(--cl-text-sm);
+  font-weight: 700;
+}
+
+.cl-skill__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 4px;
+}
+
+.cl-skill__actions .cl-hint {
+  flex: 1 1 180px;
+  font-size: var(--cl-text-xs);
+}
+
+.cl-skill__honest {
+  display: flex;
+  gap: 7px;
+  padding: 9px 11px;
+  border-left: 4px solid var(--cl-bp-600);
+  border-radius: 4px 10px 10px 4px;
+  background: var(--cl-bp-50);
+  color: var(--cl-ink-800);
+  font-size: var(--cl-text-xs);
+  line-height: var(--cl-leading-ui);
+}
+
+.cl-skill__honest svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  color: var(--cl-bp-600);
+}
+
+.cl-skill__progress {
+  display: grid;
+  gap: 5px;
+  font-size: var(--cl-text-xs);
+  color: var(--cl-text-2);
+}
+
+/* progress bar as a perforated construction strip */
+.cl-skill__bar {
+  position: relative;
+  height: 16px;
+  border: var(--cl-line) solid var(--cl-ink-900);
+  border-radius: 6px;
+  background:
+    radial-gradient(circle, var(--cl-paper-300) 2.4px, transparent 3px) 0 50% / 14px 14px repeat-x,
+    var(--cl-paper-50);
+  overflow: hidden;
+}
+
+.cl-skill__bar span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background:
+    radial-gradient(circle, rgb(28 36 64 / 0.38) 2.4px, transparent 3px) 0 50% / 14px 14px repeat-x,
+    var(--cl-sun-400);
+  border-right: var(--cl-line) solid var(--cl-ink-900);
+  transition: width var(--cl-dur-slow) var(--cl-ease-standard);
+}
+
+.cl-skill__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  border: 1.5px solid var(--cl-paper-300);
+  border-radius: 10px;
+}
+
+.cl-skill__stats > div {
+  display: grid;
+  gap: 1px;
+  padding: 7px 10px;
+  border-left: 1.5px solid var(--cl-paper-300);
+}
+
+.cl-skill__stats > div:first-child {
+  border-left: 0;
+}
+
+.cl-skill__stats dt {
+  color: var(--cl-text-muted);
+  font-size: var(--cl-text-xs);
+  font-weight: 700;
+}
+
+.cl-skill__stats dd {
+  margin: 0;
+  font-weight: 700;
+  font-size: var(--cl-text-md);
+}
+
+/* ---------- chart ---------- */
+.cl-tchart {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+}
+
+.cl-tchart__cap {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-weight: 700;
+  font-size: var(--cl-text-sm);
+}
+
+.cl-tchart__now {
+  color: var(--cl-text-2);
+  font-size: var(--cl-text-xs);
+}
+
+.cl-tchart__plot {
+  position: relative;
+  border-radius: 10px;
+  background: var(--cl-paper-100);
+  box-shadow: inset 0 0 0 1.5px var(--cl-paper-300);
+  outline: none;
+  cursor: crosshair;
+}
+
+.cl-tchart__plot:focus-visible {
+  outline: 3px solid var(--cl-focus);
+  outline-offset: 2px;
+}
+
+.cl-tchart__plot svg {
+  display: block;
+  width: 100%;
+  height: 150px;
+}
+
+.cl-tchart__grid {
+  stroke: var(--cl-paper-300);
+  stroke-width: 1;
+}
+
+.cl-tchart__tick {
+  fill: var(--cl-ink-600);
+  font-family: var(--cl-font-mono);
+  font-variation-settings: var(--cl-mono-axes);
+  font-size: 10px;
+}
+
+.cl-tchart__todo {
+  fill: rgb(28 36 64 / 0.035);
+  stroke: var(--cl-paper-400);
+  stroke-dasharray: 3 4;
+}
+
+.cl-tchart__area {
+  fill: var(--cl-bp-600);
+  opacity: 0.1;
+}
+
+.cl-tchart__line {
+  fill: none;
+  stroke: var(--cl-bp-600);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.cl-tchart__end {
+  fill: var(--cl-sun-400);
+  stroke: var(--cl-paper-100);
+  stroke-width: 2;
+}
+
+.cl-tchart__cross {
+  stroke: var(--cl-ink-600);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.cl-tchart__dot {
+  fill: var(--cl-bp-600);
+  stroke: var(--cl-paper-100);
+  stroke-width: 2;
+}
+
+.cl-tchart__tip {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  gap: 1px;
+  padding: 5px 8px;
+  border: 1.5px solid var(--cl-ink-900);
+  border-radius: 8px;
+  background: var(--cl-paper-50);
+  box-shadow: var(--cl-lift-1);
+  font-size: var(--cl-text-xs);
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% - 10px));
+}
+
+.cl-tchart__tip strong {
+  font-size: var(--cl-text-sm);
+}
+
+.cl-linkbtn {
+  justify-self: start;
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  color: var(--cl-bp-600);
+  font-size: var(--cl-text-xs);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cl-tchart__table {
+  width: 100%;
+  font-size: var(--cl-text-xs);
+}
+
+.cl-tchart__table th,
+.cl-tchart__table td {
+  padding: 3px 6px;
+  border-top: 1px solid var(--cl-paper-300);
+  text-align: left;
+}
+
+/* ---------- eval table ---------- */
+.cl-eval {
+  width: 100%;
+  font-size: var(--cl-text-xs);
+  border: 1.5px solid var(--cl-paper-300);
+  border-radius: 10px;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+}
+
+.cl-eval__cap {
+  padding: 0 0 6px;
+  color: var(--cl-text);
+  font-weight: 700;
+  font-size: var(--cl-text-sm);
+  text-align: left;
+}
+
+.cl-eval th,
+.cl-eval td {
+  padding: 7px 8px;
+  border-top: 1px solid var(--cl-paper-300);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.cl-eval thead th {
+  border-top: 0;
+  background: var(--cl-paper-200);
+  color: var(--cl-text-muted);
+  font-weight: 700;
+}
+
+.cl-eval tbody th {
+  font-weight: 700;
+}
+
+.cl-eval__asked {
+  display: block;
+  margin-top: 1px;
+  color: var(--cl-text-muted);
+  font-weight: 400;
+  font-size: 11.5px;
+}
+
+.cl-eval tr.is-fail,
+.cl-eval tr.is-fell {
+  background: var(--cl-tomato-100);
+}
+
+.cl-eval__result {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.cl-eval__result--pass {
+  background: var(--cl-leaf-100);
+  color: var(--cl-leaf-700);
+}
+
+.cl-eval__result--fail,
+.cl-eval__result--fell {
+  background: var(--cl-paper-50);
+  color: var(--cl-tomato-600);
+  box-shadow: inset 0 0 0 1.5px var(--cl-tomato-600);
+}
+
+.cl-eval__result--pending {
+  color: var(--cl-text-muted);
+}
+
+.cl-eval__result--pending .cl-spinner {
+  width: 11px;
+  height: 11px;
+  border-width: 2px;
+}

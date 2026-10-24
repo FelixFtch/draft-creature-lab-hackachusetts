@@ -1,0 +1,754 @@
+/* Chat with Tinker + message cards. */
+
+.cl-chat {
+  overflow: hidden;
+}
+
+.cl-chat__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+  padding: 12px 12px 10px 14px;
+  border-bottom: var(--cl-line-thin) solid var(--cl-hairline);
+}
+
+.cl-chat__who {
+  display: grid;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.cl-chat__title {
+  font-family: var(--cl-font-display);
+  font-variation-settings: "CASL" 1, "MONO" 0;
+  font-weight: 900;
+  font-size: var(--cl-text-xl);
+  line-height: 1.05;
+}
+
+.cl-chat__role {
+  color: var(--cl-text-muted);
+  font-size: var(--cl-text-xs);
+  font-weight: 700;
+}
+
+/* Provider badge: offline / on this computer / cloud. Words, not color alone. */
+.cl-provider {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  max-width: 190px;
+  padding: 4px 9px;
+  border: 1.5px solid currentColor;
+  border-radius: 999px;
+  font-size: var(--cl-text-xs);
+  font-weight: 700;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.cl-provider__label,
+.cl-provider__model {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cl-provider__model {
+  font-family: var(--cl-font-mono);
+  font-variation-settings: var(--cl-mono-axes);
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.cl-provider--offline {
+  border-style: dashed;
+  color: var(--cl-ink-700);
+}
+
+.cl-provider--local {
+  background: var(--cl-leaf-100);
+  color: var(--cl-leaf-700);
+}
+
+.cl-provider--cloud {
+  background: var(--cl-grape-100);
+  color: var(--cl-grape-600);
+}
+
+/* ---------- Log ---------- */
+.cl-chat__log {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 14px 12px 10px;
+  outline: none;
+}
+
+/* Focusable so keyboard users can scroll history; ring drawn inside. */
+.cl-chat__log:focus-visible {
+  box-shadow: inset 0 0 0 3px var(--cl-focus);
+}
+
+.cl-chat__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cl-msg {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  max-width: 100%;
+  animation: cl-msg-in var(--cl-dur-base) var(--cl-ease-enter);
+}
+
+.cl-msg__avatar {
+  flex: 0 0 34px;
+  width: 34px;
+  min-height: 1px;
+  margin-top: 2px;
+}
+
+.cl-msg__stack {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.cl-msg__bubble {
+  justify-self: start;
+  max-width: 100%;
+  padding: 9px 13px;
+  border: var(--cl-line-thin) solid var(--cl-ink-900);
+  border-radius: 6px 16px 16px 16px;
+  background: var(--cl-paper-50);
+  line-height: var(--cl-leading-read);
+  overflow-wrap: anywhere;
+}
+
+.cl-msg__bubble p {
+  white-space: pre-wrap;
+}
+
+.cl-msg--user {
+  justify-content: flex-end;
+}
+
+.cl-msg--user .cl-msg__stack {
+  flex: 0 1 auto;
+  max-width: 86%;
+}
+
+.cl-msg--user .cl-msg__bubble {
+  justify-self: end;
+  border-radius: 16px 6px 16px 16px;
+  background: var(--cl-sun-100);
+}
+
+.cl-msg--note {
+  justify-content: center;
+}
+
+.cl-msg--note span {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--cl-paper-200);
+  color: var(--cl-text-muted);
+  font-size: var(--cl-text-xs);
+  font-weight: 700;
+  text-align: center;
+}
+
+.cl-msg.is-error .cl-msg__bubble {
+  border-color: var(--cl-tomato-600);
+}
+
+.cl-msg__error {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--cl-tomato-600);
+  font-size: var(--cl-text-xs);
+  font-weight: 700;
+}
+
+.cl-msg__caret {
+  display: inline-block;
+  width: 8px;
+  height: 1em;
+  margin-left: 2px;
+  border-radius: 2px;
+  background: var(--cl-bp-600);
+  vertical-align: -2px;
+  animation: cl-caret 900ms steps(1) infinite;
+}
+
+.cl-typing {
+  display: inline-flex;
+  gap: 5px;
+  padding: 4px 2px;
+}
+
+.cl-typing i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cl-ink-600);
+  animation: cl-typing 1.1s var(--cl-ease-standard) infinite;
+}
+
+.cl-typing i:nth-child(2) { animation-delay: 140ms; }
+.cl-typing i:nth-child(3) { animation-delay: 280ms; }
+
+@keyframes cl-msg-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes cl-caret {
+  50% { opacity: 0; }
+}
+
+@keyframes cl-typing {
+  0%, 70%, 100% { transform: translateY(0); opacity: 0.45; }
+  35% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* ---------- Footer: chips + composer ---------- */
+.cl-chat__foot {
+  display: grid;
+  flex: 0 0 auto;
+  gap: 10px;
+  padding: 10px 12px 12px;
+  border-top: var(--cl-line-thin) solid var(--cl-hairline);
+  background: var(--cl-paper-100);
+}
+
+.cl-chat__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px 6px;
+  max-height: 92px;
+  overflow: hidden;
+  padding-bottom: 2px;
+}
+
+.cl-chat__disabled {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--cl-ink-700);
+  font-size: var(--cl-text-sm);
+}
+
+.cl-composer {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.cl-composer__input {
+  flex: 1 1 auto;
+  min-height: 46px;
+  max-height: 128px;
+  padding: 11px 13px;
+  border: var(--cl-line) solid var(--cl-ink-900);
+  border-radius: 14px;
+  background: var(--cl-paper-50);
+  color: var(--cl-ink-900);
+  line-height: 1.4;
+  resize: none;
+  field-sizing: content;
+  box-shadow: inset 0 2px 0 rgb(28 36 64 / 0.07);
+}
+
+.cl-composer__input::placeholder {
+  color: var(--cl-ink-600);
+  opacity: 1;
+}
+
+.cl-composer__input:focus-visible {
+  outline: 3px solid var(--cl-focus);
+  outline-offset: 1px;
+  box-shadow: none;
+}
+
+.cl-composer .cl-iconbtn {
+  --ib-size: 46px;
+  margin-bottom: 3px;
+}
+
+.cl-composer__send:not(:disabled) {
+  --ib-face: var(--cl-sun-400);
+  --ib-face-hover: #ffd15e;
+}
+
+.cl-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 3px;
+}
+
+/* ---------- Design card: blueprint sketch + toy label ---------- */
+.cl-design {
+  overflow: hidden;
+  border: var(--cl-line) solid var(--cl-ink-900);
+  border-radius: var(--cl-radius-card);
+  background: var(--cl-paper-50);
+  box-shadow: var(--cl-depth-sm);
+}
+
+.cl-design__sheet {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 18px 16px 8px;
+  background-color: var(--cl-bp-surface);
+  background-image:
+    linear-gradient(var(--cl-bp-grid-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--cl-bp-grid-major) 1px, transparent 1px),
+    linear-gradient(var(--cl-bp-grid-minor) 1px, transparent 1px),
+    linear-gradient(90deg, var(--cl-bp-grid-minor) 1px, transparent 1px);
+  background-size: 40px 40px, 40px 40px, 8px 8px, 8px 8px;
+  background-position: -1px -1px;
+  border-bottom: var(--cl-line) solid var(--cl-ink-900);
+}
+
+.cl-design__glyph {
+  width: 100%;
+  max-width: 230px;
+  height: auto;
+}
+
+.cl-design__sheet-label {
+  position: absolute;
+  left: 10px;
+  top: 7px;
+  color: var(--cl-bp-text-dim);
+  font-size: var(--cl-text-xs);
+}
+
+.cl-design__stamp {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border: 2px solid currentColor;
+  border-radius: 5px;
+  background: rgb(16 47 94 / 0.55);
+  color: var(--cl-bp-text);
+  font-family: var(--cl-font-display);
+  font-variation-settings: "CASL" 0, "MONO" 0;
+  font-weight: 800;
+  font-size: var(--cl-text-xs);
+  transform: rotate(2deg);
+}
+
+.cl-design__stamp--good {
+  color: #7ff0b0;
+}
+
+.cl-design__stamp--bad {
+  color: #ffb3a6;
+}
+
+.cl-design__body {
+  display: grid;
+  gap: 9px;
+  padding: 11px 13px 13px;
+}
+
+.cl-design__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.cl-design__name {
+  font-family: var(--cl-font-display);
+  font-variation-settings: "CASL" 1, "MONO" 0;
+  font-weight: 950;
+  font-size: var(--cl-text-2xl);
+  line-height: 1;
+}
+
+.cl-design__palette {
+  display: inline-flex;
+}
+
+.cl-design__palette span {
+  width: 18px;
+  height: 18px;
+  margin-left: -5px;
+  border: 2px solid var(--cl-paper-50);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.5px var(--cl-ink-900);
+}
+
+.cl-design__concept {
+  color: var(--cl-text-2);
+  font-size: var(--cl-text-sm);
+  line-height: var(--cl-leading-ui);
+}
+
+.cl-design__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.cl-design__facts li {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px 3px 7px;
+  border-radius: 8px;
+  background: var(--cl-paper-200);
+  font-size: var(--cl-text-xs);
+  font-weight: 700;
+}
+
+.cl-design__skills {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.cl-design__skills-label {
+  color: var(--cl-text-muted);
+  font-size: var(--cl-text-xs);
+  font-weight: 700;
+}
+
+.cl-design__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding-top: 2px;
+  padding-bottom: 3px;
+}
+
+.cl-design.is-superseded {
+  opacity: 0.62;
+}
+
+.cl-design.is-infeasible .cl-design__sheet {
+  background-color: #2b3f6e;
+}
+
+.cl-design--compact .cl-design__sheet {
+  padding: 12px 10px 4px;
+}
+
+/* ---------- Problem card: red pen on a blueprint ---------- */
+.cl-problem {
+  display: grid;
+  gap: 10px;
+  overflow: hidden;
+  padding-bottom: 12px;
+  border: var(--cl-line) solid var(--cl-ink-900);
+  border-radius: var(--cl-radius-card);
+  background: var(--cl-paper-50);
+  box-shadow: var(--cl-depth-sm);
+}
+
+.cl-problem__sheet {
+  position: relative;
+  display: grid;
+  gap: 4px;
+  padding: 14px 14px 14px 56px;
+  border-bottom: var(--cl-line) solid var(--cl-ink-900);
+  background-color: var(--cl-bp-surface);
+  background-image: linear-gradient(var(--cl-bp-grid-minor) 1px, transparent 1px), linear-gradient(90deg, var(--cl-bp-grid-minor) 1px, transparent 1px);
+  background-size: 8px 8px;
+  color: var(--cl-bp-text);
+}
+
+.cl-problem__mark {
+  position: absolute;
+  left: 13px;
+  top: 14px;
+  width: 30px;
+  height: 30px;
+  border: 3px solid #ff8f7d;
+  border-radius: 48% 52% 45% 55%;
+  transform: rotate(-12deg);
+}
+
+.cl-problem__mark::after {
+  content: "!";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #ffb3a6;
+  font-family: var(--cl-font-display);
+  font-variation-settings: "CASL" 1, "MONO" 0;
+  font-weight: 1000;
+  font-size: 17px;
+  transform: rotate(12deg);
+}
+
+.cl-problem__title {
+  font-family: var(--cl-font-display);
+  font-variation-settings: "CASL" 1, "MONO" 0;
+  font-weight: 900;
+  font-size: var(--cl-text-lg);
+  line-height: 1.15;
+  color: #ffd0c7;
+}
+
+.cl-problem__reason {
+  color: var(--cl-bp-text);
+  font-size: var(--cl-text-sm);
+  line-height: var(--cl-leading-ui);
+}
+
+.cl-problem__numbers {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0 13px;
+}
+
+.cl-problem__row {
+  display: grid;
+  gap: 4px;
+}
+
+.cl-problem__row dt {
+  font-weight: 700;
+  font-size: var(--cl-text-sm);
+}
+
+.cl-problem__row dd {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  font-size: var(--cl-text-xs);
+  color: var(--cl-text-2);
+}
+
+.cl-problem__bar {
+  position: relative;
+  height: 14px;
+  border-radius: 4px;
+  background: var(--cl-paper-200);
+}
+
+.cl-problem__need,
+.cl-problem__have {
+  position: absolute;
+  left: 0;
+  border-radius: 0 4px 4px 0;
+}
+
+.cl-problem__need {
+  top: 0;
+  height: 6px;
+  background: var(--cl-ink-600);
+}
+
+.cl-problem__have {
+  bottom: 0;
+  height: 6px;
+  background: var(--cl-leaf-500);
+}
+
+.cl-problem__have.is-short {
+  background: var(--cl-tomato-500);
+}
+
+.cl-problem__warnings {
+  display: grid;
+  gap: 4px;
+  padding: 0 13px;
+}
+
+.cl-problem__warnings li {
+  display: flex;
+  gap: 6px;
+  color: var(--cl-warn);
+  font-size: var(--cl-text-sm);
+}
+
+.cl-problem .cl-card-actions {
+  padding: 0 13px 3px;
+}
+
+/* ---------- Offer cards (train / play) ---------- */
+.cl-offer {
+  display: grid;
+  gap: 10px;
+  padding: 12px 13px 13px;
+  border: var(--cl-line) solid var(--cl-ink-900);
+  border-radius: var(--cl-radius-card);
+  background: var(--cl-paper-50);
+  box-shadow: var(--cl-depth-sm);
+}
+
+.cl-offer__head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 11px;
+  align-items: start;
+}
+
+.cl-offer__icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: var(--cl-line) solid var(--cl-ink-900);
+  border-radius: 12px;
+  background: var(--cl-bp-600);
+  color: var(--cl-paper-50);
+}
+
+.cl-offer__icon--go {
+  background: var(--cl-leaf-500);
+  color: var(--cl-ink-900);
+}
+
+.cl-offer__title {
+  margin-bottom: 2px;
+  font-family: var(--cl-font-display);
+  font-variation-settings: "CASL" 1, "MONO" 0;
+  font-weight: 900;
+  font-size: var(--cl-text-lg);
+  line-height: 1.15;
+}
+
+.cl-offer__skills {
+  display: grid;
+  gap: 6px;
+}
+
+.cl-offer__skills li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 10px;
+  background: var(--cl-paper-200);
+  font-size: var(--cl-text-sm);
+}
+
+.cl-offer__skill {
+  font-weight: 700;
+}
+
+.cl-offer__eta {
+  color: var(--cl-text-2);
+  font-size: var(--cl-text-xs);
+  font-weight: 700;
+}
+
+.cl-offer__skills li.is-unavailable {
+  color: var(--cl-text-muted);
+}
+
+/* ---------- Look card ---------- */
+.cl-lookcard {
+  display: grid;
+  overflow: hidden;
+  border: var(--cl-line) solid var(--cl-ink-900);
+  border-radius: var(--cl-radius-card);
+  background: var(--cl-paper-50);
+  box-shadow: var(--cl-depth-sm);
+}
+
+.cl-lookcard__art {
+  display: grid;
+  place-items: center;
+  height: 112px;
+  padding: 6px;
+  border-bottom: var(--cl-line) solid var(--cl-ink-900);
+  background: radial-gradient(circle at 50% 70%, #fff, var(--cl-paper-200));
+}
+
+.cl-lookcard__art svg {
+  width: auto;
+  height: 100%;
+}
+
+.cl-lookcard__body {
+  display: grid;
+  gap: 7px;
+  padding: 10px 12px 12px;
+}
+
+.cl-lookcard__name {
+  font-family: var(--cl-font-display);
+  font-variation-settings: "CASL" 1, "MONO" 0;
+  font-weight: 900;
+  font-size: var(--cl-text-lg);
+  line-height: 1.1;
+}
+
+.cl-lookcard__swatches {
+  display: flex;
+  gap: 4px;
+}
+
+.cl-lookcard__swatches span {
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid var(--cl-ink-900);
+  border-radius: 6px;
+}
+
+@media (max-width: 899px) {
+  .cl-chat__chips {
+    flex-wrap: nowrap;
+    max-height: none;
+    overflow-x: auto;
+    margin: 0 -12px;
+    padding: 0 12px 4px;
+    scrollbar-width: none;
+  }
+
+  .cl-chat__chips .cl-chip {
+    flex: 0 0 auto;
+  }
+
+  /* The sheet tab already says "Tinker": keep the face and the provider. */
+  .cl-chat__head {
+    gap: 8px;
+    padding: 4px 12px 6px;
+  }
+
+  .cl-chat__head > .cl-tinker {
+    width: 30px;
+    height: 30px;
+  }
+
+  /* Visually hidden but kept for the heading outline. */
+  .cl-chat__who {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .cl-chat__head .cl-provider {
+    margin-left: auto;
+  }
+}

@@ -1,0 +1,807 @@
+/* Blueprint surfaces: SpecSheet, drawing, shape tweaks, lab notes. */
+
+.cl-bp-sheet,
+.cl-spec {
+  position: relative;
+  border: var(--cl-line) solid var(--cl-bp-900);
+  border-radius: var(--cl-radius-sheet);
+  background-color: var(--cl-bp-surface);
+  background-image:
+    linear-gradient(var(--cl-bp-grid-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--cl-bp-grid-major) 1px, transparent 1px),
+    linear-gradient(var(--cl-bp-grid-minor) 1px, transparent 1px),
+    linear-gradient(90deg, var(--cl-bp-grid-minor) 1px, transparent 1px);
+  background-size: 48px 48px, 48px 48px, 12px 12px, 12px 12px;
+  background-position: -1px -1px;
+  color: var(--cl-bp-text);
+  box-shadow: inset 0 0 0 4px rgb(16 47 94 / 0.55), inset 0 0 0 5px rgb(220 232 251 / 0.18);
+}
+
+.cl-spec {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+  padding: 10px 12px 14px;
+}
+
+/* Tables scroll sideways instead of stretching the sheet on narrow screens. */
+.cl-spec__scroll {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(185 208 242 / 0.5) transparent;
+}
+
+.cl-spec__scroll:focus-visible {
+  outline: 3px solid var(--cl-focus);
+  outline-offset: 2px;
+}
+
+.cl-spec {
+  container-type: inline-size;
+}
+
+/* Narrow sheets (phones, tablet inspector): tighten instead of scrolling. */
+@container (max-width: 360px) {
+  .cl-spec__titleblock {
+    width: 100%;
+  }
+
+  .cl-spec__table th,
+  .cl-spec__table td,
+  .cl-spec__motors th,
+  .cl-spec__motors td {
+    padding: 5px 4px;
+  }
+
+  .cl-spec__range {
+    gap: 3px;
+    white-space: normal;
+  }
+
+  .cl-rangearc {
+    width: 24px;
+    height: 24px;
+  }
+
+  .cl-spec__bar {
+    min-width: 40px;
+  }
+
+  .cl-spec__stats > div {
+    padding: 7px 6px;
+  }
+
+  .cl-spec__stats dd {
+    font-size: var(--cl-text-md);
+  }
+
+  .cl-spec__prov > div {
+    grid-template-columns: 96px 1fr;
+  }
+}
+
+.cl-spec .cl-hint,
+.cl-spec .cl-muted {
+  color: var(--cl-bp-text-dim);
+}
+
+/* ---------- Drawing + title block ---------- */
+.cl-spec__drawing {
+  position: relative;
+  margin: 2px 0 6px;
+  padding: 6px 4px 0;
+}
+
+.cl-spec__corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 0 solid var(--cl-bp-200);
+}
+
+.cl-spec__corner--tl { left: 0; top: 0; border-left-width: 1.5px; border-top-width: 1.5px; }
+.cl-spec__corner--tr { right: 0; top: 0; border-right-width: 1.5px; border-top-width: 1.5px; }
+.cl-spec__corner--bl { left: 0; bottom: 0; border-left-width: 1.5px; border-bottom-width: 1.5px; }
+.cl-spec__corner--br { right: 0; bottom: 0; border-right-width: 1.5px; border-bottom-width: 1.5px; }
+
+.cl-bpdraw {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.cl-bpdraw__label,
+.cl-bpdraw__tag {
+  fill: var(--cl-bp-50);
+  font-family: var(--cl-font-mono);
+  font-variation-settings: var(--cl-mono-axes);
+  font-size: 10.5px;
+  font-weight: 600;
+}
+
+.cl-bpdraw__tag {
+  fill: var(--cl-bp-200);
+  font-size: 9.5px;
+}
+
+.cl-bpdraw__balloon {
+  fill: var(--cl-bp-50);
+  font-family: var(--cl-font-mono);
+  font-variation-settings: var(--cl-mono-axes);
+  font-size: 9.5px;
+  font-weight: 700;
+}
+
+.cl-spec__titleblock {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  margin: 2px 0 0 auto;
+  width: min(100%, 320px);
+  border: 1.5px solid var(--cl-bp-200);
+  font-size: var(--cl-text-xs);
+}
+
+.cl-spec__titleblock dd {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cl-spec__titleblock > div {
+  display: grid;
+  gap: 1px;
+  padding: 4px 7px;
+  border-left: 1.5px solid var(--cl-bp-200);
+}
+
+.cl-spec__titleblock > div:first-child {
+  border-left: 0;
+}
+
+.cl-spec__tb-name {
+  grid-row: span 1;
+}
+
+.cl-spec__tb-name dd {
+  font-family: var(--cl-font-display);
+  font-variation-settings: "CASL" 0, "MONO" 0;
+  font-weight: 800;
+  font-size: var(--cl-text-lg);
+  line-height: 1.1;
+}
+
+.cl-spec__titleblock dt {
+  color: var(--cl-bp-text-dim);
+  font-size: 10.5px;
+}
+
+.cl-spec__titleblock dd {
+  margin: 0;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+.cl-spec__titleblock > div:nth-child(4) {
+  grid-column: 2 / span 2;
+  border-top: 1.5px solid var(--cl-bp-200);
+}
+
+.cl-spec__titleblock > div:first-child {
+  grid-row: span 2;
+  align-content: center;
+}
+
+/* ---------- Stats ---------- */
+.cl-spec__stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 4px 0 6px;
+  border: 1.5px solid var(--cl-bp-200);
+  border-radius: 4px;
+  background: rgb(12 37 80 / 0.35);
+}
+
+.cl-spec__stats > div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  padding: 8px 9px;
+  border-left: 1px solid rgb(185 208 242 / 0.4);
+}
+
+.cl-spec__stats > div:first-child {
+  border-left: 0;
+}
+
+.cl-spec__stats dt {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--cl-bp-text-dim);
+  font-size: var(--cl-text-xs);
+  font-weight: 700;
+}
+
+.cl-spec__stats dd {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--cl-text-lg);
+  font-weight: 700;
+}
+
+.cl-spec__stats small {
+  font-size: var(--cl-text-xs);
+  color: var(--cl-bp-text-dim);
+}
+
+/* ---------- Sections ---------- */
+.cl-spec__section {
+  display: grid;
+  gap: 8px;
+  padding: 12px 2px 4px;
+  border-top: 1px dashed rgb(185 208 242 / 0.45);
+}
+
+.cl-spec__section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cl-spec__h {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--cl-font-display);
+  font-variation-settings: "CASL" 0, "MONO" 0;
+  font-weight: 800;
+  font-size: var(--cl-text-md);
+  letter-spacing: 0.01em;
+  color: var(--cl-bp-50);
+}
+
+.cl-spec__h svg {
+  color: var(--cl-sun-400);
+}
+
+.cl-spec__aside {
+  color: var(--cl-bp-text-dim);
+  font-size: var(--cl-text-xs);
+  font-weight: 700;
+}
+
+.cl-spec__note {
+  color: var(--cl-bp-text-dim);
+  font-size: var(--cl-text-sm);
+  line-height: var(--cl-leading-ui);
+}
+
+.cl-spec__feas {
+  display: grid;
+  gap: 2px;
+  padding: 9px 11px 9px 34px;
+  border-radius: 6px;
+  font-size: var(--cl-text-sm);
+  position: relative;
+}
+
+.cl-spec__feas::before {
+  content: "";
+  position: absolute;
+  left: 11px;
+  top: 12px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+}
+
+.cl-spec__feas.is-pass {
+  background: rgb(43 174 104 / 0.22);
+  box-shadow: inset 0 0 0 1.5px rgb(127 240 176 / 0.55);
+}
+
+.cl-spec__feas.is-pass::before {
+  background: #7ff0b0;
+}
+
+.cl-spec__feas.is-fail {
+  background: rgb(236 77 55 / 0.25);
+  box-shadow: inset 0 0 0 1.5px rgb(255 179 166 / 0.7);
+}
+
+.cl-spec__feas.is-fail::before {
+  background: #ffb3a6;
+}
+
+.cl-spec__feas span {
+  color: var(--cl-bp-text-dim);
+}
+
+.cl-spec__warn {
+  display: grid;
+  gap: 4px;
+}
+
+.cl-spec__warn li {
+  display: flex;
+  gap: 6px;
+  color: var(--cl-sun-200);
+  font-size: var(--cl-text-sm);
+}
+
+.cl-spec__warn svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+}
+
+/* skills */
+.cl-spec__skills {
+  display: grid;
+  gap: 6px;
+}
+
+.cl-spec__skill {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border: 1.5px solid rgb(185 208 242 / 0.45);
+  border-radius: 8px;
+  background: rgb(12 37 80 / 0.3);
+}
+
+.cl-spec__skill > svg {
+  color: var(--cl-bp-200);
+}
+
+.cl-spec__skill-text {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+  font-size: var(--cl-text-sm);
+}
+
+.cl-spec__skill-text span {
+  color: var(--cl-bp-text-dim);
+  font-size: var(--cl-text-xs);
+}
+
+.cl-spec__skill.is-good {
+  border-color: rgb(127 240 176 / 0.6);
+}
+
+.cl-spec__skill.is-good > svg {
+  color: #7ff0b0;
+}
+
+.cl-spec__skill.is-warn > svg {
+  color: var(--cl-sun-400);
+}
+
+.cl-spec__skill.is-bad > svg {
+  color: #ffb3a6;
+}
+
+/* legs + joints */
+.cl-spec__legs {
+  display: grid;
+  gap: 6px;
+}
+
+.cl-spec__leg {
+  border: 1.5px solid rgb(185 208 242 / 0.45);
+  border-radius: 8px;
+  background: rgb(12 37 80 / 0.25);
+}
+
+.cl-spec__leg summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 6px 10px;
+  cursor: pointer;
+  list-style: none;
+  border-radius: 7px;
+}
+
+.cl-spec__leg summary::-webkit-details-marker {
+  display: none;
+}
+
+.cl-spec__leg summary:hover {
+  background: rgb(220 232 251 / 0.07);
+}
+
+.cl-spec__leg-name {
+  font-weight: 700;
+  font-size: var(--cl-text-sm);
+}
+
+.cl-spec__leg-chain {
+  display: inline-flex;
+  align-items: center;
+  flex: 1 1 auto;
+}
+
+.cl-spec__leg-chain i {
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid var(--cl-sun-400);
+  border-radius: 50%;
+}
+
+.cl-spec__leg-chain i + i {
+  margin-left: 14px;
+  position: relative;
+}
+
+.cl-spec__leg-chain i + i::before {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  width: 14px;
+  height: 1.5px;
+  background: var(--cl-bp-200);
+}
+
+.cl-spec__chev {
+  transition: transform var(--cl-dur-base) var(--cl-ease-standard);
+}
+
+.cl-spec__leg[open] .cl-spec__chev {
+  transform: rotate(180deg);
+}
+
+.cl-spec__table,
+.cl-spec__motors {
+  width: 100%;
+  font-size: var(--cl-text-xs);
+}
+
+.cl-spec__table {
+  margin: 0 0 6px;
+}
+
+.cl-spec__table th,
+.cl-spec__table td,
+.cl-spec__motors th,
+.cl-spec__motors td {
+  padding: 5px 8px;
+  text-align: left;
+  vertical-align: middle;
+  border-top: 1px solid rgb(185 208 242 / 0.25);
+}
+
+.cl-spec__table thead th,
+.cl-spec__motors thead th {
+  border-top: 0;
+  color: var(--cl-bp-text-dim);
+  font-weight: 700;
+}
+
+.cl-spec__table tbody th,
+.cl-spec__motors tbody th {
+  font-weight: 700;
+}
+
+.cl-num {
+  text-align: right !important;
+  white-space: nowrap;
+}
+
+.cl-spec__joint {
+  display: block;
+  font-size: var(--cl-text-sm);
+}
+
+.cl-spec__jname {
+  display: block;
+  color: var(--cl-bp-text-dim);
+  font-size: 10.5px;
+  font-weight: 500;
+}
+
+.cl-spec__range {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.cl-rangearc {
+  flex: 0 0 auto;
+}
+
+/* motors */
+.cl-spec__motors td {
+  min-width: 0;
+}
+
+.cl-spec__motors td .cl-mono {
+  display: block;
+  margin-top: 3px;
+  white-space: nowrap;
+}
+
+.cl-spec__mclass {
+  display: inline-grid;
+  place-items: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 5px;
+  border: 1.5px solid var(--cl-bp-100);
+  border-radius: 6px;
+  font-family: var(--cl-font-mono);
+  font-variation-settings: var(--cl-mono-axes);
+}
+
+.cl-spec__anchor {
+  display: block;
+  margin-top: 3px;
+  color: var(--cl-bp-text-dim);
+  font-size: 10.5px;
+  font-weight: 500;
+}
+
+.cl-spec__bar {
+  display: block;
+  height: 8px;
+  min-width: 56px;
+  border-radius: 2px 4px 4px 2px;
+  background: rgb(185 208 242 / 0.22);
+  overflow: hidden;
+}
+
+.cl-spec__bar span {
+  display: block;
+  height: 100%;
+  border-radius: 0 4px 4px 0;
+  background: var(--cl-sun-400);
+}
+
+.cl-spec__bar--speed span {
+  background: #7fd7ff;
+}
+
+/* provenance */
+.cl-spec__prov {
+  display: grid;
+  gap: 0;
+  font-size: var(--cl-text-sm);
+}
+
+.cl-spec__prov > div {
+  display: grid;
+  grid-template-columns: 116px 1fr;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  border-top: 1px solid rgb(185 208 242 / 0.25);
+}
+
+.cl-spec__prov > div:first-child {
+  border-top: 0;
+}
+
+.cl-spec__prov dt {
+  color: var(--cl-bp-text-dim);
+  font-size: var(--cl-text-xs);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.cl-spec__prov dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.cl-spec__hash {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cl-spec .cl-copy {
+  --ib-text: var(--cl-bp-100);
+  --ib-face-hover: rgb(220 232 251 / 0.12);
+}
+
+.cl-spec__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 6px 0 3px;
+}
+
+.cl-spec__actions .cl-btn--blueprint {
+  --btn-face: var(--cl-bp-700);
+  --btn-face-hover: var(--cl-bp-800);
+  --btn-edge: var(--cl-bp-100);
+  box-shadow: 0 3px 0 var(--cl-bp-900);
+}
+
+/* empty / loading */
+.cl-spec.is-empty {
+  min-height: 320px;
+  display: grid;
+  place-items: center;
+}
+
+.cl-spec__empty {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  max-width: 290px;
+  padding: 20px;
+  text-align: center;
+  color: var(--cl-bp-text-dim);
+}
+
+.cl-spec__empty svg {
+  color: var(--cl-bp-100);
+}
+
+.cl-spec__empty .cl-spinner {
+  width: 28px;
+  height: 28px;
+  color: var(--cl-sun-400);
+}
+
+.cl-spec__empty-title {
+  color: var(--cl-bp-50);
+  font-size: var(--cl-text-xl);
+}
+
+/* ---------- Shape tweaks (paper card inside the blueprint tab) ---------- */
+.cl-tweaks {
+  display: grid;
+  gap: 14px;
+  padding: 14px;
+  border: var(--cl-line) solid var(--cl-ink-900);
+  border-radius: var(--cl-radius-card);
+  background: var(--cl-paper-50);
+  color: var(--cl-ink-900);
+  --cl-focus: var(--cl-bp-600);
+  --cl-focus-halo: var(--cl-paper-50);
+}
+
+.cl-tweaks__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.cl-tweaks__grid {
+  display: grid;
+  gap: 14px;
+}
+
+.cl-tweaks__pending {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--cl-sun-100);
+}
+
+.cl-tweaks__pending p {
+  font-size: var(--cl-text-sm);
+  font-weight: 700;
+}
+
+.cl-tweaks__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-bottom: 4px;
+}
+
+.cl-tweaks__group-label {
+  margin-bottom: 6px;
+  font-weight: 700;
+  font-size: var(--cl-text-sm);
+}
+
+.cl-tweaks__stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cl-tweaks__stepper output {
+  min-width: 2ch;
+  font-family: var(--cl-font-display);
+  font-variation-settings: "CASL" 1, "MONO" 0;
+  font-weight: 900;
+  font-size: var(--cl-text-2xl);
+  text-align: center;
+}
+
+/* ---------- Lab notes ---------- */
+.cl-notes {
+  display: grid;
+  gap: 14px;
+}
+
+.cl-notes__group {
+  display: grid;
+  gap: 6px;
+}
+
+.cl-notes__group h3 {
+  font-family: var(--cl-font-display);
+  font-variation-settings: "CASL" 0, "MONO" 0;
+  font-weight: 800;
+  font-size: var(--cl-text-md);
+}
+
+.cl-notes__rows {
+  display: grid;
+  border: 1.5px solid var(--cl-paper-400);
+  border-radius: 10px;
+  background: var(--cl-paper-50);
+}
+
+.cl-notes__rows > div {
+  display: grid;
+  grid-template-columns: minmax(110px, 34%) 1fr;
+  align-items: center;
+  gap: 10px;
+  min-height: 38px;
+  padding: 4px 6px 4px 12px;
+  border-top: 1px solid var(--cl-paper-300);
+  font-size: var(--cl-text-sm);
+}
+
+.cl-notes__rows > div:first-child {
+  border-top: 0;
+}
+
+.cl-notes__rows dt {
+  color: var(--cl-text-muted);
+  font-weight: 700;
+  font-size: var(--cl-text-xs);
+}
+
+.cl-notes__rows dd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.cl-notes__honesty {
+  padding: 12px 14px;
+  border-left: 4px solid var(--cl-bp-600);
+  border-radius: 4px 10px 10px 4px;
+  background: var(--cl-bp-50);
+  font-size: var(--cl-text-sm);
+  line-height: var(--cl-leading-read);
+}
+
+.cl-notes__json {
+  width: 100%;
+  min-height: 160px;
+  padding: 10px 12px;
+  border: 1.5px solid var(--cl-paper-400);
+  border-radius: 10px;
+  background: var(--cl-ink-900);
+  color: var(--cl-bp-100);
+  font: 500 12px/1.5 var(--cl-font-mono);
+  font-variation-settings: var(--cl-mono-axes);
+  resize: vertical;
+  white-space: pre;
+}
