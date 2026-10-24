@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#ffe8c6" />
+  <title>Creature Park — world dev harness</title>
+  <style>
+    :root { color-scheme: light; --ink: #2f2a22; --muted: #6f6556; --card: rgba(255, 251, 242, .9); --line: rgba(80, 60, 30, .14); --accent: #e07a5f; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; overflow: hidden; background: #ffe8c6; font: 14px/1.35 ui-rounded, "SF Pro Rounded", system-ui, sans-serif; color: var(--ink); }
+    #park { position: fixed; inset: 0; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 6px 24px rgba(70, 50, 20, .12); backdrop-filter: blur(6px); }
+    #hud { position: fixed; inset: 0; pointer-events: none; }
+    #hud > * { pointer-events: auto; }
+    #who { position: absolute; left: 14px; top: 14px; padding: 10px 14px; max-width: 360px; }
+    #who b { font-size: 16px; } #who small { color: var(--muted); display: block; margin-top: 4px; }
+    #stats { position: absolute; left: 14px; top: 110px; padding: 8px 12px; display: grid; grid-template-columns: auto auto; gap: 2px 12px; font-variant-numeric: tabular-nums; }
+    #stats span:nth-child(odd) { color: var(--muted); }
+    #tools { position: absolute; right: 14px; top: 14px; display: flex; gap: 6px; flex-wrap: wrap; justify-content: end; max-width: 520px; }
+    button, select, input { font: inherit; color: inherit; }
+    button { border: 1px solid var(--line); background: #fffaf0; border-radius: 10px; padding: 7px 11px; cursor: pointer; }
+    button:hover { background: #fff2dc; } button.on { background: var(--accent); color: white; border-color: transparent; }
+    #challenge { position: absolute; left: 14px; bottom: 14px; padding: 10px 12px; width: 330px; }
+    #challenge select { width: 100%; margin: 6px 0; padding: 6px; border-radius: 8px; border: 1px solid var(--line); background: #fffaf0; }
+    #challenge .goal { color: var(--muted); } #challenge .prog { font-weight: 700; font-variant-numeric: tabular-nums; }
+    #explore { position: absolute; right: 14px; bottom: 14px; padding: 10px 12px; width: 360px; }
+    #explore input { width: 100%; padding: 7px 9px; border-radius: 8px; border: 1px solid var(--line); background: #fffaf0; margin: 6px 0; }
+    #explore .chips { display: flex; gap: 4px; flex-wrap: wrap; } #explore .chips button { padding: 3px 8px; font-size: 12px; }
+    #explore .status { color: var(--muted); font-size: 12px; margin-top: 6px; min-height: 16px; }
+    #toasts { position: absolute; left: 50%; top: 16px; transform: translateX(-50%); display: flex; flex-direction: column; gap: 6px; align-items: center; pointer-events: none; }
+    .toast { padding: 8px 14px; font-weight: 700; animation: pop .25s ease-out; }
+    @keyframes pop { from { transform: scale(.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    #oops { position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%); padding: 16px 26px; font-size: 22px; font-weight: 800; display: none; }
+    #status { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 16px 22px; font-weight: 700; }
+    .hidden { display: none !important; }
+    @media (max-width: 760px) { #explore, #stats { display: none; } #challenge { width: calc(100% - 28px); } }
+  </style>
+</head>
+<body>
+  <div id="park"></div>
+  <div id="hud">
+    <div id="who" class="card"><b id="who-name">Loading…</b><small id="who-note"></small></div>
+    <div id="stats" class="card"></div>
+    <div id="tools">
+      <button data-pilot="legacy-cheetah">Cheetah</button><button data-pilot="legacy-flower">Flower</button>
+      <button id="cam">Camera (C)</button><button id="mute">Mute (M)</button><button id="respawn">Respawn (R)</button><button id="reset">Reset park</button><button id="jump">Jump (Space)</button>
+    </div>
+    <div id="challenge" class="card"><b>Challenge</b><select id="challenge-select"><option value="">Free play</option></select><div class="goal" id="challenge-goal"></div><div class="prog" id="challenge-prog"></div></div>
+    <div id="explore" class="card"><b>AI Explore</b><input id="explore-text" placeholder="e.g. go to the red ball" maxlength="200" /><div class="chips" id="explore-chips"></div><div class="status" id="explore-status">Needs the local vision service (/vlm/decide).</div></div>
+    <div id="toasts"></div>
+    <div id="oops" class="card"></div>
+    <div id="status" class="card">Building the park…</div>
+  </div>
+  <script type="module" src="/src/world/dev-main.js"></script>
+</body>
+</html>

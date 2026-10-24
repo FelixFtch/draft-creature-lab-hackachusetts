@@ -210,9 +210,9 @@ export const TERRACE = (() => { const [x, y] = FRAMES.plateau.toWorld(8.2, -.8);
 // shuffling hexapod can manage, medium, and giant steps near the limit of the
 // legacy Cheetah (measured: 11 cm OK, 14 cm not).
 export const STEPS = {
-  baby: { title: 'Baby steps', v: 1.45, u0: 4.3, riser: .014, tread: .42, count: 4, landing: .9, width: 1.4, palette: ['#d6ecc4', '#cdeccf', '#c3e6d6', '#b9e0dd'] },
-  medium: { title: 'Medium steps', v: 0, u0: 4.5, riser: .06, tread: .5, count: 3, landing: .8, width: 1.2, palette: ['#cfc6ea', '#c5bdea', '#bbb3e8'] },
-  giant: { title: 'Giant steps', v: -1.4, u0: 4.5, riser: .12, tread: .6, count: 2, landing: .8, width: 1.2, palette: ['#f3cfe0', '#efc0d6'] },
+  baby: { title: 'Baby steps', label: 'BABY', v: 1.45, u0: 4.3, riser: .014, tread: .42, count: 4, landing: .9, width: 1.4, palette: ['#c4e8c4', '#a6dbb0', '#88cd9d', '#6abf8b'] },
+  medium: { title: 'Medium steps', label: 'MEDIUM', v: 0, u0: 4.5, riser: .06, tread: .5, count: 3, landing: .8, width: 1.2, palette: ['#d9d1f4', '#bdb1ec', '#a192e3'] },
+  giant: { title: 'Giant steps', label: 'GIANT', v: -1.4, u0: 4.5, riser: .12, tread: .6, count: 2, landing: .8, width: 1.2, palette: ['#f7d2e2', '#ec9fc1'] },
 };
 {
   for (const [key, s] of Object.entries(STEPS)) {
@@ -334,13 +334,14 @@ for (const [zone, u] of [['court', 5.85], ['hills', 3.4], ['plateau', 3.0], ['st
 }
 
 export const ZONES = [
-  { id: 'meadow', name: 'Meadow', blurb: 'Soft grass and an easy spark trail.', accent: '#7cc46a', angle: 0, u: [1.3, 6.0], v: [-2.6, 2.6], sign: [1.5, -1.9] },
-  { id: 'court', name: 'Ball Court', blurb: 'Nudge the big ball into the goal.', accent: '#4fb6a8', angle: 0, u: [6.0, 11.8], v: [-2.75, 2.75], sign: [5.7, -2.95] },
-  { id: 'hills', name: 'Bumpy Hills', blurb: 'Gentle swells on the left, choppy bumps on the right.', accent: '#8cc46a', angle: 60, u: [4.0, 10.0], v: [-2.8, 2.8], sign: [3.6, -2.3] },
-  { id: 'plateau', name: 'Ramp & Plateau', blurb: 'A gentle ramp to the terrace, a steep one to the summit flag.', accent: '#e0a868', angle: 120, u: [3.2, 9.4], v: [-1.95, 3.55], sign: [3.1, -2.0] },
-  { id: 'steps', name: 'Steps', blurb: 'Baby, medium and giant stairs side by side.', accent: '#b9a8e8', angle: 180, u: [3.9, 9.7], v: [-2.15, 2.3], sign: [3.6, 2.45] },
-  { id: 'jump', name: 'Jump Garden', blurb: 'Stepping stones, a gap and hoops for jumpers.', accent: '#f39ac0', angle: 240, u: [3.9, 8.7], v: [-2.6, 2.3], sign: [3.6, -2.7] },
-  { id: 'blocks', name: 'Block Yard', blurb: 'Topple the dominoes, crash the crates.', accent: '#ff9f43', angle: 300, u: [3.9, 8.2], v: [-2.9, 1.6], sign: [3.6, 2.0] },
+  // Signs stand beside each zone's spoke path, facing the hub (never on a lane).
+  { id: 'meadow', name: 'Meadow', blurb: 'Soft grass and an easy spark trail.', accent: '#7cc46a', angle: 0, u: [1.3, 6.0], v: [-2.6, 2.6], sign: [2.75, -1.25] },
+  { id: 'court', name: 'Ball Court', blurb: 'Nudge the big ball into the goal.', accent: '#4fb6a8', angle: 0, u: [6.0, 11.8], v: [-2.75, 2.75], sign: [5.7, -1.95] },
+  { id: 'hills', name: 'Bumpy Hills', blurb: 'Gentle swells on the left, choppy bumps on the right.', accent: '#8cc46a', angle: 60, u: [4.0, 10.0], v: [-2.8, 2.8], sign: [3.15, -1.0] },
+  { id: 'plateau', name: 'Ramp & Plateau', blurb: 'A gentle ramp to the terrace, a steep one to the summit flag.', accent: '#e0a868', angle: 120, u: [3.2, 9.4], v: [-1.95, 3.55], sign: [3.0, .8] },
+  { id: 'steps', name: 'Steps', blurb: 'Baby, medium and giant stairs side by side.', accent: '#b9a8e8', angle: 180, u: [3.9, 9.7], v: [-2.15, 2.3], sign: [3.15, -1.0] },
+  { id: 'jump', name: 'Jump Garden', blurb: 'Stepping stones, a gap and hoops for jumpers.', accent: '#f39ac0', angle: 240, u: [3.9, 8.7], v: [-2.6, 2.3], sign: [3.15, -1.0] },
+  { id: 'blocks', name: 'Block Yard', blurb: 'Topple the dominoes, crash the crates.', accent: '#ff9f43', angle: 300, u: [3.9, 8.2], v: [-2.9, 1.6], sign: [3.15, -1.0] },
 ].map(z => {
   const f = FRAMES[z.id], uc = (z.u[0] + z.u[1]) / 2, vc = (z.v[0] + z.v[1]) / 2, [x, y] = f.toWorld(uc, vc);
   const [sx, sy] = f.toWorld(...z.sign);

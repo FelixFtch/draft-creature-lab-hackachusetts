@@ -1,0 +1,8 @@
+{
+  "schema": "world-capability/1",
+  "layout": "park",
+  "generatedAt": null,
+  "source": "qa/world-park-validation.mjs (not yet run)",
+  "method": null,
+  "pilots": {}
+}

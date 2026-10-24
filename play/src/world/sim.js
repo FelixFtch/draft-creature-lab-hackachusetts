@@ -217,9 +217,12 @@ export async function createWorldSim({ mujoco: mj, pilot, layout, memory = '48M'
     const xpos = data.geom_xpos, xmat = data.geom_xmat, aabb = model.geom_aabb, b = index.rootBody;
     const R = Array.from(data.xmat.subarray(b * 9, b * 9 + 9)), o = Array.from(data.xpos.subarray(b * 3, b * 3 + 3));
     const lo = [Infinity, Infinity, Infinity], hi = [-Infinity, -Infinity, -Infinity];
-    let groundMin = Infinity;
+    const tlo = [Infinity, Infinity, Infinity], thi = [-Infinity, -Infinity, -Infinity];
+    let groundMin = Infinity, mass = 0;
+    for (let body = 1; body < model.nbody; body++) if (index.robotBody[body]) mass += model.body_mass[body];
     for (let g = 0; g < model.ngeom; g++) {
       if (!index.robotGeom[g]) continue;
+      const torso = model.geom_bodyid[g] === b;
       const G = xmat.subarray(g * 9, g * 9 + 9), c = aabb.subarray(g * 6, g * 6 + 3), h = aabb.subarray(g * 6 + 3, g * 6 + 6);
       const wc = [0, 1, 2].map(i => xpos[g * 3 + i] + G[i * 3] * c[0] + G[i * 3 + 1] * c[1] + G[i * 3 + 2] * c[2]);
       const d = [wc[0] - o[0], wc[1] - o[1], wc[2] - o[2]];
@@ -229,12 +232,14 @@ export async function createWorldSim({ mujoco: mj, pilot, layout, memory = '48M'
         let half = 0;
         for (let j = 0; j < 3; j++) half += Math.abs(R[i] * G[j] + R[3 + i] * G[3 + j] + R[6 + i] * G[6 + j]) * h[j];
         lo[i] = Math.min(lo[i], center - half); hi[i] = Math.max(hi[i], center + half);
+        if (torso) { tlo[i] = Math.min(tlo[i], center - half); thi[i] = Math.max(thi[i], center + half); }
       }
       let wz = 0; for (let j = 0; j < 3; j++) wz += Math.abs(G[6 + j]) * h[j];
       groundMin = Math.min(groundMin, wc[2] - wz);
     }
     const length = hi[0] - lo[0], width = hi[1] - lo[1];
-    return { boundsMin: lo, boundsMax: hi, length, width, height: o[2] + hi[2] - Math.max(0, groundMin),
+    return { boundsMin: lo, boundsMax: hi, torsoMin: tlo.map(v => Number.isFinite(v) ? v : 0), torsoMax: thi.map(v => Number.isFinite(v) ? v : 0),
+      length, width, height: o[2] + hi[2] - Math.max(0, groundMin), mass,
       rootHeight: o[2] - Math.max(0, groundMin), radius: Math.hypot(length, width) / 2 };
   }
 
