@@ -141,15 +141,30 @@ function loadCreatureModule() {
 }
 
 const REQUIRED_META = ['rootBody', 'commandBounds', 'skills'];
+// A creature bundle is a directory `<root>/policies/{walk,jump}/` (trainer
+// layout), a policy directory `.../policies/walk/`, or explicit
+// {walkUrl, jumpUrl, bodyUrl}. Jump is optional: the controller drops it
+// (skills = ['walk']) unless that bundle loads and passed validation.
+export function creatureBundleUrls(bundle) {
+  if (bundle && typeof bundle === 'object') {
+    if (typeof bundle.walkUrl !== 'string' || !bundle.walkUrl) throw Error('Creature bundle needs a walkUrl');
+    return { walkUrl: bundle.walkUrl, jumpUrl: bundle.jumpUrl ?? null, bodyUrl: bundle.bodyUrl ?? null };
+  }
+  if (typeof bundle !== 'string' || !bundle) throw Error('createCreaturePilot needs a policy bundle URL');
+  const base = bundle.endsWith('/') ? bundle : `${bundle}/`;
+  if (/\/policies\/(walk|drive)\/$/.test(base)) return { walkUrl: base, jumpUrl: base.replace(/(walk|drive)\/$/, 'jump/'), bodyUrl: null };
+  return { walkUrl: `${base}policies/walk/`, jumpUrl: `${base}policies/jump/`, bodyUrl: null };
+}
+
 export function createCreaturePilot(bundleUrl, options = {}) {
-  if (typeof bundleUrl !== 'string' || !bundleUrl) throw Error('createCreaturePilot needs a policy bundle URL');
+  const urls = creatureBundleUrls(bundleUrl);
   let inner = null;
   async function load() {
     if (inner) return inner;
     const mod = await (options.loadModule ?? loadCreatureModule)();
     const factory = mod.createCreaturePilot ?? mod.createPilot;
-    if (typeof factory !== 'function') throw Error('creature-controller.js must export createCreaturePilot(bundleUrl)');
-    const candidate = await factory(bundleUrl, options);
+    if (typeof factory !== 'function') throw Error('creature-controller.js must export createCreaturePilot({walkUrl, jumpUrl})');
+    const candidate = await factory({ ...urls, jumpUrl: options.jump === false ? null : urls.jumpUrl, fetchImpl: options.fetch ?? undefined, ort: options.ort ?? null });
     if (typeof candidate?.prepare !== 'function' || typeof candidate?.attach !== 'function')
       throw Error('Creature pilot must implement prepare() and attach()');
     return (inner = candidate);
@@ -162,7 +177,9 @@ export function createCreaturePilot(bundleUrl, options = {}) {
       const meta = { ...prepared.meta };
       for (const key of REQUIRED_META) if (meta[key] == null) throw Error(`Creature pilot meta is missing ${key}`);
       meta.kind = 'creature';
-      meta.label ??= 'Your creature';
+      meta.label ??= meta.bodyName ?? 'Your creature';
+      meta.policyId ??= meta.bodyId ?? 'creature';
+      if (meta.fallCriteria?.tiltRad != null) meta.fallCriteria = { ...meta.fallCriteria, orientationLimitRad: meta.fallCriteria.tiltRad };
       meta.short ??= meta.label;
       // Only skills whose bundle passed validation may be listed. `walk`
       // (legs) and `drive` (wheels) are the perpetual locomotion skills.

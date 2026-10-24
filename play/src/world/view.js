@@ -98,7 +98,7 @@ export function createWorldView({ scene, root, layout, terrain, hfields = [], pr
   water.position.z = WATER_Z; world.add(water);
 
   // ---------------------------------------------------------------- island
-  const decor = planDecor(layout, { density: high ? 1 : .55 });
+  const decor = planDecor(layout, { density: 0 }); // white-box level: no decoration
   const staticShadows = [];
   for (const l of layout.landmarks) staticShadows.push({ x: l.x + .2, y: l.y - .15, r: l.shape === 'tree' ? 1.9 : 1.2, strength: .32 });
   for (const s of layout.statics) if (s.role === 'plateau' || s.role === 'platform' || s.role === 'step')
@@ -372,19 +372,19 @@ export function createWorldView({ scene, root, layout, terrain, hfields = [], pr
   // ----------------------------------------------------------------- sparks
   const sparkScale = .8 + .5 * Math.min(1.6, height);
   const sparkGeo = keep(new THREE.OctahedronGeometry(.075 * sparkScale, 0).scale(1, 1, 1.35));
-  const sparkMat = keep(new THREE.MeshStandardMaterial({ color: '#ffd54a', emissive: '#ffae00', emissiveIntensity: 1.35, roughness: .25, metalness: .1 }));
+  const sparkMat = keep(new THREE.MeshStandardMaterial({ color: '#ff7a3d', emissive: '#ff5a1f', emissiveIntensity: 1.1, roughness: .3, metalness: .05 }));
   const sparkMesh = new THREE.InstancedMesh(sparkGeo, sparkMat, layout.sparks.length);
   sparkMesh.frustumCulled = false; world.add(sparkMesh);
   const glowTex = keep(TX.glowTexture());
   const glowGeo = keep(new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(new Float32Array(layout.sparks.length * 3), 3)));
-  const glow = new THREE.Points(glowGeo, keep(new THREE.PointsMaterial({ map: glowTex, color: '#ffcf5a', size: .62 * sparkScale, sizeAttenuation: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })));
+  const glow = new THREE.Points(glowGeo, keep(new THREE.PointsMaterial({ map: glowTex, color: '#ff8a50', size: .5 * sparkScale, sizeAttenuation: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })));
   glow.frustumCulled = false; world.add(glow);
   let sparkState = layout.sparks.map(s => ({ ...s, z: terrain.groundHeight(s.x, s.y) + .3, collected: false }));
   const dummy = new THREE.Object3D();
 
   // ------------------------------------------------------------------ hoops
-  const hoopTex = keep(TX.stripeTexture('#ff7eb6', '#ffe066', 14));
-  const hoopMatOn = keep(new THREE.MeshStandardMaterial({ map: hoopTex, roughness: .35, emissive: '#ff6fa8', emissiveIntensity: .25 }));
+  const hoopTex = keep(TX.stripeTexture('#ff5a1f', '#ffffff', 14));
+  const hoopMatOn = keep(new THREE.MeshStandardMaterial({ map: hoopTex, roughness: .35, emissive: '#ff5a1f', emissiveIntensity: .25 }));
   const hoopMatOff = keep(new THREE.MeshStandardMaterial({ color: '#d9d2df', roughness: .6, transparent: true, opacity: .45 }));
   const hoopGeo = keep(new THREE.TorusGeometry(1, .05, 12, 64));
   const hoops = layout.hoops.map(h => {

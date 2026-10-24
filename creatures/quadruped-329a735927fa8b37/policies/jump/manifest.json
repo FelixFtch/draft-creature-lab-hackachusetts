@@ -1,0 +1,404 @@
+{
+  "schema": "creature-policy/1",
+  "skill": "jump",
+  "kind": "episodic",
+  "bodyId": "quadruped-329a735927fa8b37",
+  "bodyName": "Cheetah (dev)",
+  "bodyAssetSha256": {
+    "body.xml": "9f7cfa2f062754c5bf360a27a5c5f86f36ec15775b9f7c559de715ce546fdbdf",
+    "torso_mesh.stl": "a6eede2c727d2953b97987605d0defb9f320614969ab05bbd96f925a8f28cf2d"
+  },
+  "sceneXml": "scene.xml",
+  "sceneSha256": "f1d4189fdce901af0202409b1864d3934e5008cce63a7247167831b0cdc6ee73",
+  "assets": [
+    {
+      "name": "torso_mesh.stl",
+      "sha256": "a6eede2c727d2953b97987605d0defb9f320614969ab05bbd96f925a8f28cf2d"
+    }
+  ],
+  "policy": "policy.onnx",
+  "policySha256": "1c082603430803f45810b7aaec7b11718623fda4eddb4e5f2a03f36868d76df9",
+  "onnxInput": "obs",
+  "onnxOutput": "action",
+  "onnxOpset": 17,
+  "control": {
+    "timestep": 0.005,
+    "decimation": 4,
+    "controlDt": 0.02
+  },
+  "rootBody": "torso_link",
+  "rootJoint": "torso_link_freejoint",
+  "imuSite": "imu",
+  "floorGeom": "cg_floor",
+  "legNames": [
+    "fl",
+    "fr",
+    "rl",
+    "rr"
+  ],
+  "footSites": [
+    "fl_foot",
+    "fr_foot",
+    "rl_foot",
+    "rr_foot"
+  ],
+  "footGeoms": [
+    "fl_lower_leg_link_sphere",
+    "fr_lower_leg_link_sphere",
+    "rl_lower_leg_link_sphere",
+    "rr_lower_leg_link_sphere"
+  ],
+  "footRadius": [
+    0.0276,
+    0.0276,
+    0.0276,
+    0.0276
+  ],
+  "jointNames": [
+    "fl_hip_roll",
+    "fl_hip_pitch",
+    "fl_knee",
+    "fr_hip_roll",
+    "fr_hip_pitch",
+    "fr_knee",
+    "rl_hip_roll",
+    "rl_hip_pitch",
+    "rl_knee",
+    "rr_hip_roll",
+    "rr_hip_pitch",
+    "rr_knee"
+  ],
+  "actuatorNames": [
+    "fl_hip_roll",
+    "fl_hip_pitch",
+    "fl_knee",
+    "fr_hip_roll",
+    "fr_hip_pitch",
+    "fr_knee",
+    "rl_hip_roll",
+    "rl_hip_pitch",
+    "rl_knee",
+    "rr_hip_roll",
+    "rr_hip_pitch",
+    "rr_knee"
+  ],
+  "defaultJointPositions": [
+    0.0,
+    0.5,
+    -1.0,
+    0.0,
+    0.5,
+    -1.0,
+    0.0,
+    0.5,
+    -1.0,
+    0.0,
+    0.5,
+    -1.0
+  ],
+  "actionScale": [
+    0.3,
+    0.3,
+    0.3,
+    0.3,
+    0.3,
+    0.3,
+    0.3,
+    0.3,
+    0.3,
+    0.3,
+    0.3,
+    0.3
+  ],
+  "actionClip": 4.0,
+  "observation": {
+    "size": 48,
+    "terms": [
+      {
+        "name": "base_lin_vel",
+        "start": 0,
+        "length": 3,
+        "scale": 1.0
+      },
+      {
+        "name": "base_ang_vel",
+        "start": 3,
+        "length": 3,
+        "scale": 0.25
+      },
+      {
+        "name": "projected_gravity",
+        "start": 6,
+        "length": 3,
+        "scale": 1.0
+      },
+      {
+        "name": "joint_pos",
+        "start": 9,
+        "length": 12,
+        "scale": 1.0
+      },
+      {
+        "name": "joint_vel",
+        "start": 21,
+        "length": 12,
+        "scale": 0.05
+      },
+      {
+        "name": "last_action",
+        "start": 33,
+        "length": 12,
+        "scale": 1.0
+      },
+      {
+        "name": "jump_phase",
+        "start": 45,
+        "length": 3,
+        "scale": 1.0
+      }
+    ],
+    "notes": "All terms from robot qpos/qvel and controller state (see training/creature_gym/obs.py): base_lin_vel = R^T qvel[0:3]; base_ang_vel = qvel[3:6]; projected_gravity = R^T (0,0,-1); joint_pos = q - default; joint_vel = qd; last_action = previous clipped action; gait_clock = per leg (sin, cos)(2 pi frac(phase + offset)), zero when not moving; jump_phase = (p, sin 2 pi p, cos 2 pi p). Values are multiplied by term scale. No noise at inference."
+  },
+  "commandBounds": {
+    "vx": [
+      0.0,
+      0.0
+    ],
+    "vy": [
+      0.0,
+      0.0
+    ],
+    "wz": [
+      0.0,
+      0.0
+    ]
+  },
+  "moving": {
+    "fraction": 0.05,
+    "vmax": 1.085,
+    "wmax": 0.9574
+  },
+  "clock": null,
+  "episode": {
+    "durationS": 1.46,
+    "steps": 73,
+    "handoff": "walk"
+  },
+  "fallCriteria": {
+    "tiltRad": 1.0,
+    "minHeightAboveFeetM": 0.1571,
+    "torsoContactSensor": "cg_torso_contact"
+  },
+  "sensors": {
+    "touch": [
+      "cg_touch_fl",
+      "cg_touch_fr",
+      "cg_touch_rl",
+      "cg_touch_rr"
+    ],
+    "footPos": [
+      "cg_foot_pos_fl",
+      "cg_foot_pos_fr",
+      "cg_foot_pos_rl",
+      "cg_foot_pos_rr"
+    ],
+    "footVel": [
+      "cg_foot_vel_fl",
+      "cg_foot_vel_fr",
+      "cg_foot_vel_rl",
+      "cg_foot_vel_rr"
+    ],
+    "torsoContact": "cg_torso_contact",
+    "thighContact": [
+      "cg_thigh_contact_fl",
+      "cg_thigh_contact_fr",
+      "cg_thigh_contact_rl",
+      "cg_thigh_contact_rr"
+    ],
+    "gyro": "cg_imu_gyro",
+    "velocimeter": "cg_imu_vel",
+    "accelerometer": "cg_imu_acc"
+  },
+  "contactThresholdN": 4.0022,
+  "initialQpos": [
+    0.0,
+    0.0,
+    0.4488396297073789,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.5,
+    -1.0,
+    0.0,
+    0.5,
+    -1.0,
+    0.0,
+    0.5,
+    -1.0,
+    0.0,
+    0.5,
+    -1.0
+  ],
+  "nominalRootHeight": 0.4488396297073789,
+  "scaling": {
+    "legLengthM": 0.48,
+    "froudeTopCommand": 0.25,
+    "referenceLegM": 0.44
+  },
+  "pd": {
+    "kp": [
+      102.85714285714286,
+      102.85714285714286,
+      102.85714285714286,
+      102.85714285714286,
+      102.85714285714286,
+      102.85714285714286,
+      102.85714285714286,
+      102.85714285714286,
+      102.85714285714286,
+      102.85714285714286,
+      102.85714285714286,
+      102.85714285714286
+    ],
+    "kv": [
+      5.142857142857142,
+      5.142857142857142,
+      5.142857142857142,
+      5.142857142857142,
+      5.142857142857142,
+      5.142857142857142,
+      5.142857142857142,
+      5.142857142857142,
+      5.142857142857142,
+      5.142857142857142,
+      5.142857142857142,
+      5.142857142857142
+    ],
+    "effort": [
+      72.0,
+      72.0,
+      72.0,
+      72.0,
+      72.0,
+      72.0,
+      72.0,
+      72.0,
+      72.0,
+      72.0,
+      72.0,
+      72.0
+    ],
+    "rule": "MuJoCo position actuators: kp = 100/70 * effort, kv = 5/70 * effort (Draft), forcerange +-effort"
+  },
+  "training": {
+    "algorithm": "PPO",
+    "envSteps": 3004416,
+    "iterations": 489,
+    "wallSeconds": 1095.9,
+    "machine": {
+      "platform": "Linux-6.18.44-fc-v153-x86_64-with-glibc2.39",
+      "machine": "x86_64",
+      "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+      "cpuCount": 2,
+      "threads": 2,
+      "python": "3.12.3",
+      "torchThreads": 1
+    },
+    "seed": 0,
+    "envs": 256,
+    "budget": "quick",
+    "mujocoVersion": "3.11.0",
+    "torchVersion": "2.11.0+cpu",
+    "ppo": {
+      "steps_per_env": 24,
+      "epochs": 5,
+      "minibatches": 4,
+      "gamma": 0.99,
+      "lam": 0.95,
+      "clip": 0.2,
+      "value_coef": 1.0,
+      "entropy_coef": 0.005,
+      "learning_rate": 0.001,
+      "desired_kl": 0.01,
+      "max_grad_norm": 1.0,
+      "actor_hidden": [
+        256,
+        128,
+        64
+      ],
+      "critic_hidden": [
+        256,
+        128,
+        64
+      ],
+      "init_std": 0.6,
+      "min_std": 0.05
+    },
+    "domainRandomization": {
+      "footFriction": [
+        0.4,
+        1.2
+      ],
+      "payloadFraction": [
+        -0.1,
+        0.2
+      ],
+      "torsoComM": 0.021818181818181816,
+      "kpScale": [
+        0.9,
+        1.1
+      ],
+      "kvScale": [
+        0.8,
+        1.2
+      ],
+      "effortScale": [
+        0.85,
+        1.1
+      ],
+      "jointDampingFrictionScale": [
+        0.5,
+        1.5
+      ],
+      "pushes": false,
+      "observationNoise": true
+    },
+    "terrain": "flat",
+    "jumpReference": {
+      "duration": 1.46,
+      "h_stand": 0.43089,
+      "crouch": 0.06733,
+      "extend": 0.0192,
+      "flight_rise": 0.072,
+      "t_crouch": 0.1168,
+      "t_push": 0.1456,
+      "t_takeoff": 0.4824,
+      "t_land": 0.72471,
+      "t_absorb": 0.97471,
+      "v_takeoff": 1.18855
+    },
+    "jumpReferenceNote": "Training-only vertical target (crouch, push, ballistic flight, absorb, stand); validation uses the absolute criteria in eval.json."
+  },
+  "honesty": "One-shot jump policy for this exact body (Cheetah (dev), quadruped-329a735927fa8b37), run for a fixed window and then handed back to its walk policy; trained and validated on flat ground only. Not validated on hardware.",
+  "export": {
+    "onnxMaxAbsErrorVsTorch": 4.76837158203125e-07,
+    "opset": 17,
+    "irVersion": 8
+  },
+  "handoff": {
+    "skill": "walk",
+    "walkPolicySha256": "ccc9222948556af933f4dfda364f215fe70911f177dcc6598aacb4a13ce5561e",
+    "walkManifestId": "quadruped-329a735927fa8b37"
+  },
+  "evaluation": {
+    "evalFile": "eval.json",
+    "evalSha256": "7a2ee67ba31e48a16dac2b1baf200dff6c3cf81e4e2fd94f53e4c8abad4aaf6f",
+    "pass": true
+  },
+  "fixtures": {
+    "file": "fixtures.json",
+    "sha256": "bb72c27bc66ac526de5ce563cb6a5f6ecac7ff4fb6e308de23648288bc9a3171"
+  }
+}

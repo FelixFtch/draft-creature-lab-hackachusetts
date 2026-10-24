@@ -13,6 +13,7 @@ import { createAutopilot } from './autopilot.js';
 import { zoneSuitability, signChips, capabilityMeta } from './capabilities.js';
 import { createTrial, createTrialDriver, createCommandSmoother, trialSpawn, laneById, TRIAL_PROTOCOL } from './terrain-lab.js';
 import terrainResults from './terrain-results.json';
+import { applyWhiteboxWorld } from '../app/whitebox.js';
 
 // The playground engine (contracts/world-api.md): one MuJoCo model of the
 // pilot's verified robot + an injected world, driven like a game character.
@@ -68,6 +69,8 @@ export async function createPlayground(container, options = {}) {
     creatureView = factory.create({ THREE, mujoco, model: sim.model, look, body: options.body ?? null, rootBody: meta.rootBody });
     root.add(creatureView.group);
     view = createWorldView({ scene, root, layout, terrain: sim.terrain, hfields: sim.hfields, props: sim.index.props, quality, renderer, creatureSize: size });
+    const whitebox = applyWhiteboxWorld({ scene, view, layout });
+    cleanups.push(() => whitebox.dispose());
     view.setSignChips(signChips(suitability, meta.short ?? meta.label));
     fx = createFx({ quality }); root.add(fx.group);
     audio = createAudio({ muted });

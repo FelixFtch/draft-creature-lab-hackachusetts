@@ -1,311 +1,429 @@
-// Local Draft Creature Lab UI. Geometry and MuJoCo execution are supplied by draft-lab.js.
-import { useCallback, useEffect, useRef, useState } from "react";
-import { createDraftLab } from "./draft-lab.js";
-import TrainingCard from "./TrainingCard.jsx";
-import WalkControls from "./WalkControls.jsx";
-import FlowerCard from "./FlowerCard.jsx";
-import VisionCard from "./VisionCard.jsx";
-import "./playground.css";
+// Draft Creature Lab v2: Imagine (Tinker) -> Draft (real body) -> Dress up ->
+// Train -> Play. Engines: workshop (draft-lab.js) and playground (world/).
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import './styles/index.css';
+import './styles/premium.css';
+import './app/app.css';
+import {
+  AppShell, TitleScreen, WorkshopLayout, LoopStepper, NameTag, StageToolbar, ViewModeSwitch, TabDot,
+  ChatPanel, SpecSheet, LookPanel, TrainingPanel, CreatureShelf, LabNotes, PlayHUD, TouchControls, ExplorePanel,
+  PauseMenu, RobotRoster, TerrainLab, Modal, Toasts, useToasts, SettingsPanel, Badge, IconButton, ProgressRing, Icon,
+  useLayoutSize,
+} from './ui/index.js';
+import { createDraftLab } from './draft-lab.js';
+import { getMujoco } from './app/mujoco.js';
+import { normalizeLook, exportPrintKit } from './appearance/index.js';
+import { createPlayground } from './world/playground.js';
+import { createLegacyCheetahPilot, createLegacyFlowerPilot, createCreaturePilot as wrapCreaturePilot } from './world/pilots.js';
+import { createCreaturePilot } from './creature-controller.js';
+import terrainResults from './world/terrain-results.json';
+import { aiApi, draftApi, fetchJson, ApiError } from './app/api.js';
+import { createWhiteboxStudio } from './app/whitebox.js';
 
-const PRESETS = ["cheetah", "bear", "giraffe", "flower"];
-const COLORS = ["#1f8c80", "#ed9553", "#647db6", "#d16b78", "#c5ac5a", "#e5e9e2"];
-const STORAGE = "draft-creature-lab-remixes-v1";
-const DEFAULT = { schema: 1, preset: "cheetah", lengthScale: 1, legScale: 1, color: COLORS[0], pose: { crouch: 0, wave: 0 } };
-const TEXT = {
-  zh: {
-    walkMode: "真实策略行走", walkingNotice: "在下方用摇杆或 WASD 指路 · 空格站立", walkPaused: "行走已暂停 · 重置可回到造型", walkingLoading: "正在装载真实行走策略…", walkBadge: "本地训练的 Draft 猎豹", returnPose: "回到造型", walkPoseNote: "行走模式中，先回到造型再摆姿态。",
-    generatorOffline: "模型生成器暂时不可用。启动实验室后，再点生成重试。", explore: "探索小径",
-    name: "造物实验室", brand: "DRAFT CREATURE LAB", intro: "一只新朋友，从你的想法开始。", language: "English", presetTitle: "01 / 选个起点",
-    cheetah: "猎豹", bear: "棕熊", giraffe: "长颈鹿", flower: "花朵六足", flowerDesc: "六条腿，另一种可能", cheetahDesc: "轻快的身形", bearDesc: "敦实的骨架", giraffeDesc: "修长的四肢", flowerTorso: "花心宽度", flowerPose: "抬起一条腿", flowerSource: "自定义六足身体 · Draft 生成",
-    shapeTitle: "02 / 捏出新模样", torso: "躯干长度", legs: "腿长", original: "原始尺寸", shorter: "短一点", longer: "长一点",
-    generate: "生成这个朋友", generating: "正在生成…", changed: "调整已就绪，生成后应用", generated: "模型已生成", paint: "换个颜色", paintNote: "只改变外观", poseTitle: "03 / 打个招呼", crouch: "蹲下", wave: "前腿挥手", poseReset: "重置后可继续摆姿态",
-    mode: "姿态与重力实验", poseMode: "姿态工作台", physicsMode: "重力实验中", gravityNotice: "重力实验：电机未驱动，身体可能自然塌落", gravityComplete: "实验完成，重置后可再摆姿态", shareScope: "配方链接需在运行实验室的电脑上打开", orbit: "拖动旋转 · 滚轮缩放", home: "回到默认视角", reset: "重置", drop: "试试重力", dropAgain: "再落下一次", save: "保存我的改作", saving: "保存中…",
-    challenge: "今天的小挑战", challengeHint: "造一个高个子朋友", taller: "加长腿", posed: "摆姿态", dropped: "落下", saved: "存改作",
-    library: "我的小小家族", local: "仅保存在此浏览器", emptyTitle: "第一个朋友，还在等你", emptyHint: "做好造型，点「保存我的改作」。", open: "打开", parent: "来自", originalParent: "原始体型", missingParent: "较早的改作", remix: "改作", current: "当前",
-    share: "复制分享链接", export: "导出配方", import: "导入配方", evidence: "实验数据", loading: "正在搭建实验室…", loadingModel: "正在生成并装载真实模型…", ready: "可以开始创造了", failure: "操作未完成", finiteError: "物理状态异常，请重置。", shareDone: "配方链接已复制", savedDone: "新朋友已加入家族", exportDone: "配方已导出", importDone: "配方已导入", copiedFallback: "可复制下方的配方链接", badRecipe: "配方无效：请使用 schema 1、有效体型、0.8–1.2 比例和十六进制颜色。", badStorage: "浏览器无法保存；请导出配方保留作品。", catalogError: "无法读取体型目录", close: "关闭", recipeLink: "配方分享链接", fileError: "请选择不超过 8 KB 的 JSON 配方。", learn: "真实 Draft 几何 · 本地 MuJoCo 实验", unsaved: "未保存", dataHint: "当前引擎状态、配方与模型来源；不代表行走训练结果。",
-  },
-  en: {
-    walkMode: "Learned walking policy", walkingNotice: "Steer below with the stick or WASD · Space to stand", walkPaused: "Walking paused · Reset to return to design", walkingLoading: "Loading the real walking policy…", walkBadge: "Locally trained Draft cheetah", returnPose: "Back to design", walkPoseNote: "Return to design before changing the pose.",
-    generatorOffline: "The generator is unavailable. Start the lab launcher, then choose Generate to retry.", explore: "Explore the trail",
-    name: "Draft Creature Lab", brand: "MAKE A LITTLE SOMETHING", intro: "A new friend starts with your idea.", language: "中文", presetTitle: "01 / Pick a starting point",
-    cheetah: "Cheetah", bear: "Bear", giraffe: "Giraffe", flower: "Flower crawler", flowerDesc: "Six legs. A different possibility.", cheetahDesc: "A light, nimble shape", bearDesc: "A sturdy little frame", giraffeDesc: "Lovely long limbs", flowerTorso: "Flower center width", flowerPose: "Lift one leg", flowerSource: "Custom six-legged body · Generated with Draft",
-    shapeTitle: "02 / Make it your own", torso: "Torso length", legs: "Leg length", original: "Original size", shorter: "Shorter", longer: "Longer",
-    generate: "Generate my creature", generating: "Generating…", changed: "New shape ready to generate", generated: "Creature generated", paint: "A splash of color", paintNote: "Appearance only", poseTitle: "03 / Say hello", crouch: "Crouch", wave: "Front-leg wave", poseReset: "Reset to pose your creature again",
-    mode: "Pose + gravity experiments", poseMode: "Pose workbench", physicsMode: "Gravity experiment", gravityNotice: "Gravity experiment: motors off; the body may collapse", gravityComplete: "Drop complete — reset to pose again", shareScope: "Recipe link works with this running lab", orbit: "Drag to orbit · Scroll to zoom", home: "Home camera", reset: "Reset", drop: "Try gravity", dropAgain: "Drop again", save: "Save my remix", saving: "Saving…",
-    challenge: "A little challenge", challengeHint: "Make a taller friend", taller: "Taller legs", posed: "Pose", dropped: "Drop", saved: "Save",
-    library: "My little family", local: "Saved in this browser only", emptyTitle: "Your first friend is waiting", emptyHint: "Make a shape, then choose “Save my remix”.", open: "Open", parent: "From", originalParent: "Original preset", missingParent: "An earlier remix", remix: "Remix", current: "Current",
-    share: "Copy share link", export: "Export recipe", import: "Import recipe", evidence: "Lab evidence", loading: "Setting up your lab…", loadingModel: "Generating and loading real geometry…", ready: "Ready to make something", failure: "That didn't complete", finiteError: "Physics state is invalid. Please reset.", shareDone: "Recipe link copied", savedDone: "A new friend joined your family", exportDone: "Recipe exported", importDone: "Recipe imported", copiedFallback: "Copy your recipe link below", badRecipe: "Invalid recipe: use schema 1, a supported preset, 0.8–1.2 scales, and a hex color.", badStorage: "Browser storage is unavailable. Export the recipe to keep it.", catalogError: "Couldn't read the preset catalog", close: "Close", recipeLink: "Recipe share link", fileError: "Choose a JSON recipe no larger than 8 KB.", learn: "Real Draft geometry · Local MuJoCo experiments", unsaved: "Unsaved", dataHint: "Current engine state, recipe, and model provenance; not a walking-training result.",
-  },
-};
+// The robot keeps the original Draft lab style: one body colour with derived
+// motor, detail and foot shades. These are the original lab's colours.
+const classic = (id, name, body) => ({ id, name, look: { schema: 'creature-look/1', theme: 'classic', palette: { body } } });
+const PRODUCT_LOOKS = [
+  classic('teal', 'Draft Teal', '#1f8c80'), classic('apricot', 'Apricot', '#ed9553'), classic('slate-blue', 'Slate Blue', '#647db6'),
+  classic('rose', 'Rose', '#d16b78'), classic('brass', 'Brass', '#c5ac5a'), classic('graphite', 'Graphite', '#3a3d42'), classic('cloud', 'Cloud', '#e5e9e2'),
+];
+const DEFAULT_LOOK = PRODUCT_LOOKS[0].look;
 
-function normalizeRecipe(value) {
-  if (!value || typeof value !== "object" || value.schema !== 1 || !PRESETS.includes(value.preset)) throw Error("badRecipe");
-  const inRange = (number, min, max) => typeof number === "number" && Number.isFinite(number) && number >= min && number <= max;
-  if (!inRange(value.lengthScale, .8, 1.2) || !inRange(value.legScale, .8, 1.2) || !/^#[0-9a-f]{6}$/i.test(value.color || "")) throw Error("badRecipe");
-  const pose = value.pose || { crouch: 0, wave: 0 };
-  if (!inRange(pose.crouch, 0, 1) || !inRange(pose.wave, 0, 1)) throw Error("badRecipe");
-  return { schema: 1, preset: value.preset, lengthScale: value.lengthScale, legScale: value.legScale, color: value.color.toLowerCase(), pose: { crouch: pose.crouch, wave: pose.wave } };
+// The roster the user asked for. Bodies appear as soon as Draft has built them;
+// a skill is only offered when its bundle passed validation for that exact body.
+const ROSTER = [
+  { id: 'rollo', name: 'Rollo', kind: 'Wheel-leg', plan: 'wheeled', tagline: 'Balances on two wheels like a segway and springs into the air.' },
+  { id: 'dog', name: 'Dog', kind: 'Robot dog', bodyId: 'quadruped-329a735927fa8b37', tagline: "Draft's Cheetah: trots, turns and jumps gaps." },
+  { id: 'spider', name: 'Flower', kind: 'Six-legged crawler', legacy: 'flower', tagline: 'Pretrained six-legged crawler: always three feet down.' },
+  { id: 'octo', name: 'Octo', kind: 'Spider', bodyId: 'multileg-cfeadbfbef98a249', tagline: 'Eight long legs: wide stance, bridges small gaps by walking.' },
+  { id: 'bipo', name: 'Bipo', kind: 'Humanoid', plan: 'humanoid', tagline: "Draft's humanoid: narrow footprint, steps over obstacles." },
+];
+const LEGACY_PRESETS = ['cheetah', 'bear', 'giraffe', 'flower'];
+const GREETING = { id: 'hello', role: 'tinker', kind: 'text', text: "Hi, I'm Tinker! Tell me about a robot — a wheel-leg jumper, a robot dog, a spider, a humanoid, anything. I'll draft a real body for it with Draft: joints, motors and all." };
+const STARTER_CHIPS = ['A wheel-leg robot that jumps', 'A robot dog', 'An eight-legged spider', 'A small humanoid'];
+
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+const uid = prefix => `${prefix}${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+
+function skillState(entry) {
+  if (!entry) return { state: 'untrained' };
+  const p = entry.progress;
+  const progress = p ? { envSteps: p.envSteps, targetSteps: p.envStepsTarget, iteration: p.iteration, stepsPerSecond: p.stepsPerSecond,
+    elapsedSeconds: p.wallSeconds, etaSeconds: p.etaSeconds, meanReward: p.meanReward } : undefined;
+  if (entry.ready) return { state: 'ready', hashMatched: true, progress };
+  if (p?.running) return { state: p.phase === 'evaluating' || p.phase === 'exporting' ? 'validating' : 'training', progress };
+  if (entry.present) return { state: 'failed', progress, reason: (entry.reasons || []).join('; ') };
+  return { state: 'untrained' };
 }
-function parseRecipe(text) {
-  if (typeof text !== "string" || text.length > 8192) throw Error("badRecipe");
-  try { return normalizeRecipe(JSON.parse(text)); } catch { throw Error("badRecipe"); }
-}
-function recipeFromHash() {
-  if (!location.hash || !location.hash.startsWith("#recipe=")) return null;
-  if (location.hash.length > 8192) throw Error("badRecipe");
-  return parseRecipe(new URLSearchParams(location.hash.slice(1)).get("recipe"));
-}
-function initialRecipe() {
-  try { return { recipe: recipeFromHash() || DEFAULT, error: "" }; }
-  catch { return { recipe: DEFAULT, error: "badRecipe" }; }
-}
-function readRemixes() {
-  try {
-    const raw = localStorage.getItem(STORAGE);
-    if (!raw || raw.length > 150000) return [];
-    const items = JSON.parse(raw);
-    if (!Array.isArray(items)) return [];
-    return items.slice(0, 24).flatMap(item => {
-      try {
-        if (!/^remix-[a-z0-9-]{1,80}$/i.test(item.id || "")) return [];
-        return [{ id: item.id, parentId: /^remix-[a-z0-9-]{1,80}$/i.test(item.parentId || "") ? item.parentId : null, createdAt: typeof item.createdAt === "string" ? item.createdAt.slice(0, 40) : "", recipe: normalizeRecipe(item.recipe) }];
-      } catch { return []; }
-    });
-  } catch { return []; }
-}
-function friendlyError(error) { return error instanceof Error ? error.message : String(error); }
-function Icon({ kind, ...props }) {
-  const paths = {
-    home: <><path d="m3 10 9-7 9 7M6 9v12h12V9M10 21v-7h4v7" /></>,
-    reset: <><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6" /></>,
-    drop: <><path d="M12 3v12m-5-5 5 5 5-5M4 21h16" /><path d="M5 18v3m14-3v3" /></>,
-    save: <><path d="M5 3h12l3 3v15H4V3ZM8 3v6h8V3M8 21v-7h8v7" /></>,
-    share: <><path d="M8 8H5v13h14V8h-3M12 15V2m-4 4 4-4 4 4" /></>,
-    download: <><path d="M12 3v12m-4-4 4 4 4-4M4 17v4h16v-4" /></>,
-    upload: <><path d="M12 15V3m-4 4 4-4 4 4M4 17v4h16v-4" /></>,
-    sparkle: <><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5ZM20 2v4m-2-2h4" /></>,
-  };
-  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>{paths[kind] || paths.sparkle}</svg>;
-}
-function Creature({ preset, color = "currentColor" }) {
-  if (preset === "flower") return <svg viewBox="0 0 100 68" fill="none" aria-hidden="true"><g stroke={color} strokeWidth="5" strokeLinecap="round" strokeLinejoin="round">{Array.from({length:6}, (_,i) => <path key={i} d="M62 34h13l9-9" transform={`rotate(${i*60} 50 34)`} />)}<path d="M61 23 66 34 61 45H39L34 34l5-11Z" fill={color} fillOpacity=".13" /></g><circle cx="50" cy="34" r="6" fill={color}/></svg>;
-  const giraffe = preset === "giraffe", bear = preset === "bear";
-  return <svg viewBox="0 0 100 68" fill="none" aria-hidden="true"><g stroke={color} strokeWidth={bear ? 8 : 6} strokeLinecap="round" strokeLinejoin="round"><path d={bear ? "M24 32h42l13-5" : "M21 30h42l13-8"} /><path d={giraffe ? "M66 28 75 9h10" : bear ? "M69 29 80 22h7" : "M67 28 80 20h8"} /><path d={giraffe ? "m28 32-8 29m20-29-2 29m20-29 7 29m5-29 10 29" : bear ? "m29 34-2 23m14-23 1 23m17-23 2 23m9-23 5 23" : "m27 32-8 23m20-23-2 23m20-23 8 23m4-23 10 23"} /><path d="m22 31-10-9" /></g><circle cx={giraffe ? 83 : 85} cy={giraffe ? 8 : 20} r="2" fill="#fffdf5" /></svg>;
+
+function evalRows(evaluation) {
+  return (evaluation?.rows || []).map(row => ({
+    id: row.name, name: row.name.replace(/_/g, ' '),
+    command: row.command ? { vx: row.command[0], wz: row.command[2] } : {},
+    measured: row.meanVelocity ? { vx: +row.meanVelocity[0].toFixed(2), wz: +row.meanVelocity[2].toFixed(2) } : {},
+    fall: !!row.fell, pass: !!row.pass,
+  }));
 }
 
 export default function App() {
-  const initial = useRef(initialRecipe());
-  const stage = useRef(null), engine = useRef(null), fileInput = useRef(null);
-  const requestNumber = useRef(0), modelQueue = useRef(Promise.resolve());
-  // This release is English-only, including browsers with an older zh preference.
-  const language = "en";
-  const t = TEXT.en;
-  const [form, setForm] = useState(initial.current.recipe);
-  const [activeRecipe, setActiveRecipe] = useState(null);
-  const [color, setColor] = useState(initial.current.recipe.color);
-  const [pose, setPose] = useState(initial.current.recipe.pose);
-  const [state, setState] = useState({ ready: false, mode: "pose" });
-  const [manifest, setManifest] = useState(null);
-  const [busy, setBusy] = useState(true);
-  const [walkingBusy, setWalkingBusy] = useState(false);
-  const [error, setError] = useState(initial.current.error);
-  const [notice, setNotice] = useState("");
-  const [catalog, setCatalog] = useState(null);
-  const [flowerStatus, setFlowerStatus] = useState(null);
-  const [remixes, setRemixes] = useState(readRemixes);
-  const [parentId, setParentId] = useState(null);
-  const [shareFallback, setShareFallback] = useState("");
-  const [steps, setSteps] = useState({ taller: false, posed: false, dropped: false, saved: false });
-  const working = busy || walkingBusy;
-  const ready = !!state.ready && !!activeRecipe && !working;
-  const physics = state.mode === "physics";
-  const walkingSession = !!state.walking?.active || ["walk", "walking", "walk-paused"].includes(state.mode);
-  const walkingEligible = !!activeRecipe && activeRecipe.lengthScale === 1 && activeRecipe.legScale === 1 && (activeRecipe.preset === "cheetah" || (activeRecipe.preset === "flower" && flowerStatus?.browserReady===true));
-  const isFlower = (activeRecipe?.preset ?? form.preset) === "flower";
-  const dirty = !!activeRecipe && (form.preset !== activeRecipe.preset || form.lengthScale !== activeRecipe.lengthScale || form.legScale !== activeRecipe.legScale);
-  const currentRecipe = activeRecipe ? { ...activeRecipe, color, pose } : null;
+  const size = useLayoutSize(), phone = size === 'phone';
+  const workshopEl = useRef(null), playEl = useRef(null), fileInput = useRef(null);
+  const lab = useRef(null), game = useRef(null), mujoco = useRef(null);
+  const { toasts, push, dismiss } = useToasts();
+  const [mode, setMode] = useState('workshop');
+  const [titleOpen, setTitleOpen] = useState(false);
+  const [tab, setTab] = useState('blueprint');
+  const [modal, setModal] = useState(null);
+  const [muted, setMuted] = useState(false);
+  const [viewMode, setViewMode] = useState('normal');
+  const [bodies, setBodies] = useState([]);
+  const [current, setCurrent] = useState(null); // { kind: 'body'|'legacy', id, name, body?, design?, preset?, rosterId? }
+  const [look, setLook] = useState(() => normalizeLook(DEFAULT_LOOK));
+  const [presetId, setPresetId] = useState('teal');
+  const [policies, setPolicies] = useState({});
+  const [evals, setEvals] = useState({});
+  const [job, setJob] = useState(null);
+  const [messages, setMessages] = useState([GREETING]);
+  const [suggestions, setSuggestions] = useState(STARTER_CHIPS);
+  const [provider, setProvider] = useState({ kind: 'offline', offline: true, name: 'offline' });
+  const [busy, setBusy] = useState(false);
+  const [building, setBuilding] = useState(false);
+  const [health, setHealth] = useState(null);
+  const [flowerReady, setFlowerReady] = useState(false);
+  const [exportState, setExportState] = useState('idle');
+  const [snapshot, setSnapshot] = useState(null);
+  const [exploreOpen, setExploreOpen] = useState(false);
+  const [exploreText, setExploreText] = useState('Go to the red ball');
+  const [playLoading, setPlayLoading] = useState(false);
+  const lastBuild = useRef(null);
+  const chatAbort = useRef(null);
 
-  const loadRecipe = useCallback(async (recipeInput, nextParentId = null) => {
-    let recipe;
-    try { recipe = normalizeRecipe(recipeInput); } catch (err) { setError(friendlyError(err)); return; }
-    const request = ++requestNumber.current;
-    setBusy(true); setError(""); setNotice(""); setShareFallback("");
-    try {
-      engine.current?.setDriveCommand?.([0, 0, 0]);
-      engine.current?.stopWalking?.();
-      const response = await fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ preset: recipe.preset, lengthScale: recipe.lengthScale, legScale: recipe.legScale }) });
-      const data = await response.json().catch(() => { throw Error("generatorOffline"); });
-      if (!response.ok) throw Error(typeof data.error === "string" ? data.error : `Generation failed (${response.status})`);
-      if (request !== requestNumber.current) return;
-      if (!data.id || !data.xmlUrl || !data.meshUrl) throw Error("Generated model manifest is incomplete.");
-      const normalized = normalizeRecipe({ ...recipe, lengthScale: data.parameters?.lengthScale ?? recipe.lengthScale, legScale: data.parameters?.legScale ?? recipe.legScale });
-      const operation = modelQueue.current.catch(() => {}).then(async () => {
-        if (request !== requestNumber.current || !engine.current) return;
-        await engine.current.loadModel(data);
-        if (request !== requestNumber.current) return;
-        engine.current.setColor(normalized.color);
-        engine.current.setPose(normalized.pose);
-        setManifest(data); setActiveRecipe(normalized); setForm(normalized); setColor(normalized.color); setPose(normalized.pose); setParentId(nextParentId);
-        setSteps({ taller: normalized.legScale > 1.005, posed: normalized.pose.crouch > .005 || normalized.pose.wave > .005, dropped: false, saved: false });
-        setState({ ...engine.current.snapshot() });
-        setNotice("generated");
-      });
-      modelQueue.current = operation;
-      await operation;
-    } catch (err) { if (request === requestNumber.current) setError(friendlyError(err)); }
-    finally { if (request === requestNumber.current) setBusy(false); }
-  }, []);
-
+  // ---------- engines ----------
   useEffect(() => {
     let cancelled = false, created = null;
-    fetch("/api/catalog").then(response => { if (!response.ok) throw Error("catalogError"); return response.json(); }).then(value => { if (!cancelled) setCatalog(value); }).catch(() => { if (!cancelled) setNotice("catalogError"); });
     (async () => {
       try {
-        created = await createDraftLab(stage.current, { onState: next => { if (!cancelled) setState(previous => ({ ...previous, ...next })); } });
+        mujoco.current = await getMujoco();
+        created = await createDraftLab(workshopEl.current, { createStudio: createWhiteboxStudio });
         if (cancelled) { created.dispose(); return; }
-        engine.current = created;
-        await loadRecipe(initial.current.recipe);
-        if (initial.current.error) setError(initial.current.error);
-      } catch (err) { if (!cancelled) { setError(friendlyError(err)); setBusy(false); } }
+        lab.current = created;
+        await openRoster('dog', { quiet: true });
+      } catch (error) { if (!cancelled) push({ tone: 'bad', title: 'The workshop could not start', text: String(error.message || error) }); }
     })();
-    const poll = window.setInterval(() => {
-      if (!engine.current || cancelled) return;
-      try { setState({ ...engine.current.snapshot() }); } catch (err) { setError(friendlyError(err)); }
-    }, 250);
-    const hashChanged = () => {
-      try { const recipe = recipeFromHash(); if (recipe && engine.current) loadRecipe(recipe); }
-      catch (err) { setError(friendlyError(err)); }
-    };
-    window.addEventListener("hashchange", hashChanged);
-    return () => { cancelled = true; ++requestNumber.current; window.clearInterval(poll); window.removeEventListener("hashchange", hashChanged); if (created) created.dispose(); engine.current = null; };
-  }, [loadRecipe]);
+    return () => { cancelled = true; created?.dispose(); lab.current = null; game.current?.dispose(); game.current = null; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const refreshBodies = useCallback(async () => {
+    try { const value = await fetchJson('/api/bodies', { timeoutMs: 20000 }); setBodies(Array.isArray(value.bodies) ? value.bodies : []); }
+    catch { /* shelf stays as it is */ }
+  }, []);
+  useEffect(() => {
+    refreshBodies();
+    aiApi.health().then(setHealth).catch(() => setHealth(null));
+    draftApi.flowerStatus().then(s => setFlowerReady(s?.browserReady === true)).catch(() => setFlowerReady(false));
+  }, [refreshBodies]);
+
+  const loadPolicies = useCallback(async bodyId => {
+    if (!bodyId) return;
+    try {
+      const value = await fetchJson(`/api/creatures/${bodyId}/policies`, { timeoutMs: 8000 });
+      setPolicies(previous => ({ ...previous, [bodyId]: value.skills || {} }));
+      for (const skill of ['walk', 'jump']) {
+        if (value.skills?.[skill]?.present && !evals[`${bodyId}/${skill}`]) {
+          fetchJson(`/creatures/${bodyId}/policies/${skill}/eval.json`).then(e => setEvals(prev => ({ ...prev, [`${bodyId}/${skill}`]: e }))).catch(() => {});
+        }
+      }
+      if (value.activeJob) setJob(value.activeJob);
+    } catch { /* offline: keep previous */ }
+  }, [evals]);
+
+  // ---------- creature loading ----------
+  async function loadBodyById(bodyId, extra = {}) {
+    const body = await fetchJson(`/creatures/${bodyId}/body.json`, { timeoutMs: 20000 });
+    await lab.current?.loadBody(body, `/creatures/${bodyId}`);
+    setCurrent({ kind: 'body', id: bodyId, name: extra.name || body.name, body, design: extra.design || body.design || null, rosterId: extra.rosterId || null });
+    loadPolicies(bodyId);
+    return body;
+  }
+  async function loadLegacy(preset, extra = {}) {
+    const manifest = await draftApi.generatePreset({ preset });
+    await lab.current?.loadModel(manifest);
+    setCurrent({ kind: 'legacy', id: manifest.id, name: extra.name || preset[0].toUpperCase() + preset.slice(1), preset, manifest, rosterId: extra.rosterId || null });
+  }
+  async function openRoster(rosterId, { quiet = false } = {}) {
+    const robot = ROSTER.find(r => r.id === rosterId);
+    if (!robot) return;
+    try {
+      if (robot.legacy) await loadLegacy(robot.legacy, { name: robot.name, rosterId });
+      else if (robot.bodyId) await loadBodyById(robot.bodyId, { name: robot.name, rosterId });
+      else { push({ tone: 'info', title: `${robot.name} is still being drafted`, text: 'Its Draft body is on the way. Ask Tinker for one in the meantime.' }); return; }
+      if (!quiet) push({ tone: 'good', title: `${robot.name} is on the bench`, text: robot.tagline });
+      setModal(null);
+    } catch (error) { push({ tone: 'bad', title: `Could not open ${robot.name}`, text: String(error.message || error) }); }
+  }
+
+  useEffect(() => { lab.current?.setLook(look); }, [look]);
+  useEffect(() => { lab.current?.setViewMode(viewMode); }, [viewMode]);
+
+  // ---------- skills ----------
+  const bodyId = current?.kind === 'body' ? current.id : null;
+  const skillEntries = bodyId ? policies[bodyId] || {} : {};
+  const walkState = current?.kind === 'legacy'
+    ? (current.preset === 'cheetah' || (current.preset === 'flower' && flowerReady) ? { state: 'ready', hashMatched: true, honesty: 'Pretrained policy from the original lab (validated for this exact original-size body).' } : { state: 'untrained', reason: 'Legacy preset without a policy' })
+    : skillState(skillEntries.walk);
+  const jumpState = current?.kind === 'legacy' ? { state: 'untrained', available: false, reason: 'No jump trained for this legacy body' } : skillState(skillEntries.jump);
+  const training = {
+    walk: { ...walkState, eval: evals[`${bodyId}/walk`] ? { pass: evals[`${bodyId}/walk`].pass, rows: evalRows(evals[`${bodyId}/walk`]) } : undefined },
+    jump: { ...jumpState, available: walkState.state === 'ready', reason: walkState.state === 'ready' ? undefined : 'Learn to walk first',
+      eval: evals[`${bodyId}/jump`] ? { pass: evals[`${bodyId}/jump`].pass, rows: evalRows(evals[`${bodyId}/jump`]) } : undefined },
+  };
+  const canPlay = walkState.state === 'ready';
+  const canJump = jumpState.state === 'ready';
 
   useEffect(() => {
-    document.documentElement.lang = "en";
-    document.title = t.name;
-    try { localStorage.setItem("draft-creature-language", language); } catch { /* Preference persistence is optional. */ }
-  }, [language, t.name]);
+    if (!job?.id) return undefined;
+    let stop = false;
+    (async () => {
+      while (!stop) {
+        try {
+          const value = await fetchJson(`/api/training/jobs/${job.id}`, { timeoutMs: 6000 });
+          if (bodyId) loadPolicies(bodyId);
+          if (value?.job && !value.job.running && value.job.state !== 'running') { setJob(null); push({ tone: value.job.state === 'done' ? 'good' : 'info', title: 'Training finished', text: value.job.message || '' }); break; }
+        } catch { /* keep polling */ }
+        await sleep(2000);
+      }
+    })();
+    return () => { stop = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [job?.id]);
 
-  function updatePose(key, value) {
-    if (!ready || physics || walkingSession) return;
-    const next = { ...pose, [key]: value };
-    try { engine.current.setPose(next); setPose(next); setSteps(previous => ({ ...previous, posed: true, saved: false })); setNotice(""); }
-    catch (err) { setError(friendlyError(err)); }
-  }
-  function paint(value) {
-    if (!ready) return;
-    try { engine.current.setColor(value); setColor(value); setSteps(previous => ({ ...previous, saved: false })); }
-    catch (err) { setError(friendlyError(err)); }
-  }
-  async function exploreTrail() {
-    if (!ready || !walkingEligible) return;
-    setWalkingBusy(true); setError(""); setNotice("");
-    try { await engine.current.startTrail(false); setState({ ...engine.current.snapshot() }); }
-    catch (err) { setError(friendlyError(err)); }
-    finally { setWalkingBusy(false); }
-  }
-  function run(action) {
-    if (!ready || (action === "drop" && walkingSession)) return;
+  async function startTraining(skill, opts = {}) {
+    if (!bodyId) { push({ tone: 'info', title: 'Pick a Draft body first', text: 'Legacy presets keep their original policies.' }); return; }
     try {
-      engine.current[action](); setError(""); setNotice("");
-      if (action === "drop") setSteps(previous => ({ ...previous, dropped: true, saved: false }));
-      if (action === "reset") { engine.current.setPose({ crouch: 0, wave: 0 }); setPose({ crouch: 0, wave: 0 }); }
-      setState({ ...engine.current.snapshot() });
-    } catch (err) { setError(friendlyError(err)); }
+      const value = await fetchJson('/api/training/jobs', { method: 'POST', body: { bodyId, skill, budget: opts.budget || 'quick' }, timeoutMs: 15000 });
+      setJob(value.job || value); push({ tone: 'info', title: `Training ${skill}`, text: 'Running on this computer’s CPU. You can keep designing meanwhile.' });
+      loadPolicies(bodyId);
+    } catch (error) { push({ tone: 'bad', title: 'Training did not start', text: error.message }); }
   }
-  function saveRemix() {
-    if (!ready || !currentRecipe) return;
-    try {
-      const id = `remix-${globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`}`;
-      const entry = { id, parentId, createdAt: new Date().toISOString(), recipe: normalizeRecipe(currentRecipe) };
-      const next = [entry, ...remixes].slice(0, 24);
-      localStorage.setItem(STORAGE, JSON.stringify(next));
-      setRemixes(next); setParentId(id); setSteps(previous => ({ ...previous, saved: true })); setNotice("savedDone"); setError("");
-    } catch { setError("badStorage"); }
-  }
-  async function share() {
-    if (!ready || !currentRecipe) return;
-    const url = new URL(location.href); url.hash = `recipe=${encodeURIComponent(JSON.stringify(normalizeRecipe(currentRecipe)))}`;
-    try { await navigator.clipboard.writeText(url.href); setNotice("shareDone"); setShareFallback(""); }
-    catch { setShareFallback(url.href); setNotice("copiedFallback"); }
-  }
-  function exportRecipe() {
-    if (!ready || !currentRecipe) return;
-    const blob = new Blob([JSON.stringify(normalizeRecipe(currentRecipe), null, 2) + "\n"], { type: "application/json" });
-    const url = URL.createObjectURL(blob), link = document.createElement("a");
-    link.href = url; link.download = `draft-${currentRecipe.preset}-recipe.json`; document.body.appendChild(link); link.click(); link.remove();
-    window.setTimeout(() => URL.revokeObjectURL(url), 1000); setNotice("exportDone");
-  }
-  async function importRecipe(event) {
-    const file = event.target.files?.[0]; event.target.value = "";
-    if (!file) return;
-    if (file.size > 8192) { setError("fileError"); return; }
-    try { const recipe = parseRecipe(await file.text()); await loadRecipe(recipe); }
-    catch (err) { setError(friendlyError(err)); }
+  async function stopTraining() {
+    if (!job?.id) return;
+    try { await fetchJson(`/api/training/jobs/${job.id}/cancel`, { method: 'POST', timeoutMs: 15000 }); } catch (error) { push({ tone: 'bad', title: 'Could not stop training', text: error.message }); }
   }
 
-  const catalogSummary = catalog && {
-    presets: (Array.isArray(catalog.presets) ? catalog.presets : []).map(item => typeof item === "string" ? item : { id: item.id, name: typeof item.name === "string" ? item.name : item.name?.en || item.id }),
-    provenance: catalog.provenance,
-  };
-  const evidence = JSON.stringify({ engine: state, recipe: currentRecipe, manifest: manifest && { id: manifest.id, preset: manifest.preset, xmlUrl: manifest.xmlUrl, meshUrl: manifest.meshUrl, parameters: manifest.parameters, resolvedParameters: manifest.resolvedParameters, warnings: manifest.warnings, assetSha256: manifest.assetSha256, provenance: manifest.provenance, massKg: manifest.massKg }, catalog: catalogSummary, error: error || null }, null, 2);
-  const displayedError = error || state.error || (state.ready && state.finite === false ? "finiteError" : "");
-  const visionStatus = state.vision?.phase === "thinking" ? "Looking through the robot camera · Physics paused" : state.vision?.phase === "moving" ? "Trying a visual instruction · Use the stick to take over" : null;
-  const status = walkingBusy ? t.walkingLoading : busy ? (engine.current ? t.loadingModel : t.loading) : displayedError ? (t[displayedError] || String(displayedError)) : visionStatus || (walkingSession ? (state.walking?.active ? t.walkingNotice : t.walkPaused) : physics ? (state.physicsComplete ? t.gravityComplete : t.gravityNotice) : notice ? (t[notice] || notice) : t.ready);
-  const entryName = entry => `${t[entry.recipe.preset]} ${t.remix} · ${entry.id.slice(-4).toUpperCase()}`;
+  // ---------- Tinker ----------
+  function stateForTinker(extra = {}) {
+    const body = current?.kind === 'body' ? { id: current.body.id, massKg: current.body.massKg, design: current.design || current.body.design,
+      feasibility: current.body.feasibility, trainability: current.body.trainability, terrainProfile: current.body.terrainProfile } : undefined;
+    return { design: current?.design || undefined, look, body: lastBuild.current?.error ? lastBuild.current.error : body,
+      policies: { walk: walkState.state === 'ready', jump: jumpState.state === 'ready' }, ...extra };
+  }
+  async function askTinker(text) {
+    const userMessage = text ? { id: uid('u'), role: 'user', kind: 'text', text } : null;
+    const history = userMessage ? [...messages, userMessage] : messages;
+    if (userMessage) setMessages(history);
+    setBusy(true);
+    chatAbort.current?.abort(); const abort = new AbortController(); chatAbort.current = abort;
+    try {
+      const apiMessages = history.filter(m => (m.role === 'user' || m.role === 'tinker') && m.text).slice(-24)
+        .map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: String(m.text).slice(0, 3900) }));
+      const value = await aiApi.chat(apiMessages, stateForTinker(), abort.signal);
+      if (value.provider) setProvider(value.provider);
+      setSuggestions(Array.isArray(value.suggestions) ? value.suggestions : []);
+      const next = [];
+      let replied = false;
+      for (const action of value.actions || []) {
+        if (action.type === 'design') { next.push({ id: uid('d'), role: 'tinker', kind: 'design', text: replied ? '' : value.reply, design: action.design, designStatus: 'proposed' }); replied = true; }
+        else if (action.type === 'look') next.push({ id: uid('l'), role: 'tinker', kind: 'look', look: normalizeLook(action.look), lookName: action.look?.theme, design: current?.design });
+        else if (action.type === 'train') next.push({ id: uid('t'), role: 'tinker', kind: 'training', training: { skills: action.skills, estimateMinutes: 8 }, creatureName: current?.name });
+        else if (action.type === 'play' && canPlay) next.push({ id: uid('p'), role: 'tinker', kind: 'play', creatureName: current?.name, skills: canJump ? ['walk', 'jump'] : ['walk'] });
+      }
+      if (!replied && value.reply) next.unshift({ id: uid('m'), role: 'tinker', kind: 'text', text: value.reply });
+      setMessages(list => [...list, ...next]);
+    } catch (error) {
+      if (error?.message !== 'Cancelled') setMessages(list => [...list, { id: uid('e'), role: 'system', kind: 'note', text: `Tinker is unavailable: ${error.message}` }]);
+    } finally { if (chatAbort.current === abort) { chatAbort.current = null; setBusy(false); } }
+  }
+
+  async function buildDesign(design, message) {
+    setBuilding(true); setTab('blueprint');
+    setMessages(list => list.map(m => (m === message ? { ...m, designStatus: 'building' } : m)));
+    try {
+      const value = await fetchJson('/api/design', { method: 'POST', body: design, timeoutMs: 180000 });
+      lastBuild.current = { body: value.body };
+      await lab.current?.loadBody(value.body, `/creatures/${value.body.id}`);
+      setCurrent({ kind: 'body', id: value.body.id, name: design.name, body: value.body, design });
+      if (design.look) setLook(normalizeLook(design.look));
+      loadPolicies(value.body.id); refreshBodies();
+      setMessages(list => [...list.map(m => (m === message || m.id === message?.id ? { ...m, designStatus: 'built', body: value.body } : m)),
+        { id: uid('n'), role: 'system', kind: 'note', text: `Draft built ${design.name}: ${value.body.massKg?.toFixed?.(1) ?? '?'} kg, ${value.body.jointNames?.length ?? '?'} joints, feasibility ${value.body.feasibility?.passed === false ? 'needs work' : 'passed'}${value.cached ? ' (cached)' : ''}.` }]);
+      await askTinker(null);
+    } catch (error) {
+      const problem = error instanceof ApiError ? error.body : { error: 'design-failed', message: String(error.message || error) };
+      lastBuild.current = { error: problem };
+      setMessages(list => [...list.map(m => (m === message || m.id === message?.id ? { ...m, designStatus: 'failed' } : m)),
+        { id: uid('x'), role: 'tinker', kind: 'problem', problem }]);
+      await askTinker(null);
+      lastBuild.current = null;
+    } finally { setBuilding(false); }
+  }
+
+  function onChatAction(action, message) {
+    if (action.type === 'build') buildDesign(action.design, message);
+    else if (action.type === 'tweak') setTab('blueprint');
+    else if (action.type === 'open-blueprint') setTab('blueprint');
+    else if (action.type === 'apply-look') { setLook(normalizeLook(action.look)); setPresetId(null); setMessages(list => list.map(m => (m.id === message.id ? { ...m, lookApplied: true } : m))); }
+    else if (action.type === 'revise') askTinker('Please revise the design so Draft can build it.');
+    else if (action.type === 'train') { setTab('train'); startTraining(action.skills?.[0] || 'walk'); }
+    else if (action.type === 'play') enterPlayground();
+  }
+
+  // ---------- playground ----------
+  function pilotFor() {
+    if (current?.kind === 'legacy') return current.preset === 'flower' ? createLegacyFlowerPilot() : createLegacyCheetahPilot();
+    const base = `/creatures/${current.id}/policies`;
+    return wrapCreaturePilot(`${base}/walk/`, {
+      loadModule: async () => ({ createCreaturePilot: () => createCreaturePilot({ walkUrl: `${base}/walk/`, jumpUrl: canJump ? `${base}/jump/` : null, bodyUrl: `/creatures/${current.id}/body.json` }) }),
+    });
+  }
+  async function enterPlayground() {
+    if (!canPlay) { push({ tone: 'info', title: 'Teach it to walk first', text: 'The playground needs a validated walking skill for this exact body.' }); return; }
+    setMode('playground'); setPlayLoading(true); setTitleOpen(false);
+    try {
+      game.current?.dispose(); game.current = null;
+      game.current = await createPlayground(playEl.current, {
+        mujoco: mujoco.current, pilot: pilotFor(), look, muted,
+        onEvent: event => {
+          if (event?.type === 'spark') return;
+          if (event?.title || event?.text) push({ tone: event.type === 'fall' ? 'bad' : 'good', title: event.title || event.type, text: event.text || '' });
+        },
+      });
+    } catch (error) {
+      push({ tone: 'bad', title: 'The playground could not start', text: String(error.message || error) }); setMode('workshop');
+    } finally { setPlayLoading(false); }
+  }
+  function leavePlayground() { game.current?.dispose(); game.current = null; setSnapshot(null); setMode('workshop'); setModal(null); }
+  useEffect(() => {
+    if (mode !== 'playground') return undefined;
+    const timer = setInterval(() => { try { if (game.current) setSnapshot(game.current.snapshot()); } catch { /* engine restarting */ } }, 200);
+    return () => clearInterval(timer);
+  }, [mode]);
+  useEffect(() => { game.current?.setMuted?.(muted); }, [muted]);
+
+  // ---------- look + print kit ----------
+  async function printKit() {
+    setExportState('working');
+    try {
+      const result = await lab.current.printKit(args => exportPrintKit(args));
+      const blob = result instanceof Blob ? result : result?.blob;
+      if (blob) {
+        const url = URL.createObjectURL(blob), link = document.createElement('a');
+        link.href = url; link.download = result?.filename || `${(current?.name || 'creature').toLowerCase().replace(/[^a-z0-9]+/g, '-')}-print-kit.zip`;
+        document.body.appendChild(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 1500);
+      }
+      setExportState('done');
+    } catch (error) { setExportState('error'); push({ tone: 'bad', title: 'Print kit failed', text: error.message }); }
+  }
+
+  // ---------- derived UI data ----------
+  const rosterEntries = useMemo(() => ROSTER.map(robot => {
+    const listed = robot.bodyId ? bodies.find(b => b.id === robot.bodyId) : null;
+    const entries = robot.bodyId ? policies[robot.bodyId] : null;
+    const walk = robot.legacy ? (flowerReady ? 'ready' : 'untrained') : entries ? skillState(entries.walk).state : robot.bodyId ? 'untrained' : 'drafting';
+    const jump = robot.legacy ? 'untrained' : entries ? skillState(entries.jump).state : 'untrained';
+    return { id: robot.id, name: robot.name, kind: robot.kind, tagline: robot.tagline, design: listed?.design || { schema: 'creature-design/1', name: robot.name, bodyPlan: robot.plan || (robot.legacy ? 'multileg' : listed?.bodyPlan || 'quadruped') },
+      look, skills: robot.plan === 'wheeled' ? { drive: walk, jump } : { walk, jump }, massKg: listed?.massKg, dimensions: listed?.dimensions, terrainProfile: listed?.terrainProfile };
+  }), [bodies, policies, flowerReady, look]);
+  useEffect(() => { for (const robot of ROSTER) if (robot.bodyId) loadPolicies(robot.bodyId); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, []);
+
+  const starters = useMemo(() => bodies.map(b => ({ id: b.id, name: b.name, design: b.design || { schema: 'creature-design/1', name: b.name, bodyPlan: b.bodyPlan }, look, note: b.bodyPlan })), [bodies, look]);
+  const creature = { name: current?.name || 'Creature', design: current?.design, look, skills: { walk: walkState.state, jump: jumpState.state } };
+  const steps = { imagine: 'done', draft: current ? 'done' : 'active', dress: current ? 'active' : 'todo', train: canPlay ? 'done' : current ? 'active' : 'todo', play: canPlay ? 'active' : 'locked' };
+  const nameBadges = canPlay
+    ? <><Badge tone="good" icon="check">Walks</Badge>{canJump && <Badge tone="good" icon="check">Jumps</Badge>}</>
+    : walkState.state === 'training' || walkState.state === 'validating' ? <Badge tone="info" icon="train">Learning to walk</Badge>
+      : building ? <Badge tone="info" icon="blueprint">Drafting</Badge>
+        : current ? <Badge tone="warn" icon="alert">Untrained</Badge> : <Badge tone="outline" icon="blueprint">Not built yet</Badge>;
+
+  const spec = <SpecSheet body={current?.kind === 'body' ? current.body : null} design={current?.design} loading={building} policies={training}
+    onTrain={skill => { setTab('train'); startTraining(skill); }} onOpenLabNotes={() => setModal('notes')} onTweak={() => askTinker('Can we tweak the proportions?')} device="your Mac" />;
+  const tabs = [
+    { id: 'blueprint', label: 'Blueprint', icon: 'blueprint', content: spec },
+    { id: 'look', label: 'Look', icon: 'palette', content: <LookPanel look={look} onChange={next => { setLook(normalizeLook(next)); setPresetId(null); }}
+      presets={PRODUCT_LOOKS} presetId={presetId} onPreset={(id, next) => { setPresetId(id); setLook(normalizeLook(next)); }} design={current?.design}
+      onExportPrintKit={printKit} exportState={exportState} onAskTinker={askTinker} /> },
+    { id: 'train', label: 'Train', icon: 'train',
+      badge: walkState.state === 'training' ? <ProgressRing value={walkState.progress?.envSteps && walkState.progress?.targetSteps ? walkState.progress.envSteps / walkState.progress.targetSteps : 0.1} size={20} stroke={3.5} label="Training" /> : canPlay ? <TabDot tone="good" label="Skills verified" /> : null,
+      content: <TrainingPanel creatureName={current?.name} skills={training} onTrain={(skill, opts) => startTraining(skill, opts)} onStop={stopTraining}
+        onPlay={enterPlayground} onAskTinker={askTinker} device="your Mac" machineNote="Training runs on this computer's CPU with MuJoCo; no GPU needed." /> },
+  ];
+
+  const stageActions = [
+    { id: 'roster', label: 'Robots', icon: 'gamepad', hint: 'Pick from the roster', onClick: () => setModal('roster') },
+    { id: 'home', label: 'Center', icon: 'home', onClick: () => lab.current?.home() },
+    { id: 'drop', label: 'Drop test', icon: 'download', hint: 'Motors off: see how gravity takes it', onClick: () => lab.current?.drop() },
+    { id: 'reset', label: 'Reset', icon: 'undo', onClick: () => lab.current?.reset() },
+    { id: 'play', label: canPlay ? 'Play' : 'Play (train first)', icon: 'park', primary: true, onClick: enterPlayground },
+  ];
+
+  const playHud = (
+    <PlayHUD creature={creature} snapshot={snapshot || {}} canJump={canJump} jumpHint={canJump ? undefined : 'This robot has no validated jump yet'}
+      onJump={() => game.current?.trigger?.('jump')} onJumpBlocked={hint => push({ tone: 'info', title: 'Jump is locked', text: hint })}
+      onExplore={() => setExploreOpen(open => !open)} exploreOpen={exploreOpen}
+      explorePanel={<ExplorePanel state={snapshot?.explore?.phase || 'idle'} instruction={exploreText} onInstructionChange={setExploreText}
+        landmarks={['red ball', 'goal', 'yellow flag', 'blue tower', 'jump pad']} onStart={() => game.current?.startExplore?.(exploreText)}
+        onStop={() => game.current?.stopExplore?.()} onClose={() => setExploreOpen(false)} lastDecision={snapshot?.explore?.lastDecision}
+        eyes={health?.roles?.eyes?.configured ? { model: health.roles.eyes.model, kind: health.roles.eyes.kind } : undefined} />}
+      cameraMode={snapshot?.camera?.mode || 'chase'} onCamera={next => game.current?.setCameraMode?.(next)}
+      onOpenChallenges={() => setModal('terrain')} onOpenStickers={() => {}} onReset={() => game.current?.reset?.()}
+      touchControls={<TouchControls onCommand={({ x = 0, y = 0 }) => game.current?.setCommand?.({ vx: -y, wz: -x, normalized: true })} onJump={() => game.current?.trigger?.('jump')} canJump={canJump} />} />
+  );
 
   return (
-    <main className={`draft-app${walkingSession ? " is-walking-view" : ""}`}>
-      <header className="draft-topbar">
-        <div className="draft-brand"><span className="draft-brand-icon"><Icon kind="sparkle" /></span><div><span className="draft-eyebrow">{t.brand}</span><h1>{t.name}</h1></div></div>
-        <p className="draft-tagline">{t.intro}</p>
-        <div className="draft-top-actions"><button className="draft-share" disabled={!ready} onClick={share} title={t.shareScope}><Icon kind="share" /><span>{t.share}</span></button></div>
-      </header>
-
-      <div className="draft-workspace">
-        <aside className="draft-inspector" aria-label={t.shapeTitle}>
-          <section className="draft-control-section">
-            <h2>{t.presetTitle}</h2>
-            <div className="draft-presets">{PRESETS.map(preset => <button key={preset} className={`draft-preset${form.preset === preset ? " is-selected" : ""}${preset === "flower" ? " is-flower" : ""}`} aria-pressed={form.preset === preset} disabled={working || !engine.current} onClick={() => { const next = { ...DEFAULT, preset, color }; setForm(next); loadRecipe(next); }}><Creature preset={preset} /><strong>{t[preset]}</strong><span>{t[`${preset}Desc`]}</span></button>)}</div>
-          </section>
-
-          <section className="draft-control-section draft-shape">
-            <h2>{t.shapeTitle}</h2>
-            {[{ key: "lengthScale", label: isFlower ? t.flowerTorso : t.torso }, { key: "legScale", label: t.legs }].map(({ key, label }) => <div className="draft-slider" key={key}><label htmlFor={`draft-${key}`}>{label}<output>{form[key].toFixed(2)}×</output></label><input id={`draft-${key}`} type="range" min="0.8" max="1.2" step="0.01" value={form[key]} disabled={!ready} onChange={event => setForm(previous => ({ ...previous, [key]: Number(event.target.value) }))} /><div className="draft-range-labels"><span>{t.shorter}</span><span>{t.longer}</span></div></div>)}
-            <button className="draft-generate" disabled={working || !engine.current} onClick={() => loadRecipe({ ...form, color, pose }, parentId)}><Icon kind="sparkle" />{busy ? t.generating : t.generate}</button>
-            <p className={`draft-shape-note${dirty ? " is-dirty" : ""}`}>{dirty ? t.changed : activeRecipe?.lengthScale === 1 && activeRecipe?.legScale === 1 ? t.original : t.generated}</p>
-          </section>
-
-          <section className="draft-control-section draft-paint"><div className="draft-label-row"><h2>{t.paint}</h2><span>{t.paintNote}</span></div><div className="draft-swatches">{COLORS.map(value => <button key={value} style={{ "--swatch": value }} className={color === value ? "is-selected" : ""} disabled={!ready} onClick={() => paint(value)} aria-label={`${t.paint} ${value}`} aria-pressed={color === value}>{color === value ? "✓" : ""}</button>)}<label className="draft-custom-color" title={t.paint}><input type="color" aria-label={t.paint} value={color} disabled={!ready} onChange={event => paint(event.target.value)} /><span aria-hidden="true">＋</span></label></div></section>
-
-          <section className="draft-control-section draft-pose"><h2>{t.poseTitle}</h2>{[{ key: "crouch", label: t.crouch }, { key: "wave", label: isFlower ? t.flowerPose : t.wave }].map(({ key, label }) => <div className="draft-slider" key={key}><label htmlFor={`draft-${key}`}>{label}<output>{Math.round(pose[key] * 100)}%</output></label><input id={`draft-${key}`} type="range" min="0" max="1" step="0.01" value={pose[key]} disabled={!ready || physics || walkingSession} onChange={event => updatePose(key, Number(event.target.value))} /></div>)}{(physics || walkingSession) && <p className="draft-small-note">{walkingSession ? t.walkPoseNote : t.poseReset}</p>}</section>
-
-          <div className="draft-file-actions"><button disabled={!ready} onClick={exportRecipe}><Icon kind="download" />{t.export}</button><button disabled={working || !engine.current} onClick={() => fileInput.current?.click()}><Icon kind="upload" />{t.import}</button><input ref={fileInput} type="file" accept=".json,application/json" hidden onChange={importRecipe} /></div>
-          <details className="draft-evidence"><summary>{t.evidence}<span>＋</span></summary><p>{t.dataHint}</p><textarea aria-label="Lab evidence" readOnly spellCheck={false} value={evidence} /></details>
-        </aside>
-
-        <section className="draft-main">
-          <section className="draft-stage-shell" aria-label={t.name}>
-            <div className="draft-stage" ref={stage} />
-            <div className="draft-stage-top"><div><span className="draft-stage-kicker">{walkingSession ? t.walkMode : physics ? t.physicsMode : isFlower ? t.flowerSource : t.poseMode}</span><h2>{t[activeRecipe?.preset || form.preset]}<span className="draft-status-dot" /></h2></div><button className="draft-camera" disabled={!ready} onClick={() => run("home")} aria-label={t.home} title={t.home}><Icon kind="home" /></button></div>
-            <p className="draft-orbit-hint">{t.orbit}</p>
-            {!walkingSession && walkingEligible && <button className="draft-explore" disabled={!ready} onClick={exploreTrail}><Icon kind="sparkle" />{t.explore}<span aria-hidden="true">↗</span></button>}
-            <div className={`draft-stage-message${displayedError ? " is-error" : ""}`} role="status" aria-live="polite">{working && <span className="draft-spinner" aria-hidden="true" />}{status}</div>
-            {shareFallback && <div className="draft-share-fallback"><label htmlFor="draft-share-url">{t.recipeLink} · {t.shareScope}</label><input id="draft-share-url" readOnly value={shareFallback} onFocus={event => event.target.select()} /><button onClick={() => setShareFallback("")} aria-label={t.close}>×</button></div>}
-            <div className="draft-stage-bottom"><p className="draft-policy-note"><span aria-hidden="true">○</span>{walkingSession ? (isFlower ? "Locally trained custom Flower" : t.walkBadge) : t.mode}</p><div className="draft-stage-actions"><button className="draft-reset" disabled={!ready} onClick={() => run("reset")}><Icon kind="reset" />{walkingSession ? t.returnPose : t.reset}</button><button className="draft-drop" disabled={!ready || walkingSession} onClick={() => run("drop")}><Icon kind="drop" />{physics ? t.dropAgain : t.drop}</button><button className="draft-save" disabled={!ready} onClick={saveRemix}><Icon kind="save" />{t.save}</button></div></div>
-          </section>
-
-          <WalkControls body={activeRecipe?.preset ?? form.preset} flowerTrained={flowerStatus?.browserReady===true} language={language} lab={engine.current} walking={state.walking} visionActive={state.vision?.active===true} eligible={walkingEligible} disabled={!ready} paused={state.mode === "walk-paused"} onRestore={() => loadRecipe({ ...DEFAULT, preset:isFlower&&flowerStatus?.browserReady?'flower':'cheetah', color })} onBusyChange={setWalkingBusy} onRefresh={() => { if (engine.current) setState({ ...engine.current.snapshot() }); setError(""); setNotice(""); }} />
-
-          <VisionCard engine={engine.current} language={language} eligible={walkingEligible} disabled={!ready} walking={state.walking} vision={state.vision} />
-
-          <section className="draft-challenge" aria-label={t.challenge}><div><span className="draft-eyebrow">{t.challenge}</span><strong>{t.challengeHint}</strong></div><ol>{["taller", "posed", "dropped", "saved"].map((key, index) => <li key={key} className={steps[key] ? "is-done" : ""}><span>{steps[key] ? "✓" : index + 1}</span>{t[key]}</li>)}</ol></section>
-
-          <section className="draft-library" aria-label={t.library}><div className="draft-library-heading"><h2>{t.library}<span>{remixes.length}</span></h2><p>{t.local}</p></div>{remixes.length ? <div className="draft-remix-list">{remixes.map(entry => { const parent = remixes.find(item => item.id === entry.parentId); return <article key={entry.id} className={`draft-remix${parentId === entry.id ? " is-current" : ""}`}><button className="draft-remix-open" disabled={working} onClick={() => loadRecipe(entry.recipe, entry.id)} aria-label={`${t.open} ${entryName(entry)}`}><span className="draft-remix-art" style={{ "--creature-color": entry.recipe.color }}><Creature preset={entry.recipe.preset} color={entry.recipe.color} /></span><span><strong>{entryName(entry)}</strong><small>{entry.recipe.lengthScale.toFixed(2)}× · {entry.recipe.legScale.toFixed(2)}×</small></span></button><p className="draft-parent">{t.parent} {parent ? <button disabled={working} onClick={() => loadRecipe(parent.recipe, parent.id)}>{entryName(parent)}</button> : entry.parentId ? t.missingParent : t.originalParent}</p></article>; })}</div> : <div className="draft-library-empty"><span className="draft-empty-illustration"><Creature preset="giraffe" /></span><div><strong>{t.emptyTitle}</strong><p>{t.emptyHint}</p></div><span className="draft-empty-spark" aria-hidden="true">✳</span></div>}</section>
-          {isFlower ? <FlowerCard language={language} onStatus={setFlowerStatus} /> : <TrainingCard language={language} />}
-          <footer className="draft-footer">{t.learn}</footer>
-        </section>
-      </div>
-    </main>
+    <AppShell
+      mode={mode}
+      onModeChange={next => (next === 'playground' ? enterPlayground() : leavePlayground())}
+      playgroundLocked={!canPlay}
+      playgroundHint="Teach it to walk first. The playground needs a verified walking skill."
+      stage={<div className="app-stage"><div ref={workshopEl} className="app-stage__layer" hidden={mode !== 'workshop'} /><div ref={playEl} className="app-stage__layer" hidden={mode !== 'playground'} />{playLoading && <div className="app-stage__loading">Loading the playground…</div>}</div>}
+      muted={muted}
+      onToggleMute={() => setMuted(m => !m)}
+      onOpenSettings={() => setModal('settings')}
+      topActions={mode === 'playground' ? <IconButton icon="pause" label="Pause" onClick={() => setModal('pause')} /> : <IconButton icon="terrain-step" label="Terrain Lab" onClick={() => setModal('terrain')} />}
+      toasts={<Toasts toasts={toasts} onDismiss={dismiss} placement={mode === 'playground' ? 'hud' : 'top'} />}
+      titleScreen={titleOpen ? <TitleScreen onStart={() => setTitleOpen(false)} onStarter={id => { setTitleOpen(false); openRoster(ROSTER.some(r => r.id === id) ? id : 'dog'); }}
+        starters={rosterEntries.filter(r => r.skills.walk === 'ready' || r.skills.drive === 'ready').map(r => ({ id: r.id, name: r.name, design: r.design, look: r.look, blurb: r.tagline }))}
+        hero={{ design: 'cheetah', look: '#1f8c80' }} /> : null}
+      modals={<>
+        <Modal open={modal === 'settings'} onClose={() => setModal(null)} title="Settings" icon="settings" size="lg" placement={phone ? 'bottom' : 'center'}>
+          <SettingsPanel health={health} onRefreshHealth={() => aiApi.health().then(setHealth).catch(() => setHealth(null))} muted={muted} onMutedChange={setMuted} />
+        </Modal>
+        <Modal open={modal === 'notes'} onClose={() => setModal(null)} title="Lab notes" icon="note" description="Where every number on this creature comes from" placement={phone ? 'bottom' : 'right'}>
+          <LabNotes body={current?.kind === 'body' ? current.body : null} look={look} policies={training} />
+        </Modal>
+        <PauseMenu open={modal === 'pause'} onResume={() => setModal(null)} onRestart={() => { game.current?.reset?.(); setModal(null); }}
+          onChallenges={() => setModal('terrain')} onStickers={() => setModal(null)} onSettings={() => setModal('settings')} onWorkshop={leavePlayground} creature={creature} stats={{}} />
+        <Modal open={modal === 'roster'} onClose={() => setModal(null)} title="Pick a robot" icon="gamepad" description="Real Draft bodies. Badges show only what passed its checks." size="xl" placement={phone ? 'bottom' : 'center'}>
+          <RobotRoster robots={rosterEntries} selectedId={current?.rosterId} onSelect={id => openRoster(id)} trials={terrainResults} onOpenTerrain={() => setModal('terrain')} />
+        </Modal>
+        <Modal open={modal === 'terrain'} onClose={() => setModal(null)} title="Terrain Lab" icon="terrain-step" description="How each robot's structure meets the terrain" size="xl" placement={phone ? 'bottom' : 'center'}>
+          <TerrainLab robots={rosterEntries} trials={terrainResults} initial={{ robotId: current?.rosterId || 'dog', laneId: 'gap-35' }} onTryLane={() => { setModal(null); enterPlayground(); }} />
+        </Modal>
+      </>}
+    >
+      {mode === 'workshop' ? (
+        <WorkshopLayout
+          chat={<ChatPanel messages={messages} suggestions={suggestions} provider={provider} busy={busy} onSend={askTinker} onAction={onChatAction} onStop={() => chatAbort.current?.abort()} />}
+          tabs={tabs} activeTab={tab} onTabChange={setTab}
+          stepper={<LoopStepper status={steps} onStep={step => (step === 'play' ? enterPlayground() : setTab(step === 'dress' ? 'look' : step === 'train' ? 'train' : 'blueprint'))} compact={phone} />}
+          nameTag={<NameTag name={current?.name || 'Your creature'} drafted={current?.kind === 'body'} badges={nameBadges} />}
+          stageTools={<><StageToolbar actions={stageActions} />{!phone && <ViewModeSwitch value={viewMode} onChange={setViewMode} />}</>}
+          shelf={<CreatureShelf starters={starters} mine={[]} currentId={current?.id} onOpen={id => (LEGACY_PRESETS.includes(id) ? loadLegacy(id) : loadBodyById(id).catch(error => push({ tone: 'bad', title: 'Could not open it', text: error.message })))}
+            onRemix={() => askTinker('Remix this creature')} onDelete={() => {}} onNew={() => askTinker(null)} onImport={() => fileInput.current?.click()} defaultTab="starters" layout={phone ? 'grid' : 'row'} />}
+          phoneStatus={<span className="cl-hint">Tap a tab to open it.</span>}
+        />
+      ) : playHud}
+      <input ref={fileInput} type="file" accept=".json,application/json" hidden onChange={() => push({ tone: 'info', title: 'Recipes', text: 'Recipe import arrives with the next update.' })} />
+    </AppShell>
   );
 }

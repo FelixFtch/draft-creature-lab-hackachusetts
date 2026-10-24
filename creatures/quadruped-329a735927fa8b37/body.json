@@ -1,0 +1,801 @@
+{
+  "schema": "creature-body/1",
+  "id": "quadruped-329a735927fa8b37",
+  "name": "Dog",
+  "bodyPlan": "quadruped",
+  "design": {
+    "schema": "creature-design/1",
+    "name": "Cheetah",
+    "concept": "Draft's light, fast QDD quadruped preset.",
+    "bodyPlan": "quadruped",
+    "basePreset": "cheetah",
+    "skills": [
+      "walk",
+      "jump"
+    ]
+  },
+  "resolvedDesign": {
+    "torsoLength": 0.52,
+    "torsoWidth": 0.2,
+    "torsoHeight": 0.18,
+    "shoulderWidth": 0.16,
+    "hipOffset": 0.1,
+    "upperLeg": 0.25,
+    "lowerLeg": 0.23,
+    "actuator": "qdd",
+    "strength": 1.0
+  },
+  "xmlFile": "body.xml",
+  "meshFiles": [
+    "torso_mesh.stl"
+  ],
+  "rootBody": "torso_link",
+  "imuSite": "imu",
+  "forwardAxis": [
+    1,
+    0,
+    0
+  ],
+  "legs": [
+    {
+      "name": "fl",
+      "joints": [
+        "fl_hip_roll",
+        "fl_hip_pitch",
+        "fl_knee"
+      ],
+      "roles": [
+        "hip_roll",
+        "hip_pitch",
+        "knee"
+      ],
+      "footGeom": "fl_lower_leg_link_sphere",
+      "footSite": "fl_foot",
+      "mountAngle": 0.298499,
+      "side": "left",
+      "end": "front",
+      "bodies": [
+        "fl_roll_motor_link",
+        "fl_roll_link",
+        "fl_pitch_link",
+        "fl_upper_leg_link",
+        "fl_lower_leg_link"
+      ],
+      "footRadius": 0.0276
+    },
+    {
+      "name": "fr",
+      "joints": [
+        "fr_hip_roll",
+        "fr_hip_pitch",
+        "fr_knee"
+      ],
+      "roles": [
+        "hip_roll",
+        "hip_pitch",
+        "knee"
+      ],
+      "footGeom": "fr_lower_leg_link_sphere",
+      "footSite": "fr_foot",
+      "mountAngle": -0.298499,
+      "side": "right",
+      "end": "front",
+      "bodies": [
+        "fr_roll_motor_link",
+        "fr_roll_link",
+        "fr_pitch_link",
+        "fr_upper_leg_link",
+        "fr_lower_leg_link"
+      ],
+      "footRadius": 0.0276
+    },
+    {
+      "name": "rl",
+      "joints": [
+        "rl_hip_roll",
+        "rl_hip_pitch",
+        "rl_knee"
+      ],
+      "roles": [
+        "hip_roll",
+        "hip_pitch",
+        "knee"
+      ],
+      "footGeom": "rl_lower_leg_link_sphere",
+      "footSite": "rl_foot",
+      "mountAngle": 2.843094,
+      "side": "left",
+      "end": "rear",
+      "bodies": [
+        "rl_roll_motor_link",
+        "rl_roll_link",
+        "rl_pitch_link",
+        "rl_upper_leg_link",
+        "rl_lower_leg_link"
+      ],
+      "footRadius": 0.0276
+    },
+    {
+      "name": "rr",
+      "joints": [
+        "rr_hip_roll",
+        "rr_hip_pitch",
+        "rr_knee"
+      ],
+      "roles": [
+        "hip_roll",
+        "hip_pitch",
+        "knee"
+      ],
+      "footGeom": "rr_lower_leg_link_sphere",
+      "footSite": "rr_foot",
+      "mountAngle": -2.843094,
+      "side": "right",
+      "end": "rear",
+      "bodies": [
+        "rr_roll_motor_link",
+        "rr_roll_link",
+        "rr_pitch_link",
+        "rr_upper_leg_link",
+        "rr_lower_leg_link"
+      ],
+      "footRadius": 0.0276
+    }
+  ],
+  "jointNames": [
+    "fl_hip_roll",
+    "fl_hip_pitch",
+    "fl_knee",
+    "fr_hip_roll",
+    "fr_hip_pitch",
+    "fr_knee",
+    "rl_hip_roll",
+    "rl_hip_pitch",
+    "rl_knee",
+    "rr_hip_roll",
+    "rr_hip_pitch",
+    "rr_knee"
+  ],
+  "joints": [
+    {
+      "name": "fl_hip_roll",
+      "role": "hip_roll",
+      "leg": "fl",
+      "range": [
+        -0.8,
+        0.8
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": 6.0,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "motorClass": "L"
+    },
+    {
+      "name": "fl_hip_pitch",
+      "role": "hip_pitch",
+      "leg": "fl",
+      "range": [
+        -2.5,
+        2.5
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": 6.0,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "motorClass": "L"
+    },
+    {
+      "name": "fl_knee",
+      "role": "knee",
+      "leg": "fl",
+      "range": [
+        -2.8,
+        0.0
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": 6.0,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "motorClass": "L"
+    },
+    {
+      "name": "fr_hip_roll",
+      "role": "hip_roll",
+      "leg": "fr",
+      "range": [
+        -0.8,
+        0.8
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": 6.0,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "motorClass": "L"
+    },
+    {
+      "name": "fr_hip_pitch",
+      "role": "hip_pitch",
+      "leg": "fr",
+      "range": [
+        -2.5,
+        2.5
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": 6.0,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "motorClass": "L"
+    },
+    {
+      "name": "fr_knee",
+      "role": "knee",
+      "leg": "fr",
+      "range": [
+        -2.8,
+        0.0
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": 6.0,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "motorClass": "L"
+    },
+    {
+      "name": "rl_hip_roll",
+      "role": "hip_roll",
+      "leg": "rl",
+      "range": [
+        -0.8,
+        0.8
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": 6.0,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "motorClass": "L"
+    },
+    {
+      "name": "rl_hip_pitch",
+      "role": "hip_pitch",
+      "leg": "rl",
+      "range": [
+        -2.5,
+        2.5
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": 6.0,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "motorClass": "L"
+    },
+    {
+      "name": "rl_knee",
+      "role": "knee",
+      "leg": "rl",
+      "range": [
+        -2.8,
+        0.0
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": 6.0,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "motorClass": "L"
+    },
+    {
+      "name": "rr_hip_roll",
+      "role": "hip_roll",
+      "leg": "rr",
+      "range": [
+        -0.8,
+        0.8
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": 6.0,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "motorClass": "L"
+    },
+    {
+      "name": "rr_hip_pitch",
+      "role": "hip_pitch",
+      "leg": "rr",
+      "range": [
+        -2.5,
+        2.5
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": 6.0,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "motorClass": "L"
+    },
+    {
+      "name": "rr_knee",
+      "role": "knee",
+      "leg": "rr",
+      "range": [
+        -2.8,
+        0.0
+      ],
+      "effort": 72.0,
+      "velocity": 40.0,
+      "gear": 6.0,
+      "armature": 0.0153984,
+      "damping": 0.0127,
+      "frictionloss": 0.127,
+      "motorClass": "L"
+    }
+  ],
+  "nominalJointPositions": [
+    0.0,
+    0.5,
+    -1.0,
+    0.0,
+    0.5,
+    -1.0,
+    0.0,
+    0.5,
+    -1.0,
+    0.0,
+    0.5,
+    -1.0
+  ],
+  "nominalRootHeight": 0.44884,
+  "initialQpos": [
+    0.0,
+    0.0,
+    0.44884,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.5,
+    -1.0,
+    0.0,
+    0.5,
+    -1.0,
+    0.0,
+    0.5,
+    -1.0,
+    0.0,
+    0.5,
+    -1.0
+  ],
+  "stanceCheck": {
+    "footHeightsM": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "maxFootHeightErrorM": 0.0,
+    "rollRad": 0.0,
+    "pitchRad": 0.0,
+    "bellyClearanceM": 0.1756,
+    "minJointMarginFraction": 0.3571,
+    "tolerances": {
+      "footHeightM": 0.0001,
+      "levelRad": 1e-06,
+      "jointMarginFraction": 0.1,
+      "minBellyClearanceM": 0.01
+    },
+    "source": "legacy Cheetah policy default stance",
+    "candidates": [
+      {
+        "source": "legacy Cheetah policy default stance",
+        "standLoad": 0.1226
+      }
+    ],
+    "comfortLoad": 0.45,
+    "method": "Candidate stances from most crouched to straightest; the first whose equal-share stand load is comfortable (else the least loaded) is kept. Each is posed with MuJoCo forward kinematics: root lowered until the lowest foot sphere touches z = 0, then per-leg Newton on hip pitch and knee."
+  },
+  "massKg": 32.6381,
+  "dimensions": {
+    "lengthM": 1.0098,
+    "widthM": 0.3692,
+    "heightM": 0.5388,
+    "legLengthM": 0.48
+  },
+  "gaitHint": {
+    "pattern": "trot",
+    "groups": [
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        2
+      ]
+    ],
+    "phaseOffsets": [
+      0.0,
+      0.5,
+      0.5,
+      0.0
+    ],
+    "dutyFactor": 0.5
+  },
+  "geomRoles": {
+    "feet": [
+      "fl_lower_leg_link_sphere",
+      "fr_lower_leg_link_sphere",
+      "rl_lower_leg_link_sphere",
+      "rr_lower_leg_link_sphere"
+    ],
+    "torso": [
+      "torso_link_mesh"
+    ],
+    "limbs": [
+      "fl_roll_link_link",
+      "fl_pitch_link_link",
+      "fl_upper_leg_link_link",
+      "fl_lower_leg_link_link",
+      "fr_roll_link_link",
+      "fr_pitch_link_link",
+      "fr_upper_leg_link_link",
+      "fr_lower_leg_link_link",
+      "rl_roll_link_link",
+      "rl_pitch_link_link",
+      "rl_upper_leg_link_link",
+      "rl_lower_leg_link_link",
+      "rr_roll_link_link",
+      "rr_pitch_link_link",
+      "rr_upper_leg_link_link",
+      "rr_lower_leg_link_link"
+    ],
+    "motors": [
+      "fl_roll_motor_link_motor",
+      "fl_roll_link_motor",
+      "fl_pitch_link_motor",
+      "fl_upper_leg_link_motor",
+      "fr_roll_motor_link_motor",
+      "fr_roll_link_motor",
+      "fr_pitch_link_motor",
+      "fr_upper_leg_link_motor",
+      "rl_roll_motor_link_motor",
+      "rl_roll_link_motor",
+      "rl_pitch_link_motor",
+      "rl_upper_leg_link_motor",
+      "rr_roll_motor_link_motor",
+      "rr_roll_link_motor",
+      "rr_pitch_link_motor",
+      "rr_upper_leg_link_motor"
+    ],
+    "details": [
+      "fl_roll_motor_link_detail",
+      "fl_roll_link_detail",
+      "fl_pitch_link_detail",
+      "fl_upper_leg_link_detail",
+      "fr_roll_motor_link_detail",
+      "fr_roll_link_detail",
+      "fr_pitch_link_detail",
+      "fr_upper_leg_link_detail",
+      "rl_roll_motor_link_detail",
+      "rl_roll_link_detail",
+      "rl_pitch_link_detail",
+      "rl_upper_leg_link_detail",
+      "rr_roll_motor_link_detail",
+      "rr_roll_link_detail",
+      "rr_pitch_link_detail",
+      "rr_upper_leg_link_detail"
+    ]
+  },
+  "bodyRoles": {
+    "torso": "torso_link",
+    "head": null
+  },
+  "poseHints": {
+    "crouchDelta": [
+      0.0,
+      0.475,
+      -0.95
+    ],
+    "waveLeg": "fl",
+    "waveDelta": [
+      0.0,
+      -1.25,
+      -0.3
+    ]
+  },
+  "xmlContents": {
+    "actuators": 0,
+    "sensors": 4,
+    "sensorNames": [
+      "imu_ang_vel",
+      "imu_lin_vel",
+      "imu_lin_acc",
+      "root_angmom"
+    ],
+    "keyframes": [],
+    "note": "Generated bodies carry no actuators; the legacy Flower body keeps its 18 direct torque motors and nominal keyframe so its bytes match the legacy policy."
+  },
+  "motors": [
+    {
+      "class": "L",
+      "family": "qdd",
+      "familyLabel": "Quasi-direct drive (MIT U12 class, Cheetah preset)",
+      "catalogAnchor": "MIT U12",
+      "category": "QDD",
+      "count": 12,
+      "effortNm": 72.0,
+      "velocityRadS": 40.0,
+      "gear": 6.0,
+      "massKg": 1.1,
+      "diameterMm": 126.0,
+      "lengthMm": 46.0,
+      "armatureKgm2": 0.015398419,
+      "peakPowerW": 720.0,
+      "torqueDensityNmPerKg": 65.5,
+      "powerDensityWPerKg": 654.5,
+      "frontierTorqueMaxNm": 99.2
+    }
+  ],
+  "feasibility": {
+    "passed": true,
+    "strict": true,
+    "allowHypothetical": false,
+    "warnings": [
+      "[L]: torque density 65 Nm/kg is above the QDD p90 (64 Nm/kg) \u2014 best-in-class territory.",
+      "[L]: power density 655 W/kg is above the QDD p90 (532 W/kg) \u2014 best-in-class territory.",
+      "fl_roll_link_link: to weigh its 0.202 kg share of the hip_link trend inside the actuators it joins, the member's density is 7439 kg/m\u00b3 against the class's 676",
+      "fl_upper_leg_link_link: to weigh its 0.486 kg share of the thigh trend inside the actuators it joins, the member's density is 1860 kg/m\u00b3 against the class's 345",
+      "fr_roll_link_link: to weigh its 0.202 kg share of the hip_link trend inside the actuators it joins, the member's density is 7439 kg/m\u00b3 against the class's 676",
+      "fr_upper_leg_link_link: to weigh its 0.486 kg share of the thigh trend inside the actuators it joins, the member's density is 1860 kg/m\u00b3 against the class's 345",
+      "rl_roll_link_link: to weigh its 0.202 kg share of the hip_link trend inside the actuators it joins, the member's density is 7439 kg/m\u00b3 against the class's 676",
+      "rl_upper_leg_link_link: to weigh its 0.486 kg share of the thigh trend inside the actuators it joins, the member's density is 1860 kg/m\u00b3 against the class's 345",
+      "rr_roll_link_link: to weigh its 0.202 kg share of the hip_link trend inside the actuators it joins, the member's density is 7439 kg/m\u00b3 against the class's 676",
+      "rr_upper_leg_link_link: to weigh its 0.486 kg share of the thigh trend inside the actuators it joins, the member's density is 1860 kg/m\u00b3 against the class's 345"
+    ],
+    "overridden": [],
+    "extraGates": [
+      "rigid actuator overlap",
+      "level stance with body clearance"
+    ]
+  },
+  "trainability": {
+    "verdict": {
+      "stand": "ok",
+      "walk": "plausible",
+      "jump": "strong"
+    },
+    "flags": [
+      {
+        "code": "dynamic-gait",
+        "severity": "info",
+        "message": "The trot gait is not statically stable; the policy must balance dynamically (normal for trotting)."
+      }
+    ],
+    "metrics": {
+      "massKg": 32.6381,
+      "weightN": 320.18,
+      "standLoad": 0.1226,
+      "gaitLoad": 0.2452,
+      "gaitStanceLegs": 2,
+      "verticalForceRatio": 8.157,
+      "specificTorqueNmPerKg": 2.206,
+      "staticMarginM": 0.157,
+      "gaitMarginM": -0.0015,
+      "comHeightM": 0.43,
+      "bellyClearanceM": 0.1756,
+      "legLengthM": 0.48,
+      "bodyLengthM": 0.52,
+      "legToBodyRatio": 0.923,
+      "minJointVelocityRadS": 40.0,
+      "maxFootSpeedMS": 19.2,
+      "jumpEstimate": {
+        "takeoffSpeedMS": 3.937,
+        "strokeM": 0.192,
+        "hopHeightM": 0.79,
+        "note": "Rough upper bound from joint torque/speed limits at the nominal pose; not a simulated or trained jump."
+      }
+    },
+    "holdTest": {
+      "passed": true,
+      "finite": true,
+      "seconds": 2.0,
+      "sagFraction": 0.0115,
+      "tiltRad": 0.0,
+      "peakTorqueFraction": 0.1242,
+      "bodyGroundContacts": 0,
+      "method": "PD hold of the nominal pose, kp = effort/0.15 rad, damping ratio 1, torque capped at the Draft effort, timestep 0.005 implicitfast, plan collision classes"
+    },
+    "notes": "Static and PD-hold heuristics for coaching; only a trained policy's evaluation shows walking or jumping."
+  },
+  "legacy": {
+    "preset": "cheetah",
+    "controller": "/controller/cheetah/manifest.json",
+    "note": "Byte-identical to the legacy /api/generate model at original size."
+  },
+  "provenance": {
+    "generator": "Draft RobotGenerator strict=True",
+    "repository": "https://github.com/davidhnguyen2000/draft",
+    "draftRevision": "3b03e144735098ef94b938e85756806f45628f83",
+    "draftPackageVersion": "0.1.0",
+    "mujocoVersion": "3.8.0",
+    "template": "quadruped",
+    "templateDir": "draft:src/draft/robots/quadruped",
+    "family": "qdd",
+    "basePreset": "cheetah",
+    "archetype": "cheetah",
+    "sourcesSha256": {
+      "quadruped/parameters.yaml": "a22911f8857dfc390532d0ed75d1f4882b2ad2a586a42d95e106beb8f34c199f",
+      "quadruped/tree.yaml": "24b465197e3b15da12cb2ba2845408586ee5e14cc7b64cd58bb0a56a0a4cfada",
+      "quadruped/mesh.yaml": "f415fb84600c0689f8fb001bbfd49ffcf3a37930c7e0eb6c6c03e4764e8220bd"
+    },
+    "draftOverrides": {
+      "hip_roll_link_length": 0.1,
+      "upper_leg_link_length": 0.25,
+      "lower_leg_link_length": 0.23,
+      "hip_roll_mot": "L",
+      "hip_pitch_mot": "L",
+      "knee_mot": "L",
+      "link_render_radius_scale": 1.0,
+      "torso_lx": 0.52,
+      "torso_ly": 0.2,
+      "torso_lz": 0.18,
+      "shoulder_width": 0.16,
+      "motor_rho": 2700.0,
+      "torso_rho": 120.0,
+      "L_motor": "MIT U12",
+      "L_motor_effort": 72.0,
+      "L_motor_velocity": 40.0,
+      "L_motor_gear": 6.0,
+      "M_motor": "AK10-9 V2",
+      "M_motor_effort": 48.0,
+      "M_motor_velocity": 31.1,
+      "M_motor_gear": 9.0,
+      "S_motor": "RS01",
+      "S_motor_effort": 17.0,
+      "S_motor_velocity": 28.8,
+      "S_motor_gear": 7.75,
+      "L_motor_friction": 0.127,
+      "M_motor_friction": 0.085,
+      "S_motor_friction": 0.03,
+      "L_motor_damping": 0.0127,
+      "M_motor_damping": 0.0085,
+      "S_motor_damping": 0.003,
+      "link_color": "0.424 0.547 0.746 1.000",
+      "motor_color": "0.155 0.232 0.359 1.000",
+      "mot_detail_color": "0.095 0.143 0.221 1.000",
+      "torso_color": "0.298 0.447 0.690 1.000",
+      "foot_color": "0.302 0.302 0.302 1.000",
+      "allow_hypothetical": false
+    },
+    "assetSha256": {
+      "body.xml": "9f7cfa2f062754c5bf360a27a5c5f86f36ec15775b9f7c559de715ce546fdbdf",
+      "torso_mesh.stl": "a6eede2c727d2953b97987605d0defb9f320614969ab05bbd96f925a8f28cf2d"
+    },
+    "designsVersion": 1,
+    "massModel": "Actuators and structure from Draft trends (quadruped population)",
+    "note": "Draft Cheetah preset at original size (same robot as quadruped-598b285cc0d49f89). body.xml is the exact MJCF the bundled walk and jump policies were trained on: Draft output re-serialized by creature_gym.dev_bodies (whitespace only, semantically identical), hence the different hash."
+  },
+  "specSheet": {
+    "title": "Cheetah",
+    "bodyId": "quadruped-598b285cc0d49f89",
+    "subtitle": "Quadruped \u00b7 Quasi-direct drive (MIT U12 class, Cheetah preset)",
+    "template": "quadruped",
+    "massKg": 32.6381,
+    "dimensions": {
+      "lengthM": 1.0098,
+      "widthM": 0.3692,
+      "heightM": 0.5388,
+      "legLengthM": 0.48
+    },
+    "legCount": 4,
+    "jointCount": 12,
+    "actuatorCount": 12,
+    "motors": [
+      {
+        "class": "L",
+        "family": "qdd",
+        "familyLabel": "Quasi-direct drive (MIT U12 class, Cheetah preset)",
+        "catalogAnchor": "MIT U12",
+        "category": "QDD",
+        "count": 12,
+        "effortNm": 72.0,
+        "velocityRadS": 40.0,
+        "gear": 6.0,
+        "massKg": 1.1,
+        "diameterMm": 126.0,
+        "lengthMm": 46.0,
+        "armatureKgm2": 0.015398419,
+        "peakPowerW": 720.0,
+        "torqueDensityNmPerKg": 65.5,
+        "powerDensityWPerKg": 654.5,
+        "frontierTorqueMaxNm": 99.2
+      }
+    ],
+    "feasibility": {
+      "status": "passed",
+      "gate": "Draft strict feasibility gate + lab packing/stance gates",
+      "warnings": [
+        "[L]: torque density 65 Nm/kg is above the QDD p90 (64 Nm/kg) \u2014 best-in-class territory.",
+        "[L]: power density 655 W/kg is above the QDD p90 (532 W/kg) \u2014 best-in-class territory.",
+        "fl_roll_link_link: to weigh its 0.202 kg share of the hip_link trend inside the actuators it joins, the member's density is 7439 kg/m\u00b3 against the class's 676",
+        "fl_upper_leg_link_link: to weigh its 0.486 kg share of the thigh trend inside the actuators it joins, the member's density is 1860 kg/m\u00b3 against the class's 345",
+        "fr_roll_link_link: to weigh its 0.202 kg share of the hip_link trend inside the actuators it joins, the member's density is 7439 kg/m\u00b3 against the class's 676",
+        "fr_upper_leg_link_link: to weigh its 0.486 kg share of the thigh trend inside the actuators it joins, the member's density is 1860 kg/m\u00b3 against the class's 345",
+        "rl_roll_link_link: to weigh its 0.202 kg share of the hip_link trend inside the actuators it joins, the member's density is 7439 kg/m\u00b3 against the class's 676",
+        "rl_upper_leg_link_link: to weigh its 0.486 kg share of the thigh trend inside the actuators it joins, the member's density is 1860 kg/m\u00b3 against the class's 345",
+        "rr_roll_link_link: to weigh its 0.202 kg share of the hip_link trend inside the actuators it joins, the member's density is 7439 kg/m\u00b3 against the class's 676",
+        "rr_upper_leg_link_link: to weigh its 0.486 kg share of the thigh trend inside the actuators it joins, the member's density is 1860 kg/m\u00b3 against the class's 345"
+      ],
+      "warningCount": 10
+    },
+    "trainability": {
+      "verdict": {
+        "stand": "ok",
+        "walk": "plausible",
+        "jump": "strong"
+      },
+      "flags": [
+        {
+          "code": "dynamic-gait",
+          "severity": "info",
+          "message": "The trot gait is not statically stable; the policy must balance dynamically (normal for trotting)."
+        }
+      ],
+      "metrics": {
+        "massKg": 32.6381,
+        "weightN": 320.18,
+        "standLoad": 0.1226,
+        "gaitLoad": 0.2452,
+        "gaitStanceLegs": 2,
+        "verticalForceRatio": 8.157,
+        "specificTorqueNmPerKg": 2.206,
+        "staticMarginM": 0.157,
+        "gaitMarginM": -0.0015,
+        "comHeightM": 0.43,
+        "bellyClearanceM": 0.1756,
+        "legLengthM": 0.48,
+        "bodyLengthM": 0.52,
+        "legToBodyRatio": 0.923,
+        "minJointVelocityRadS": 40.0,
+        "maxFootSpeedMS": 19.2,
+        "jumpEstimate": {
+          "takeoffSpeedMS": 3.937,
+          "strokeM": 0.192,
+          "hopHeightM": 0.79,
+          "note": "Rough upper bound from joint torque/speed limits at the nominal pose; not a simulated or trained jump."
+        }
+      }
+    },
+    "gait": "trot",
+    "provenance": {
+      "generator": "Draft RobotGenerator strict=True",
+      "draftRevision": "3b03e144735098ef94b938e85756806f45628f83",
+      "template": "quadruped",
+      "assetSha256": {
+        "body.xml": "bb4fcf76d7462b588c11cad35632164956d87e8ae27dba97c9973175492ebf17",
+        "torso_mesh.stl": "a6eede2c727d2953b97987605d0defb9f320614969ab05bbd96f925a8f28cf2d"
+      }
+    },
+    "honesty": "Generated mechanism only: no controller exists until a policy is trained and validated for this exact body."
+  }
+}

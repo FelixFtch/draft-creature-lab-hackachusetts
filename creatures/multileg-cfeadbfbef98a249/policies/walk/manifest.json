@@ -1,0 +1,573 @@
+{
+  "schema": "creature-policy/1",
+  "skill": "walk",
+  "kind": "perpetual",
+  "bodyId": "multileg-cfeadbfbef98a249",
+  "bodyName": "Octo",
+  "bodyAssetSha256": {
+    "body.xml": "b9cf15e8a328574a683a3fd7b2d3ab87bc6c9229586dd69db04a89f48612ea8a",
+    "torso_mesh.stl": "dcfc906bd08cb6f3bf3ea51129b727c9c126e0395f16be5d844b0feb99e148ef"
+  },
+  "sceneXml": "scene.xml",
+  "sceneSha256": "a44be80eadafdde0b5ad12c40f6b0fab2cc53ca1743248ed2d65f4a50a7b9d32",
+  "assets": [
+    {
+      "name": "torso_mesh.stl",
+      "sha256": "dcfc906bd08cb6f3bf3ea51129b727c9c126e0395f16be5d844b0feb99e148ef"
+    }
+  ],
+  "policy": "policy.onnx",
+  "policySha256": "b7ea05dba33f5427fcd018dd96f5671717518fcd634d54c35efb6d107a71af9c",
+  "onnxInput": "obs",
+  "onnxOutput": "action",
+  "onnxOpset": 17,
+  "control": {
+    "timestep": 0.005,
+    "decimation": 4,
+    "controlDt": 0.02
+  },
+  "rootBody": "torso_link",
+  "rootJoint": "torso_link_freejoint",
+  "imuSite": "imu",
+  "floorGeom": "cg_floor",
+  "legNames": [
+    "leg0",
+    "leg1",
+    "leg2",
+    "leg3",
+    "leg4",
+    "leg5",
+    "leg6",
+    "leg7"
+  ],
+  "footSites": [
+    "leg0_foot",
+    "leg1_foot",
+    "leg2_foot",
+    "leg3_foot",
+    "leg4_foot",
+    "leg5_foot",
+    "leg6_foot",
+    "leg7_foot"
+  ],
+  "footGeoms": [
+    "leg0_lower_leg_link_sphere",
+    "leg1_lower_leg_link_sphere",
+    "leg2_lower_leg_link_sphere",
+    "leg3_lower_leg_link_sphere",
+    "leg4_lower_leg_link_sphere",
+    "leg5_lower_leg_link_sphere",
+    "leg6_lower_leg_link_sphere",
+    "leg7_lower_leg_link_sphere"
+  ],
+  "footRadius": [
+    0.0264,
+    0.0264,
+    0.0264,
+    0.0264,
+    0.0264,
+    0.0264,
+    0.0264,
+    0.0264
+  ],
+  "jointNames": [
+    "leg0_hip_yaw",
+    "leg0_hip_pitch",
+    "leg0_knee",
+    "leg1_hip_yaw",
+    "leg1_hip_pitch",
+    "leg1_knee",
+    "leg2_hip_yaw",
+    "leg2_hip_pitch",
+    "leg2_knee",
+    "leg3_hip_yaw",
+    "leg3_hip_pitch",
+    "leg3_knee",
+    "leg4_hip_yaw",
+    "leg4_hip_pitch",
+    "leg4_knee",
+    "leg5_hip_yaw",
+    "leg5_hip_pitch",
+    "leg5_knee",
+    "leg6_hip_yaw",
+    "leg6_hip_pitch",
+    "leg6_knee",
+    "leg7_hip_yaw",
+    "leg7_hip_pitch",
+    "leg7_knee"
+  ],
+  "actuatorNames": [
+    "leg0_hip_yaw",
+    "leg0_hip_pitch",
+    "leg0_knee",
+    "leg1_hip_yaw",
+    "leg1_hip_pitch",
+    "leg1_knee",
+    "leg2_hip_yaw",
+    "leg2_hip_pitch",
+    "leg2_knee",
+    "leg3_hip_yaw",
+    "leg3_hip_pitch",
+    "leg3_knee",
+    "leg4_hip_yaw",
+    "leg4_hip_pitch",
+    "leg4_knee",
+    "leg5_hip_yaw",
+    "leg5_hip_pitch",
+    "leg5_knee",
+    "leg6_hip_yaw",
+    "leg6_hip_pitch",
+    "leg6_knee",
+    "leg7_hip_yaw",
+    "leg7_hip_pitch",
+    "leg7_knee"
+  ],
+  "defaultJointPositions": [
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25
+  ],
+  "actionScale": [
+    0.175,
+    0.175,
+    0.175,
+    0.175,
+    0.175,
+    0.175,
+    0.175,
+    0.175,
+    0.175,
+    0.175,
+    0.175,
+    0.175,
+    0.175,
+    0.175,
+    0.175,
+    0.175,
+    0.175,
+    0.175,
+    0.175,
+    0.175,
+    0.175,
+    0.175,
+    0.175,
+    0.175
+  ],
+  "actionClip": 4.0,
+  "actionOffset": [
+    0.0,
+    0.145987,
+    0.027332,
+    0.0,
+    0.145987,
+    0.027332,
+    -0.0,
+    0.145987,
+    0.027332,
+    -0.0,
+    0.145987,
+    0.027332,
+    -0.0,
+    0.145987,
+    0.027332,
+    -0.0,
+    0.145987,
+    0.027332,
+    0.0,
+    0.145987,
+    0.027332,
+    0.0,
+    0.145987,
+    0.027332
+  ],
+  "observation": {
+    "size": 100,
+    "terms": [
+      {
+        "name": "base_lin_vel",
+        "start": 0,
+        "length": 3,
+        "scale": 1.0
+      },
+      {
+        "name": "base_ang_vel",
+        "start": 3,
+        "length": 3,
+        "scale": 0.25
+      },
+      {
+        "name": "projected_gravity",
+        "start": 6,
+        "length": 3,
+        "scale": 1.0
+      },
+      {
+        "name": "command",
+        "start": 9,
+        "length": 3,
+        "scale": 1.0
+      },
+      {
+        "name": "joint_pos",
+        "start": 12,
+        "length": 24,
+        "scale": 1.0
+      },
+      {
+        "name": "joint_vel",
+        "start": 36,
+        "length": 24,
+        "scale": 0.05
+      },
+      {
+        "name": "last_action",
+        "start": 60,
+        "length": 24,
+        "scale": 1.0
+      },
+      {
+        "name": "gait_clock",
+        "start": 84,
+        "length": 16,
+        "scale": 1.0
+      }
+    ],
+    "notes": "All terms from robot qpos/qvel and controller state (see training/creature_gym/obs.py): base_lin_vel = R^T qvel[0:3]; base_ang_vel = qvel[3:6]; projected_gravity = R^T (0,0,-1); joint_pos = q - default; joint_vel = qd; last_action = previous clipped action; gait_clock = per leg (sin, cos)(2 pi frac(phase + offset)), zero when not moving; jump_phase = (p, sin 2 pi p, cos 2 pi p). Values are multiplied by term scale. No noise at inference."
+  },
+  "commandBounds": {
+    "vx": [
+      -0.5074,
+      1.0149
+    ],
+    "vy": [
+      0.0,
+      0.0
+    ],
+    "wz": [
+      -1.0235,
+      1.0235
+    ]
+  },
+  "moving": {
+    "fraction": 0.05,
+    "vmax": 1.0149,
+    "wmax": 1.0235
+  },
+  "clock": {
+    "frequencyHz": 2.0471,
+    "legPhaseOffsets": [
+      0.0,
+      0.5,
+      0.25,
+      0.75,
+      0.0,
+      0.5,
+      0.25,
+      0.75
+    ],
+    "swingFraction": 0.225,
+    "pattern": "ripple",
+    "groups": [
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        3,
+        7
+      ]
+    ]
+  },
+  "episode": null,
+  "fallCriteria": {
+    "tiltRad": 1.0,
+    "minHeightAboveFeetM": 0.1449,
+    "torsoContactSensor": "cg_torso_contact"
+  },
+  "sensors": {
+    "touch": [
+      "cg_touch_leg0",
+      "cg_touch_leg1",
+      "cg_touch_leg2",
+      "cg_touch_leg3",
+      "cg_touch_leg4",
+      "cg_touch_leg5",
+      "cg_touch_leg6",
+      "cg_touch_leg7"
+    ],
+    "footPos": [
+      "cg_foot_pos_leg0",
+      "cg_foot_pos_leg1",
+      "cg_foot_pos_leg2",
+      "cg_foot_pos_leg3",
+      "cg_foot_pos_leg4",
+      "cg_foot_pos_leg5",
+      "cg_foot_pos_leg6",
+      "cg_foot_pos_leg7"
+    ],
+    "footVel": [
+      "cg_foot_vel_leg0",
+      "cg_foot_vel_leg1",
+      "cg_foot_vel_leg2",
+      "cg_foot_vel_leg3",
+      "cg_foot_vel_leg4",
+      "cg_foot_vel_leg5",
+      "cg_foot_vel_leg6",
+      "cg_foot_vel_leg7"
+    ],
+    "torsoContact": "cg_torso_contact",
+    "thighContact": [
+      "cg_thigh_contact_leg0",
+      "cg_thigh_contact_leg1",
+      "cg_thigh_contact_leg2",
+      "cg_thigh_contact_leg3",
+      "cg_thigh_contact_leg4",
+      "cg_thigh_contact_leg5",
+      "cg_thigh_contact_leg6",
+      "cg_thigh_contact_leg7"
+    ],
+    "gyro": "cg_imu_gyro",
+    "velocimeter": "cg_imu_vel",
+    "accelerometer": "cg_imu_acc"
+  },
+  "contactThresholdN": 0.8043,
+  "initialQpos": [
+    0.0,
+    0.0,
+    0.289807,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25
+  ],
+  "nominalRootHeight": 0.289807,
+  "scaling": {
+    "legLengthM": 0.42,
+    "froudeTopCommand": 0.25,
+    "referenceLegM": 0.44
+  },
+  "pd": {
+    "kp": [
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142,
+      17.142857142857142
+    ],
+    "kv": [
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571,
+      0.8571428571428571
+    ],
+    "effort": [
+      12.0,
+      12.0,
+      12.0,
+      12.0,
+      12.0,
+      12.0,
+      12.0,
+      12.0,
+      12.0,
+      12.0,
+      12.0,
+      12.0,
+      12.0,
+      12.0,
+      12.0,
+      12.0,
+      12.0,
+      12.0,
+      12.0,
+      12.0,
+      12.0,
+      12.0,
+      12.0,
+      12.0
+    ],
+    "rule": "MuJoCo position actuators: kp = 100/70 * effort, kv = 5/70 * effort (Draft), forcerange +-effort"
+  },
+  "training": {
+    "algorithm": "PPO",
+    "envSteps": 30001152,
+    "iterations": 4883,
+    "wallSeconds": 1817.8,
+    "machine": {
+      "platform": "Linux-6.8.0-138-generic-aarch64-with-glibc2.35",
+      "machine": "aarch64",
+      "cpu": "aarch64",
+      "cpuCount": 4,
+      "threads": 4,
+      "python": "3.10.12",
+      "torchThreads": 4
+    },
+    "seed": 0,
+    "envs": 256,
+    "budget": "standard",
+    "mujocoVersion": "3.11.0",
+    "torchVersion": "2.14.1+cpu",
+    "ppo": {
+      "steps_per_env": 24,
+      "epochs": 5,
+      "minibatches": 4,
+      "gamma": 0.99,
+      "lam": 0.95,
+      "clip": 0.2,
+      "value_coef": 1.0,
+      "entropy_coef": 0.005,
+      "learning_rate": 0.001,
+      "desired_kl": 0.01,
+      "max_grad_norm": 1.0,
+      "actor_hidden": [
+        256,
+        128,
+        64
+      ],
+      "critic_hidden": [
+        256,
+        128,
+        64
+      ],
+      "init_std": 0.6,
+      "min_std": 0.05
+    },
+    "domainRandomization": {
+      "footFriction": [
+        0.4,
+        1.2
+      ],
+      "payloadFraction": [
+        -0.1,
+        0.2
+      ],
+      "torsoComM": 0.01909090909090909,
+      "kpScale": [
+        0.9,
+        1.1
+      ],
+      "kvScale": [
+        0.8,
+        1.2
+      ],
+      "effortScale": [
+        0.85,
+        1.1
+      ],
+      "jointDampingFrictionScale": [
+        0.5,
+        1.5
+      ],
+      "pushes": true,
+      "observationNoise": true
+    },
+    "terrain": "flat + smooth bump patches (protrusion up to 8% of leg length)"
+  },
+  "honesty": "PPO velocity-tracking policy trained on CPU for this exact body (Octo, multileg-cfeadbfbef98a249); simulated position servos (Draft PD rule, torque-limited, no DC-motor speed droop); flat ground plus small smooth bump patches during training. Not validated on hardware, stairs, steep ramps or slippery ice.",
+  "export": {
+    "onnxMaxAbsErrorVsTorch": 9.5367431640625e-07,
+    "opset": 17,
+    "irVersion": 8
+  },
+  "evaluation": {
+    "evalFile": "eval.json",
+    "evalSha256": "006093e6535d5a09541b783108972621a7d96007a651e63e4af61b810a803191",
+    "pass": true
+  },
+  "fixtures": {
+    "file": "fixtures.json",
+    "sha256": "a4d0285cf2ac9c3e421e9b71b6d5b4f8ed9c1da9b2008705292b7dffe5e014f3"
+  }
+}

@@ -663,7 +663,7 @@
   display: grid;
   gap: 14px;
   padding: 14px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: var(--cl-radius-card);
   background: var(--cl-paper-50);
   color: var(--cl-ink-900);

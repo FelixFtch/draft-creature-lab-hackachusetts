@@ -1,0 +1,139 @@
+/*
+  Premium theme (default). A calm, product-configurator look: neutral
+  monochrome surfaces, one restrained blue accent, Inter, hairline keylines,
+  small radii, soft shadows and glass panels over the full-bleed 3D stage.
+  Loaded after index.css so it overrides the original toybox tokens.
+*/
+@import "@fontsource-variable/inter";
+
+:root, .cl-root {
+  --cl-ink-900: #171a20;
+  --cl-ink-800: #22262e;
+  --cl-ink-700: #393c41;
+  --cl-ink-600: #5c5e62;
+  --cl-ink-400: #8e8e8e;
+  --cl-ink-200: #d0d1d2;
+
+  --cl-paper-50: #ffffff;
+  --cl-paper-100: #f7f7f8;
+  --cl-paper-200: #f0f0f2;
+  --cl-paper-300: #e6e6e8;
+  --cl-paper-400: #d0d1d2;
+  --cl-kraft-400: #d0d1d2;
+  --cl-kraft-200: #eeeeee;
+  --cl-tape: transparent;
+
+  /* "Blueprint" becomes a precise dark graphite engineering surface. */
+  --cl-bp-900: #0b0d11;
+  --cl-bp-800: #11141a;
+  --cl-bp-700: #171b22;
+  --cl-bp-600: #1d222b;
+  --cl-bp-500: #3e6ae1;
+  --cl-bp-300: #8fa8e8;
+  --cl-bp-200: #b9c4d6;
+  --cl-bp-100: #d9dee7;
+  --cl-bp-50: #f2f4f7;
+  --cl-bp-grid-minor: rgb(217 222 231 / 0.05);
+  --cl-bp-grid-major: rgb(217 222 231 / 0.11);
+  --cl-bp-mark: #3e6ae1;
+
+  /* One accent: Tesla-like blue. The old sun/yellow slots map to it. */
+  --cl-sun-600: #2f55c4;
+  --cl-sun-500: #3459c9;
+  --cl-sun-400: #3e6ae1;
+  --cl-sun-200: #c9d6f7;
+  --cl-sun-100: #eef2fc;
+  --cl-sky-700: #2f55c4;
+  --cl-sky-400: #3e6ae1;
+  --cl-sky-100: #eef2fc;
+  --cl-leaf-700: #12805c;
+  --cl-leaf-500: #1fa37a;
+  --cl-leaf-100: #e3f5ee;
+  --cl-tomato-600: #c8102e;
+  --cl-tomato-500: #e31937;
+  --cl-tomato-100: #fde8eb;
+  --cl-bubble-600: #393c41;
+  --cl-bubble-400: #5c5e62;
+  --cl-bubble-100: #f0f0f2;
+  --cl-grape-600: #393c41;
+  --cl-grape-400: #5c5e62;
+  --cl-grape-100: #f0f0f2;
+
+  --cl-surface: rgb(255 255 255 / 0.78);
+  --cl-surface-raised: #ffffff;
+  --cl-surface-sunken: #f2f2f3;
+  --cl-surface-strong: #e9e9eb;
+  --cl-text: #171a20;
+  --cl-text-2: #393c41;
+  --cl-text-muted: #5c5e62;
+  --cl-keyline: rgb(23 26 32 / 0.12);
+  --cl-hairline: rgb(23 26 32 / 0.08);
+  --cl-divider: rgb(23 26 32 / 0.10);
+  --cl-accent: #3e6ae1;
+  --cl-accent-soft: #eef2fc;
+  --cl-focus: #3e6ae1;
+  --cl-warn: #8a5a00;
+  --cl-warn-fill: #f5b301;
+  --cl-warn-soft: #fff6dd;
+
+  --cl-font-display: "Inter Variable", "Inter", -apple-system, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  --cl-font-ui: "Inter Variable", "Inter", -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  --cl-font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --cl-radius-panel: 12px;
+  --cl-radius-card: 10px;
+  --cl-radius-key: 8px;
+  --cl-radius-field: 8px;
+  --cl-radius-sheet: 8px;
+
+  --cl-line: 1px;
+  --cl-line-thin: 1px;
+  --cl-depth-sm: 0 1px 2px rgb(23 26 32 / 0.06);
+  --cl-depth: 0 1px 3px rgb(23 26 32 / 0.08);
+  --cl-depth-lg: 0 2px 6px rgb(23 26 32 / 0.10);
+  --cl-lift-1: 0 1px 2px rgb(23 26 32 / 0.04), 0 4px 12px rgb(23 26 32 / 0.06);
+  --cl-lift-2: 0 1px 3px rgb(23 26 32 / 0.05), 0 10px 30px rgb(23 26 32 / 0.08);
+  --cl-lift-3: 0 2px 6px rgb(23 26 32 / 0.06), 0 20px 50px rgb(23 26 32 / 0.12);
+  --cl-sticker-shadow: drop-shadow(0 1px 2px rgb(23 26 32 / 0.10));
+
+  --cl-ease-spring: cubic-bezier(0.2, 0, 0, 1);
+  --cl-ease-bounce: cubic-bezier(0.2, 0, 0, 1);
+}
+
+.cl-root, .cl-root button, .cl-root input, .cl-root textarea, .cl-root select {
+  font-family: var(--cl-font-ui);
+  font-variation-settings: normal;
+  letter-spacing: -0.005em;
+}
+.cl-root :is(h1, h2, h3, h4, strong, b) { font-family: var(--cl-font-display); font-variation-settings: normal; }
+.cl-root :is(h1, h2, h3) { font-weight: 600; letter-spacing: -0.015em; }
+
+/* Glass panels over the stage. */
+.cl-panel {
+  background: rgb(255 255 255 / 0.74);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  backdrop-filter: blur(22px) saturate(160%);
+  border-color: rgb(255 255 255 / 0.6);
+  box-shadow: 0 1px 2px rgb(23 26 32 / 0.04), 0 12px 40px rgb(23 26 32 / 0.08);
+}
+
+/* Buttons: flat, confident, no chunky press depth. */
+.cl-btn, .cl-iconbtn, .cl-chip, .cl-seg, .cl-tab, .cl-key, .cl-badge { font-weight: 500; box-shadow: none; }
+.cl-btn { border-radius: 6px; letter-spacing: 0; }
+.cl-btn--primary, .cl-btn--go { background: #3e6ae1; color: #fff; border-color: #3e6ae1; }
+.cl-btn--primary:hover, .cl-btn--go:hover { background: #3459c9; border-color: #3459c9; }
+.cl-btn:active, .cl-iconbtn:active { transform: none; }
+.cl-badge { border-radius: 4px; text-transform: none; }
+.cl-chip { border-radius: 999px; }
+
+/* Name tag: a clean product title instead of masking tape. */
+.cl-nametag__tape { background: none; transform: none; box-shadow: none; clip-path: none; padding: 4px 8px; }
+.cl-nametag__tape::before { display: none; }
+.cl-nametag__name, .cl-nametag.is-drafted .cl-nametag__name {
+  font-family: var(--cl-font-display); font-variation-settings: normal; font-weight: 600;
+  font-size: clamp(1.75rem, 2.6vw, 2.5rem); letter-spacing: -0.02em; color: #171a20;
+}
+
+/* Calm motion everywhere. */
+.cl-root * { animation-timing-function: cubic-bezier(0.2, 0, 0, 1); }
+.cl-sticker, .cl-stickerpop { filter: none; }

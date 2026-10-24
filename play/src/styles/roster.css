@@ -16,7 +16,7 @@
   --rc: var(--cl-sky-400);
   display: flex;
   flex-direction: column;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: var(--cl-radius-card);
   background: var(--cl-paper-50);
   box-shadow: var(--cl-depth);
@@ -49,7 +49,7 @@
   display: grid;
   place-items: center;
   height: 150px;
-  border-bottom: var(--cl-line) solid var(--cl-ink-900);
+  border-bottom: var(--cl-line) solid var(--cl-keyline);
   border-radius: calc(var(--cl-radius-card) - 2px) calc(var(--cl-radius-card) - 2px) 0 0;
   background:
     radial-gradient(circle at 50% 120%, color-mix(in srgb, var(--rc) 55%, white) 0 45%, transparent 46%),
@@ -71,7 +71,7 @@
   top: 10px;
   left: 10px;
   padding: 3px 9px;
-  border: var(--cl-line-thin) solid var(--cl-ink-900);
+  border: var(--cl-line-thin) solid var(--cl-keyline);
   border-radius: var(--cl-radius-pill);
   background: var(--cl-paper-50);
   font-size: var(--cl-text-xs);
@@ -87,7 +87,7 @@
   align-items: center;
   gap: 4px;
   padding: 3px 9px;
-  border: var(--cl-line-thin) solid var(--cl-ink-900);
+  border: var(--cl-line-thin) solid var(--cl-keyline);
   border-radius: var(--cl-radius-pill);
   background: var(--cl-sun-400);
   font-size: var(--cl-text-xs);
@@ -182,7 +182,7 @@
   align-items: center;
   gap: 5px;
   padding: 3px 8px 3px 6px;
-  border: var(--cl-line-thin) solid var(--cl-ink-900);
+  border: var(--cl-line-thin) solid var(--cl-keyline);
   border-radius: var(--cl-radius-pill);
   background: var(--cl-paper-50);
   font-size: var(--cl-text-xs);
@@ -341,7 +341,7 @@
   place-items: center;
   width: 22px;
   height: 22px;
-  border: 1.5px solid var(--cl-ink-900);
+  border: 1.5px solid var(--cl-keyline);
   border-radius: 50%;
   color: var(--cl-ink-900);
 }
@@ -381,7 +381,7 @@
   place-items: center;
   width: 17px;
   height: 17px;
-  border: 1.5px solid var(--cl-ink-900);
+  border: 1.5px solid var(--cl-keyline);
   border-radius: 50%;
   background: var(--cl-sun-400);
   color: var(--cl-ink-900);
@@ -479,7 +479,7 @@
   display: grid;
   gap: 10px;
   padding: 14px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: var(--cl-radius-card);
   background: var(--cl-paper-50);
   box-shadow: var(--cl-depth-sm);
@@ -520,7 +520,7 @@
 
 .cl-struct__tags span {
   padding: 1px 8px;
-  border: var(--cl-line-thin) solid var(--cl-ink-900);
+  border: var(--cl-line-thin) solid var(--cl-keyline);
   border-radius: var(--cl-radius-pill);
   font-size: var(--cl-text-xs);
   font-weight: 700;
@@ -627,7 +627,7 @@
   min-width: 22px;
   height: 22px;
   padding: 0 5px;
-  border: 1.5px solid var(--cl-ink-900);
+  border: 1.5px solid var(--cl-keyline);
   border-radius: 50%;
   background: var(--cl-paper-50);
   font-size: var(--cl-text-2xs);

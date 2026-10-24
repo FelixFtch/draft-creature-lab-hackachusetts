@@ -22,7 +22,7 @@
   display: grid;
   gap: 0;
   overflow: hidden;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: var(--cl-radius-card);
   background: var(--cl-paper-50);
   box-shadow: var(--cl-depth-sm);
@@ -41,7 +41,7 @@
   place-items: center;
   width: 46px;
   height: 46px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: 14px;
   background: var(--cl-paper-200);
 }
@@ -149,7 +149,7 @@
 .cl-skill__bar {
   position: relative;
   height: 16px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: 6px;
   background:
     radial-gradient(circle, var(--cl-paper-300) 2.4px, transparent 3px) 0 50% / 14px 14px repeat-x,
@@ -163,7 +163,7 @@
   background:
     radial-gradient(circle, rgb(28 36 64 / 0.38) 2.4px, transparent 3px) 0 50% / 14px 14px repeat-x,
     var(--cl-sun-400);
-  border-right: var(--cl-line) solid var(--cl-ink-900);
+  border-right: var(--cl-line) solid var(--cl-keyline);
   transition: width var(--cl-dur-slow) var(--cl-ease-standard);
 }
 
@@ -294,7 +294,7 @@
   display: grid;
   gap: 1px;
   padding: 5px 8px;
-  border: 1.5px solid var(--cl-ink-900);
+  border: 1.5px solid var(--cl-keyline);
   border-radius: 8px;
   background: var(--cl-paper-50);
   box-shadow: var(--cl-lift-1);

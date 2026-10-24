@@ -1,0 +1,934 @@
+{
+ "schema": "creature-eval/1",
+ "skill": "walk",
+ "bodyId": "quadruped-329a735927fa8b37",
+ "policySha256": "ccc9222948556af933f4dfda364f215fe70911f177dcc6598aacb4a13ce5561e",
+ "sceneSha256": "f1d4189fdce901af0202409b1864d3934e5008cce63a7247167831b0cdc6ee73",
+ "pass": true,
+ "rows": [
+  {
+   "name": "stand",
+   "durationS": 10,
+   "measureFromS": 2,
+   "schedule": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "criteria": {
+    "maxPlanarDriftM": 0.24,
+    "maxPlanarSpeed": 0.1085,
+    "maxAbsHeadingChange": 0.5
+   },
+   "required": true,
+   "command": [
+    0,
+    0,
+    0
+   ],
+   "executedSteps": 500,
+   "requestedSteps": 500,
+   "fall": false,
+   "error": null,
+   "complete": true,
+   "outcomes": [
+    {
+     "criterion": "maxPlanarSpeed",
+     "value": 0.0024,
+     "pass": true
+    },
+    {
+     "criterion": "maxPlanarDriftM",
+     "value": 0.0226,
+     "pass": true
+    },
+    {
+     "criterion": "maxAbsHeadingChange",
+     "value": 0.0303,
+     "pass": true
+    }
+   ],
+   "meanVelocity": [
+    0.0019,
+    -0.0015,
+    -0.0018
+   ],
+   "planarSpeed": 0.0024,
+   "displacement": [
+    0.0202,
+    -0.0101,
+    -0.0232
+   ],
+   "windowDisplacement": [
+    0.0145,
+    -0.0122,
+    -0.0032
+   ],
+   "headingChange": -0.0303,
+   "maxTilt": 0.0098,
+   "minHeightAboveFeet": 0.4039,
+   "gait": {
+    "dutyFactor": [
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "touchdownsPerS": [
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "peakFootClearanceM": [
+     -0.0009,
+     -0.0008,
+     -0.0007,
+     -0.0009
+    ]
+   },
+   "pass": true
+  },
+  {
+   "name": "forward",
+   "durationS": 10,
+   "measureFromS": 2,
+   "schedule": [
+    [
+     0,
+     0.651,
+     0,
+     0
+    ]
+   ],
+   "criteria": {
+    "minVxFraction": 0.5,
+    "maxAbsWz": 0.1915
+   },
+   "required": true,
+   "command": [
+    0.651,
+    0,
+    0
+   ],
+   "executedSteps": 500,
+   "requestedSteps": 500,
+   "fall": false,
+   "error": null,
+   "complete": true,
+   "outcomes": [
+    {
+     "criterion": "minVxFraction",
+     "value": 0.992,
+     "pass": true
+    },
+    {
+     "criterion": "maxAbsWz",
+     "value": 0.0059,
+     "pass": true
+    }
+   ],
+   "meanVelocity": [
+    0.6457,
+    0.0192,
+    -0.0059
+   ],
+   "planarSpeed": 0.6461,
+   "displacement": [
+    6.3546,
+    -0.0842,
+    -0.0152
+   ],
+   "windowDisplacement": [
+    5.153,
+    -0.0816,
+    0.0
+   ],
+   "headingChange": -0.0653,
+   "maxTilt": 0.0416,
+   "minHeightAboveFeet": 0.3813,
+   "gait": {
+    "dutyFactor": [
+     0.588,
+     0.56,
+     0.545,
+     0.532
+    ],
+    "touchdownsPerS": [
+     1.875,
+     2.0,
+     2.125,
+     1.875
+    ],
+    "peakFootClearanceM": [
+     0.074,
+     0.0628,
+     0.0601,
+     0.0569
+    ]
+   },
+   "pass": true
+  },
+  {
+   "name": "forward_max",
+   "durationS": 10,
+   "measureFromS": 3,
+   "schedule": [
+    [
+     0,
+     1.085,
+     0,
+     0
+    ]
+   ],
+   "criteria": {
+    "minVxFraction": 0.4,
+    "maxAbsWz": 0.1915
+   },
+   "required": true,
+   "command": [
+    1.085,
+    0,
+    0
+   ],
+   "executedSteps": 500,
+   "requestedSteps": 500,
+   "fall": false,
+   "error": null,
+   "complete": true,
+   "outcomes": [
+    {
+     "criterion": "minVxFraction",
+     "value": 0.952,
+     "pass": true
+    },
+    {
+     "criterion": "maxAbsWz",
+     "value": 0.0054,
+     "pass": true
+    }
+   ],
+   "meanVelocity": [
+    1.0325,
+    0.0288,
+    -0.0054
+   ],
+   "planarSpeed": 1.0332,
+   "displacement": [
+    10.1375,
+    -0.2487,
+    -0.0214
+   ],
+   "windowDisplacement": [
+    7.2117,
+    -0.2024,
+    -0.012
+   ],
+   "headingChange": -0.075,
+   "maxTilt": 0.0884,
+   "minHeightAboveFeet": 0.3737,
+   "gait": {
+    "dutyFactor": [
+     0.574,
+     0.523,
+     0.511,
+     0.566
+    ],
+    "touchdownsPerS": [
+     2.714,
+     2.571,
+     3.286,
+     2.0
+    ],
+    "peakFootClearanceM": [
+     0.0919,
+     0.0758,
+     0.0559,
+     0.0631
+    ]
+   },
+   "pass": true
+  },
+  {
+   "name": "backward",
+   "durationS": 10,
+   "measureFromS": 2,
+   "schedule": [
+    [
+     0,
+     -0.5425,
+     0,
+     0
+    ]
+   ],
+   "criteria": {
+    "minVxFraction": 0.4,
+    "maxAbsWz": 0.1915
+   },
+   "required": true,
+   "command": [
+    -0.5425,
+    0,
+    0
+   ],
+   "executedSteps": 500,
+   "requestedSteps": 500,
+   "fall": false,
+   "error": null,
+   "complete": true,
+   "outcomes": [
+    {
+     "criterion": "minVxFraction",
+     "value": 0.981,
+     "pass": true
+    },
+    {
+     "criterion": "maxAbsWz",
+     "value": 0.037,
+     "pass": true
+    }
+   ],
+   "meanVelocity": [
+    -0.532,
+    -0.0029,
+    0.037
+   ],
+   "planarSpeed": 0.5324,
+   "displacement": [
+    -5.1175,
+    -0.9278,
+    -0.0127
+   ],
+   "windowDisplacement": [
+    -4.1272,
+    -0.9114,
+    0.0016
+   ],
+   "headingChange": 0.3522,
+   "maxTilt": 0.044,
+   "minHeightAboveFeet": 0.3762,
+   "gait": {
+    "dutyFactor": [
+     0.53,
+     0.557,
+     0.57,
+     0.585
+    ],
+    "touchdownsPerS": [
+     1.875,
+     2.0,
+     2.125,
+     1.875
+    ],
+    "peakFootClearanceM": [
+     0.0749,
+     0.0866,
+     0.0664,
+     0.0548
+    ]
+   },
+   "pass": true
+  },
+  {
+   "name": "turn_left",
+   "durationS": 10,
+   "measureFromS": 2,
+   "schedule": [
+    [
+     0,
+     0,
+     0,
+     0.5744
+    ]
+   ],
+   "criteria": {
+    "minWzFraction": 0.5,
+    "maxPlanarSpeed": 0.2712
+   },
+   "required": true,
+   "command": [
+    0,
+    0,
+    0.5744
+   ],
+   "executedSteps": 500,
+   "requestedSteps": 500,
+   "fall": false,
+   "error": null,
+   "complete": true,
+   "outcomes": [
+    {
+     "criterion": "minWzFraction",
+     "value": 1.048,
+     "pass": true
+    },
+    {
+     "criterion": "maxPlanarSpeed",
+     "value": 0.0244,
+     "pass": true
+    }
+   ],
+   "meanVelocity": [
+    -0.0092,
+    0.0083,
+    0.6022
+   ],
+   "planarSpeed": 0.0244,
+   "displacement": [
+    -0.0046,
+    -0.0004,
+    -0.0095
+   ],
+   "windowDisplacement": [
+    0.02,
+    -0.0057,
+    0.0036
+   ],
+   "headingChange": 5.9911,
+   "maxTilt": 0.0202,
+   "minHeightAboveFeet": 0.3809,
+   "gait": {
+    "dutyFactor": [
+     0.57,
+     0.593,
+     0.562,
+     0.545
+    ],
+    "touchdownsPerS": [
+     1.875,
+     2.0,
+     2.0,
+     1.875
+    ],
+    "peakFootClearanceM": [
+     0.0738,
+     0.0689,
+     0.0633,
+     0.063
+    ]
+   },
+   "pass": true
+  },
+  {
+   "name": "turn_right",
+   "durationS": 10,
+   "measureFromS": 2,
+   "schedule": [
+    [
+     0,
+     0,
+     0,
+     -0.5744
+    ]
+   ],
+   "criteria": {
+    "minWzFraction": 0.5,
+    "maxPlanarSpeed": 0.2712
+   },
+   "required": true,
+   "command": [
+    0,
+    0,
+    -0.5744
+   ],
+   "executedSteps": 500,
+   "requestedSteps": 500,
+   "fall": false,
+   "error": null,
+   "complete": true,
+   "outcomes": [
+    {
+     "criterion": "minWzFraction",
+     "value": 1.016,
+     "pass": true
+    },
+    {
+     "criterion": "maxPlanarSpeed",
+     "value": 0.0191,
+     "pass": true
+    }
+   ],
+   "meanVelocity": [
+    -0.0055,
+    -0.0083,
+    -0.5838
+   ],
+   "planarSpeed": 0.0191,
+   "displacement": [
+    -0.0049,
+    0.0161,
+    -0.0203
+   ],
+   "windowDisplacement": [
+    0.0203,
+    0.0161,
+    0.003
+   ],
+   "headingChange": -5.7876,
+   "maxTilt": 0.025,
+   "minHeightAboveFeet": 0.3759,
+   "gait": {
+    "dutyFactor": [
+     0.578,
+     0.58,
+     0.557,
+     0.552
+    ],
+    "touchdownsPerS": [
+     1.875,
+     2.0,
+     2.0,
+     1.875
+    ],
+    "peakFootClearanceM": [
+     0.0714,
+     0.0682,
+     0.0655,
+     0.0542
+    ]
+   },
+   "pass": true
+  },
+  {
+   "name": "arc",
+   "durationS": 10,
+   "measureFromS": 2,
+   "schedule": [
+    [
+     0,
+     0.5425,
+     0,
+     0.4787
+    ]
+   ],
+   "criteria": {
+    "minVxFraction": 0.4,
+    "minWzFraction": 0.4
+   },
+   "required": true,
+   "command": [
+    0.5425,
+    0,
+    0.4787
+   ],
+   "executedSteps": 500,
+   "requestedSteps": 500,
+   "fall": false,
+   "error": null,
+   "complete": true,
+   "outcomes": [
+    {
+     "criterion": "minVxFraction",
+     "value": 0.968,
+     "pass": true
+    },
+    {
+     "criterion": "minWzFraction",
+     "value": 1.019,
+     "pass": true
+    }
+   ],
+   "meanVelocity": [
+    0.525,
+    0.0146,
+    0.4877
+   ],
+   "planarSpeed": 0.5254,
+   "displacement": [
+    -1.1002,
+    0.877,
+    -0.0114
+   ],
+   "windowDisplacement": [
+    -1.9278,
+    0.4223,
+    0.001
+   ],
+   "headingChange": 4.8499,
+   "maxTilt": 0.0362,
+   "minHeightAboveFeet": 0.3819,
+   "gait": {
+    "dutyFactor": [
+     0.573,
+     0.557,
+     0.57,
+     0.535
+    ],
+    "touchdownsPerS": [
+     1.875,
+     2.0,
+     2.0,
+     1.875
+    ],
+    "peakFootClearanceM": [
+     0.0772,
+     0.068,
+     0.058,
+     0.0581
+    ]
+   },
+   "pass": true
+  },
+  {
+   "name": "start_stop",
+   "durationS": 12,
+   "measureFromS": 11,
+   "schedule": [
+    [
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     2,
+     0.651,
+     0,
+     0
+    ],
+    [
+     5,
+     0,
+     0,
+     0
+    ],
+    [
+     8,
+     0,
+     0,
+     0.5744
+    ],
+    [
+     10,
+     0,
+     0,
+     0
+    ]
+   ],
+   "criteria": {
+    "maxPlanarSpeed": 0.1627
+   },
+   "required": true,
+   "command": [
+    0,
+    0,
+    0
+   ],
+   "executedSteps": 600,
+   "requestedSteps": 600,
+   "fall": false,
+   "error": null,
+   "complete": true,
+   "outcomes": [
+    {
+     "criterion": "maxPlanarSpeed",
+     "value": 0.0061,
+     "pass": true
+    }
+   ],
+   "meanVelocity": [
+    -0.0061,
+    -0.0,
+    -0.0144
+   ],
+   "planarSpeed": 0.0061,
+   "displacement": [
+    1.9077,
+    -0.0629,
+    -0.0295
+   ],
+   "windowDisplacement": [
+    -0.0026,
+    -0.0053,
+    -0.0002
+   ],
+   "headingChange": 1.1078,
+   "maxTilt": 0.0337,
+   "minHeightAboveFeet": 0.3809,
+   "gait": {
+    "dutyFactor": [
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "touchdownsPerS": [
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "peakFootClearanceM": [
+     -0.0009,
+     -0.0009,
+     -0.0007,
+     -0.0009
+    ]
+   },
+   "pass": true
+  },
+  {
+   "name": "push_recovery",
+   "durationS": 12,
+   "measureFromS": 2,
+   "schedule": [
+    [
+     0,
+     0.3255,
+     0,
+     0
+    ]
+   ],
+   "pushes": [
+    [
+     3,
+     0,
+     0.5222
+    ],
+    [
+     6,
+     0,
+     -0.5222
+    ],
+    [
+     9,
+     0.5222,
+     0
+    ]
+   ],
+   "criteria": {},
+   "required": true,
+   "command": [
+    0.3255,
+    0,
+    0
+   ],
+   "executedSteps": 600,
+   "requestedSteps": 600,
+   "fall": false,
+   "error": null,
+   "complete": true,
+   "outcomes": [],
+   "meanVelocity": [
+    0.3251,
+    0.0075,
+    -0.0073
+   ],
+   "planarSpeed": 0.3311,
+   "displacement": [
+    3.8374,
+    -0.0594,
+    -0.0208
+   ],
+   "windowDisplacement": [
+    3.2464,
+    -0.0662,
+    -0.0049
+   ],
+   "headingChange": -0.0797,
+   "maxTilt": 0.1011,
+   "minHeightAboveFeet": 0.3793,
+   "gait": {
+    "dutyFactor": [
+     0.596,
+     0.584,
+     0.548,
+     0.548
+    ],
+    "touchdownsPerS": [
+     2.0,
+     2.0,
+     2.0,
+     1.9
+    ],
+    "peakFootClearanceM": [
+     0.0906,
+     0.0648,
+     0.0688,
+     0.0672
+    ]
+   },
+   "pass": true
+  },
+  {
+   "name": "drop_recovery",
+   "durationS": 4,
+   "measureFromS": 3,
+   "schedule": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "initialQpos": [
+    0.0,
+    0.0,
+    0.5208,
+    0.995,
+    0.0998,
+    0.0,
+    0.0,
+    0.0,
+    0.5,
+    -1.0,
+    0.0,
+    0.5,
+    -1.0,
+    0.0,
+    0.5,
+    -1.0,
+    0.0,
+    0.5,
+    -1.0
+   ],
+   "initialVelocity": [
+    0,
+    0,
+    -0.5222
+   ],
+   "criteria": {},
+   "required": true,
+   "command": [
+    0,
+    0,
+    0
+   ],
+   "executedSteps": 200,
+   "requestedSteps": 200,
+   "fall": false,
+   "error": null,
+   "complete": true,
+   "outcomes": [],
+   "meanVelocity": [
+    0.0004,
+    -0.0023,
+    -0.0023
+   ],
+   "planarSpeed": 0.0024,
+   "displacement": [
+    -0.0082,
+    0.0646,
+    -0.0915
+   ],
+   "windowDisplacement": [
+    0.0004,
+    -0.0023,
+    -0.0014
+   ],
+   "headingChange": -0.0241,
+   "maxTilt": 0.1985,
+   "minHeightAboveFeet": 0.4076,
+   "gait": {
+    "dutyFactor": [
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "touchdownsPerS": [
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "peakFootClearanceM": [
+     -0.001,
+     -0.0008,
+     -0.0008,
+     -0.0009
+    ]
+   },
+   "pass": true
+  },
+  {
+   "name": "bumpy",
+   "durationS": 10,
+   "measureFromS": 2,
+   "schedule": [
+    [
+     0,
+     0.5425,
+     0,
+     0
+    ]
+   ],
+   "terrain": {
+    "pattern": 0,
+    "scale": 0.8
+   },
+   "criteria": {
+    "minVxFraction": 0.3
+   },
+   "required": true,
+   "command": [
+    0.5425,
+    0,
+    0
+   ],
+   "executedSteps": 500,
+   "requestedSteps": 500,
+   "fall": false,
+   "error": null,
+   "complete": true,
+   "outcomes": [
+    {
+     "criterion": "minVxFraction",
+     "value": 0.995,
+     "pass": true
+    }
+   ],
+   "meanVelocity": [
+    0.5399,
+    0.0161,
+    -0.0057
+   ],
+   "planarSpeed": 0.5403,
+   "displacement": [
+    5.316,
+    -0.1325,
+    -0.0147
+   ],
+   "windowDisplacement": [
+    4.3084,
+    -0.0855,
+    0.0006
+   ],
+   "headingChange": -0.0699,
+   "maxTilt": 0.0557,
+   "minHeightAboveFeet": 0.3806,
+   "gait": {
+    "dutyFactor": [
+     0.595,
+     0.57,
+     0.545,
+     0.535
+    ],
+    "touchdownsPerS": [
+     1.875,
+     2.0,
+     2.0,
+     1.875
+    ],
+    "peakFootClearanceM": [
+     0.0723,
+     0.0618,
+     0.0613,
+     0.0569
+    ]
+   },
+   "pass": true
+  }
+ ],
+ "engine": {
+  "mujoco": "3.11.0",
+  "onnxruntime": "1.27.0",
+  "controlDt": 0.02,
+  "substeps": 4
+ },
+ "scope": "Deterministic Python MuJoCo rollouts of the exported ONNX policy on the exported scene (flat cg_floor; the bumpy row adds the training bump patch). Engineering acceptance for this exact body as a game character, not a robustness study or hardware claim."
+}

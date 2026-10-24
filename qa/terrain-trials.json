@@ -1,0 +1,521 @@
+{
+  "schema": "terrain-trials/1",
+  "createdAt": "2026-10-24T21:13:10.944Z",
+  "layout": "park",
+  "scope": "Headless Node: production pilots/sim/terrain-lab modules, MuJoCo WASM 3.11, ONNX Runtime Web WASM. One deterministic rollout per trial.",
+  "protocol": {
+    "commandFraction": 0.7,
+    "settleSeconds": 0.6,
+    "headingGain": 2.2,
+    "lateralGain": 1.1,
+    "maxHeadingCorrection": 0.45,
+    "jumpLeadM": 0.1,
+    "jumpLeadS": 0.15,
+    "stuckSeconds": 8,
+    "stuckProgressM": 0.05,
+    "description": "Forward command fixed at commandFraction x the pilot max forward speed, ramped like the game; yaw command = heading hold toward the lane axis; jump triggered at gap/step edges only when the pilot lists a validated jump skill. Full runs start behind the start line; grade trials start on the surface just before the grade."
+  },
+  "lab": {
+    "start": 0,
+    "finish": 6,
+    "sprintMark": 5,
+    "laneWidth": 1.4,
+    "pitDepth": 0.6,
+    "lanes": [
+      {
+        "id": "flat",
+        "title": "Flat sprint",
+        "grades": [
+          {
+            "id": "sprint-5m",
+            "label": "5 m sprint",
+            "kind": "sprint",
+            "value": 5,
+            "unit": "m",
+            "at": 0,
+            "clear": 5
+          }
+        ]
+      },
+      {
+        "id": "rubble",
+        "title": "Rubble",
+        "grades": [
+          {
+            "id": "rubble-2-6cm",
+            "label": "2–6 cm rubble",
+            "kind": "rubble",
+            "value": 0.06,
+            "unit": "m",
+            "at": 0.8,
+            "clear": 5.5
+          }
+        ]
+      },
+      {
+        "id": "step",
+        "title": "Step-up",
+        "grades": [
+          {
+            "id": "step-6cm",
+            "label": "6 cm step",
+            "kind": "step",
+            "value": 0.06,
+            "unit": "m",
+            "at": 1,
+            "clear": 1.75
+          },
+          {
+            "id": "step-12cm",
+            "label": "12 cm step",
+            "kind": "step",
+            "value": 0.12,
+            "unit": "m",
+            "at": 2.6,
+            "clear": 3.35
+          },
+          {
+            "id": "step-18cm",
+            "label": "18 cm step",
+            "kind": "step",
+            "value": 0.18,
+            "unit": "m",
+            "at": 4.2,
+            "clear": 4.95
+          }
+        ]
+      },
+      {
+        "id": "gap",
+        "title": "Gap",
+        "grades": [
+          {
+            "id": "gap-20cm",
+            "label": "0.20 m gap",
+            "kind": "gap",
+            "value": 0.2,
+            "unit": "m",
+            "at": 1,
+            "clear": 1.8
+          },
+          {
+            "id": "gap-35cm",
+            "label": "0.35 m gap",
+            "kind": "gap",
+            "value": 0.35,
+            "unit": "m",
+            "at": 2.7,
+            "clear": 3.65
+          },
+          {
+            "id": "gap-50cm",
+            "label": "0.50 m gap",
+            "kind": "gap",
+            "value": 0.5,
+            "unit": "m",
+            "at": 4.5,
+            "clear": 5.6
+          }
+        ]
+      },
+      {
+        "id": "slope",
+        "title": "Slope",
+        "grades": [
+          {
+            "id": "slope-12deg",
+            "label": "12° slope",
+            "kind": "slope",
+            "value": 12,
+            "unit": "deg",
+            "at": 0.9,
+            "clear": 2.8
+          },
+          {
+            "id": "slope-20deg",
+            "label": "20° slope",
+            "kind": "slope",
+            "value": 20,
+            "unit": "deg",
+            "at": 3.5,
+            "clear": 5
+          }
+        ]
+      }
+    ]
+  },
+  "sources": {
+    "layout-park.js": "ff0be3a15e45e1526fb7e2c7def94ee61078b769a6c1eefa35ad1f1d9ace6ac8",
+    "terrain-lab.js": "cf7739d93e3626a6cb1ff0cfb6639679ddcecc2f7963c651a6ded79f035ff511",
+    "sim.js": "11a40dd20ec9913b97b2b2ad63e94e4916fafcc0adca831182cde3fe54b7d8b3",
+    "pilots.js": "320248bf14fb62db56f4e0a2edac825e655b53ad8e13fa48fdbbb0ab753dc255",
+    "inject.js": "2dc96f2da5b186719e6df37fc70cc67fdb77792e78128e8751cd109ac465743d"
+  },
+  "pilots": [
+    {
+      "id": "legacy-cheetah",
+      "kind": "legacy-cheetah",
+      "bundle": null,
+      "runs": {
+        "flat": {
+          "outcome": "pass",
+          "timeS": 16.72,
+          "sprintS": 12.18,
+          "passedGrades": [
+            "sprint-5m"
+          ],
+          "failure": null,
+          "maxU": 5.999,
+          "spawnU": -1.15,
+          "commandVx": 0.49,
+          "jumps": [],
+          "steps": 1026,
+          "peakZ": 0.489,
+          "wallSeconds": 4.672,
+          "observation": "passed in 16.72 s"
+        },
+        "gap": {
+          "outcome": "fail",
+          "timeS": null,
+          "sprintS": null,
+          "passedGrades": [],
+          "failure": {
+            "reason": "stuck",
+            "u": 0.324,
+            "grade": "gap-20cm"
+          },
+          "maxU": 0.365,
+          "spawnU": -1.15,
+          "commandVx": 0.49,
+          "jumps": [],
+          "steps": 599,
+          "peakZ": 1.089,
+          "wallSeconds": 2.688,
+          "observation": "stalled with its front 0.174 m from the 0.20 m gap edge (u=0.365 m)"
+        }
+      },
+      "grades": {
+        "sprint-5m": {
+          "lane": "flat",
+          "outcome": "pass",
+          "timeS": 16.84,
+          "sprintS": 16.84,
+          "passedGrades": [
+            "sprint-5m"
+          ],
+          "failure": null,
+          "maxU": 5.004,
+          "spawnU": -0.991,
+          "commandVx": 0.49,
+          "jumps": [],
+          "steps": 842,
+          "peakZ": 0.489,
+          "wallSeconds": 3.733,
+          "observation": "passed in 16.84 s"
+        },
+        "gap-20cm": {
+          "lane": "gap",
+          "outcome": "fail",
+          "timeS": null,
+          "sprintS": null,
+          "passedGrades": [],
+          "failure": {
+            "reason": "stuck",
+            "u": 0.317,
+            "grade": "gap-20cm"
+          },
+          "maxU": 0.324,
+          "spawnU": -0.161,
+          "commandVx": 0.49,
+          "jumps": [],
+          "steps": 517,
+          "peakZ": 1.089,
+          "wallSeconds": 2.211,
+          "observation": "stalled with its front 0.215 m from the 0.20 m gap edge (u=0.324 m)"
+        },
+        "gap-35cm": {
+          "lane": "gap",
+          "outcome": "fail",
+          "timeS": null,
+          "sprintS": null,
+          "passedGrades": [],
+          "failure": {
+            "reason": "stuck",
+            "u": 1.974,
+            "grade": "gap-35cm"
+          },
+          "maxU": 2.025,
+          "spawnU": 1.809,
+          "commandVx": 0.49,
+          "jumps": [],
+          "steps": 653,
+          "peakZ": 1.089,
+          "wallSeconds": 2.851,
+          "observation": "stalled with its front 0.214 m from the 0.35 m gap edge (u=2.025 m)"
+        },
+        "gap-50cm": {
+          "lane": "gap",
+          "outcome": "fail",
+          "timeS": null,
+          "sprintS": null,
+          "passedGrades": [],
+          "failure": {
+            "reason": "stuck",
+            "u": 3.728,
+            "grade": "gap-50cm"
+          },
+          "maxU": 3.768,
+          "spawnU": 3.659,
+          "commandVx": 0.49,
+          "jumps": [],
+          "steps": 421,
+          "peakZ": 1.089,
+          "wallSeconds": 1.846,
+          "observation": "stalled with its front 0.271 m from the 0.50 m gap edge (u=3.768 m)"
+        }
+      },
+      "error": null,
+      "label": "Draft Cheetah",
+      "skills": [
+        "walk"
+      ],
+      "canJump": false,
+      "commandBounds": {
+        "vx": [
+          -0.5,
+          0.7
+        ],
+        "vy": [
+          0,
+          0
+        ],
+        "wz": [
+          -0.7,
+          0.7
+        ]
+      },
+      "provenance": {
+        "xmlSha256": "e5fae07b0ba2c4d58963fed762300b99419035f4638744b66a94ca89db2af6b1",
+        "policySha256": "3832f34a2ed6a852c12cd4f7c1acbee3516f816e61ab7ef8ec1a3544291cfe67"
+      },
+      "controllerSha256": "420667f517974eeb3e939b80a375ec60de65f9550fd8011e538722bec6b9ff36",
+      "jumpError": null,
+      "structure": {
+        "lengthM": 1.01,
+        "widthM": 0.369,
+        "heightM": 0.549,
+        "rootHeightM": 0.459,
+        "massKg": 32.638,
+        "frontReachM": 0.461,
+        "rearReachM": 0.549,
+        "source": "measured from the compiled MuJoCo model at the spawn pose"
+      }
+    },
+    {
+      "id": "creature:quadruped-329a735927fa8b37",
+      "kind": "creature",
+      "bundle": "/tmp/44a7176b-3752-58c7-9ce4-163736ea1a01/scratchpad/trainer/training/dev-bundles/cheetah",
+      "runs": {
+        "flat": {
+          "outcome": "fall",
+          "timeS": null,
+          "sprintS": null,
+          "passedGrades": [],
+          "failure": {
+            "reason": "splash",
+            "u": 2.694,
+            "grade": "sprint-5m"
+          },
+          "maxU": 2.639,
+          "spawnU": -1.15,
+          "commandVx": 0.759,
+          "jumps": [],
+          "steps": 314,
+          "peakZ": 0.451,
+          "wallSeconds": 0.651,
+          "observation": "stepped off the pier near the 5 m sprint"
+        },
+        "gap": {
+          "outcome": "fall",
+          "timeS": null,
+          "sprintS": null,
+          "passedGrades": [],
+          "failure": {
+            "reason": "tumble",
+            "u": 0.866,
+            "grade": "gap-20cm"
+          },
+          "maxU": 0.858,
+          "spawnU": -1.15,
+          "commandVx": 0.759,
+          "jumps": [
+            {
+              "u": 0.347,
+              "t": 2.98
+            }
+          ],
+          "steps": 502,
+          "peakZ": 1.127,
+          "wallSeconds": 1.194,
+          "observation": "tipped over at the 0.20 m gap (u=0.866 m)"
+        }
+      },
+      "grades": {
+        "sprint-5m": {
+          "lane": "flat",
+          "outcome": "fall",
+          "timeS": null,
+          "sprintS": null,
+          "passedGrades": [],
+          "failure": {
+            "reason": "splash",
+            "u": 2.915,
+            "grade": "sprint-5m"
+          },
+          "maxU": 2.874,
+          "spawnU": -0.991,
+          "commandVx": 0.759,
+          "jumps": [],
+          "steps": 319,
+          "peakZ": 0.451,
+          "wallSeconds": 0.639,
+          "observation": "stepped off the pier near the 5 m sprint"
+        },
+        "gap-20cm": {
+          "lane": "gap",
+          "outcome": "fall",
+          "timeS": null,
+          "sprintS": null,
+          "passedGrades": [],
+          "failure": {
+            "reason": "tumble",
+            "u": 0.863,
+            "grade": "gap-20cm"
+          },
+          "maxU": 0.874,
+          "spawnU": -0.161,
+          "commandVx": 0.759,
+          "jumps": [
+            {
+              "u": 0.343,
+              "t": 1.64
+            }
+          ],
+          "steps": 240,
+          "peakZ": 1.127,
+          "wallSeconds": 0.608,
+          "observation": "tipped over at the 0.20 m gap (u=0.863 m)"
+        },
+        "gap-35cm": {
+          "lane": "gap",
+          "outcome": "fall",
+          "timeS": null,
+          "sprintS": null,
+          "passedGrades": [],
+          "failure": {
+            "reason": "tumble",
+            "u": 2.612,
+            "grade": "gap-35cm"
+          },
+          "maxU": 2.561,
+          "spawnU": 1.809,
+          "commandVx": 0.759,
+          "jumps": [
+            {
+              "u": 2.052,
+              "t": 1.28
+            }
+          ],
+          "steps": 137,
+          "peakZ": 1.125,
+          "wallSeconds": 0.291,
+          "observation": "tipped over at the 0.35 m gap (u=2.612 m)"
+        },
+        "gap-50cm": {
+          "lane": "gap",
+          "outcome": "fall",
+          "timeS": null,
+          "sprintS": null,
+          "passedGrades": [],
+          "failure": {
+            "reason": "tumble",
+            "u": 4.405,
+            "grade": "gap-50cm"
+          },
+          "maxU": 4.354,
+          "spawnU": 3.659,
+          "commandVx": 0.759,
+          "jumps": [
+            {
+              "u": 3.86,
+              "t": 1.22
+            }
+          ],
+          "steps": 132,
+          "peakZ": 1.121,
+          "wallSeconds": 0.269,
+          "observation": "tipped over at the 0.50 m gap (u=4.405 m)"
+        }
+      },
+      "error": null,
+      "controllerSha256": "59ced13ee055ddcd49921e46e04e86da74c74b823815716d680d7a45baea9812",
+      "label": "Cheetah (dev)",
+      "skills": [
+        "walk",
+        "jump"
+      ],
+      "canJump": true,
+      "commandBounds": {
+        "vx": [
+          -0.5425,
+          1.085
+        ],
+        "vy": [
+          0,
+          0
+        ],
+        "wz": [
+          -0.9574,
+          0.9574
+        ]
+      },
+      "provenance": {
+        "walk": true,
+        "jump": true
+      },
+      "jumpError": null,
+      "structure": {
+        "lengthM": 1.01,
+        "widthM": 0.369,
+        "heightM": 0.544,
+        "rootHeightM": 0.454,
+        "massKg": 32.638,
+        "frontReachM": 0.461,
+        "rearReachM": 0.549,
+        "source": "measured from the compiled MuJoCo model at the spawn pose"
+      }
+    }
+  ],
+  "matrix": {
+    "legacy-cheetah": {
+      "sprint-5m": "pass",
+      "gap-20cm": "fail",
+      "gap-35cm": "fail",
+      "gap-50cm": "fail"
+    },
+    "creature:quadruped-329a735927fa8b37": {
+      "sprint-5m": "fall",
+      "gap-20cm": "fall",
+      "gap-35cm": "fall",
+      "gap-50cm": "fall"
+    }
+  },
+  "engines": {
+    "mujoco": "3.11.0",
+    "onnxruntime": {
+      "common": "1.27.0",
+      "web": "1.27.0"
+    }
+  },
+  "pass": true
+}

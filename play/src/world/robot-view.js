@@ -8,8 +8,10 @@ import * as THREE from 'three';
 // code change; to make it static later, import createCreatureView directly.
 const appearance = import.meta.glob('../appearance/index.js');
 
-export async function loadCreatureViewFactory() {
-  const load = appearance['../appearance/index.js'];
+// The playground shows the robot in the original Draft lab style (one body
+// colour with derived motor, detail and foot shades) unless asked otherwise.
+export async function loadCreatureViewFactory({ preferAppearance = false } = {}) {
+  const load = preferAppearance ? appearance['../appearance/index.js'] : null;
   if (load) {
     try {
       const mod = await load();

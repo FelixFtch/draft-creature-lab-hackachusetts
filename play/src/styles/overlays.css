@@ -30,7 +30,7 @@
   display: flex;
   flex-direction: column;
   max-height: inherit;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: var(--cl-radius-panel);
   background: var(--cl-paper-100);
   box-shadow: var(--cl-depth-lg), var(--cl-lift-3);
@@ -98,7 +98,7 @@
   flex: 0 0 auto;
   width: 42px;
   height: 42px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: 12px;
   background: var(--cl-sun-400);
 }
@@ -217,7 +217,7 @@
   align-items: center;
   gap: 10px;
   padding: 9px 9px 9px 10px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: 16px;
   background: var(--cl-paper-50);
   box-shadow: var(--cl-depth-sm), var(--cl-lift-2);
@@ -230,7 +230,7 @@
   place-items: center;
   width: 36px;
   height: 36px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: 11px;
   background: var(--cl-sky-100);
 }
@@ -265,7 +265,7 @@
 .cl-toast__action {
   min-height: 34px;
   padding: 0 12px;
-  border: var(--cl-line-thin) solid var(--cl-ink-900);
+  border: var(--cl-line-thin) solid var(--cl-keyline);
   border-radius: 10px;
   background: var(--cl-paper-100);
   font-weight: 800;
@@ -329,7 +329,7 @@
   display: grid;
   gap: 10px;
   padding: 12px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: var(--cl-radius-card);
   background: var(--cl-paper-50);
 }
@@ -360,7 +360,7 @@
   grid-row: span 2;
   width: 38px;
   height: 38px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: 11px;
   background: var(--cl-sun-400);
 }

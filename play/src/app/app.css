@@ -1,0 +1,5 @@
+/* Stage layers for the two engines; the UI kit owns everything else. */
+.app-stage { position: absolute; inset: 0; }
+.app-stage__layer { position: absolute; inset: 0; }
+.app-stage__layer[hidden] { display: none; }
+.app-stage__loading { position: absolute; inset: 0; display: grid; place-items: center; font-weight: 700; font-size: 18px; color: #fff; background: rgba(18, 28, 40, .35); pointer-events: none; }

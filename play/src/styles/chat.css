@@ -125,7 +125,7 @@
   justify-self: start;
   max-width: 100%;
   padding: 9px 13px;
-  border: var(--cl-line-thin) solid var(--cl-ink-900);
+  border: var(--cl-line-thin) solid var(--cl-keyline);
   border-radius: 6px 16px 16px 16px;
   background: var(--cl-paper-50);
   line-height: var(--cl-leading-read);
@@ -258,7 +258,7 @@
   min-height: 46px;
   max-height: 128px;
   padding: 11px 13px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: 14px;
   background: var(--cl-paper-50);
   color: var(--cl-ink-900);
@@ -300,7 +300,7 @@
 /* ---------- Design card: blueprint sketch + toy label ---------- */
 .cl-design {
   overflow: hidden;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: var(--cl-radius-card);
   background: var(--cl-paper-50);
   box-shadow: var(--cl-depth-sm);
@@ -319,7 +319,7 @@
     linear-gradient(90deg, var(--cl-bp-grid-minor) 1px, transparent 1px);
   background-size: 40px 40px, 40px 40px, 8px 8px, 8px 8px;
   background-position: -1px -1px;
-  border-bottom: var(--cl-line) solid var(--cl-ink-900);
+  border-bottom: var(--cl-line) solid var(--cl-keyline);
 }
 
 .cl-design__glyph {
@@ -460,7 +460,7 @@
   gap: 10px;
   overflow: hidden;
   padding-bottom: 12px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: var(--cl-radius-card);
   background: var(--cl-paper-50);
   box-shadow: var(--cl-depth-sm);
@@ -471,7 +471,7 @@
   display: grid;
   gap: 4px;
   padding: 14px 14px 14px 56px;
-  border-bottom: var(--cl-line) solid var(--cl-ink-900);
+  border-bottom: var(--cl-line) solid var(--cl-keyline);
   background-color: var(--cl-bp-surface);
   background-image: linear-gradient(var(--cl-bp-grid-minor) 1px, transparent 1px), linear-gradient(90deg, var(--cl-bp-grid-minor) 1px, transparent 1px);
   background-size: 8px 8px;
@@ -595,7 +595,7 @@
   display: grid;
   gap: 10px;
   padding: 12px 13px 13px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: var(--cl-radius-card);
   background: var(--cl-paper-50);
   box-shadow: var(--cl-depth-sm);
@@ -613,7 +613,7 @@
   place-items: center;
   width: 42px;
   height: 42px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: 12px;
   background: var(--cl-bp-600);
   color: var(--cl-paper-50);
@@ -667,7 +667,7 @@
 .cl-lookcard {
   display: grid;
   overflow: hidden;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: var(--cl-radius-card);
   background: var(--cl-paper-50);
   box-shadow: var(--cl-depth-sm);
@@ -678,7 +678,7 @@
   place-items: center;
   height: 112px;
   padding: 6px;
-  border-bottom: var(--cl-line) solid var(--cl-ink-900);
+  border-bottom: var(--cl-line) solid var(--cl-keyline);
   background: radial-gradient(circle at 50% 70%, #fff, var(--cl-paper-200));
 }
 
@@ -709,7 +709,7 @@
 .cl-lookcard__swatches span {
   width: 20px;
   height: 20px;
-  border: 1.5px solid var(--cl-ink-900);
+  border: 1.5px solid var(--cl-keyline);
   border-radius: 6px;
 }
 

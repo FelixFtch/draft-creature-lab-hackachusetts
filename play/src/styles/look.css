@@ -82,7 +82,7 @@
 
 /* groups */
 .cl-lookgroup {
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: var(--cl-radius-card);
   background: var(--cl-paper-50);
 }
@@ -180,7 +180,7 @@
 .cl-slot__chip {
   width: 32px;
   height: 32px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: 10px;
   box-shadow: inset 0 -5px 0 rgb(0 0 0 / 0.14);
 }
@@ -202,7 +202,7 @@
   place-items: center;
   width: 30px;
   height: 30px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: 50%;
   background: conic-gradient(#e23b2e, #ffc63a, #43b05c, #49b6f0, #7b5cf5, #ff6f95, #e23b2e);
   color: var(--cl-ink-900);
@@ -304,7 +304,7 @@
   display: block;
   width: 30px;
   height: 30px;
-  border: 1.5px solid var(--cl-ink-900);
+  border: 1.5px solid var(--cl-keyline);
   border-radius: 50%;
   background: var(--fc);
 }
@@ -323,7 +323,7 @@
   display: block;
   width: 40px;
   height: 28px;
-  border: 1.5px solid var(--cl-ink-900);
+  border: 1.5px solid var(--cl-keyline);
   border-radius: 7px;
   background-color: var(--pb);
 }
@@ -353,7 +353,7 @@
   place-items: center;
   width: 46px;
   height: 46px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: 12px;
   background: var(--cl-paper-50);
 }

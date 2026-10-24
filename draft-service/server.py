@@ -34,6 +34,25 @@ import yaml
 
 from draft.generation.generator import RobotGenerator
 
+import designs
+import training_jobs
+
+# Module routes: designs (DesignSpec -> Draft body, body files, policy bundles)
+# and training_jobs (local creature_gym runs). Each handler returns
+# (status, dict) or (status, designs.FileResponse).
+EXTRA_ROUTES = [(method, re.compile(pattern) if isinstance(pattern, str) else pattern, handler)
+                for module in (designs, training_jobs) for method, pattern, handler in module.ROUTES]
+MAX_MODULE_BODY = 256 * 1024
+
+
+def route_extra(method: str, path: str, payload=None):
+    for route_method, pattern, handler in EXTRA_ROUTES:
+        if route_method == method:
+            match = pattern.fullmatch(path)
+            if match:
+                return handler(match, payload)
+    return None
+
 SERVICE = Path(__file__).resolve().parent
 PROJECT = SERVICE.parent
 TRAINING = PROJECT / 'training'
@@ -623,16 +642,51 @@ class Handler(BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(data)
             else:
-                self.reply(404, {'error': 'Unknown endpoint.'})
+                routed = route_extra('GET', unquote(path))
+                if routed is None:
+                    self.reply(404, {'error': 'Unknown endpoint.'})
+                elif isinstance(routed[1], designs.FileResponse):
+                    designs.send_file_response(self, routed[1])
+                else:
+                    self.reply(*routed)
         except Exception as error:
             LOG.exception('GET failed')
             self.reply(500, {'error': 'Draft could not prepare the model catalog.', 'detail': str(error)[:500]})
 
+    def module_post(self, path: str):
+        try:
+            if self.headers.get('Transfer-Encoding'):
+                raise RequestError('Use a JSON request with Content-Length.')
+            size = int(self.headers.get('Content-Length', '0') or 0)
+            if size < 0 or size > MAX_MODULE_BODY:
+                raise RequestError('The JSON request is too large.')
+            payload = None
+            if size:
+                if self.headers.get_content_type() != 'application/json':
+                    raise RequestError('Content-Type must be application/json.')
+                raw = self.rfile.read(size)
+                if len(raw) != size:
+                    raise RequestError('Incomplete JSON request.')
+                def reject_constant(value):
+                    raise RequestError('JSON numbers must be finite.')
+                payload = json.loads(raw, parse_constant=reject_constant)
+            routed = route_extra('POST', path, payload)
+            if routed is None:
+                self.reply(404, {'error': 'Unknown endpoint.'})
+            else:
+                self.reply(*routed)
+        except (RequestError, json.JSONDecodeError, UnicodeDecodeError, ValueError) as error:
+            self.reply(400, {'error': str(error)})
+        except Exception as error:
+            LOG.exception('Module POST failed')
+            self.reply(500, {'error': 'The local service could not complete that request.', 'detail': str(error)[:300]})
+
     def do_POST(self):
         if not self.permitted():
             return
-        if urlsplit(self.path).path != '/api/generate':
-            self.reply(404, {'error': 'Unknown endpoint.'})
+        path = urlsplit(self.path).path
+        if path != '/api/generate':
+            self.module_post(path)
             return
         try:
             if self.headers.get('Transfer-Encoding'):

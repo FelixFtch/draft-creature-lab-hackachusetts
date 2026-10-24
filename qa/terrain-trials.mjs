@@ -34,7 +34,7 @@ async function bundleFetch(url) {
     const file = path.join(root, dir, pathname.slice(prefix.length));
     try { return new Response(await fs.readFile(file)); } catch { return new Response('not found', { status: 404 }); }
   }
-  const direct = path.isAbsolute(pathname) && pathname.startsWith(root) ? pathname : path.join(root, pathname);
+  const direct = path.isAbsolute(pathname) && await fs.access(pathname).then(() => true, () => false) ? pathname : path.join(root, pathname);
   try { return new Response(await fs.readFile(direct)); } catch { return new Response('not found', { status: 404 }); }
 }
 
@@ -98,15 +98,18 @@ try {
     let sim = null;
     try {
       if (entry.kind === 'creature') {
-        const file = path.join(root, 'play/src/creature-controller.js');
-        await fs.access(file).catch(() => { throw Error('play/src/creature-controller.js is not in this checkout yet'); });
-        const pilot = createCreaturePilot(entry.bundle, { loadModule: () => import(pathToFileURL(file).href), fetch: bundleFetch, ort: h.ort, node: true });
+        const file = path.resolve(root, opt('--controller')[0] ?? 'play/src/creature-controller.js');
+        await fs.access(file).catch(() => { throw Error(`${file} is not available (pass --controller <path>)`); });
+        const pilot = createCreaturePilot(entry.bundle, { loadModule: () => import(pathToFileURL(file).href), fetch: bundleFetch, ort: h.ort });
         sim = await createWorldSim({ mujoco: h.mj, pilot, layout: PARK });
-        row.id = sim.meta.policyId ?? entry.bundle;
+        row.id = `creature:${sim.meta.policyId ?? entry.bundle}`;
+        row.controllerSha256 = sha(await fs.readFile(file));
       } else sim = await h.sim(entry.kind, PARK, { collision: 'torso' });
+      sim.resetRobot(sim.spawnAt(PARK.pads[0])); // measures the body at its spawn pose
       const m = sim.meta;
       Object.assign(row, { label: m.label, skills: [...m.skills], canJump: m.skills.includes('jump'), commandBounds: m.commandBounds,
-        provenance: m.provenance ?? null, controllerSha256: entry.kind === 'legacy-cheetah' ? h.controllerSha256.cheetah : entry.kind === 'legacy-flower' ? h.controllerSha256.flower : null,
+        provenance: m.provenance ?? m.evaluation ?? null, controllerSha256: row.controllerSha256 ?? (entry.kind === 'legacy-cheetah' ? h.controllerSha256?.cheetah : entry.kind === 'legacy-flower' ? h.controllerSha256?.flower : null) ?? null,
+        jumpError: m.jumpError ?? null,
         structure: { lengthM: r3(sim.size.length), widthM: r3(sim.size.width), heightM: r3(sim.size.height), rootHeightM: r3(sim.size.rootHeight), massKg: r3(sim.size.mass),
           frontReachM: r3(sim.size.boundsMax[0]), rearReachM: r3(-sim.size.boundsMin[0]), source: 'measured from the compiled MuJoCo model at the spawn pose' } });
       for (const lane of PARK.lab.lanes) {
@@ -121,7 +124,7 @@ try {
       report.matrix[row.id] = Object.fromEntries(Object.entries(row.grades).map(([g, r]) => [g, r.outcome]));
     } catch (error) {
       row.error = String(error.message ?? error);
-      console.error('PILOT ERROR', entry.id, row.error);
+      console.error('PILOT ERROR', entry.id, error.stack ?? row.error);
     } finally { sim?.dispose(); }
   }
 } finally { await h.close(); }

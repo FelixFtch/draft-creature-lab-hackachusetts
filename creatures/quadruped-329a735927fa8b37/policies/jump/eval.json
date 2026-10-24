@@ -1,0 +1,212 @@
+{
+ "schema": "creature-eval/1",
+ "skill": "jump",
+ "bodyId": "quadruped-329a735927fa8b37",
+ "policySha256": "1c082603430803f45810b7aaec7b11718623fda4eddb4e5f2a03f36868d76df9",
+ "sceneSha256": "f1d4189fdce901af0202409b1864d3934e5008cce63a7247167831b0cdc6ee73",
+ "pass": true,
+ "rows": [
+  {
+   "name": "jump_from_stand",
+   "durationS": 5.96,
+   "schedule": [
+    [
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "jumps": [
+    1.5
+   ],
+   "criteria": {
+    "minApexGainM": 0.048,
+    "minAirborneS": 0.1,
+    "maxTiltRad": 0.6
+   },
+   "required": true,
+   "executedSteps": 298,
+   "requestedSteps": 298,
+   "fall": false,
+   "error": null,
+   "complete": true,
+   "jumpsMeasured": [
+    {
+     "t": 1.5,
+     "executed": true,
+     "apexGainM": 0.0975,
+     "airborneS": 0.2,
+     "maxTiltRad": 0.0205,
+     "handoffSteps": 50,
+     "pass": true
+    }
+   ],
+   "pass": true,
+   "meanVelocity": [
+    0.0403,
+    -0.0048,
+    -0.0377
+   ],
+   "planarSpeed": 0.0442,
+   "displacement": [
+    0.2346,
+    -0.0626,
+    -0.0236
+   ],
+   "windowDisplacement": [
+    0.2346,
+    -0.0626,
+    -0.0212
+   ],
+   "headingChange": -0.2249,
+   "maxTilt": 0.0205,
+   "minHeightAboveFeet": 0.3408
+  },
+  {
+   "name": "jump_from_walk",
+   "durationS": 6.46,
+   "schedule": [
+    [
+     0,
+     0.3255,
+     0,
+     0
+    ]
+   ],
+   "jumps": [
+    2.0
+   ],
+   "criteria": {
+    "minApexGainM": 0.048,
+    "minAirborneS": 0.1,
+    "maxTiltRad": 0.6
+   },
+   "required": true,
+   "executedSteps": 323,
+   "requestedSteps": 323,
+   "fall": false,
+   "error": null,
+   "complete": true,
+   "jumpsMeasured": [
+    {
+     "t": 2.0,
+     "executed": true,
+     "apexGainM": 0.0841,
+     "airborneS": 0.2,
+     "maxTiltRad": 0.0318,
+     "handoffSteps": 50,
+     "pass": true
+    }
+   ],
+   "pass": true,
+   "meanVelocity": [
+    0.2725,
+    0.0132,
+    -0.038
+   ],
+   "planarSpeed": 0.2759,
+   "displacement": [
+    1.7418,
+    -0.1654,
+    -0.0142
+   ],
+   "windowDisplacement": [
+    1.7413,
+    -0.1653,
+    -0.0115
+   ],
+   "headingChange": -0.2409,
+   "maxTilt": 0.0318,
+   "minHeightAboveFeet": 0.3415
+  },
+  {
+   "name": "jump_repeat",
+   "durationS": 10.879999999999999,
+   "schedule": [
+    [
+     0,
+     0.217,
+     0,
+     0
+    ]
+   ],
+   "jumps": [
+    1.5,
+    4.46,
+    7.42
+   ],
+   "criteria": {
+    "minApexGainM": 0.048,
+    "minAirborneS": 0.1,
+    "maxTiltRad": 0.6
+   },
+   "required": true,
+   "executedSteps": 544,
+   "requestedSteps": 544,
+   "fall": false,
+   "error": null,
+   "complete": true,
+   "jumpsMeasured": [
+    {
+     "t": 1.5,
+     "executed": true,
+     "apexGainM": 0.0831,
+     "airborneS": 0.2,
+     "maxTiltRad": 0.0288,
+     "handoffSteps": 50,
+     "pass": true
+    },
+    {
+     "t": 4.46,
+     "executed": true,
+     "apexGainM": 0.0813,
+     "airborneS": 0.2,
+     "maxTiltRad": 0.0363,
+     "handoffSteps": 50,
+     "pass": true
+    },
+    {
+     "t": 7.42,
+     "executed": true,
+     "apexGainM": 0.0814,
+     "airborneS": 0.2,
+     "maxTiltRad": 0.0503,
+     "handoffSteps": 50,
+     "pass": true
+    }
+   ],
+   "pass": true,
+   "meanVelocity": [
+    0.1716,
+    0.0027,
+    -0.0538
+   ],
+   "planarSpeed": 0.1786,
+   "displacement": [
+    1.7413,
+    -0.5182,
+    -0.0145
+   ],
+   "windowDisplacement": [
+    1.741,
+    -0.5182,
+    -0.0118
+   ],
+   "headingChange": -0.578,
+   "maxTilt": 0.0503,
+   "minHeightAboveFeet": 0.3403
+  }
+ ],
+ "engine": {
+  "mujoco": "3.11.0",
+  "onnxruntime": "1.27.0",
+  "controlDt": 0.02,
+  "substeps": 4
+ },
+ "scope": "Deterministic Python MuJoCo rollouts of the exported ONNX policy on the exported scene (flat cg_floor; the bumpy row adds the training bump patch). Engineering acceptance for this exact body as a game character, not a robustness study or hardware claim.",
+ "handoff": {
+  "walkPolicySha256": "ccc9222948556af933f4dfda364f215fe70911f177dcc6598aacb4a13ce5561e",
+  "walkSceneSha256": "f1d4189fdce901af0202409b1864d3934e5008cce63a7247167831b0cdc6ee73"
+ }
+}

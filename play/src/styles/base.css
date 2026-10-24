@@ -124,7 +124,7 @@
   top: 12px;
   z-index: calc(var(--cl-z-title) + 1);
   padding: 10px 14px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: var(--cl-radius-key);
   background: var(--cl-sun-400);
   color: var(--cl-ink-900);

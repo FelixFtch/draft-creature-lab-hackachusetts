@@ -89,7 +89,7 @@
   display: inline-flex;
   align-items: center;
   padding: 4px 14px 4px 5px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: 16px;
   background: var(--cl-paper-50);
   box-shadow: var(--cl-depth-sm);
@@ -110,7 +110,7 @@ button.cl-topbar__brand:hover {
   display: inline-grid;
   grid-template-columns: 1fr 1fr;
   padding: 4px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: 18px;
   background: var(--cl-ink-900);
   box-shadow: var(--cl-depth-sm);
@@ -224,7 +224,7 @@ button.cl-topbar__brand:hover {
   gap: 6px;
   width: 64px;
   padding: 12px 4px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: 18px;
   background: var(--cl-paper-50);
   box-shadow: var(--cl-depth);
@@ -374,7 +374,7 @@ button.cl-topbar__brand:hover {
   align-items: center;
   gap: 6px;
   padding: 5px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: 999px;
   background: var(--cl-paper-50);
   box-shadow: var(--cl-depth-sm), var(--cl-lift-1);
@@ -430,7 +430,7 @@ button.cl-topbar__brand:hover {
   place-items: center;
   width: 26px;
   height: 26px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: 50%;
   background: var(--cl-paper-50);
   color: var(--cl-ink-900);
@@ -560,7 +560,7 @@ button.cl-topbar__brand:hover {
   align-items: center;
   gap: 2px;
   padding: 5px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: 18px;
   background: var(--cl-paper-50);
   box-shadow: var(--cl-depth-sm), var(--cl-lift-1);
@@ -665,7 +665,7 @@ button.cl-topbar__brand:hover {
   gap: 8px;
   max-width: min(560px, 100%);
   padding: 8px 14px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: 999px;
   background: var(--cl-paper-50);
   box-shadow: var(--cl-lift-1);
@@ -688,7 +688,7 @@ button.cl-topbar__brand:hover {
   display: inline-block;
   width: 10px;
   height: 10px;
-  border: 2px solid var(--cl-ink-900);
+  border: 2px solid var(--cl-keyline);
   border-radius: 50%;
   background: var(--cl-bubble-400);
 }
@@ -813,7 +813,7 @@ button.cl-topbar__brand:hover {
   gap: 2px;
   margin: 0 8px;
   padding: 3px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: 16px;
   background: var(--cl-paper-200);
 }

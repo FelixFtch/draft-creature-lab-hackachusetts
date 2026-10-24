@@ -167,11 +167,12 @@ export async function createDraftLab(container, { onState = () => {}, createView
   function applyPose() { if (model) { identityBase = poseInto(model, data, joints, feet); view?.sync(data); } }
 
   function frameCamera() {
+    turntable.updateMatrixWorld(true);
     const box = view ? new THREE.Box3().setFromObject(view.group) : null;
     const size = box && !box.isEmpty() ? box.getSize(new THREE.Vector3()) : new THREE.Vector3(.8, .6, .8);
     const extent = Math.max(.7, size.x, size.y, size.z);
     controls.target.set(0, Math.max(.18, size.y * .45), 0);
-    camera.position.set(extent * 1.55, extent * 1.05, extent * 1.85); controls.update();
+    camera.position.set(extent * 1.85, extent * 1.15, extent * 2.25); controls.update();
   }
 
   // Compile a candidate completely before replacing the current creature.
@@ -322,8 +323,14 @@ export async function createDraftLab(container, { onState = () => {}, createView
     raf = requestAnimationFrame(frame);
   }
   frameCamera(); raf = requestAnimationFrame(frame);
+  // The print kit is built from the current posed model; the exporter never
+  // writes physics state.
+  async function printKit(exporter) {
+    if (!model || !data) throw Error('Load a creature before exporting its print kit');
+    return exporter({ THREE, mujoco: mj, model, data, look, body: entry?.body ?? null });
+  }
   const api = {
-    loadModel, loadBody, setLook, setPose, reset, drop, home: frameCamera, setViewMode, printReveal, capture, snapshot,
+    loadModel, loadBody, setLook, setPose, reset, drop, home: frameCamera, setViewMode, printReveal, capture, snapshot, printKit,
     setSpin: on => { spin = !!on; },
     getScene: () => ({ scene, camera, renderer, root }),
     dispose() {

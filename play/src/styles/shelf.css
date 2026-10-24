@@ -2,7 +2,7 @@
 
 .cl-shelf {
   position: relative;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: 18px;
   background: var(--cl-paper-100);
   box-shadow: var(--cl-lift-2);
@@ -93,7 +93,7 @@
   right: 0;
   bottom: 0;
   height: 26px;
-  border-top: var(--cl-line) solid var(--cl-ink-900);
+  border-top: var(--cl-line) solid var(--cl-keyline);
   border-radius: 0 0 16px 16px;
   background:
     repeating-linear-gradient(90deg, rgb(28 36 64 / 0.06) 0 2px, transparent 2px 46px),
@@ -113,7 +113,7 @@
   gap: 3px;
   width: 100%;
   padding: 6px 6px 8px;
-  border: var(--cl-line) solid var(--cl-ink-900);
+  border: var(--cl-line) solid var(--cl-keyline);
   border-radius: 14px;
   background: var(--cl-paper-50);
   box-shadow: 0 3px 0 var(--cl-ink-900);
@@ -197,7 +197,7 @@
   place-items: center;
   width: 20px;
   height: 20px;
-  border: 1.5px solid var(--cl-ink-900);
+  border: 1.5px solid var(--cl-keyline);
   border-radius: 6px;
   background: var(--cl-paper-50);
 }
@@ -221,7 +221,7 @@
   top: -8px;
   left: 50%;
   padding: 2px 8px;
-  border: 1.5px solid var(--cl-ink-900);
+  border: 1.5px solid var(--cl-keyline);
   border-radius: 6px;
   background: var(--cl-sun-400);
   font-family: var(--cl-font-display);
