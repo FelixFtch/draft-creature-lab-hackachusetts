@@ -143,6 +143,8 @@ export function createAudio({ muted = false, target = globalThis } = {}) {
     splash(pos) { if (!live()) return; const out = voice({ ...place(pos, 1.1, 10) }); noiseBurst(out, { dur: .6, f: 900, q: .5, lp: 3500, gain: .6, attack: .01 }); noiseBurst(out, { at: ctx.currentTime + .12, dur: .5, f: 2200, q: .7, lp: 7000, gain: .25 }); },
     sticker() { if (!live()) return; const out = voice({ gain: .7 }), t = ctx.currentTime; [1047, 1319, 1568, 2093].forEach((f, i) => tone(out, { at: t + i * .07, f, dur: .4, gain: .13, type: 'triangle' })); },
     click() { if (!live()) return; tone(voice({ gain: .4 }), { f: 1200, f1: 900, dur: .05, gain: .2, type: 'triangle' }); },
+    // Soft "nope" for an unavailable skill (two low blips).
+    bonk() { if (!live()) return; const out = voice({ gain: .5 }), t = ctx.currentTime; tone(out, { at: t, f: 220, f1: 180, dur: .09, gain: .25, type: 'square' }); tone(out, { at: t + .11, f: 196, f1: 150, dur: .12, gain: .22, type: 'square' }); },
     dispose() {
       disposed = true;
       for (const type of ['pointerdown', 'keydown', 'touchstart']) target.removeEventListener?.(type, unlock);

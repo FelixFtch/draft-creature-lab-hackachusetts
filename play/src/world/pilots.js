@@ -164,7 +164,10 @@ export function createCreaturePilot(bundleUrl, options = {}) {
       meta.kind = 'creature';
       meta.label ??= 'Your creature';
       meta.short ??= meta.label;
-      meta.skills = [...new Set(meta.skills)].filter(s => s === 'walk' || s === 'jump');
+      // Only skills whose bundle passed validation may be listed. `walk`
+      // (legs) and `drive` (wheels) are the perpetual locomotion skills.
+      meta.skills = [...new Set(meta.skills)].filter(s => s === 'walk' || s === 'drive' || s === 'jump');
+      if (!meta.skills.includes('walk') && !meta.skills.includes('drive')) throw Error('Creature pilot has no validated walk or drive skill');
       meta.commandBounds = { vx: meta.commandBounds.vx, vy: meta.commandBounds.vy ?? [0, 0], wz: meta.commandBounds.wz };
       meta.worldGeomGroup ??= 0;
       meta.robotGeomBits ??= {}; // new-pipeline bodies already use the shared collision bits

@@ -8,7 +8,10 @@
 // cancels it immediately. New here: landmark goals (success = the creature
 // reaches the named landmark, checked by the engine, never sent to the model)
 // and provenance from local OR cloud vision providers, reported honestly.
-export const COMMANDS = Object.freeze({ forward: [.35, 0, 0], backward: [-.2, 0, 0], turn_left: [0, 0, .5], turn_right: [0, 0, -.5], stand: [0, 0, 0] });
+// `jump` (durationSeconds 0) is a one-shot request: executed only when the
+// pilot has a validated jump skill, otherwise refused and the run continues.
+export const COMMANDS = Object.freeze({ forward: [.35, 0, 0], backward: [-.2, 0, 0], turn_left: [0, 0, .5], turn_right: [0, 0, -.5], stand: [0, 0, 0], jump: [0, 0, 0] });
+const INSTANT = new Set(['stand', 'jump']);
 export const EXPLORE_MAX_DECISIONS = 30;
 export const EXPLORE_MAX_SIM_SECONDS = 90;
 const SOURCES = new Set(['local_vlm', 'cloud_vlm']);
@@ -23,7 +26,7 @@ export function validateExploreDecision(value, observationId) {
   const a = value.action, expected = Object.hasOwn(COMMANDS, a?.operation) ? COMMANDS[a.operation] : null;
   if (!a || Object.keys(a).sort().join(',') !== 'durationSeconds,operation,vx,vy,wz' || !expected ||
       typeof a.durationSeconds !== 'number' || !Number.isFinite(a.durationSeconds) ||
-      (a.operation === 'stand' ? a.durationSeconds !== 0 : a.durationSeconds < .1 || a.durationSeconds > 2) ||
+      (INSTANT.has(a.operation) ? a.durationSeconds !== 0 : a.durationSeconds < .1 || a.durationSeconds > 2) ||
       !['vx', 'vy', 'wz'].every((key, i) => a[key] === expected[i])) throw Error('Visual action exceeds the movement contract');
   const provenance = { source: value.provenance.source, model: value.provenance.model, imageSha256: value.provenance.imageSha256,
     provider: value.provenance.provider ?? (value.provenance.source === 'local_vlm' ? 'local' : 'cloud') };
@@ -40,7 +43,18 @@ export function findLandmark(instruction, landmarks) {
   return best?.landmark ?? null;
 }
 
+// Goals: { id, name, judge() -> boolean } judged by the environment, never the
+// model. A landmark goal (from the instruction or a preset) is judged by
+// reach distance (and minimum height, e.g. the flag on the catwalk).
+export function landmarkGoal(landmark, getPosition) {
+  return { id: landmark.id, name: landmark.name, judge: () => {
+    const p = getPosition();
+    return Math.hypot(p[0] - landmark.x, p[1] - landmark.y) < landmark.reach && (landmark.minZ === undefined || p[2] >= landmark.minZ);
+  } };
+}
+
 export function createExplore({ capture, apply, freeze, context, getSimTime, getPosition, isReady = () => true, landmarks = [],
+  canJump = () => false, jump = () => false, jumpSeconds = 1.2,
   onChange = () => {}, onReached = () => {},
   request = async (body, signal) => {
     const response = await fetch('/vlm/decide', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal });
@@ -49,8 +63,8 @@ export function createExplore({ capture, apply, freeze, context, getSimTime, get
     return value;
   }, timeoutMs = 125000 } = {}) {
   let generation = 0, abort = null, timer = null, image = null, sessionContext = null, instruction = '', startPosition = [], goal = null;
-  const fresh = () => ({ phase: 'idle', active: false, instruction: '', landmark: null, action: null, remainingSeconds: 0, completedSteps: 0,
-    maxSteps: 12, elapsedSeconds: 0, lastDecision: null, provider: null, model: null, error: null, reason: null, history: [], frame: null, reached: null });
+  const fresh = () => ({ phase: 'idle', active: false, instruction: '', landmark: null, goal: null, action: null, remainingSeconds: 0, completedSteps: 0,
+    maxSteps: 12, elapsedSeconds: 0, lastDecision: null, provider: null, model: null, error: null, reason: null, history: [], frame: null, reached: null, refusedJumps: 0 });
   let state = fresh();
   const current = token => token === generation && activePhase(state.phase);
   function clearRequest() { if (timer !== null) clearTimeout(timer); timer = null; abort?.abort(); abort = null; }
@@ -99,18 +113,32 @@ export function createExplore({ capture, apply, freeze, context, getSimTime, get
       state = { ...state, lastDecision: decision, provider: decision.provenance.provider, model: decision.provenance.model, action,
         history: [...state.history, { step: state.completedSteps + 1, ...decision, operation: action.operation, durationSeconds: action.durationSeconds, startSimTime: now }].slice(-EXPLORE_MAX_DECISIONS) };
       if (action.operation === 'stand') { state.completedSteps++; finish('done', 'model_stand'); return; }
+      if (action.operation === 'jump') {
+        if (!canJump() || !jump()) {
+          // Refused: this body has no validated jump skill. Record it and ask again.
+          const last = state.history.at(-1);
+          state.history = [...state.history.slice(0, -1), { ...last, refused: 'no_validated_jump_skill' }];
+          state.completedSteps++; state.refusedJumps = (state.refusedJumps ?? 0) + 1;
+          if (state.completedSteps >= state.maxSteps) { finish('done', 'step_limit'); return; }
+          onChange(state); void decide(generation); return;
+        }
+        // A jump runs as one fixed window on the pilot's episodic jump skill.
+        state = { ...state, phase: 'moving', action: { ...action, durationSeconds: jumpSeconds }, remainingSeconds: jumpSeconds, actionStartSimTime: now };
+        apply([0, 0, 0]); onChange(state); return;
+      }
       if (state.elapsedSeconds + action.durationSeconds > EXPLORE_MAX_SIM_SECONDS + 1e-8) throw Error('Visual motion budget exceeded');
       state = { ...state, phase: 'moving', remainingSeconds: action.durationSeconds, actionStartSimTime: now };
       apply([action.vx, action.vy, action.wz]); onChange(state);
     } catch (error) { if (current(token)) fail(error?.message ?? error); }
   }
-  async function start(nextInstruction, { maxSteps = 12, landmark = null } = {}) {
+  async function start(nextInstruction, { maxSteps = 12, landmark = null, goal: presetGoal = null } = {}) {
     if (typeof nextInstruction !== 'string' || !nextInstruction.trim() || nextInstruction.trim().length > 2000) throw Error('Enter an instruction of 1–2000 characters');
     if (!Number.isInteger(maxSteps) || maxSteps < 1 || maxSteps > EXPLORE_MAX_DECISIONS) throw Error(`Choose 1–${EXPLORE_MAX_DECISIONS} visual decisions`);
     cancel('restarted');
     const token = ++generation; instruction = nextInstruction.trim(); image = null;
-    goal = (landmark && landmarks.find(l => l.id === landmark)) || findLandmark(instruction, landmarks);
-    state = { ...fresh(), phase: 'thinking', active: true, instruction, maxSteps, landmark: goal ? { id: goal.id, name: goal.name } : null }; onChange(state);
+    const mark = (landmark && landmarks.find(l => l.id === landmark)) || (!presetGoal && findLandmark(instruction, landmarks)) || null;
+    goal = presetGoal ?? (mark ? landmarkGoal(mark, getPosition) : null);
+    state = { ...fresh(), phase: 'thinking', active: true, instruction, maxSteps, landmark: goal ? { id: goal.id, name: goal.name } : null, goal: goal ? { id: goal.id, name: goal.name } : null }; onChange(state);
     try {
       if (!isReady()) throw Error('A healthy, standing creature is required for AI Explore');
       sessionContext = context(); await decide(token);
@@ -118,12 +146,10 @@ export function createExplore({ capture, apply, freeze, context, getSimTime, get
   }
   // Called by the engine after every control step with the creature position.
   function advance(simTime = getSimTime()) {
-    if (goal && activePhase(state.phase)) {
-      const p = getPosition();
-      if (Math.hypot(p[0] - goal.x, p[1] - goal.y) < goal.reach) {
-        closeStep('reached_landmark');
-        state = { ...state, reached: goal.id }; finish('done', 'reached_landmark'); onReached(goal); return;
-      }
+    // The environment judges the goal; the model never declares success.
+    if (goal && activePhase(state.phase) && goal.judge()) {
+      closeStep('goal_reached');
+      state = { ...state, reached: goal.id }; finish('done', 'goal_reached'); onReached(goal); return;
     }
     if (state.phase !== 'moving') return;
     if (context() !== sessionContext) { fail('Creature session changed during visual movement'); return; }

@@ -4,6 +4,7 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { paintGround, GROUND_EXTENT } from './ground-texture.js';
 import { planDecor } from './decor.js';
 import * as TX from './textures.js';
+import { createLabView } from './view-lab.js';
 
 // World visuals for the playground. Everything MuJoCo-related is authored in
 // the MuJoCo frame under `root` (rotation.x = -PI/2): (x, y, z) here renders
@@ -169,6 +170,7 @@ export function createWorldView({ scene, root, layout, terrain, hfields = [], pr
     const c = s.color;
     if (s.role === 'ramp') { if (!plankTex.has(c)) plankTex.set(c, keep(TX.plankTexture(c))); return material(`ramp${c}`, () => new THREE.MeshStandardMaterial({ map: plankTex.get(c), roughness: .78 })); }
     if (s.role === 'plateau' || s.role === 'step') return material(`tile${c}`, () => new THREE.MeshStandardMaterial({ color: c, map: tileTex, roughness: .9 }));
+    if (s.role === 'catwalk') return material('catwalk', () => new THREE.MeshStandardMaterial({ color: '#d9d3c8', map: tileTex, roughness: .85 }));
     if (s.role === 'platform') return material(`candy${c}`, () => new THREE.MeshPhysicalMaterial({ color: c, roughness: .32, clearcoat: .8, clearcoatRoughness: .25 }));
     if (s.surface === 'metal') return material(`metal${c}`, () => new THREE.MeshStandardMaterial({ color: c, roughness: .28, metalness: .35 }));
     if (s.surface === 'wood') return material(`wood${c}`, () => new THREE.MeshStandardMaterial({ color: c, roughness: .8 }));
@@ -194,7 +196,7 @@ export function createWorldView({ scene, root, layout, terrain, hfields = [], pr
     if (s.type === 'box') {
       const [hx, hy, hz] = s.size, r = Math.min(.035, .45 * Math.min(hx, hy, hz));
       g = r > .002 ? new RoundedBoxGeometry(2 * hx, 2 * hy, 2 * hz, 2, r) : new THREE.BoxGeometry(2 * hx, 2 * hy, 2 * hz);
-      if (s.role === 'ramp') boxUV(g, .18); else if (s.role === 'plateau' || s.role === 'step') boxUV(g, .5);
+      if (s.role === 'ramp') boxUV(g, .18); else if (s.role === 'plateau' || s.role === 'step' || s.role === 'catwalk') boxUV(g, .5);
     } else if (s.type === 'cylinder') g = new THREE.CylinderGeometry(s.size[0], s.size[0], 2 * s.size[1], 32).rotateX(Math.PI / 2);
     else if (s.type === 'sphere') g = new THREE.SphereGeometry(s.size[0], 40, 24);
     else if (s.type === 'capsule') {
@@ -240,7 +242,19 @@ export function createWorldView({ scene, root, layout, terrain, hfields = [], pr
 
   // ------------------------------------------------------ landmark extras
   for (const l of layout.landmarks) {
-    const g = new THREE.Group(); g.position.set(l.x, l.y, 0); g.rotation.z = l.yaw; world.add(g);
+    const g = new THREE.Group(); g.position.set(l.x, l.y, l.z ?? 0); g.rotation.z = l.yaw; world.add(g);
+    if (l.shape === 'flag') {
+      // Visual-only goal flag (AI Explore target) on the catwalk.
+      const pole = new THREE.Mesh(keep(new THREE.CylinderGeometry(.018, .022, 1.15, 10).rotateX(Math.PI / 2).translate(0, 0, .575)), material('metal#ffffff', () => new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: .3, metalness: .3 })));
+      pole.castShadow = true; g.add(pole);
+      const base = new THREE.Mesh(keep(new THREE.CylinderGeometry(.12, .14, .04, 20).rotateX(Math.PI / 2).translate(0, 0, .02)), material('paint#ffd23f', () => new THREE.MeshStandardMaterial({ color: '#ffd23f', roughness: .5 })));
+      g.add(base);
+      const geo = keep(new THREE.PlaneGeometry(.6, .38, 12, 6).rotateX(Math.PI / 2).translate(.3, 0, 0)), rest = Float32Array.from(geo.attributes.position.array);
+      const cloth = new THREE.Mesh(geo, material('flag#ffd23f', () => new THREE.MeshStandardMaterial({ color: '#ffd23f', side: THREE.DoubleSide, roughness: .7, emissive: '#5a4300', emissiveIntensity: .25 })));
+      cloth.position.z = .92; cloth.castShadow = true; g.add(cloth);
+      animated.push(t => { const p = geo.attributes.position; for (let i = 0; i < p.count; i++) { const x = rest[i * 3]; p.setY(i, rest[i * 3 + 1] + Math.sin(x * 9 - t * 6.5) * .05 * (x / .6)); } p.needsUpdate = true; });
+      continue;
+    }
     const gloss = material(`gloss${l.color}`, () => new THREE.MeshPhysicalMaterial({ color: l.color, roughness: .38, clearcoat: .6, clearcoatRoughness: .3 }));
     const white = material('paint#fffaf0', () => new THREE.MeshStandardMaterial({ color: '#fffaf0', roughness: .6 }));
     if (l.shape === 'tree') {
@@ -480,6 +494,8 @@ export function createWorldView({ scene, root, layout, terrain, hfields = [], pr
     if (mesh) { world.remove(mesh); cloudGroup.add(mesh); mesh.receiveShadow = false; }
   }
 
+  const labView = layout.lab ? createLabView({ world, layout, keep }) : null;
+
   // ------------------------------------------------------------- per frame
   const focus = new THREE.Vector3(), texel = new THREE.Vector3();
   let time = 0;
@@ -528,6 +544,7 @@ export function createWorldView({ scene, root, layout, terrain, hfields = [], pr
     }
   }
   function dispose() {
+    labView?.dispose();
     for (const v of signViews) { v.texture?.dispose(); v.face.material.dispose(); }
     for (const item of owned) item.dispose?.();
     for (const mat of materials.values()) mat.dispose();
@@ -536,5 +553,6 @@ export function createWorldView({ scene, root, layout, terrain, hfields = [], pr
     sun.shadow.map?.dispose();
     scene.fog = null; scene.background = null;
   }
-  return { group: world, sun, occluders, update, setSparks, setHoops, setSignChips, syncProps, dispose, water, palette: PALETTE };
+  return { group: world, sun, occluders, update, setSparks, setHoops, setSignChips, syncProps, dispose, water, palette: PALETTE,
+    setLabResults: (measured, label) => labView?.setResults(measured, label) };
 }

@@ -155,9 +155,12 @@ export async function createWorldSim({ mujoco: mj, pilot, layout, memory = '48M'
   function checkFall(snap) {
     if (snap?.error) return 'error';
     if (!allFinite(data.qpos) || !allFinite(data.qvel)) return 'unstable';
-    const pose = robotPose();
-    if (Math.hypot(pose.pos[0], pose.pos[1]) > layout.islandRadius + .05) return 'splash';
-    if (pose.pos[2] < -.5) return 'void';
+    const pose = robotPose(), [x, y, z] = pose.pos;
+    const onLand = layout.isLand ? layout.isLand(x, y) : Math.hypot(x, y) <= layout.islandRadius + .05;
+    if (!onLand) return 'splash';
+    if (z < -.5) return 'void';
+    const hazard = layout.labHazard?.(x, y, z);
+    if (hazard) return hazard;
     if (snap?.fall) return 'tumble';
     const min = meta.fallCriteria?.minimumRootHeightAboveGround;
     if (Number.isFinite(min) && pose.heightAboveTerrain < min) return 'tumble';

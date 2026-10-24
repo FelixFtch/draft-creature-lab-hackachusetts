@@ -48,23 +48,24 @@ try {
   // 2. Layout sanity: everything on the island, zones apart, pads clear.
   {
     const R = PARK.islandRadius, far = [];
-    // Farthest footprint point of each static (box corners / cylinder rim).
-    const reach = s => {
+    // Every footprint corner of each static must be on land (island or pier).
+    const corners = s => {
       if (s.type === 'box') {
-        let m = 0;
+        const out = [];
         for (const sx of [-1, 1]) for (const sy of [-1, 1]) {
-          const q = s.quat, v = [sx * s.size[0], sy * s.size[1], 0], [w, x, y, z] = q;
-          const rx = (1 - 2 * (y * y + z * z)) * v[0] + 2 * (x * y - w * z) * v[1], ry = 2 * (x * y + w * z) * v[0] + (1 - 2 * (x * x + z * z)) * v[1];
-          m = Math.max(m, Math.hypot(s.pos[0] + rx, s.pos[1] + ry));
+          const v = [sx * s.size[0], sy * s.size[1], 0], [w, x, y, z] = s.quat;
+          out.push([s.pos[0] + (1 - 2 * (y * y + z * z)) * v[0] + 2 * (x * y - w * z) * v[1], s.pos[1] + 2 * (x * y + w * z) * v[0] + (1 - 2 * (x * x + z * z)) * v[1]]);
         }
-        return m;
+        return out;
       }
-      return Math.hypot(s.pos[0], s.pos[1]) + (s.type === 'capsule' ? 0 : s.size[0]);
+      const r = s.type === 'capsule' ? 0 : s.size[0];
+      return [[s.pos[0] + r, s.pos[1]], [s.pos[0] - r, s.pos[1]], [s.pos[0], s.pos[1] + r], [s.pos[0], s.pos[1] - r]];
     };
-    for (const s of PARK.statics) if (reach(s) > R - .3) far.push(`${s.name}@${reach(s).toFixed(2)}`);
+    for (const s of PARK.statics) if (!corners(s).every(([x, y]) => PARK.isLand(x, y))) far.push(s.name);
     for (const p of PARK.props) if (Math.hypot(p.pos[0], p.pos[1]) > R - 1) far.push(p.name);
     for (const s of PARK.sparks) if (Math.hypot(s.x, s.y) > R - .8) far.push(s.id);
-    check('all world geoms, props and sparks are on the island', far.length === 0, { outside: far });
+    for (const pad of PARK.pads) if (!PARK.isLand(pad.x, pad.y)) far.push(pad.id);
+    check('all world geoms, props, sparks and pads are on land (island or lab pier)', far.length === 0, { outside: far });
     // Every physical feature of a zone lies inside that zone (wedge + rect),
     // so zones never intrude on each other.
     const strays = [];

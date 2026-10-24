@@ -96,6 +96,10 @@ export function createTerrain(layout) {
   // Surface tag for footstep sounds/dust when the contact is the base floor.
   function surfaceAt(x, y) {
     const r = Math.hypot(x, y);
+    if (layout.lab && r > layout.islandRadius - .6) {
+      const [u, v] = layout.labLocal(x, y);
+      if (u >= layout.lab.pier.u[0] && u <= layout.lab.pier.u[1] && Math.abs(v) <= layout.lab.pier.v[1]) return 'wood';
+    }
     if (r < layout.hubRadius) return 'stone';
     if (r > layout.islandRadius - .55) return 'sand';
     const [u, v] = layout.toZoneLocal('court', x, y);

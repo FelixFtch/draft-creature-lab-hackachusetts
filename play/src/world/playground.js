@@ -8,9 +8,11 @@ import { createFx } from './fx.js';
 import { createAudio } from './audio.js';
 import { createInput } from './input.js';
 import { createCameraRig } from './camera.js';
-import { createExplore } from './explore.js';
+import { createExplore, landmarkGoal } from './explore.js';
 import { createAutopilot } from './autopilot.js';
 import { zoneSuitability, signChips, capabilityMeta } from './capabilities.js';
+import { createTrial, createTrialDriver, createCommandSmoother, trialSpawn, laneById, TRIAL_PROTOCOL } from './terrain-lab.js';
+import terrainResults from './terrain-results.json';
 
 // The playground engine (contracts/world-api.md): one MuJoCo model of the
 // pilot's verified robot + an injected world, driven like a game character.
@@ -75,6 +77,10 @@ export async function createPlayground(container, options = {}) {
   let oops = null, paused = false, busy = false, frozen = false, last = 0, fpsEMA = 60, combo = 0, lastSparkAt = -10;
   let cmd = { vx: 0, wz: 0 }, inputState = { vx: 0, wz: 0, boost: false, active: false, source: null, camera: { x: 0, y: 0 } };
   let jumpPending = false, devDrive = null, devAuto = null, exploreCmd = null, wasAirborne = false, airSince = 0, hidden = false;
+  let trial = null, trialDriver = null, shakeUntil = 0;
+  const labRuns = [];
+  const locomotion = skills.has('drive') && !skills.has('walk') ? 'drive' : 'walk';
+  const measuredLab = (terrainResults.pilots ?? []).find(p => p.id === (meta.policyId && meta.kind === 'creature' ? meta.policyId : meta.kind)) ?? null;
   const pending = [], propResets = [];
   const weight = clamp((size?.mass ?? 10) / 10, .5, 4), dustScale = clamp(.6 + (size?.height ?? .4) * 1.1, .6, 2.2);
   const exclusive = fn => { if (busy) pending.push(fn); else fn(); };
@@ -85,6 +91,7 @@ export async function createPlayground(container, options = {}) {
     respawnAt: pad => respawnAt(pad, 'challenge'),
   });
   view.setSparks(game.sparks); view.setHoops(game.snapshot().hoop);
+  view.setLabResults(measuredLab, meta.short ?? meta.label);
 
   function onGameEvent(e) {
     if (e.type === 'spark') {
@@ -141,6 +148,8 @@ export async function createPlayground(container, options = {}) {
     context: () => `${session}:${disposed}:${hidden}`,
     getSimTime: () => sim.clock, getPosition: () => sim.robotPose().pos,
     isReady: () => !oops && !paused && !disposed,
+    // `jump` decisions run only on a validated jump skill; otherwise refused.
+    canJump: () => skills.has('jump'), jump: () => api.trigger('jump', { source: 'explore' }),
     onChange: state => emit({ type: 'explore', phase: state.phase, reason: state.reason, error: state.error, landmark: state.landmark, provider: state.provider, model: state.model, steps: state.completedSteps }),
     onReached: landmark => { game.onExplore({ reached: landmark.id }); fx.confetti(sim.robotPose().pos, 80); audio.cheer(); },
   });
@@ -168,7 +177,9 @@ export async function createPlayground(container, options = {}) {
   function startOops(reason, detail = null) {
     if (oops) return;
     const pos = sim.robotPose().pos;
-    oops = { reason, message: FALL_TEXT[reason] ?? 'Oops!', detail, pos, until: performance.now() + (reason === 'splash' ? 1300 : 2000) };
+    // In a Terrain Lab trial the creature goes back to its lane start.
+    const pad = trial && trial.state.lane ? trial.spawn : nearestPad(pos);
+    oops = { reason, message: FALL_TEXT[reason] ?? 'Oops!', detail, pos, pad, until: performance.now() + (reason === 'splash' ? 1300 : 2000) };
     cmd = { vx: 0, wz: 0 }; exploreCmd = null; devAuto = null; devDrive = null;
     explore.fail(`Creature stopped: ${oops.message}`);
     game.onFall(reason); audio.oops();
@@ -189,20 +200,26 @@ export async function createPlayground(container, options = {}) {
     if (inputState.active) {
       if (explore.isActive()) explore.cancel('manual');
       devAuto = null; devDrive = null; exploreCmd = null;
+      // Taking the stick during an automatic trial turns it into a driven run.
+      if (trialDriver) { trialDriver = null; if (trial) trial.state.driver = 'mixed'; }
       return fromNormalized(inputState, inputState.boost);
     }
     if (devAuto) { const c = devAuto.command(pose, bounds); if (devAuto.done) devAuto = null; return c; }
     if (devDrive) return devDrive;
+    if (trialDriver && trial && (trial.state.phase === 'armed' || trial.state.phase === 'running')) {
+      const out = trialDriver.step(pose, sim.clock);
+      if (out.jump && skills.has('jump')) jumpPending = true;
+      return out.command;
+    }
     if (exploreCmd && explore.moving) return exploreCmd;
     return [0, 0, 0];
   }
+  const smoother = createCommandSmoother(bounds, CONTROL_DT);
   function smoothCommand(target) {
-    const vmax = Math.max(Math.abs(bounds.vx[0]), Math.abs(bounds.vx[1]));
-    const dv = 1.8 * vmax * CONTROL_DT, dw = 4.5 * CONTROL_DT;
-    cmd.vx = clamp(cmd.vx + clamp(target[0] - cmd.vx, -dv, dv), bounds.vx[0], bounds.vx[1]);
-    cmd.wz = clamp(cmd.wz + clamp(target[2] - cmd.wz, -dw, dw), bounds.wz[0], bounds.wz[1]);
-    const vy = clamp(0, bounds.vy?.[0] ?? 0, bounds.vy?.[1] ?? 0);
-    return [cmd.vx, vy, cmd.wz];
+    if (cmd.vx === 0 && cmd.wz === 0) smoother.reset(); // after a respawn/pause
+    const out = smoother.step(target);
+    cmd.vx = out[0]; cmd.wz = out[2];
+    return out;
   }
 
   // ---------------------------------------------------------- control step
@@ -215,7 +232,7 @@ export async function createPlayground(container, options = {}) {
     }
     if (oops) {
       if (oops.reason === 'tumble' || oops.reason === 'void') { const r = sim.passiveStep(); if (r.unstable) oops.reason = 'unstable'; }
-      if (performance.now() >= oops.until) respawnAt(nearestPad(oops.pos), 'fall');
+      if (performance.now() >= oops.until) respawnAt(oops.pad ?? nearestPad(oops.pos), 'fall');
       return;
     }
     const pose = sim.robotPose();
@@ -247,8 +264,21 @@ export async function createPlayground(container, options = {}) {
     if (strays.length) { sim.resetProps(p => strays.includes(p)); game.onPropsReset(strays.map(p => p.kind)); }
     const fall = sim.checkFall(res.snap);
     game.update({ clock: sim.clock, pose: after, props: sim.propStates(), airborne: res.airborne, fallen: !!fall });
+    if (trial && (trial.state.phase === 'armed' || trial.state.phase === 'running'))
+      for (const e of trial.update({ clock: sim.clock, pose: after, ground: sim.terrain.groundHeight(after.pos[0], after.pos[1]), fall })) onTrialEvent(e);
     explore.advance(sim.clock);
     if (fall) startOops(fall, res.snap?.error ?? null);
+  }
+  function onTrialEvent(e) {
+    const p = sim.robotPose().pos;
+    if (e.phase === 'grade') audio.chime(3, toThree(p).toArray());
+    if (e.phase === 'passed') { fx.confetti([p[0], p[1], p[2] + .3], 120); audio.cheer(toThree(p).toArray()); }
+    if (e.phase === 'passed' || e.phase === 'failed') {
+      trialDriver = null;
+      labRuns.push(trial.snapshot()); if (labRuns.length > 40) labRuns.shift();
+    }
+    game.onTrial(e);
+    emit(e);
   }
   // Physics runs on its own 50 Hz schedule, independent of rendering: a slow
   // GPU frame never slows the gait down, and catching up is capped so a
@@ -318,6 +348,11 @@ export async function createPlayground(container, options = {}) {
     if (gap > 0) fpsEMA = fpsEMA * .9 + Math.min(240, 1 / gap) * .1;
     inputState = paused ? { ...inputState, vx: 0, wz: 0, active: false } : input.read();
     creatureView.sync(sim.data); creatureView.update?.(dt);
+    // "No jump skill" feedback: a short sideways head-shake of the whole body view.
+    if (now < shakeUntil) {
+      const k = (shakeUntil - now) / 480, h = sim.robotPose().heading, a = Math.sin(now * .065) * .016 * k * (1 + (size?.height ?? .4));
+      creatureView.group.position.set(-Math.sin(h) * a, Math.cos(h) * a, 0);
+    } else if (creatureView.group.position.lengthSq() > 0) creatureView.group.position.set(0, 0, 0);
     view.syncProps(mujoco, sim.model, sim.data);
     const pose = sim.robotPose();
     rig.update(dt, robotForCamera(), inputState.camera);
@@ -334,17 +369,68 @@ export async function createPlayground(container, options = {}) {
   raf = requestAnimationFrame(frame);
   void physicsLoop();
 
+  // AI Explore goal presets. The environment judges completion (judge()),
+  // never the vision model; start = where the creature is placed first.
+  function explorePresets() {
+    const gap = laneById(layout, 'gap'), step = laneById(layout, 'step'), top = step.grades.at(-1);
+    const flag = layout.landmarks.find(l => l.id === 'yellow-flag'), getPos = () => sim.robotPose().pos;
+    return [
+      { id: 'flag-beyond-gap', title: 'Reach the yellow flag beyond the gap', zone: 'lab', start: trialSpawn(layout, gap, null, size),
+        instruction: 'You are on a raised catwalk. Get across the gaps in the catwalk and reach the yellow flag at the far end.',
+        goal: () => landmarkGoal(flag, getPos) },
+      { id: 'ball-into-goal', title: 'Push the ball into the goal', zone: 'court', start: { ...layout.pads.find(p => p.zone === 'court') },
+        instruction: 'Push the big red and white striped ball into the white goal.',
+        goal: () => { const g0 = game.goals; return { id: 'ball-into-goal', name: 'ball in the goal', judge: () => game.goals > g0 }; } },
+      { id: 'climb-platform', title: 'Climb onto the platform', zone: 'lab', start: trialSpawn(layout, step, null, size),
+        instruction: 'Climb the purple steps in front of you onto the highest platform.',
+        goal: () => ({ id: 'climb-platform', name: 'top platform', judge: () => {
+          const p = getPos(), [u, v] = layout.labLocal(p[0], p[1]);
+          return u >= top.at + .2 && Math.abs(v - step.v) < layout.lab.laneWidth / 2 && sim.terrain.groundHeight(p[0], p[1]) >= top.level - .01;
+        } }) },
+      ...layout.landmarks.filter(l => !l.lab).map(l => ({ id: `visit-${l.id}`, title: `Visit the ${l.name}`, zone: 'landmark', start: null,
+        instruction: `Go to the ${l.name}.`, goal: () => landmarkGoal(l, getPos) })),
+    ];
+  }
+
   // --------------------------------------------------------------- the API
   const api = {
     get layout() { return layout.id; },
     // Touch joystick: normalised stick values in [-1, 1]; send {0, 0} on release.
     setCommand(command) { input.setTouch(command ?? {}); },
-    trigger(skill) {
+    // One-shot skills. Jump fires only when the pilot lists a validated jump
+    // skill; otherwise the creature gives a small "no" shake and nothing moves.
+    trigger(skill, { source = 'user' } = {}) {
       if (skill !== 'jump') throw Error(`Unknown skill trigger: ${skill}`);
-      if (!skills.has('jump')) { emit({ type: 'skill-unavailable', skill: 'jump', message: `${meta.short ?? meta.label} has no trained jump skill yet` }); return false; }
+      if (!skills.has('jump')) {
+        shakeUntil = performance.now() + 480; audio.bonk();
+        emit({ type: 'skill-unavailable', skill: 'jump', source, message: `${meta.short ?? meta.label} has no validated jump skill` });
+        return false;
+      }
       if (oops || paused) return false;
-      jumpPending = true; emit({ type: 'jump', phase: 'requested' }); return true;
+      jumpPending = true; emit({ type: 'jump', phase: 'requested', source }); return true;
     },
+    // Terrain Lab: put the creature on a lane's start line (or just before
+    // one grade), or run a timed trial there. auto = the standard trial
+    // driver (fixed forward command + heading hold + jump trigger); taking
+    // the controls turns it into a driven run.
+    selectLane(laneId, { grade = null } = {}) {
+      const lane = laneById(layout, laneId), g = grade ? lane.grades.find(x => x.id === grade) : null;
+      if (grade && !g) throw Error(`Lane ${laneId} has no grade ${grade}`);
+      exclusive(() => { trial?.cancel(sim.clock); trialDriver = null; explore.cancel('lane'); respawnAt(trialSpawn(layout, lane, g, size), 'lane'); emit({ type: 'lane', lane: laneId, grade }); });
+    },
+    runTrial(laneId, { grade = null, auto = true } = {}) {
+      const lane = laneById(layout, laneId), g = grade ? lane.grades.find(x => x.id === grade) : null;
+      if (grade && !g) throw Error(`Lane ${laneId} has no grade ${grade}`);
+      exclusive(() => {
+        trial?.cancel(sim.clock); explore.cancel('trial');
+        const spawn = trialSpawn(layout, lane, g, size);
+        respawnAt(spawn, 'trial');
+        trial = createTrial(layout, { laneId, gradeId: grade, clock: sim.clock, size, speed: TRIAL_PROTOCOL.commandFraction * bounds.vx[1], driver: auto ? 'auto' : 'manual' });
+        trialDriver = auto ? createTrialDriver(layout, { laneId, bounds, size, canJump: skills.has('jump'), startClock: sim.clock }) : null;
+        emit({ type: 'trial', phase: 'armed', lane: laneId, grade, driver: auto ? 'auto' : 'manual' });
+      });
+    },
+    stopTrial() { exclusive(() => { if (trial && (trial.state.phase === 'armed' || trial.state.phase === 'running')) { trial.cancel(sim.clock); emit({ type: 'trial', phase: 'cancelled', lane: trial.state.lane, grade: trial.state.grade }); } trialDriver = null; }); },
     setCameraMode(mode) { rig.setMode(mode); },
     recenterCamera() { rig.recenter(); },
     setChallenge(id, opts) { exclusive(() => game.setChallenge(id, opts)); },
@@ -356,14 +442,30 @@ export async function createPlayground(container, options = {}) {
         const active = game.challenge; if (active && active.status !== 'locked') game.setChallenge(active.id, { teleport: false });
       });
     },
-    // Quick respawn at the nearest pad (R key).
-    respawn() { exclusive(() => { explore.cancel('respawn'); respawnAt(nearestPad(sim.robotPose().pos), 'respawn'); }); },
+    // Quick respawn at the nearest pad (R key); in a lab trial, its start.
+    respawn() {
+      exclusive(() => {
+        explore.cancel('respawn');
+        const pad = trial && (trial.state.phase === 'armed' || trial.state.phase === 'running') ? trial.spawn : nearestPad(sim.robotPose().pos);
+        if (trial && trial.state.phase !== 'passed' && trial.state.phase !== 'failed') { trial.cancel(sim.clock); trialDriver = null; }
+        respawnAt(pad, 'respawn');
+      });
+    },
     pause(value = true) {
       paused = !!value; if (paused) { cmd = { vx: 0, wz: 0 }; explore.cancel('paused'); input.clear(); }
       emit({ type: 'paused', paused });
     },
     setMuted(value) { audio.setMuted(value); emit({ type: 'muted', muted: !!value }); },
-    async startExplore(instruction, opts) { audio.unlock(); return explore.start(instruction, opts); },
+    // AI Explore. opts.preset picks a goal preset (see snapshot().explorePresets):
+    // the creature starts at the preset's start and the environment judges
+    // completion. Free text works too; a named landmark becomes the goal.
+    async startExplore(instruction, opts = {}) {
+      audio.unlock();
+      const preset = opts.preset ? explorePresets().find(p => p.id === opts.preset) : null;
+      if (opts.preset && !preset) throw Error(`Unknown AI Explore preset: ${opts.preset}`);
+      if (preset?.start) await new Promise(resolve => exclusive(() => { trial?.cancel(sim.clock); trialDriver = null; respawnAt(preset.start, 'explore'); resolve(); }));
+      return explore.start(instruction || preset?.instruction || '', { ...opts, goal: preset ? preset.goal() : null });
+    },
     stopExplore(reason = 'user') { explore.cancel(reason); },
     getExploreFrame: () => previewFrame,
     setLook(next) { creatureView.setLook(next); },
@@ -385,9 +487,20 @@ export async function createPlayground(container, options = {}) {
         command: { input: { vx: inputState.vx, wz: inputState.wz }, boost: inputState.boost, source: inputState.active ? inputState.source : devAuto || devDrive ? 'script' : exploreCmd ? 'explore' : null,
           actual: [cmd.vx, 0, cmd.wz], gamepad: inputState.gamepad ?? null },
         ...g,
-        skills: { walk: skills.has('walk'), jump: skills.has('jump') },
+        skills: { walk: skills.has('walk'), drive: skills.has('drive'), jump: skills.has('jump'), locomotion },
         camera: { mode: rig.mode, zoom: +rig.zoom.toFixed(2) },
         explore: explore.snapshot(),
+        explorePresets: explorePresets().map(p => ({ id: p.id, title: p.title, zone: p.zone, instruction: p.instruction, movesCreature: !!p.start })),
+        terrainLab: {
+          start: layout.lab.start, finish: layout.lab.finish, sprintMark: layout.lab.sprint, protocol: { ...TRIAL_PROTOCOL },
+          lanes: layout.lab.lanes.map(l => ({ id: l.id, title: l.title, accent: l.accent, pad: `lab-${l.id}`,
+            grades: l.grades.map(g => ({ id: g.id, label: g.label, kind: g.kind, value: g.value, unit: g.unit })) })),
+          trial: trial ? trial.snapshot() : null,
+          active: !!trial && (trial.state.phase === 'armed' || trial.state.phase === 'running'), autoDriver: !!trialDriver,
+          session: labRuns.map(r => ({ lane: r.lane, grade: r.grade, outcome: r.outcome, timeS: r.timeS, sprintS: r.sprintS, failure: r.failure, driver: r.driver })),
+          measured: measuredLab ? { createdAt: terrainResults.createdAt, source: terrainResults.source, protocol: terrainResults.protocol ?? null,
+            runs: measuredLab.runs, grades: measuredLab.grades, matrix: terrainResults.matrix?.[measuredLab.id] ?? null } : null,
+        },
         zones: layout.zones.map(z => ({ id: z.id, name: z.name, blurb: z.blurb, accent: z.accent, center: z.center, suitability: suitability[z.id] })),
         landmarks: layout.landmarks.map(l => {
           const dx = l.x - pose.pos[0], dy = l.y - pose.pos[1];

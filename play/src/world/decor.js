@@ -45,8 +45,9 @@ export function planDecor(layout, { density = 1 } = {}) {
   // Rocks around the shoreline, partly in the water.
   const shore = [];
   for (let i = 0; i < n(84); i++) {
-    const a = i / n(84) * Math.PI * 2 + rand() * .05, r = R + .05 + rand() * .45;
-    shore.push({ x: r * Math.cos(a), y: r * Math.sin(a), rot: rand() * 6.28, s: .55 + rand() * .9, t: rand() });
+    const a = i / n(84) * Math.PI * 2 + rand() * .05, r = R + .05 + rand() * .45, x = r * Math.cos(a), y = r * Math.sin(a);
+    if (layout.isLand && layout.lab) { const [u, v] = layout.labLocal(x, y); if (u > layout.lab.pier.u[0] - .8 && Math.abs(v) < layout.lab.pier.v[1] + .6) continue; }
+    shore.push({ x, y, rot: rand() * 6.28, s: .55 + rand() * .9, t: rand() });
   }
   const clouds = [];
   // Clouds frame the island from outside; none hang over the play area.

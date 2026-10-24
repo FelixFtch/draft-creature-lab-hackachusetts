@@ -232,6 +232,11 @@ export function createGame({ layout, terrain, pilot, size, storage = defaultStor
     if (result?.reached) { explore.reached = result.reached; award('explorer'); emit({ type: 'explore', phase: 'reached', landmark: result.reached }); }
   }
   function onTeleport() { lastPos = null; prevHoopSide.clear(); stepCrossing.clear(); hills.entered = false; }
+  // Terrain Lab trial events (from terrain-lab.js via the engine).
+  function onTrial(e) {
+    if ((e.phase === 'grade' || e.phase === 'passed') && e.grade === 'gap-50cm') award('gap-jumper');
+    if (e.phase === 'passed' && !e.grade) { award('lab-run'); if (active('lab')) challenge.progress = 1; }
+  }
 
   function snapshot() {
     const zoneCounts = {};
@@ -254,7 +259,7 @@ export function createGame({ layout, terrain, pilot, size, storage = defaultStor
   }
   function pick(def) { return { id: def.id, title: def.title, zone: def.zone, goal: def.goal, kind: def.kind, target: def.target }; }
 
-  return { update, setChallenge, onFall, onPropsReset, onExplore, onTeleport, snapshot, award,
-    get sparks() { return sparks; }, get challenge() { return challenge; }, get ballScoredAt() { return ballScoredAt; },
+  return { update, setChallenge, onFall, onPropsReset, onExplore, onTeleport, onTrial, snapshot, award,
+    get sparks() { return sparks; }, get challenge() { return challenge; }, get ballScoredAt() { return ballScoredAt; }, get goals() { return goals; },
     clearProgress() { all.creatures[creatureKey] = undefined; delete all.creatures[creatureKey]; persist(); } };
 }

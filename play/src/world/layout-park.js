@@ -325,9 +325,98 @@ for (const l of LANDMARKS) {
   sparks.push({ id: `landmark-${l.id}`, zone: 'landmark', x: round(9.5 * Math.cos(a)), y: round(9.5 * Math.sin(a)), hover: 0, tag: l.id });
 }
 
+// ------------------------------------------------------------- Terrain Lab
+// A test pier off the island's far side (behind the Steps). Five parallel
+// lanes share one start line (u = 0) and one finish line (u = 6 m); the flat
+// lane also has a 5 m sprint mark. Lab coordinates: u along the lanes from the
+// start line, v across (lane centres below). The physics floor is an infinite
+// plane at z = 0, so the gap lane is a raised catwalk (deck 0.6 m) whose gaps
+// drop to the floor: a real 0.6 m pit. Grades are absolute sizes.
+FRAMES.lab = zoneFrame(180);
+const SLOPE12 = { at: .9, run: 1.4 }, SLOPE20 = { at: 3.5, run: 1.0 };
+const slopeLevel1 = SLOPE12.run * Math.tan(12 * DEG), slopeLevel2 = slopeLevel1 + SLOPE20.run * Math.tan(20 * DEG);
+export const LAB = {
+  origin: 14.2, start: 0, sprint: 5, finish: 6, runUp: -1.6, end: 7.6, laneWidth: 1.4, spawnU: -1.15,
+  pier: { u: [-2.2, 7.9], v: [-4.0, 4.0] },
+  lanes: [
+    { id: 'flat', title: 'Flat sprint', v: 3.2, accent: '#7cc46a', finishLevel: 0,
+      grades: [{ id: 'sprint-5m', label: '5 m sprint', kind: 'sprint', value: 5, unit: 'm', from: -1.6, at: 0, clear: 5, level: 0 }] },
+    { id: 'rubble', title: 'Rubble', v: 1.6, accent: '#c9a26b', finishLevel: 0,
+      grades: [{ id: 'rubble-2-6cm', label: '2–6 cm rubble', kind: 'rubble', value: .06, unit: 'm', from: -1.6, at: .8, clear: 5.5, level: 0, min: .02, max: .06 }] },
+    { id: 'step', title: 'Step-up', v: 0, accent: '#9b8ce0', finishLevel: .36,
+      grades: [
+        { id: 'step-6cm', label: '6 cm step', kind: 'step', value: .06, unit: 'm', from: -1.6, at: 1.0, clear: 1.75, level: .06 },
+        { id: 'step-12cm', label: '12 cm step', kind: 'step', value: .12, unit: 'm', from: 1.0, at: 2.6, clear: 3.35, level: .18 },
+        { id: 'step-18cm', label: '18 cm step', kind: 'step', value: .18, unit: 'm', from: 2.6, at: 4.2, clear: 4.95, level: .36 }] },
+    { id: 'gap', title: 'Gap', v: -1.6, accent: '#f08a5d', deck: .6, finishLevel: .6,
+      grades: [
+        { id: 'gap-20cm', label: '0.20 m gap', kind: 'gap', value: .2, unit: 'm', from: -1.6, at: 1.0, clear: 1.8, level: .6 },
+        { id: 'gap-35cm', label: '0.35 m gap', kind: 'gap', value: .35, unit: 'm', from: 1.2, at: 2.7, clear: 3.65, level: .6 },
+        { id: 'gap-50cm', label: '0.50 m gap', kind: 'gap', value: .5, unit: 'm', from: 3.05, at: 4.5, clear: 5.6, level: .6 }] },
+    { id: 'slope', title: 'Slope', v: -3.2, accent: '#5aa9e6', finishLevel: round(slopeLevel2),
+      grades: [
+        { id: 'slope-12deg', label: '12° slope', kind: 'slope', value: 12, unit: 'deg', from: -1.6, at: SLOPE12.at, clear: 2.8, level: round(slopeLevel1) },
+        { id: 'slope-20deg', label: '20° slope', kind: 'slope', value: 20, unit: 'deg', from: 2.3, at: SLOPE20.at, clear: 5.0, level: round(slopeLevel2) }] },
+  ],
+};
+const labU = u => LAB.origin + u;
+export const labWorld = (u, v) => FRAMES.lab.toWorld(labU(u), v).map(x => round(x));
+export function labLocal(x, y) { const [u, v] = FRAMES.lab.toLocal(x, y); return [u - LAB.origin, v]; }
+{
+  const half = LAB.laneWidth / 2, laneBox = (lane, name, u0, u1, top, opts = {}) =>
+    box('lab', `${lane.id}_${name}`, labU((u0 + u1) / 2), lane.v, top / 2, (u1 - u0) / 2, half, top / 2, { surface: 'stone', role: 'lab', ...opts });
+  const [, rubble, step, gap, slope] = LAB.lanes;
+  // Step-up: nested levels (risers 6, 12, 18 cm).
+  step.grades.forEach((g, k) => laneBox(step, `level${k + 1}`, g.at, LAB.end, g.level, { color: ['#d9d1f4', '#bdb1ec', '#a192e3'][k], role: 'step' }));
+  // Gap: catwalk segments, deck 0.6 m; the gaps between them are the pit.
+  const segments = [[-1.8, gap.grades[0].at]];
+  gap.grades.forEach((g, k) => segments.push([g.at + g.value, k + 1 < gap.grades.length ? gap.grades[k + 1].at : LAB.end]));
+  gap.segments = segments.map(s => s.map(round));
+  segments.forEach(([u0, u1], k) => laneBox(gap, `deck${k}`, u0, u1, gap.deck, { color: '#e9e2d6', role: 'catwalk' }));
+  // Slope: 12° ramp, landing, 20° ramp, top.
+  ramp('lab', 'slope_ramp12', labU(SLOPE12.at), slope.v, 0, SLOPE12.run, LAB.laneWidth, slopeLevel1, { color: '#cfe6f6' });
+  laneBox(slope, 'landing', SLOPE12.at + SLOPE12.run, SLOPE20.at, slopeLevel1, { color: '#b5d9f2', role: 'plateau' });
+  ramp('lab', 'slope_ramp20', labU(SLOPE20.at), slope.v, 0, SLOPE20.run, LAB.laneWidth, slopeLevel2 - slopeLevel1, { color: '#9ccbee', base: slopeLevel1 });
+  laneBox(slope, 'top', SLOPE20.at + SLOPE20.run, LAB.end, slopeLevel2, { color: '#86bfe9', role: 'plateau' });
+  // Rubble: deterministic scatter of 2-6 cm static blocks across the lane.
+  let seed = 9091; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const g = rubble.grades[0];
+  for (let i = 0; i < 64; i++) {
+    const u = g.at + .05 + rnd() * (4.4 - .1), v = rubble.v + (rnd() * 2 - 1) * (half - .08), h = g.min + rnd() * (g.max - g.min);
+    const hx = .03 + rnd() * .045, hy = .03 + rnd() * .045, [x, y] = FRAMES.lab.toWorld(labU(u), v);
+    statics.push({ name: `world_lab_rubble_${i}`, zone: 'lab', type: 'box', pos: r5([x, y, h / 2]), quat: r5(yawQuat(rnd() * Math.PI)),
+      size: r5([hx, hy, h / 2]), surface: 'stone', color: ['#b9b0a2', '#a89f90', '#c7bfb1', '#9d9486'][i % 4], walkable: true, role: 'rubble' });
+  }
+  // Lane pads: lane select spawns the creature here, facing the course.
+  for (const lane of LAB.lanes) {
+    const [x, y] = FRAMES.lab.toWorld(labU(LAB.spawnU), lane.v);
+    pads.push({ id: `lab-${lane.id}`, zone: 'lab', lane: lane.id, x: round(x), y: round(y), yaw: round(FRAMES.lab.angle) });
+  }
+}
+// Is (x, y) above solid ground (island or pier)? Off it is the sea.
+export function isLand(x, y) {
+  if (Math.hypot(x, y) <= ISLAND_RADIUS + .05) return true;
+  const [u, v] = labLocal(x, y);
+  return u >= LAB.pier.u[0] && u <= LAB.pier.u[1] && Math.abs(v) <= LAB.pier.v[1];
+}
+// Lab hazards for a creature root at world (x, y, z): the gap pit.
+export function labHazard(x, y, z) {
+  const [u, v] = labLocal(x, y), gap = LAB.lanes.find(l => l.id === 'gap');
+  if (Math.abs(v - gap.v) <= LAB.laneWidth / 2 + .15 && u > gap.segments[0][0] && u < LAB.end && z < gap.deck + .05) return 'pit';
+  return null;
+}
+// The yellow goal flag stands on the catwalk beyond the widest gap (visual
+// only, never physical): an AI Explore target that needs the gaps crossed.
+{
+  const gap = LAB.lanes.find(l => l.id === 'gap'), [x, y] = labWorld(6.9, gap.v + .45);
+  LAB.flag = { x, y, z: gap.deck, reach: .8 };
+  LANDMARKS.push({ id: 'yellow-flag', name: 'yellow flag', color: '#ffd23f', shape: 'flag', x, y, z: gap.deck, yaw: round(FRAMES.lab.angle + Math.PI),
+    reach: .8, minZ: gap.deck + .1, aliases: ['yellow flag', 'flag beyond the gap', 'goal flag'], lab: true });
+}
+
 // --------------------------------------------------------- pads and signs
 // Respawn pads: the hub plus one at every zone entrance (facing the zone).
-pads.push({ id: 'hub', zone: 'hub', x: 0, y: 0, yaw: 0 });
+pads.unshift({ id: 'hub', zone: 'hub', x: 0, y: 0, yaw: 0 });
 for (const [zone, u] of [['court', 5.85], ['hills', 3.4], ['plateau', 3.0], ['steps', 3.4], ['jump', 3.4], ['blocks', 3.4]]) {
   const [x, y] = FRAMES[zone].toWorld(u, 0);
   pads.push({ id: zone, zone, x: round(x), y: round(y), yaw: round(FRAMES[zone].angle) });
@@ -342,6 +431,8 @@ export const ZONES = [
   { id: 'steps', name: 'Steps', blurb: 'Baby, medium and giant stairs side by side.', accent: '#b9a8e8', angle: 180, u: [3.9, 9.7], v: [-2.15, 2.3], sign: [3.15, -1.0] },
   { id: 'jump', name: 'Jump Garden', blurb: 'Stepping stones, a gap and hoops for jumpers.', accent: '#f39ac0', angle: 240, u: [3.9, 8.7], v: [-2.6, 2.3], sign: [3.15, -1.0] },
   { id: 'blocks', name: 'Block Yard', blurb: 'Topple the dominoes, crash the crates.', accent: '#ff9f43', angle: 300, u: [3.9, 8.2], v: [-2.9, 1.6], sign: [3.15, -1.0] },
+  { id: 'lab', name: 'Terrain Lab', blurb: 'Sprint, rubble, step-ups, gaps over a pit, and slopes: same start, same finish.', accent: '#5aa9e6',
+    angle: 180, u: [LAB.origin + LAB.pier.u[0], LAB.origin + LAB.pier.u[1]], v: [...LAB.pier.v], sign: [11.75, 1.55] },
 ].map(z => {
   const f = FRAMES[z.id], uc = (z.u[0] + z.u[1]) / 2, vc = (z.v[0] + z.v[1]) / 2, [x, y] = f.toWorld(uc, vc);
   const [sx, sy] = f.toWorld(...z.sign);
@@ -370,7 +461,8 @@ export const fromZoneLocal = (zone, u, v) => FRAMES[zone].toWorld(u, v);
 // Ground decals (painted into the ground texture; never physical).
 export const PATHS = [
   ...[0, 60, 120, 180, 240, 300].map(a => ({ kind: 'spoke', angle: a, r0: HUB_RADIUS - .2, r1: a === 0 ? 1.4 : 4.0, width: .9 })),
-  ...LANDMARKS.map(l => ({ kind: 'trail', angle: l.angle, r0: HUB_RADIUS, r1: 9.9, width: .55 })),
+  ...LANDMARKS.filter(l => l.angle !== undefined).map(l => ({ kind: 'trail', angle: l.angle, r0: HUB_RADIUS, r1: 9.9, width: .55 })),
+  { kind: 'spoke', angle: 180, r0: 9.75, r1: LAB.origin + LAB.pier.u[0] + .4, width: 1.2 }, // boardwalk to the Terrain Lab
 ];
 
 // Challenges. `requires` lists skills the pilot must have; otherwise locked.
@@ -384,6 +476,7 @@ export const CHALLENGES = [
   { id: 'dominoes', title: 'Domino Rally', zone: 'blocks', requires: [], goal: 'Topple all 9 dominoes', kind: 'dominoes', target: BLOCKS.domino.count },
   { id: 'hoop', title: 'Hoop Jump', zone: 'jump', requires: ['jump'], goal: 'Jump through a hoop', kind: 'hoop', target: 1 },
   { id: 'explore', title: 'AI Explorer', zone: 'landmark', requires: [], goal: 'Let AI Explore steer you to a landmark', kind: 'explore', target: 1 },
+  { id: 'lab', title: 'Lab Run', zone: 'lab', requires: [], goal: 'Run any Terrain Lab lane from the start line to the finish line', kind: 'lab', target: 1 },
   { id: 'all-sparks', title: 'Spark Collector', zone: 'park', requires: [], goal: `Collect all ${sparks.length} sparks in the park`, kind: 'sparks', sparkTag: null, target: sparks.length },
 ];
 
@@ -405,14 +498,16 @@ export const STICKERS = [
   { id: 'wanderer', title: 'Wanderer', blurb: 'Walked 50 metres.' },
   { id: 'oops', title: 'Oops!', blurb: 'Took a tumble. It happens to everyone.' },
   { id: 'splash', title: 'Splash!', blurb: 'Tried to swim. Robots sink.' },
+  { id: 'lab-run', title: 'Lab Run', blurb: 'Finished a Terrain Lab lane.' },
+  { id: 'gap-jumper', title: 'Gap Jumper', blurb: 'Crossed the 0.50 m gap.' },
 ];
 
 export const PARK = Object.freeze({
   id: PARK_ID, name: 'Creature Park', islandRadius: ISLAND_RADIUS, hubRadius: HUB_RADIUS,
   spawn: { x: 0, y: 0, yaw: 0 }, pads, zones: ZONES, statics, props, hfields, sparks, hoops, signs, lanes,
   landmarks: LANDMARKS, paths: PATHS, challenges: CHALLENGES, stickers: STICKERS,
-  court: COURT, plateau: PLATEAU, summit: SUMMIT, terrace: TERRACE, steps: STEPS, jump: JUMP, blocks: BLOCKS, hills: HILLS,
-  zoneAt, toZoneLocal, fromZoneLocal,
+  court: COURT, plateau: PLATEAU, summit: SUMMIT, terrace: TERRACE, steps: STEPS, jump: JUMP, blocks: BLOCKS, hills: HILLS, lab: LAB,
+  zoneAt, toZoneLocal, fromZoneLocal, isLand, labLocal, labWorld, labHazard,
 });
 
 export const LAYOUTS = { park: PARK };
