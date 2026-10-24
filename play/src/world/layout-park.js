@@ -250,7 +250,7 @@ export const JUMP = {
     hoops.push({ id: `hoop-${i + 1}`, zone: 'jump', x: round(x), y: round(y), yaw: round(FRAMES.jump.angle) });
   }
   spark('jump', 1, 4.9, 0, { tag: 'stone' }); spark('jump', 2, 7.6, 0, { tag: 'stone' }); spark('jump', 3, 8.2, 1.6, { tag: 'hoops' });
-  lane('jump', 'stone-1', 'First stepping stone (8 cm)', [3.6, 0], [4.9, 0], { goal: 'stone_1' });
+  lane('jump', 'stone-1', `First stepping stone (${Math.round(JUMP.stones[0].h * 100)} cm)`, [3.6, 0], [4.9, 0], { stone: 'stone_1' });
 }
 
 // ------------------------------------------------------------- Block Yard
@@ -349,11 +349,16 @@ export const ZONES = [
   return { ...z, center: [round(x), round(y)], radius: round(Math.hypot((z.u[1] - z.u[0]) / 2, (z.v[1] - z.v[0]) / 2)) };
 });
 
-// Which zone contains world point (x, y)? Hub and the outer ring are zones too.
+// Which zone contains world point (x, y)? Each zone owns the 60° wedge around
+// its axis (Meadow and Ball Court split the forward wedge by distance), so
+// the answer is unambiguous. Hub, shore and trails are reported too.
 export function zoneAt(x, y) {
   const r = Math.hypot(x, y);
   if (r < HUB_RADIUS) return 'hub';
+  const a = Math.atan2(y, x);
   for (const z of ZONES) {
+    const off = Math.atan2(Math.sin(a - z.angle * DEG), Math.cos(a - z.angle * DEG));
+    if (Math.abs(off) > 30 * DEG) continue;
     const [u, v] = FRAMES[z.id].toLocal(x, y);
     if (u >= z.u[0] && u <= z.u[1] && v >= z.v[0] && v <= z.v[1]) return z.id;
   }
