@@ -97,6 +97,17 @@ class TinkerModelTests(unittest.TestCase):
         self.assertNotIn("quadruped", design)
         self.assertEqual(design["multileg"]["upperLeg"], 0.2)
 
+    def test_sloppy_small_model_output_is_repaired(self):
+        value = {"reply": "**Meet Dot!** A ladybug bot.", "look": "ladybird", "suggestions": "Make it red, Add wings",
+                 "design": {"name": "Dot", "bodyPlan": "multileg", "multileg": {"leg_count": "6", "arrangement": "Bilateral"}}}
+        t, _ = tinker([value])
+        result = chat(t, "a ladybug")
+        acts = actions(result)
+        self.assertEqual(acts["design"]["design"]["multileg"], {"legCount": 6, "arrangement": "bilateral"})
+        self.assertEqual(acts["look"]["look"]["theme"], "ladybug")
+        self.assertEqual(result["suggestions"], ["Make it red", "Add wings"])
+        self.assertEqual(result["reply"], "Meet Dot! A ladybug bot.")
+
     def test_retry_with_validation_errors_then_success(self):
         t, transport = tinker(["I think a frog would be lovely!", GOOD])
         result = chat(t)

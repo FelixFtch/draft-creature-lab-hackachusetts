@@ -77,6 +77,9 @@ def clean_text(value, limit):
     if not isinstance(value, str):
         return ""
     value = re.sub(r"<think>.*?</think>", "", value, flags=re.S | re.I)
+    # Replies are shown as plain text: drop light markdown a model may add.
+    value = re.sub(r"(\*\*|__|`)", "", value)
+    value = re.sub(r"(?m)^\s{0,3}#{1,6}\s+", "", value)
     value = re.sub(r"[ \t]+", " ", value).strip()
     value = re.sub(r"\n{3,}", "\n\n", value)
     if len(value) > limit:

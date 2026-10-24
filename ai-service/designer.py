@@ -19,6 +19,7 @@ import re
 import threading
 
 from design_rules import design_rules, enforce
+import looks
 from modeljson import clean_text, extract_json_object
 from offline_designer import DRAFT_LINE, MODEL as OFFLINE_MODEL, OfflineDesigner, StateView
 from providers import ProviderError, message_content
@@ -305,6 +306,12 @@ class Tinker:
                     look_value = embedded_look
         elif design_value not in (None, False, {}):
             errors.append('"design" must be an object or null.')
+        if isinstance(look_value, str) and look_value.strip():
+            # A small model may answer with just a theme name ("ladybug").
+            key = looks.ALIASES.get(look_value.strip().lower())
+            look_value = looks.theme_look(key) if key else None
+            if key:
+                repairs.append(f"look \"{key}\" expanded from the theme name")
         if isinstance(look_value, dict) and look_value:
             look, notes = self.normalise_look(look_value, view.look)
             repairs += notes
@@ -318,6 +325,8 @@ class Tinker:
                 proposal["reply"] = reply + " (It needs a validated walking policy for this body first.)"
         suggestions = []
         raw = parsed.get("suggestions")
+        if isinstance(raw, str):
+            raw = re.split(r"[;,\n]", raw)
         for item in raw if isinstance(raw, list) else []:
             item = clean_text(item, MAX_SUGGESTION_CHARS)
             if item and item not in suggestions:
