@@ -65,8 +65,9 @@ Other options:
 - `--skip-smoke` writes the config without sending the test image.
 
 Note: the plain `qwen3-vl:2b`, `:4b` and `:8b` tags point at the thinking variants, which answer slower. That is why
-the script uses the `-instruct` tags. For Qwen3.5, the service sends `reasoning_effort: "none"`, which turns thinking
-off in Ollama.
+the script uses the `-instruct` tags. For models that report a thinking capability (such as Qwen3.5), the script
+writes `"reasoning_effort": "none"` into the config, and Ollama then answers without thinking. If you configure by
+hand, add it yourself.
 
 To set things up by hand instead:
 
