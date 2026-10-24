@@ -1,6 +1,6 @@
 """Unit tests for the creature_gym pipeline (run with the training venv).
 
-    cd training && ../.venv-train/bin/python -m unittest discover -s creature_gym/tests -v
+    cd training && ../.venv-train/bin/python -m unittest discover -s creature_gym/tests -t . -v
 """
 from __future__ import annotations
 
@@ -171,6 +171,48 @@ class EnvAndPPOTest(unittest.TestCase):
         with torch.no_grad():
             scale = float(model.policy_mean(torch.from_numpy(samples)).abs().max())
         self.assertLess(verify_onnx(model, data, samples, tolerance=1e-5), 1e-5 * max(1.0, scale))
+
+
+class EvaluationScoringTest(unittest.TestCase):
+    """Scoring logic on synthetic samples (no simulation)."""
+
+    def sample(self, t, vel, pos, yaw=0.0, touch=(50.0, 0.0), feet=(0.0, 0.05), fall=False):
+        return {'t': t, 'mode': 'walk', 'vel': np.array(vel), 'pos': np.array(pos), 'yaw': yaw, 'tilt': 0.05,
+                'heightAboveFeet': 0.4, 'touch': np.array(touch), 'feetZ': np.array(feet), 'fall': fall}
+
+    def test_schedule_lookup(self):
+        from creature_gym.evaluate import schedule_command
+        rows = [[0, 0, 0, 0], [2, 0.5, 0, 0], [5, 0, 0, 0.3]]
+        self.assertEqual(schedule_command(rows, 0.0), [0, 0, 0])
+        self.assertEqual(schedule_command(rows, 2.0), [0.5, 0, 0])
+        self.assertEqual(schedule_command(rows, 9.0), [0, 0, 0.3])
+
+    def test_forward_row_criteria(self):
+        from creature_gym.evaluate import score_walk_row
+        sc = {'name': 'forward', 'durationS': 0.1, 'measureFromS': 0.0, 'schedule': [[0, 1.0, 0, 0]],
+              'criteria': {'minVxFraction': 0.5, 'maxAbsWz': 0.1}}
+        start = self.sample(0, [0, 0, 0], [0, 0, 0.4])
+        good = [self.sample(0.02 * (k + 1), [0.8, 0, 0.02], [0.016 * (k + 1), 0, 0.4]) for k in range(5)]
+        row = score_walk_row(sc, {'samples': good, 'error': None, 'start': start}, {'contactThresholdN': 10})
+        self.assertTrue(row['pass'])
+        curving = [self.sample(0.02 * (k + 1), [0.8, 0, 0.3], [0.016 * (k + 1), 0, 0.4]) for k in range(5)]
+        row = score_walk_row(sc, {'samples': curving, 'error': None, 'start': start}, {'contactThresholdN': 10})
+        self.assertFalse(row['pass'])                      # yaw-rate limit catches a curving "forward"
+        fell = good[:3] + [self.sample(0.08, [0.8, 0, 0], [0.06, 0, 0.1], fall=True)]
+        row = score_walk_row(sc, {'samples': fell, 'error': None, 'start': start}, {'contactThresholdN': 10})
+        self.assertFalse(row['pass'])
+        self.assertTrue(row['fall'])
+
+    def test_gait_stats(self):
+        from creature_gym.evaluate import gait_stats
+        samples = [self.sample(0.02 * (k + 1), [0, 0, 0], [0, 0, 0.4],
+                               touch=(50.0 if k % 10 < 5 else 0.0, 50.0), feet=(0.0 if k % 10 < 5 else 0.06, 0.0))
+                   for k in range(100)]
+        stats = gait_stats(samples, 0.0, 10.0)
+        self.assertAlmostEqual(stats['dutyFactor'][0], 0.5, places=2)
+        self.assertEqual(stats['dutyFactor'][1], 1.0)
+        self.assertAlmostEqual(stats['touchdownsPerS'][0], 4.5, places=1)   # 9 touchdowns in 2 s
+        self.assertAlmostEqual(stats['peakFootClearanceM'][0], 0.06)
 
 
 class ResumeEquivalenceTest(unittest.TestCase):

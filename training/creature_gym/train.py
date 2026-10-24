@@ -146,7 +146,7 @@ def main(argv: list[str] | None = None) -> int:
     torch.set_num_threads(max(1, args.torch_threads or min(threads, 4)))
     body = load_body(args.body)
     target = int(args.steps or BUDGETS[args.skill][args.budget])
-    machine = machine_info(threads)
+    machine = dict(machine_info(threads), torchThreads=torch.get_num_threads())
     progress_path = out / 'progress.json'
     ckpt_path = work / 'checkpoint.pt'
     summary = {'iteration': 0, 'env_steps': 0, 'steps_per_s': 0.0, 'mean_reward': None, 'done': False,
