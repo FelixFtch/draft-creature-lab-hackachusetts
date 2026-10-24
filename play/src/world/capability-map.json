@@ -1,0 +1,283 @@
+{
+  "schema": "world-capability/1",
+  "layout": "park",
+  "generatedAt": "2026-10-24T20:47:48.598Z",
+  "source": "qa/world-park-validation.json",
+  "method": "Deterministic headless rollouts of the exact browser modules (MuJoCo WASM + ONNX Runtime Web), steered by a proportional waypoint driver; torso collisions on; world visible to height scans. One rollout per lane.",
+  "pilots": {
+    "legacy-cheetah": {
+      "label": "Draft Cheetah",
+      "policySha256": "3832f34a2ed6a852c12cd4f7c1acbee3516f816e61ab7ef8ec1a3544291cfe67",
+      "controllerSha256": "420667f517974eeb3e939b80a375ec60de65f9550fd8011e538722bec6b9ff36",
+      "zones": {
+        "meadow": {
+          "level": "great",
+          "note": "Flat lawn: walked it end to end (0.507 m/s).",
+          "lanes": [
+            {
+              "id": "flat",
+              "title": "Meadow (flat)",
+              "pass": true,
+              "reason": "arrived",
+              "seconds": 10.7,
+              "progress": 0.946
+            }
+          ]
+        },
+        "court": {
+          "level": "great",
+          "note": "Pushed the ball into the goal in 10 s.",
+          "lanes": [
+            {
+              "id": "ball",
+              "title": "Ball push",
+              "pass": true,
+              "reason": "goal",
+              "seconds": 10.38,
+              "progress": null
+            }
+          ]
+        },
+        "hills": {
+          "level": "great",
+          "note": "Crossed both the gentle swells and the bumpy lane.",
+          "lanes": [
+            {
+              "id": "hills-gentle",
+              "title": "Gentle swells",
+              "pass": true,
+              "reason": "arrived",
+              "seconds": 13.58,
+              "progress": 0.958
+            },
+            {
+              "id": "hills-bumpy",
+              "title": "Bumpy lane",
+              "pass": true,
+              "reason": "arrived",
+              "seconds": 14,
+              "progress": 0.957
+            }
+          ]
+        },
+        "plateau": {
+          "level": "great",
+          "note": "Climbs the 2.22° ramp to the terrace and the 11.96° ramp to the summit.",
+          "lanes": [
+            {
+              "id": "ramp-terrace",
+              "title": "Gentle ramp (2.22°) to the terrace",
+              "pass": true,
+              "reason": "goal",
+              "seconds": 8.16,
+              "progress": 0.715
+            },
+            {
+              "id": "ramp-summit",
+              "title": "Steep ramp (11.96°) to the summit",
+              "pass": true,
+              "reason": "goal",
+              "seconds": 5.54,
+              "progress": 0.744
+            }
+          ]
+        },
+        "steps": {
+          "level": "great",
+          "note": "All stairs, up to 12 cm risers.",
+          "lanes": [
+            {
+              "id": "steps-baby",
+              "title": "Baby steps (1.4 cm)",
+              "pass": true,
+              "reason": "arrived",
+              "seconds": 11.56,
+              "progress": 0.949
+            },
+            {
+              "id": "steps-medium",
+              "title": "Medium steps (6 cm)",
+              "pass": true,
+              "reason": "arrived",
+              "seconds": 10.92,
+              "progress": 0.947
+            },
+            {
+              "id": "steps-giant",
+              "title": "Giant steps (12 cm)",
+              "pass": true,
+              "reason": "arrived",
+              "seconds": 10.98,
+              "progress": 0.943
+            }
+          ]
+        },
+        "blocks": {
+          "level": "great",
+          "note": "Toppled 9/9 dominoes in one push.",
+          "lanes": [
+            {
+              "id": "dominoes",
+              "title": "Domino push",
+              "pass": true,
+              "reason": "arrived",
+              "seconds": 6.08,
+              "progress": 0.89
+            }
+          ]
+        },
+        "jump": {
+          "level": "needs-jump",
+          "note": "Built for a trained jump skill. Walking onto the first 6 cm stone: OK.",
+          "lanes": [
+            {
+              "id": "stone-1",
+              "title": "First stepping stone (6 cm)",
+              "pass": true,
+              "reason": "goal",
+              "seconds": 2.9,
+              "progress": 0.617
+            }
+          ]
+        }
+      }
+    },
+    "legacy-flower": {
+      "label": "Flower crawler",
+      "policySha256": "3364db3b53d5195abc0725b3eb9924eabcb4ae390bd588bd542494700bc08abf",
+      "controllerSha256": "533ab4b8414e6e02da1c449096c4f9714281b0f6361e6c981d9d892915069487",
+      "zones": {
+        "meadow": {
+          "level": "great",
+          "note": "Flat lawn: walked it end to end (0.322 m/s).",
+          "lanes": [
+            {
+              "id": "flat",
+              "title": "Meadow (flat)",
+              "pass": true,
+              "reason": "arrived",
+              "seconds": 16.24,
+              "progress": 0.943
+            }
+          ]
+        },
+        "court": {
+          "level": "great",
+          "note": "Pushed the ball into the goal in 18 s.",
+          "lanes": [
+            {
+              "id": "ball",
+              "title": "Ball push",
+              "pass": true,
+              "reason": "goal",
+              "seconds": 18.04,
+              "progress": null
+            }
+          ]
+        },
+        "hills": {
+          "level": "ok",
+          "note": "Gentle swells OK; bumpy lane too rough (stalled at 13%).",
+          "lanes": [
+            {
+              "id": "hills-gentle",
+              "title": "Gentle swells",
+              "pass": true,
+              "reason": "arrived",
+              "seconds": 21.58,
+              "progress": 0.956
+            },
+            {
+              "id": "hills-bumpy",
+              "title": "Bumpy lane",
+              "pass": false,
+              "reason": "stuck",
+              "seconds": 15.76,
+              "progress": 0.128
+            }
+          ]
+        },
+        "plateau": {
+          "level": "ok",
+          "note": "Terrace OK (2.22° ramp); the 11.96° summit ramp is too steep.",
+          "lanes": [
+            {
+              "id": "ramp-terrace",
+              "title": "Gentle ramp (2.22°) to the terrace",
+              "pass": true,
+              "reason": "goal",
+              "seconds": 13.44,
+              "progress": 0.714
+            },
+            {
+              "id": "ramp-summit",
+              "title": "Steep ramp (11.96°) to the summit",
+              "pass": false,
+              "reason": "stuck",
+              "seconds": 15.36,
+              "progress": 0.19
+            }
+          ]
+        },
+        "steps": {
+          "level": "ok",
+          "note": "1.4 cm risers OK; 6 cm is too tall.",
+          "lanes": [
+            {
+              "id": "steps-baby",
+              "title": "Baby steps (1.4 cm)",
+              "pass": true,
+              "reason": "arrived",
+              "seconds": 17.92,
+              "progress": 0.948
+            },
+            {
+              "id": "steps-medium",
+              "title": "Medium steps (6 cm)",
+              "pass": false,
+              "reason": "stuck",
+              "seconds": 14.92,
+              "progress": 0.107
+            },
+            {
+              "id": "steps-giant",
+              "title": "Giant steps (12 cm)",
+              "pass": false,
+              "reason": "stuck",
+              "seconds": 14.7,
+              "progress": 0.117
+            }
+          ]
+        },
+        "blocks": {
+          "level": "great",
+          "note": "Toppled 9/9 dominoes in one push.",
+          "lanes": [
+            {
+              "id": "dominoes",
+              "title": "Domino push",
+              "pass": true,
+              "reason": "arrived",
+              "seconds": 6.9,
+              "progress": 0.861
+            }
+          ]
+        },
+        "jump": {
+          "level": "needs-jump",
+          "note": "Built for a trained jump skill. Walking onto the first 6 cm stone: not possible.",
+          "lanes": [
+            {
+              "id": "stone-1",
+              "title": "First stepping stone (6 cm)",
+              "pass": false,
+              "reason": "stuck",
+              "seconds": 14.62,
+              "progress": 0.36
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1582 @@
+{
+  "createdAt": "2026-10-24T20:47:48.598Z",
+  "pass": true,
+  "scope": "Node CPU, production playground modules with MuJoCo WASM 3.11 and ONNX Runtime Web WASM; deterministic rollouts driven by a proportional waypoint driver (not a planner, not AI). Not a live-browser or real-robot test.",
+  "sources": {
+    "layout-park.js": "387643f6bb12ebf4fe44c31ccaff1dafcee20cf803dee29829d51d70bbb297b6",
+    "terrain.js": "532ba3768a54df0828c614deccaf853d4a554ce9c2fc163852fc4933304dbf80",
+    "inject.js": "2dc96f2da5b186719e6df37fc70cc67fdb77792e78128e8751cd109ac465743d",
+    "sim.js": "52f93ea38460e88c6ad81c7a4b4c8bc686208084157aa4e49efc0705be11841a",
+    "pilots.js": "9a4f27f27e97973d88a6e225193d049d2690d887515230dc07c2695055d3d336",
+    "game.js": "1ab5c3007c2476f643dacf1b83ef2c1b94201552c2e3b6f3f5a1da67bd9b7ff0",
+    "explore.js": "f865dba84095c103c24b051d038be0dc36ad98e7cddfede8b53cee8d09367b4a",
+    "autopilot.js": "838d72fc89dce03cf519a116f4a2002bed20487619abf49d434307370d0bb9da",
+    "cheetah-controller.js": "420667f517974eeb3e939b80a375ec60de65f9550fd8011e538722bec6b9ff36",
+    "flower-controller.js": "533ab4b8414e6e02da1c449096c4f9714281b0f6361e6c981d9d892915069487"
+  },
+  "legacyReports": {
+    "cheetah": {
+      "pass": true,
+      "createdAt": "2026-10-24T19:33:34.644Z",
+      "controllerSha256": "420667f517974eeb3e939b80a375ec60de65f9550fd8011e538722bec6b9ff36",
+      "matchesSource": true
+    },
+    "flower": {
+      "pass": true,
+      "createdAt": "2026-10-24T19:33:29.567Z",
+      "controllerSha256": "533ab4b8414e6e02da1c449096c4f9714281b0f6361e6c981d9d892915069487",
+      "matchesSource": true
+    }
+  },
+  "layout": {
+    "islandRadius": 12.5,
+    "zones": 7,
+    "statics": 49,
+    "props": 19,
+    "sparks": 33,
+    "landmarks": 6,
+    "lanes": [
+      "flat",
+      "ball",
+      "hills-gentle",
+      "hills-bumpy",
+      "ramp-terrace",
+      "ramp-summit",
+      "steps-baby",
+      "steps-medium",
+      "steps-giant",
+      "stone-1",
+      "dominoes"
+    ],
+    "plateau": {
+      "gentleDeg": 2.22,
+      "steepDeg": 11.96
+    },
+    "steps": {
+      "baby": {
+        "riserM": 0.014,
+        "count": 4
+      },
+      "medium": {
+        "riserM": 0.06,
+        "count": 3
+      },
+      "giant": {
+        "riserM": 0.12,
+        "count": 2
+      }
+    },
+    "hills": 12
+  },
+  "compile": {
+    "legacy-flower": {
+      "nq": 158,
+      "nv": 138,
+      "nu": 18,
+      "ngeom": 137,
+      "nbody": 52,
+      "robotNq": 25,
+      "props": 19,
+      "keyframeQposLengths": [
+        158,
+        158
+      ],
+      "prefixOk": true,
+      "bodyIdsOk": true,
+      "geomIdsOk": true,
+      "propsAfter": true,
+      "compileAttachMs": 317,
+      "size": null
+    },
+    "legacy-cheetah": {
+      "nq": 152,
+      "nv": 132,
+      "nu": 12,
+      "ngeom": 123,
+      "nbody": 48,
+      "robotNq": 19,
+      "props": 19,
+      "keyframeQposLengths": [
+        152
+      ],
+      "prefixOk": true,
+      "bodyIdsOk": true,
+      "geomIdsOk": true,
+      "propsAfter": true,
+      "compileAttachMs": 232,
+      "size": null
+    }
+  },
+  "prefixGuards": {
+    "worldAppended": "accepted",
+    "propBeforeRobot": "rejected: Flower root free joint must be the first joint of the model",
+    "extraActuator": "rejected: Flower control requires the exported nq=25, nv=24, nu=18 training model",
+    "cheetah": {
+      "worldAppended": "accepted",
+      "propBeforeRobot": "rejected: Cheetah root free joint must be the first joint of the model"
+    }
+  },
+  "terrainConsistency": {
+    "legacy-flower": {
+      "samples": 2878,
+      "worstAbsErrM": 0.005
+    },
+    "legacy-cheetah": {
+      "samples": 2878,
+      "worstAbsErrM": 0.005
+    }
+  },
+  "propPreservation": {
+    "legacy-flower": {
+      "kept": true,
+      "ballBefore": [
+        9.234,
+        0,
+        0.32
+      ],
+      "ballAfter": [
+        9.234,
+        0,
+        0.32
+      ],
+      "robotSpawn": [
+        5.85,
+        0,
+        0.274
+      ],
+      "pad": {
+        "id": "court",
+        "zone": "court",
+        "x": 5.85,
+        "y": 0,
+        "yaw": 0
+      }
+    },
+    "legacy-cheetah": {
+      "kept": true,
+      "ballBefore": [
+        9.234,
+        0,
+        0.32
+      ],
+      "ballAfter": [
+        9.234,
+        0,
+        0.32
+      ],
+      "robotSpawn": [
+        5.85,
+        0,
+        0.491
+      ],
+      "pad": {
+        "id": "court",
+        "zone": "court",
+        "x": 5.85,
+        "y": 0,
+        "yaw": 0
+      }
+    }
+  },
+  "standing": {
+    "legacy-flower": {
+      "fall": null,
+      "driftM": 0.037,
+      "msPerControlStep": 7.29
+    },
+    "legacy-cheetah": {
+      "fall": null,
+      "driftM": 0.042,
+      "msPerControlStep": 9.702
+    }
+  },
+  "lanes": {
+    "legacy-flower": [
+      {
+        "lane": "flat",
+        "success": true,
+        "reason": "arrived",
+        "fall": null,
+        "error": null,
+        "seconds": 16.24,
+        "steps": 812,
+        "progress": 0.943,
+        "maxTiltDeg": 1.7,
+        "meanSpeed": 0.322,
+        "peakZ": 0.283,
+        "end": [
+          5.304,
+          0.007,
+          0.28
+        ],
+        "headingErrorDeg": -1.6,
+        "title": "Meadow (flat)",
+        "zone": "meadow",
+        "wallSeconds": 3.414
+      },
+      {
+        "lane": "ball",
+        "success": true,
+        "reason": "goal",
+        "fall": null,
+        "seconds": 18.04,
+        "ballTowardGoalM": 2.962,
+        "ballEnd": [
+          10.962,
+          0.212,
+          0.32
+        ],
+        "title": "Ball push",
+        "zone": "court",
+        "wallSeconds": 4.421
+      },
+      {
+        "lane": "hills-gentle",
+        "success": true,
+        "reason": "arrived",
+        "fall": null,
+        "error": null,
+        "seconds": 21.58,
+        "steps": 1079,
+        "progress": 0.956,
+        "maxTiltDeg": 7.3,
+        "meanSpeed": 0.311,
+        "peakZ": 0.298,
+        "end": [
+          3.817,
+          9.348,
+          0.28
+        ],
+        "headingErrorDeg": -3.2,
+        "title": "Gentle swells",
+        "zone": "hills",
+        "wallSeconds": 5.555
+      },
+      {
+        "lane": "hills-bumpy",
+        "success": false,
+        "reason": "stuck",
+        "fall": null,
+        "error": null,
+        "seconds": 15.76,
+        "steps": 788,
+        "progress": 0.128,
+        "maxTiltDeg": 16.6,
+        "meanSpeed": 0.058,
+        "peakZ": 0.29,
+        "end": [
+          3.284,
+          3.226,
+          0.245
+        ],
+        "headingErrorDeg": 4.8,
+        "title": "Bumpy lane",
+        "zone": "hills",
+        "wallSeconds": 3.583
+      },
+      {
+        "lane": "ramp-terrace",
+        "success": true,
+        "reason": "goal",
+        "fall": null,
+        "error": null,
+        "seconds": 13.44,
+        "steps": 672,
+        "progress": 0.714,
+        "maxTiltDeg": 7.7,
+        "meanSpeed": 0.287,
+        "peakZ": 0.389,
+        "end": [
+          -2.527,
+          5.899,
+          0.389
+        ],
+        "headingErrorDeg": -1.7,
+        "title": "Gentle ramp (2.22°) to the terrace",
+        "zone": "plateau",
+        "wallSeconds": 3.5
+      },
+      {
+        "lane": "ramp-summit",
+        "success": false,
+        "reason": "stuck",
+        "fall": null,
+        "error": null,
+        "seconds": 15.36,
+        "steps": 768,
+        "progress": 0.19,
+        "maxTiltDeg": 17.8,
+        "meanSpeed": 0.042,
+        "peakZ": 0.293,
+        "end": [
+          -7.126,
+          5.224,
+          0.244
+        ],
+        "headingErrorDeg": 5,
+        "title": "Steep ramp (11.96°) to the summit",
+        "zone": "plateau",
+        "wallSeconds": 3.813
+      },
+      {
+        "lane": "steps-baby",
+        "success": true,
+        "reason": "arrived",
+        "fall": null,
+        "error": null,
+        "seconds": 17.92,
+        "steps": 896,
+        "progress": 0.948,
+        "maxTiltDeg": 7.3,
+        "meanSpeed": 0.317,
+        "peakZ": 0.337,
+        "end": [
+          -8.966,
+          -1.484,
+          0.278
+        ],
+        "headingErrorDeg": -4.9,
+        "title": "Baby steps (1.4 cm)",
+        "zone": "steps",
+        "wallSeconds": 5.649
+      },
+      {
+        "lane": "steps-medium",
+        "success": false,
+        "reason": "stuck",
+        "fall": null,
+        "error": null,
+        "seconds": 14.92,
+        "steps": 746,
+        "progress": 0.107,
+        "maxTiltDeg": 15.6,
+        "meanSpeed": 0.041,
+        "peakZ": 0.29,
+        "end": [
+          -4.177,
+          -0.051,
+          0.241
+        ],
+        "headingErrorDeg": 2.2,
+        "title": "Medium steps (6 cm)",
+        "zone": "steps",
+        "wallSeconds": 3.814
+      },
+      {
+        "lane": "steps-giant",
+        "success": false,
+        "reason": "stuck",
+        "fall": null,
+        "error": null,
+        "seconds": 14.7,
+        "steps": 735,
+        "progress": 0.117,
+        "maxTiltDeg": 4.7,
+        "meanSpeed": 0.041,
+        "peakZ": 0.291,
+        "end": [
+          -4.129,
+          1.319,
+          0.276
+        ],
+        "headingErrorDeg": -13.6,
+        "title": "Giant steps (12 cm)",
+        "zone": "steps",
+        "wallSeconds": 3.376
+      },
+      {
+        "lane": "stone-1",
+        "success": false,
+        "reason": "stuck",
+        "fall": null,
+        "error": null,
+        "seconds": 14.62,
+        "steps": 731,
+        "progress": 0.36,
+        "maxTiltDeg": 16,
+        "meanSpeed": 0.034,
+        "peakZ": 0.288,
+        "end": [
+          -1.988,
+          -3.548,
+          0.238
+        ],
+        "headingErrorDeg": 2.7,
+        "title": "First stepping stone (6 cm)",
+        "zone": "jump",
+        "wallSeconds": 4.501
+      },
+      {
+        "lane": "dominoes",
+        "success": true,
+        "reason": "arrived",
+        "fall": null,
+        "error": null,
+        "seconds": 6.9,
+        "steps": 345,
+        "progress": 0.861,
+        "maxTiltDeg": 4,
+        "meanSpeed": 0.306,
+        "peakZ": 0.286,
+        "end": [
+          3.652,
+          -4.483,
+          0.28
+        ],
+        "headingErrorDeg": -2.1,
+        "dominoesToppled": 9,
+        "title": "Domino push",
+        "zone": "blocks",
+        "wallSeconds": 3.372
+      }
+    ],
+    "legacy-cheetah": [
+      {
+        "lane": "flat",
+        "success": true,
+        "reason": "arrived",
+        "fall": null,
+        "error": null,
+        "seconds": 10.7,
+        "steps": 535,
+        "progress": 0.946,
+        "maxTiltDeg": 3.9,
+        "meanSpeed": 0.507,
+        "peakZ": 0.491,
+        "end": [
+          5.317,
+          -0.012,
+          0.452
+        ],
+        "headingErrorDeg": 2.3,
+        "title": "Meadow (flat)",
+        "zone": "meadow",
+        "wallSeconds": 6.853
+      },
+      {
+        "lane": "ball",
+        "success": true,
+        "reason": "goal",
+        "fall": null,
+        "seconds": 10.38,
+        "ballTowardGoalM": 2.961,
+        "ballEnd": [
+          10.961,
+          -0.306,
+          0.32
+        ],
+        "title": "Ball push",
+        "zone": "court",
+        "wallSeconds": 5.539
+      },
+      {
+        "lane": "hills-gentle",
+        "success": true,
+        "reason": "arrived",
+        "fall": null,
+        "error": null,
+        "seconds": 13.58,
+        "steps": 679,
+        "progress": 0.958,
+        "maxTiltDeg": 3.9,
+        "meanSpeed": 0.51,
+        "peakZ": 0.491,
+        "end": [
+          3.854,
+          9.34,
+          0.453
+        ],
+        "headingErrorDeg": 4.1,
+        "title": "Gentle swells",
+        "zone": "hills",
+        "wallSeconds": 9.19
+      },
+      {
+        "lane": "hills-bumpy",
+        "success": true,
+        "reason": "arrived",
+        "fall": null,
+        "error": null,
+        "seconds": 14,
+        "steps": 700,
+        "progress": 0.957,
+        "maxTiltDeg": 5.9,
+        "meanSpeed": 0.493,
+        "peakZ": 0.515,
+        "end": [
+          6.12,
+          8.029,
+          0.449
+        ],
+        "headingErrorDeg": -4.7,
+        "title": "Bumpy lane",
+        "zone": "hills",
+        "wallSeconds": 8.976
+      },
+      {
+        "lane": "ramp-terrace",
+        "success": true,
+        "reason": "goal",
+        "fall": null,
+        "error": null,
+        "seconds": 8.16,
+        "steps": 408,
+        "progress": 0.715,
+        "maxTiltDeg": 4,
+        "meanSpeed": 0.499,
+        "peakZ": 0.567,
+        "end": [
+          -2.508,
+          5.911,
+          0.56
+        ],
+        "headingErrorDeg": -0.1,
+        "title": "Gentle ramp (2.22°) to the terrace",
+        "zone": "plateau",
+        "wallSeconds": 4.254
+      },
+      {
+        "lane": "ramp-summit",
+        "success": true,
+        "reason": "goal",
+        "fall": null,
+        "error": null,
+        "seconds": 5.54,
+        "steps": 277,
+        "progress": 0.744,
+        "maxTiltDeg": 9.7,
+        "meanSpeed": 0.525,
+        "peakZ": 0.777,
+        "end": [
+          -5.57,
+          6.211,
+          0.777
+        ],
+        "headingErrorDeg": -5.1,
+        "title": "Steep ramp (11.96°) to the summit",
+        "zone": "plateau",
+        "wallSeconds": 2.384
+      },
+      {
+        "lane": "steps-baby",
+        "success": true,
+        "reason": "arrived",
+        "fall": null,
+        "error": null,
+        "seconds": 11.56,
+        "steps": 578,
+        "progress": 0.949,
+        "maxTiltDeg": 4.1,
+        "meanSpeed": 0.509,
+        "peakZ": 0.515,
+        "end": [
+          -8.974,
+          -1.41,
+          0.453
+        ],
+        "headingErrorDeg": 4.5,
+        "title": "Baby steps (1.4 cm)",
+        "zone": "steps",
+        "wallSeconds": 4.952
+      },
+      {
+        "lane": "steps-medium",
+        "success": true,
+        "reason": "arrived",
+        "fall": null,
+        "error": null,
+        "seconds": 10.92,
+        "steps": 546,
+        "progress": 0.947,
+        "maxTiltDeg": 8.3,
+        "meanSpeed": 0.516,
+        "peakZ": 0.638,
+        "end": [
+          -8.716,
+          0.006,
+          0.461
+        ],
+        "headingErrorDeg": -0.6,
+        "title": "Medium steps (6 cm)",
+        "zone": "steps",
+        "wallSeconds": 3.804
+      },
+      {
+        "lane": "steps-giant",
+        "success": true,
+        "reason": "arrived",
+        "fall": null,
+        "error": null,
+        "seconds": 10.98,
+        "steps": 549,
+        "progress": 0.943,
+        "maxTiltDeg": 15.4,
+        "meanSpeed": 0.453,
+        "peakZ": 0.698,
+        "end": [
+          -8.125,
+          1.324,
+          0.459
+        ],
+        "headingErrorDeg": -12.8,
+        "title": "Giant steps (12 cm)",
+        "zone": "steps",
+        "wallSeconds": 3.302
+      },
+      {
+        "lane": "stone-1",
+        "success": true,
+        "reason": "goal",
+        "fall": null,
+        "error": null,
+        "seconds": 2.9,
+        "steps": 145,
+        "progress": 0.617,
+        "maxTiltDeg": 3.9,
+        "meanSpeed": 0.422,
+        "peakZ": 0.491,
+        "end": [
+          -2.214,
+          -3.805,
+          0.487
+        ],
+        "headingErrorDeg": 0.8,
+        "title": "First stepping stone (6 cm)",
+        "zone": "jump",
+        "wallSeconds": 0.969
+      },
+      {
+        "lane": "dominoes",
+        "success": true,
+        "reason": "arrived",
+        "fall": null,
+        "error": null,
+        "seconds": 6.08,
+        "steps": 304,
+        "progress": 0.89,
+        "maxTiltDeg": 12.8,
+        "meanSpeed": 0.368,
+        "peakZ": 0.527,
+        "end": [
+          3.818,
+          -4.457,
+          0.494
+        ],
+        "headingErrorDeg": -26.6,
+        "dominoesToppled": 9,
+        "title": "Domino push",
+        "zone": "blocks",
+        "wallSeconds": 3.76
+      }
+    ]
+  },
+  "collisionModes": {
+    "legacy-flower": {
+      "feet": {
+        "flat": {
+          "success": true,
+          "reason": "arrived",
+          "meanSpeed": 0.322,
+          "maxTiltDeg": 1.7,
+          "dominoesToppled": null,
+          "ballTowardGoalM": null
+        },
+        "hills-gentle": {
+          "success": true,
+          "reason": "arrived",
+          "meanSpeed": 0.311,
+          "maxTiltDeg": 7.3,
+          "dominoesToppled": null,
+          "ballTowardGoalM": null
+        },
+        "dominoes": {
+          "success": true,
+          "reason": "arrived",
+          "meanSpeed": 0.306,
+          "maxTiltDeg": 4,
+          "dominoesToppled": 9,
+          "ballTowardGoalM": null
+        },
+        "ball": {
+          "success": true,
+          "reason": "goal",
+          "meanSpeed": null,
+          "maxTiltDeg": null,
+          "dominoesToppled": null,
+          "ballTowardGoalM": 2.962
+        },
+        "wall": {
+          "torsoCentreBeyondWallFaceM": -0.476,
+          "fall": null
+        }
+      },
+      "torso": {
+        "flat": {
+          "success": true,
+          "reason": "arrived",
+          "meanSpeed": 0.322,
+          "maxTiltDeg": 1.7,
+          "dominoesToppled": null,
+          "ballTowardGoalM": null
+        },
+        "hills-gentle": {
+          "success": true,
+          "reason": "arrived",
+          "meanSpeed": 0.311,
+          "maxTiltDeg": 7.3,
+          "dominoesToppled": null,
+          "ballTowardGoalM": null
+        },
+        "dominoes": {
+          "success": true,
+          "reason": "arrived",
+          "meanSpeed": 0.306,
+          "maxTiltDeg": 4,
+          "dominoesToppled": 9,
+          "ballTowardGoalM": null
+        },
+        "ball": {
+          "success": true,
+          "reason": "goal",
+          "meanSpeed": null,
+          "maxTiltDeg": null,
+          "dominoesToppled": null,
+          "ballTowardGoalM": 2.962
+        },
+        "wall": {
+          "torsoCentreBeyondWallFaceM": -0.476,
+          "fall": null
+        }
+      }
+    },
+    "legacy-cheetah": {
+      "feet": {
+        "flat": {
+          "success": true,
+          "reason": "arrived",
+          "meanSpeed": 0.507,
+          "maxTiltDeg": 3.9,
+          "dominoesToppled": null,
+          "ballTowardGoalM": null
+        },
+        "hills-gentle": {
+          "success": true,
+          "reason": "arrived",
+          "meanSpeed": 0.51,
+          "maxTiltDeg": 3.9,
+          "dominoesToppled": null,
+          "ballTowardGoalM": null
+        },
+        "dominoes": {
+          "success": true,
+          "reason": "arrived",
+          "meanSpeed": 0.391,
+          "maxTiltDeg": 10,
+          "dominoesToppled": 9,
+          "ballTowardGoalM": null
+        },
+        "ball": {
+          "success": true,
+          "reason": "goal",
+          "meanSpeed": null,
+          "maxTiltDeg": null,
+          "dominoesToppled": null,
+          "ballTowardGoalM": 2.982
+        },
+        "wall": {
+          "torsoCentreBeyondWallFaceM": -0.468,
+          "fall": null
+        }
+      },
+      "torso": {
+        "flat": {
+          "success": true,
+          "reason": "arrived",
+          "meanSpeed": 0.507,
+          "maxTiltDeg": 3.9,
+          "dominoesToppled": null,
+          "ballTowardGoalM": null
+        },
+        "hills-gentle": {
+          "success": true,
+          "reason": "arrived",
+          "meanSpeed": 0.51,
+          "maxTiltDeg": 3.9,
+          "dominoesToppled": null,
+          "ballTowardGoalM": null
+        },
+        "dominoes": {
+          "success": true,
+          "reason": "arrived",
+          "meanSpeed": 0.368,
+          "maxTiltDeg": 12.8,
+          "dominoesToppled": 9,
+          "ballTowardGoalM": null
+        },
+        "ball": {
+          "success": true,
+          "reason": "goal",
+          "meanSpeed": null,
+          "maxTiltDeg": null,
+          "dominoesToppled": null,
+          "ballTowardGoalM": 2.961
+        },
+        "wall": {
+          "torsoCentreBeyondWallFaceM": -0.407,
+          "fall": null
+        }
+      }
+    }
+  },
+  "scanVisibility": {
+    "group0": {
+      "ramp-summit": {
+        "success": true,
+        "reason": "goal",
+        "progress": 0.744
+      },
+      "steps-medium": {
+        "success": true,
+        "reason": "arrived",
+        "progress": 0.947
+      },
+      "steps-giant": {
+        "success": true,
+        "reason": "arrived",
+        "progress": 0.943
+      },
+      "hills-bumpy": {
+        "success": true,
+        "reason": "arrived",
+        "progress": 0.957
+      }
+    },
+    "group3": {
+      "ramp-summit": {
+        "success": false,
+        "reason": "stuck",
+        "progress": 0.311
+      },
+      "steps-medium": {
+        "success": false,
+        "reason": "stuck",
+        "progress": 0.241
+      },
+      "steps-giant": {
+        "success": false,
+        "reason": "stuck",
+        "progress": 0.153
+      },
+      "hills-bumpy": {
+        "success": true,
+        "reason": "arrived",
+        "progress": 0.958
+      }
+    },
+    "decision": "World geoms stay in geom group 0: the Cheetah policy relies on its height scan to climb."
+  },
+  "gameLogic": {
+    "legacy-flower:fallDetection": {
+      "tipped": "tumble",
+      "sea": "splash"
+    },
+    "legacy-cheetah:fallDetection": {
+      "tipped": "tumble",
+      "sea": "splash"
+    },
+    "cheetah": {
+      "goals": 1,
+      "toppled": 1,
+      "sprint": {
+        "status": "complete",
+        "progress": 8,
+        "timeMs": 17320
+      },
+      "stairs": true,
+      "stickers": [
+        "goal",
+        "first-spark",
+        "meadow-sweep",
+        "stair-hop",
+        "terrace",
+        "summit"
+      ],
+      "eventTypes": [
+        "goal",
+        "sticker",
+        "topple",
+        "challenge",
+        "zone",
+        "spark",
+        "stairs"
+      ]
+    }
+  },
+  "explore": {
+    "local": "accepted",
+    "cloud": "accepted",
+    "unknownSource": "rejected: Invalid or stale visual decision",
+    "staleObservation": "rejected: Invalid or stale visual decision",
+    "tooLong": "rejected: Visual action exceeds the movement contract",
+    "fasterThanContract": "rejected: Visual action exceeds the movement contract",
+    "cloudProvider": "dashscope/qwen2.5-vl",
+    "landmarkFromText": "red-ball",
+    "flow": {
+      "firstPhase": "moving",
+      "applied": true,
+      "landmark": "red-ball",
+      "provider": "dashscope",
+      "model": "qwen2.5-vl",
+      "endPhase": "done",
+      "reason": "reached_landmark",
+      "reached": "red-ball"
+    }
+  },
+  "capability": {
+    "schema": "world-capability/1",
+    "layout": "park",
+    "generatedAt": "2026-10-24T20:47:48.598Z",
+    "source": "qa/world-park-validation.json",
+    "method": "Deterministic headless rollouts of the exact browser modules (MuJoCo WASM + ONNX Runtime Web), steered by a proportional waypoint driver; torso collisions on; world visible to height scans. One rollout per lane.",
+    "pilots": {
+      "legacy-cheetah": {
+        "label": "Draft Cheetah",
+        "policySha256": "3832f34a2ed6a852c12cd4f7c1acbee3516f816e61ab7ef8ec1a3544291cfe67",
+        "controllerSha256": "420667f517974eeb3e939b80a375ec60de65f9550fd8011e538722bec6b9ff36",
+        "zones": {
+          "meadow": {
+            "level": "great",
+            "note": "Flat lawn: walked it end to end (0.507 m/s).",
+            "lanes": [
+              {
+                "id": "flat",
+                "title": "Meadow (flat)",
+                "pass": true,
+                "reason": "arrived",
+                "seconds": 10.7,
+                "progress": 0.946
+              }
+            ]
+          },
+          "court": {
+            "level": "great",
+            "note": "Pushed the ball into the goal in 10 s.",
+            "lanes": [
+              {
+                "id": "ball",
+                "title": "Ball push",
+                "pass": true,
+                "reason": "goal",
+                "seconds": 10.38,
+                "progress": null
+              }
+            ]
+          },
+          "hills": {
+            "level": "great",
+            "note": "Crossed both the gentle swells and the bumpy lane.",
+            "lanes": [
+              {
+                "id": "hills-gentle",
+                "title": "Gentle swells",
+                "pass": true,
+                "reason": "arrived",
+                "seconds": 13.58,
+                "progress": 0.958
+              },
+              {
+                "id": "hills-bumpy",
+                "title": "Bumpy lane",
+                "pass": true,
+                "reason": "arrived",
+                "seconds": 14,
+                "progress": 0.957
+              }
+            ]
+          },
+          "plateau": {
+            "level": "great",
+            "note": "Climbs the 2.22° ramp to the terrace and the 11.96° ramp to the summit.",
+            "lanes": [
+              {
+                "id": "ramp-terrace",
+                "title": "Gentle ramp (2.22°) to the terrace",
+                "pass": true,
+                "reason": "goal",
+                "seconds": 8.16,
+                "progress": 0.715
+              },
+              {
+                "id": "ramp-summit",
+                "title": "Steep ramp (11.96°) to the summit",
+                "pass": true,
+                "reason": "goal",
+                "seconds": 5.54,
+                "progress": 0.744
+              }
+            ]
+          },
+          "steps": {
+            "level": "great",
+            "note": "All stairs, up to 12 cm risers.",
+            "lanes": [
+              {
+                "id": "steps-baby",
+                "title": "Baby steps (1.4 cm)",
+                "pass": true,
+                "reason": "arrived",
+                "seconds": 11.56,
+                "progress": 0.949
+              },
+              {
+                "id": "steps-medium",
+                "title": "Medium steps (6 cm)",
+                "pass": true,
+                "reason": "arrived",
+                "seconds": 10.92,
+                "progress": 0.947
+              },
+              {
+                "id": "steps-giant",
+                "title": "Giant steps (12 cm)",
+                "pass": true,
+                "reason": "arrived",
+                "seconds": 10.98,
+                "progress": 0.943
+              }
+            ]
+          },
+          "blocks": {
+            "level": "great",
+            "note": "Toppled 9/9 dominoes in one push.",
+            "lanes": [
+              {
+                "id": "dominoes",
+                "title": "Domino push",
+                "pass": true,
+                "reason": "arrived",
+                "seconds": 6.08,
+                "progress": 0.89
+              }
+            ]
+          },
+          "jump": {
+            "level": "needs-jump",
+            "note": "Built for a trained jump skill. Walking onto the first 6 cm stone: OK.",
+            "lanes": [
+              {
+                "id": "stone-1",
+                "title": "First stepping stone (6 cm)",
+                "pass": true,
+                "reason": "goal",
+                "seconds": 2.9,
+                "progress": 0.617
+              }
+            ]
+          }
+        }
+      },
+      "legacy-flower": {
+        "label": "Flower crawler",
+        "policySha256": "3364db3b53d5195abc0725b3eb9924eabcb4ae390bd588bd542494700bc08abf",
+        "controllerSha256": "533ab4b8414e6e02da1c449096c4f9714281b0f6361e6c981d9d892915069487",
+        "zones": {
+          "meadow": {
+            "level": "great",
+            "note": "Flat lawn: walked it end to end (0.322 m/s).",
+            "lanes": [
+              {
+                "id": "flat",
+                "title": "Meadow (flat)",
+                "pass": true,
+                "reason": "arrived",
+                "seconds": 16.24,
+                "progress": 0.943
+              }
+            ]
+          },
+          "court": {
+            "level": "great",
+            "note": "Pushed the ball into the goal in 18 s.",
+            "lanes": [
+              {
+                "id": "ball",
+                "title": "Ball push",
+                "pass": true,
+                "reason": "goal",
+                "seconds": 18.04,
+                "progress": null
+              }
+            ]
+          },
+          "hills": {
+            "level": "ok",
+            "note": "Gentle swells OK; bumpy lane too rough (stalled at 13%).",
+            "lanes": [
+              {
+                "id": "hills-gentle",
+                "title": "Gentle swells",
+                "pass": true,
+                "reason": "arrived",
+                "seconds": 21.58,
+                "progress": 0.956
+              },
+              {
+                "id": "hills-bumpy",
+                "title": "Bumpy lane",
+                "pass": false,
+                "reason": "stuck",
+                "seconds": 15.76,
+                "progress": 0.128
+              }
+            ]
+          },
+          "plateau": {
+            "level": "ok",
+            "note": "Terrace OK (2.22° ramp); the 11.96° summit ramp is too steep.",
+            "lanes": [
+              {
+                "id": "ramp-terrace",
+                "title": "Gentle ramp (2.22°) to the terrace",
+                "pass": true,
+                "reason": "goal",
+                "seconds": 13.44,
+                "progress": 0.714
+              },
+              {
+                "id": "ramp-summit",
+                "title": "Steep ramp (11.96°) to the summit",
+                "pass": false,
+                "reason": "stuck",
+                "seconds": 15.36,
+                "progress": 0.19
+              }
+            ]
+          },
+          "steps": {
+            "level": "ok",
+            "note": "1.4 cm risers OK; 6 cm is too tall.",
+            "lanes": [
+              {
+                "id": "steps-baby",
+                "title": "Baby steps (1.4 cm)",
+                "pass": true,
+                "reason": "arrived",
+                "seconds": 17.92,
+                "progress": 0.948
+              },
+              {
+                "id": "steps-medium",
+                "title": "Medium steps (6 cm)",
+                "pass": false,
+                "reason": "stuck",
+                "seconds": 14.92,
+                "progress": 0.107
+              },
+              {
+                "id": "steps-giant",
+                "title": "Giant steps (12 cm)",
+                "pass": false,
+                "reason": "stuck",
+                "seconds": 14.7,
+                "progress": 0.117
+              }
+            ]
+          },
+          "blocks": {
+            "level": "great",
+            "note": "Toppled 9/9 dominoes in one push.",
+            "lanes": [
+              {
+                "id": "dominoes",
+                "title": "Domino push",
+                "pass": true,
+                "reason": "arrived",
+                "seconds": 6.9,
+                "progress": 0.861
+              }
+            ]
+          },
+          "jump": {
+            "level": "needs-jump",
+            "note": "Built for a trained jump skill. Walking onto the first 6 cm stone: not possible.",
+            "lanes": [
+              {
+                "id": "stone-1",
+                "title": "First stepping stone (6 cm)",
+                "pass": false,
+                "reason": "stuck",
+                "seconds": 14.62,
+                "progress": 0.36
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "checks": [
+    {
+      "name": "legacy cheetah controller report passes and matches the edited controller",
+      "pass": true,
+      "detail": {
+        "pass": true,
+        "createdAt": "2026-10-24T19:33:34.644Z",
+        "controllerSha256": "420667f517974eeb3e939b80a375ec60de65f9550fd8011e538722bec6b9ff36",
+        "matchesSource": true
+      }
+    },
+    {
+      "name": "legacy flower controller report passes and matches the edited controller",
+      "pass": true,
+      "detail": {
+        "pass": true,
+        "createdAt": "2026-10-24T19:33:29.567Z",
+        "controllerSha256": "533ab4b8414e6e02da1c449096c4f9714281b0f6361e6c981d9d892915069487",
+        "matchesSource": true
+      }
+    },
+    {
+      "name": "all world geoms, props and sparks are on the island",
+      "pass": true,
+      "detail": {
+        "outside": []
+      }
+    },
+    {
+      "name": "every zone feature lies inside its own zone",
+      "pass": true,
+      "detail": {
+        "strays": []
+      }
+    },
+    {
+      "name": "legacy-flower: park compiles, robot qpos/qvel prefix and ids unchanged, props after robot",
+      "pass": true,
+      "detail": {
+        "nq": 158,
+        "nv": 138,
+        "nu": 18,
+        "ngeom": 137,
+        "nbody": 52,
+        "robotNq": 25,
+        "props": 19,
+        "keyframeQposLengths": [
+          158,
+          158
+        ],
+        "prefixOk": true,
+        "bodyIdsOk": true,
+        "geomIdsOk": true,
+        "propsAfter": true,
+        "compileAttachMs": 317,
+        "size": null
+      }
+    },
+    {
+      "name": "legacy-flower: analytic terrain matches physics within 6 mm",
+      "pass": true,
+      "detail": {
+        "samples": 2878,
+        "worstAbsErrM": 0.005
+      }
+    },
+    {
+      "name": "legacy-flower: robot reset preserves prop state and spawns at the pad",
+      "pass": true,
+      "detail": {
+        "kept": true,
+        "ballBefore": [
+          9.234,
+          0,
+          0.32
+        ],
+        "ballAfter": [
+          9.234,
+          0,
+          0.32
+        ],
+        "robotSpawn": [
+          5.85,
+          0,
+          0.274
+        ],
+        "pad": {
+          "id": "court",
+          "zone": "court",
+          "x": 5.85,
+          "y": 0,
+          "yaw": 0
+        }
+      }
+    },
+    {
+      "name": "legacy-flower: stands 6 s in the park without falling",
+      "pass": true,
+      "detail": {
+        "fall": null,
+        "driftM": 0.037,
+        "msPerControlStep": 7.29
+      }
+    },
+    {
+      "name": "legacy-flower: fall detection reports tumble and splash",
+      "pass": true,
+      "detail": {
+        "tipped": "tumble",
+        "sea": "splash"
+      }
+    },
+    {
+      "name": "legacy-cheetah: park compiles, robot qpos/qvel prefix and ids unchanged, props after robot",
+      "pass": true,
+      "detail": {
+        "nq": 152,
+        "nv": 132,
+        "nu": 12,
+        "ngeom": 123,
+        "nbody": 48,
+        "robotNq": 19,
+        "props": 19,
+        "keyframeQposLengths": [
+          152
+        ],
+        "prefixOk": true,
+        "bodyIdsOk": true,
+        "geomIdsOk": true,
+        "propsAfter": true,
+        "compileAttachMs": 232,
+        "size": null
+      }
+    },
+    {
+      "name": "legacy-cheetah: analytic terrain matches physics within 6 mm",
+      "pass": true,
+      "detail": {
+        "samples": 2878,
+        "worstAbsErrM": 0.005
+      }
+    },
+    {
+      "name": "legacy-cheetah: robot reset preserves prop state and spawns at the pad",
+      "pass": true,
+      "detail": {
+        "kept": true,
+        "ballBefore": [
+          9.234,
+          0,
+          0.32
+        ],
+        "ballAfter": [
+          9.234,
+          0,
+          0.32
+        ],
+        "robotSpawn": [
+          5.85,
+          0,
+          0.491
+        ],
+        "pad": {
+          "id": "court",
+          "zone": "court",
+          "x": 5.85,
+          "y": 0,
+          "yaw": 0
+        }
+      }
+    },
+    {
+      "name": "legacy-cheetah: stands 6 s in the park without falling",
+      "pass": true,
+      "detail": {
+        "fall": null,
+        "driftM": 0.042,
+        "msPerControlStep": 9.702
+      }
+    },
+    {
+      "name": "legacy-cheetah: fall detection reports tumble and splash",
+      "pass": true,
+      "detail": {
+        "tipped": "tumble",
+        "sea": "splash"
+      }
+    },
+    {
+      "name": "relaxed Flower guard accepts world-after-robot and rejects a shifted robot or extra actuator",
+      "pass": true,
+      "detail": {
+        "worldAppended": "accepted",
+        "propBeforeRobot": "rejected: Flower root free joint must be the first joint of the model",
+        "extraActuator": "rejected: Flower control requires the exported nq=25, nv=24, nu=18 training model",
+        "cheetah": {
+          "worldAppended": "accepted",
+          "propBeforeRobot": "rejected: Cheetah root free joint must be the first joint of the model"
+        }
+      }
+    },
+    {
+      "name": "relaxed Cheetah guard accepts world-after-robot and rejects a shifted robot",
+      "pass": true,
+      "detail": {
+        "worldAppended": "accepted",
+        "propBeforeRobot": "rejected: Cheetah root free joint must be the first joint of the model"
+      }
+    },
+    {
+      "name": "legacy-flower: torso collisions keep open-ground gait (flat lane unchanged)",
+      "pass": true,
+      "detail": {
+        "feet": {
+          "success": true,
+          "reason": "arrived",
+          "meanSpeed": 0.322,
+          "maxTiltDeg": 1.7,
+          "dominoesToppled": null,
+          "ballTowardGoalM": null
+        },
+        "torso": {
+          "success": true,
+          "reason": "arrived",
+          "meanSpeed": 0.322,
+          "maxTiltDeg": 1.7,
+          "dominoesToppled": null,
+          "ballTowardGoalM": null
+        }
+      }
+    },
+    {
+      "name": "legacy-cheetah: torso collisions keep open-ground gait (flat lane unchanged)",
+      "pass": true,
+      "detail": {
+        "feet": {
+          "success": true,
+          "reason": "arrived",
+          "meanSpeed": 0.507,
+          "maxTiltDeg": 3.9,
+          "dominoesToppled": null,
+          "ballTowardGoalM": null
+        },
+        "torso": {
+          "success": true,
+          "reason": "arrived",
+          "meanSpeed": 0.507,
+          "maxTiltDeg": 3.9,
+          "dominoesToppled": null,
+          "ballTowardGoalM": null
+        }
+      }
+    },
+    {
+      "name": "Cheetah: world visible to its height scan performs at least as well as hidden",
+      "pass": true,
+      "detail": {
+        "visible": 4,
+        "hidden": 1
+      }
+    },
+    {
+      "name": "game: goal, topple, spark sprint, stairs and summit are detected on real physics",
+      "pass": true,
+      "detail": {
+        "goals": 1,
+        "toppled": 1,
+        "sprint": {
+          "status": "complete",
+          "progress": 8,
+          "timeMs": 17320
+        },
+        "stairs": true,
+        "stickers": [
+          "goal",
+          "first-spark",
+          "meadow-sweep",
+          "stair-hop",
+          "terrace",
+          "summit"
+        ],
+        "eventTypes": [
+          "goal",
+          "sticker",
+          "topple",
+          "challenge",
+          "zone",
+          "spark",
+          "stairs"
+        ]
+      }
+    },
+    {
+      "name": "game: hoop challenge is locked without a trained jump skill",
+      "pass": true,
+      "detail": {
+        "reason": "Needs a trained jump skill"
+      }
+    },
+    {
+      "name": "AI Explore: accepts local/cloud provenance, rejects stale/unknown/out-of-contract, reports provider and reaches a landmark",
+      "pass": true,
+      "detail": {
+        "local": "accepted",
+        "cloud": "accepted",
+        "unknownSource": "rejected: Invalid or stale visual decision",
+        "staleObservation": "rejected: Invalid or stale visual decision",
+        "tooLong": "rejected: Visual action exceeds the movement contract",
+        "fasterThanContract": "rejected: Visual action exceeds the movement contract",
+        "cloudProvider": "dashscope/qwen2.5-vl",
+        "landmarkFromText": "red-ball",
+        "flow": {
+          "firstPhase": "moving",
+          "applied": true,
+          "landmark": "red-ball",
+          "provider": "dashscope",
+          "model": "qwen2.5-vl",
+          "endPhase": "done",
+          "reason": "reached_landmark",
+          "reached": "red-ball"
+        }
+      }
+    },
+    {
+      "name": "capability map written",
+      "pass": true,
+      "detail": {
+        "path": "play/src/world/capability-map.json",
+        "cheetah": {
+          "meadow": "great",
+          "court": "great",
+          "hills": "great",
+          "plateau": "great",
+          "steps": "great",
+          "blocks": "great",
+          "jump": "needs-jump"
+        },
+        "flower": {
+          "meadow": "great",
+          "court": "great",
+          "hills": "ok",
+          "plateau": "ok",
+          "steps": "ok",
+          "blocks": "great",
+          "jump": "needs-jump"
+        }
+      }
+    },
+    {
+      "name": "both legacy walkers can play every ground zone at least partly",
+      "pass": true,
+      "detail": {
+        "cheetah": 6,
+        "flower": 6
+      }
+    }
+  ],
+  "engines": {
+    "mujoco": "3.11.0",
+    "onnxruntime": {
+      "common": "1.27.0",
+      "web": "1.27.0"
+    }
+  }
+}

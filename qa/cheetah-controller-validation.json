@@ -1,5 +1,5 @@
 {
-  "createdAt": "2026-10-24T18:32:14.055Z",
+  "createdAt": "2026-10-24T19:33:34.644Z",
   "scope": "Node CPU, actual MuJoCo WASM and ONNX Runtime Web WASM; not a live browser test",
   "engines": {
     "nativeFixture": "MuJoCo 3.8.0 CPU with source float32 math",
@@ -11,7 +11,7 @@
   },
   "checkpointSha256": "2c38e5fb6463a1121546f60fa54d5c3cc0544561da84e1056d4c25623e0a045f",
   "policySha256": "3832f34a2ed6a852c12cd4f7c1acbee3516f816e61ab7ef8ec1a3544291cfe67",
-  "controllerSha256": "28a7a8f10e617b8d42bb7679a01a7b04c36856acf769530ed64a1d0570be81e3",
+  "controllerSha256": "420667f517974eeb3e939b80a375ec60de65f9550fd8011e538722bec6b9ff36",
   "modelParity": {
     "pass": true,
     "robotMass": 32.63809926450245,
@@ -2947,7 +2947,7 @@
         0.00021545140793455264,
         0.00019383925744628772
       ],
-      "wallSeconds": 0.5258323909999999
+      "wallSeconds": 1.869567749
     },
     {
       "name": "forward",
@@ -3075,7 +3075,7 @@
         0.09521326909837768,
         0.09309015636443636
       ],
-      "wallSeconds": 0.48442467899999997
+      "wallSeconds": 1.33365004
     },
     {
       "name": "turn_left",
@@ -3203,7 +3203,7 @@
         0.08648981933341705,
         0.10011781362030245
       ],
-      "wallSeconds": 0.48755144399999994
+      "wallSeconds": 1.2795248110000002
     },
     {
       "name": "forward_ui_max",
@@ -3331,7 +3331,7 @@
         0.09204767290113162,
         0.09283825959289205
       ],
-      "wallSeconds": 0.4691682800000001
+      "wallSeconds": 1.2148229820000005
     },
     {
       "name": "backward_ui_max",
@@ -3459,7 +3459,7 @@
         0.0922485097230808,
         0.10196362852993678
       ],
-      "wallSeconds": 0.4661273889999998
+      "wallSeconds": 1.2412466009999998
     },
     {
       "name": "turn_left_ui_max",
@@ -3587,7 +3587,7 @@
         0.09833134222916823,
         0.09900930633742482
       ],
-      "wallSeconds": 0.4667665430000002
+      "wallSeconds": 1.2060319879999997
     },
     {
       "name": "turn_right_ui_max",
@@ -3715,7 +3715,7 @@
         0.09559670414102145,
         0.10804719267479188
       ],
-      "wallSeconds": 0.465181634
+      "wallSeconds": 1.1395701769999995
     },
     {
       "name": "forward_left_combined",
@@ -3843,7 +3843,7 @@
         0.10445530888285443,
         0.09611764531474536
       ],
-      "wallSeconds": 0.4693125110000001
+      "wallSeconds": 1.2223339720000004
     }
   ],
   "lifecycle": {
