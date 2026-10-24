@@ -282,15 +282,15 @@ export function buildShell(look, info, { quality = 'high' } = {}) {
   } else if (kind === 'turtle') {
     parts.push({ name: 'carapace', slot: 'shellAccent', solid: capSolid(cap, seg) });
     // Flat-top hex lattice: columns 1.5 R apart, rows sqrt(3) R, odd columns offset.
-    const R = minAB * 0.36, plates = [];
-    const thickness = Math.max(0.004, minAB * 0.05);
-    for (let col = -10; col <= 10; col++) {
-      for (let row = -8; row <= 8; row++) {
+    const R = minAB * 0.27, plates = [];
+    const thickness = Math.max(0.004, minAB * 0.045);
+    for (let col = -14; col <= 14; col++) {
+      for (let row = -10; row <= 10; row++) {
         const x = cap.cx + col * 1.5 * R, y = cap.cy + (row + (Math.abs(col) % 2 ? 0.5 : 0)) * Math.sqrt(3) * R;
         const { rho } = seInverse(x - cap.cx, y - cap.cy, cap.a, cap.b, cap.n);
-        if (rho > 0.8) continue;
+        if (rho > 0.86) continue;
         const z = capZ(cap, x, y), nrm = capNormal(cap, x, y);
-        const r = R * 0.9 * (1 - 0.3 * rho * rho);
+        const r = R * 0.9 * (1 - 0.22 * rho * rho);
         const hex = Array.from({ length: 6 }, (_, k) => [r * Math.cos((k / 6) * TAU), r * Math.sin((k / 6) * TAU)]);
         const plate = prismSolid(hex, -thickness * 0.6, thickness * 0.55, 0.22);
         plates.push(place(plate, new THREE.Vector3(x, y, z), alignTo(nrm)));
@@ -371,24 +371,30 @@ export function buildShell(look, info, { quality = 'high' } = {}) {
     bands.concat(rivets).forEach(g => g.dispose());
   } else if (kind === 'fluffy') {
     parts.push({ name: 'base', slot: 'shell', solid: capSolid(cap, seg) });
+    // Puffs are flattened along the surface normal and never reach below the
+    // shell wall, so a printed fluffy shell still slips over the torso.
     const puffR = minAB * 0.24 * (0.9 + 0.2 * size), matrices = [];
     const area = Math.PI * cap.a * cap.b * 1.3, count = Math.min(hi ? 140 : 70, Math.max(24, Math.round((area / (Math.PI * puffR * puffR)) * 2.2)));
     const golden = Math.PI * (3 - Math.sqrt(5));
+    const puff = (p, nrm, r) => {
+      const hn = r * 0.62;
+      const center = p.clone().addScaledVector(nrm, hn - cap.t * 0.9);
+      matrices.push(new THREE.Matrix4().compose(center, alignTo(nrm, random() * TAU), new THREE.Vector3(r, r, hn)));
+    };
     for (let i = 0; i < count; i++) {
       const rho = Math.sqrt((i + 0.5) / count) * 0.96, th = i * golden;
-      const p = capPoint(cap, th, rho), nrm = capNormal(cap, p.x, p.y);
-      const r = puffR * (0.75 + 0.45 * random());
-      p.add(nrm.multiplyScalar(r * 0.3));
-      matrices.push(new THREE.Matrix4().compose(p, new THREE.Quaternion(), new THREE.Vector3(r, r, r * 0.9)));
+      const p = capPoint(cap, th, rho);
+      puff(p, capNormal(cap, p.x, p.y), puffR * (0.75 + 0.45 * random()));
     }
     const rimCount = Math.round((2 * Math.PI * Math.sqrt((cap.a * cap.a + cap.b * cap.b) / 2)) / (puffR * 1.1));
     for (let k = 0; k < rimCount; k++) {
-      const th = (k / rimCount) * TAU, [dx, dy] = seDir(th, cap.n), r = puffR * (0.62 + 0.25 * random());
-      const p = new THREE.Vector3(cap.cx + cap.a * dx * 0.98, cap.cy + cap.b * dy * 0.98, rimAt(cap, th) - cap.lip * 0.2);
-      matrices.push(new THREE.Matrix4().compose(p, new THREE.Quaternion(), new THREE.Vector3(r, r, r * 0.85)));
+      const th = (k / rimCount) * TAU, [dx, dy] = seDir(th, cap.n);
+      const out = new THREE.Vector3((cap.n / cap.a) * Math.sign(dx) * Math.abs(dx) ** (cap.n - 1), (cap.n / cap.b) * Math.sign(dy) * Math.abs(dy) ** (cap.n - 1), 0).normalize();
+      const p = new THREE.Vector3(cap.cx + cap.a * dx, cap.cy + cap.b * dy, rimAt(cap, th) - cap.lip * 0.35);
+      puff(p, out.add(new THREE.Vector3(0, 0, 0.25)).normalize(), puffR * (0.62 + 0.25 * random()));
     }
     parts.push({ name: 'puffs', slot: 'shell', solid: sphereSolid(1, hi ? 16 : 10, hi ? 10 : 7), matrices, smooth: true });
-    extra = () => puffR * 0.95;
+    extra = () => puffR * 1.1;
   } else if (kind === 'saddle') {
     const blanket = clipSolid(capSolid(cap, seg), [
       { normal: new THREE.Vector3(1, 0, 0), constant: cap.cx - cap.a * 0.42 },
@@ -410,19 +416,20 @@ export function buildShell(look, info, { quality = 'high' } = {}) {
 
   const surfaceAt = (x, y) => { const z = capZ(cap, x, y); return z === null ? null : z + extra(x, y); };
   const normalAt = (x, y) => capNormal(cap, x, y);
-  // Printable groups: one STL per colour slot keeps multi-colour prints easy.
-  const bySlot = new Map();
-  for (const part of parts) {
-    const solids = part.matrices ? part.matrices.map(m => part.solid.clone().applyMatrix4(m)) : [part.solid.clone()];
-    if (!bySlot.has(part.slot)) bySlot.set(part.slot, []);
-    bySlot.get(part.slot).push(...solids);
-  }
-  const printable = [...bySlot.entries()].map(([slot, solids]) => ({ name: `shell-${kind}-${slotLabel(slot)}`, slot, solids }));
+  // Printable groups (built on demand, before the parts are disposed): one
+  // STL per colour slot keeps multi-colour prints easy.
+  const printable = () => {
+    const bySlot = new Map();
+    for (const part of parts) {
+      const solids = part.matrices ? part.matrices.map(m => part.solid.clone().applyMatrix4(m)) : [part.solid.clone()];
+      if (!bySlot.has(part.slot)) bySlot.set(part.slot, { names: [], solids: [] });
+      const entry = bySlot.get(part.slot);
+      entry.names.push(part.name.replace(/-(left|right)$/, '')); entry.solids.push(...solids);
+    }
+    // Name each file after what is in it ("shell-beetle-elytron", "shell-dome-piping").
+    return [...bySlot.entries()].map(([slot, { names, solids }]) => ({ name: `shell-${kind}-${[...new Set(names)].join('+')}`, slot, solids }));
+  };
   return { kind, cap, parts, surfaceAt, normalAt, printable, top: cap.top + extra(cap.cx, cap.cy) };
-}
-
-function slotLabel(slot) {
-  return { shell: 'main', shellAccent: 'accent', shellTrim: 'trim', petalInner: 'inner', accent: 'blanket-or-pistil' }[slot] ?? slot;
 }
 
 export { seInverse, rimAt };

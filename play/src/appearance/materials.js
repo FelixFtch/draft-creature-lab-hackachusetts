@@ -95,6 +95,11 @@ export function createMaterialKit(look, ctx) {
       if (role === 'ink') { material.roughness = 0.6; material.metalness = 0; }
       if (role === 'soft') { material.roughness = Math.max(0.55, material.roughness); material.metalness = 0; }
     }
+    if (role === 'wing') {
+      // Thin printed membranes: a little see-through, both faces visible.
+      material.transparent = true; material.opacity = 0.62; material.depthWrite = false; material.side = THREE.DoubleSide;
+      if (!toon) { material.roughness = 0.2; material.metalness = 0; }
+    }
     if (emissive > 0) { material.emissive = color.clone(); material.emissiveIntensity = emissive; }
     patchLookMaterial(material, { pattern, layer: layer && finish.layer > 0 ? { amp: finish.layer, pitch: LAYER_PITCH } : null, shared: ctx.shared });
     material.userData.lookRole = role;
@@ -109,10 +114,10 @@ export function createMaterialKit(look, ctx) {
     shellTrim: () => build('plastic', mixHex(look.shell.color, look.pattern.kind !== 'none' ? look.pattern.color : p.joints, 0.55)),
     limbs: () => build('plastic', p.limbs, { pattern: targets.limbs ? patternFor('limb') : null }),
     joints: () => build('joint', p.joints),
-    details: () => build('plastic', p.accent, { emissive: glowPattern ? 1.6 : 0 }),
+    details: () => build('plastic', p.caps ?? p.accent, { emissive: glowPattern ? 1.6 : 0 }),
     feet: () => build('rubber', p.feet, { layer: false }),
     accent: () => build('plastic', p.accent, { emissive: glowPattern ? 1.2 : 0 }),
-    muzzle: () => build('soft', mixHex(p.body, '#fff6ea', 0.62)),
+    muzzle: () => build('soft', mixHex(p.accent, p.body, 0.2)),   // pink cow nose, white tiger muzzle
     eyeWhite: () => build('eye', '#f7f5ef', { layer: false }),
     eyeIris: () => build('eye', look.face.eyeColor, { layer: false, emissive: eyeGlow ? 1.4 : 0 }),
     eyePupil: () => build('pupil', '#0d0f14', { layer: false }),

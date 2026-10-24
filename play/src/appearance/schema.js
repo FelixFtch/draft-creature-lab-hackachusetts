@@ -101,8 +101,8 @@ export function mixHex(a, b, t) {
 // The v1 colour rules, verbatim: `_sphere` feet fixed dark green-grey,
 // `_motor` x0.52, `_detail` x0.33, `_link` lerped 20% to white.
 export function classicPalette(body = DEFAULT_BODY) {
-  const hex = toHex(body, DEFAULT_BODY);
-  return { body: hex, limbs: mixHex(hex, '#ffffff', 0.2), joints: scaleHex(hex, 0.52), accent: scaleHex(hex, 0.33), feet: LEGACY_FOOT };
+  const hex = toHex(body, DEFAULT_BODY), detail = scaleHex(hex, 0.33);
+  return { body: hex, limbs: mixHex(hex, '#ffffff', 0.2), joints: scaleHex(hex, 0.52), accent: detail, feet: LEGACY_FOOT, caps: detail };
 }
 
 export function classicLook(body = DEFAULT_BODY) {
@@ -151,6 +151,8 @@ export function normalizeLook(input) {
     accent: toHex(palIn.accent, base.accent),
     feet: toHex(palIn.feet, base.feet),
   };
+  // Motor face caps follow the accent unless the look says otherwise.
+  palette.caps = toHex(palIn.caps, palette.accent);
   const patIn = object(source.pattern), shellIn = object(source.shell), faceIn = object(source.face), limbsIn = object(source.limbs);
   const theme = typeof source.theme === 'string' ? source.theme.trim().slice(0, 40) : 'custom';
   const accessories = [];
@@ -217,7 +219,7 @@ export function validateLook(look) {
   if (look.theme !== undefined && (typeof look.theme !== 'string' || look.theme.length > 40)) err('$.theme', 'expected a string of at most 40 characters');
   const palette = section(look.palette, '$.palette');
   if (palette) {
-    allowOnly(palette, ['body', 'limbs', 'joints', 'accent', 'feet'], '$.palette');
+    allowOnly(palette, ['body', 'limbs', 'joints', 'accent', 'feet', 'caps'], '$.palette');
     for (const key of Object.keys(palette)) color(palette[key], `$.palette.${key}`);
   }
   oneOf(look.finish, FINISHES, '$.finish');

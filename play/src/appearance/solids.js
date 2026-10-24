@@ -104,6 +104,28 @@ export function boxSolid(sx, sy, sz) {
   return b.build();
 }
 
+/**
+ * A ring band about +z with a rectangular section: radius R (mid-wall),
+ * wall thickness t, top edge height h(theta) (crowns zig-zag, hat bands are
+ * flat). Genus 1 and closed.
+ */
+export function bandSolid(R, t, height, segments = 48) {
+  const b = new Builder(), sections = [];
+  for (let k = 0; k < segments; k++) {
+    const a = (k / segments) * TAU, c = Math.cos(a), s = Math.sin(a), h = typeof height === 'function' ? height(a) : height;
+    const ri = R - t / 2, ro = R + t / 2;
+    sections.push([b.v(ri * c, ri * s, 0), b.v(ro * c, ro * s, 0), b.v(ro * c, ro * s, h), b.v(ri * c, ri * s, h)]);
+  }
+  for (let k = 0; k < segments; k++) {
+    const p = sections[k], q = sections[(k + 1) % segments];
+    for (let e = 0; e < 4; e++) {
+      const a = p[e], c = p[(e + 1) % 4], d = q[(e + 1) % 4], f = q[e];
+      b.tri(a, c, d); b.tri(a, d, f);
+    }
+  }
+  return b.build();
+}
+
 /** Torus about +z: major radius R, tube radius r. Genus 1, still closed. */
 export function torusSolid(R, r, segments = 32, tube = 12) {
   const pts = Array.from({ length: segments }, (_, k) => { const a = (k / segments) * TAU; return new THREE.Vector3(R * Math.cos(a), R * Math.sin(a), 0); });
@@ -287,12 +309,16 @@ export function signedVolume(geometry) {
  * the cut, so the result is closed again. Works on welded geometry; the
  * same intersection vertex is reused by both triangles sharing an edge.
  */
-export function cutSolid(geometry, normal, constant, { eps = 1e-5 } = {}) {
-  // Vertices within eps (10 um) of the plane are moved onto it, so new
-  // vertices are never closer than eps to old ones and caps stay planar
-  // (no micron slivers where a later cut grazes an earlier one).
+export function cutSolid(geometry, normal, constant, { eps = null } = {}) {
+  // Vertices within eps of the plane are moved onto it, so new vertices are
+  // never closer than eps to old ones and caps stay planar (no slivers where
+  // a later cut grazes an earlier one). Tolerances scale with the part:
+  // 3e-5 of its size (18 um on a 0.6 m shell, also right in millimetres).
   const g = geometry.index ? geometry : weld(geometry);
   const pos = g.attributes.position, idx = g.index.array, n = normal.clone().normalize();
+  if (!g.boundingBox) g.computeBoundingBox();
+  const extent = g.boundingBox.getSize(new THREE.Vector3()).length() || 1;
+  eps = eps ?? extent * 3e-5;
   const positions = Array.from(pos.array), dist = [];
   for (let i = 0; i < pos.count; i++) {
     let d = n.x * pos.getX(i) + n.y * pos.getY(i) + n.z * pos.getZ(i) - constant;
@@ -394,9 +420,9 @@ export function cutSolid(geometry, normal, constant, { eps = 1e-5 } = {}) {
   }
   // Where two cut planes meet inside the solid, an earlier cap's vertices can
   // sit microns from the later plane and leave micro-edges on the corner
-  // line. Collapse anything closer than 20 um (real features are mm-sized),
+  // line. Collapse anything closer than 2 eps (real features are far larger),
   // then split whatever collinear slivers remain.
-  clusterIndices(out, positions, 2e-5);
+  clusterIndices(out, positions, eps * 2);
   removeSlivers(out, positions, 400);
   const result = new THREE.BufferGeometry();
   result.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
@@ -611,12 +637,14 @@ export function meshReport(geometry, tol = 1e-7) {
   const g = weld(geometry, tol);
   const pos = g.attributes.position, idx = g.index.array, faces = idx.length / 3;
   const directed = new Map(), undirected = new Map();
-  let degenerate = 0;
+  let degenerate = 0, area = 0;
   const a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3();
   for (let f = 0; f < faces; f++) {
     const t = [idx[f * 3], idx[f * 3 + 1], idx[f * 3 + 2]];
     a.fromBufferAttribute(pos, t[0]); b.fromBufferAttribute(pos, t[1]); c.fromBufferAttribute(pos, t[2]);
-    if (b.clone().sub(a).cross(c.clone().sub(a)).length() < tol * tol) degenerate++;
+    const cross = b.clone().sub(a).cross(c.clone().sub(a)).length();
+    area += cross / 2;
+    if (cross < tol * tol) degenerate++;
     for (let k = 0; k < 3; k++) {
       const u = t[k], v = t[(k + 1) % 3];
       directed.set(`${u}_${v}`, (directed.get(`${u}_${v}`) ?? 0) + 1);
@@ -649,7 +677,7 @@ export function meshReport(geometry, tol = 1e-7) {
   const report = {
     triangles: faces, vertices: pos.count, boundaryEdges: boundary, nonManifoldEdges: nonManifold, inconsistentEdges: inconsistent,
     degenerateTriangles: degenerate, components: componentVolumes.length, negativeComponents: componentVolumes.filter(v => v <= 0).length,
-    volume: componentVolumes.reduce((s, v) => s + v, 0),
+    volume: componentVolumes.reduce((s, v) => s + v, 0), area,
     size: box ? [box.max.x - box.min.x, box.max.y - box.min.y, box.max.z - box.min.z] : [0, 0, 0],
   };
   report.watertight = faces > 0 && boundary === 0 && nonManifold === 0 && inconsistent === 0 && degenerate === 0 && report.negativeComponents === 0;

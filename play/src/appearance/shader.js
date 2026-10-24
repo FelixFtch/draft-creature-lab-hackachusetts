@@ -123,7 +123,7 @@ float lookPattern() {
   #elif LOOK_PAT == 9
     vec3 q = lkP + ( lkFbm( lkP * 1.2 ) - 0.5 ) * 0.4;
     vec2 f = lkWorley( q, id );
-    return lkAA( 0.05 + 0.04 * lkNoise( lkP * 3.7 ) - ( f.y - f.x ) );
+    return lkAA( 0.018 + 0.034 * lkNoise( lkP * 3.7 ) * lkNoise( lkP * 1.3 + 7.0 ) - ( f.y - f.x ) );
   #elif LOOK_PAT == 10
     return LK_TRI( lkScale );
   #elif LOOK_PAT == 11
