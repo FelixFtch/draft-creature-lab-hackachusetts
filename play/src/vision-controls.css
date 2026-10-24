@@ -1,0 +1,63 @@
+.draft-vision-card { min-width: 0; margin-top: 16px; border: 1px solid #cfdbcf; border-radius: 18px; background: #fffdf6; color: #243c3b; font-size: 16px; line-height: 1.55; }
+.draft-vision-card.is-active { border-color: #80ae9a; }
+.draft-vision-card > summary { display: flex; align-items: center; gap: 13px; min-height: 78px; padding: 15px 22px; cursor: pointer; list-style: none; }
+.draft-vision-card summary::-webkit-details-marker { display: none; }
+.draft-vision-icon { display: grid; place-items: center; flex: 0 0 42px; height: 42px; border-radius: 13px; background: #e8eddf; color: #48735c; }
+.draft-vision-icon svg { width: 27px; height: 27px; }
+.draft-vision-title { display: grid; min-width: 0; }
+.draft-vision-title strong { font-size: 20px; line-height: 1.35; font-weight: 650; }
+.draft-vision-title > span { color: #586c5e; font-size: 14px; }
+.draft-vision-expand { margin-left: auto; font-size: 23px; color: #50705c; }
+.draft-vision-card[open] > summary .draft-vision-expand { transform: rotate(45deg); }
+.draft-vision-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(250px, .85fr); gap: 20px 26px; padding: 0 22px 22px; }
+.draft-vision-copy, .draft-vision-observation { min-width: 0; }
+.draft-vision-badge { display: inline-flex; padding: 4px 9px; border-radius: 7px; background: #e8eddf; color: #496349; font-size: 14px; font-weight: 600; }
+.draft-vision-intro { margin-top: 10px !important; }
+.draft-vision-connection { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin: 12px 0; }
+.draft-vision-health { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6b5b41; }
+.draft-vision-health i { flex: 0 0 7px; height: 7px; border-radius: 50%; background: #a78d64; }
+.draft-vision-health.is-ready { color: #31664e; }
+.draft-vision-health.is-ready i { background: #40866b; }
+.draft-vision-card button { min-height: 44px; padding: 9px 13px; border: 1px solid #cbd7c7; border-radius: 9px; background: #fffdf6; color: #345545; font-size: 16px; font-weight: 550; }
+.draft-vision-card button:hover:not(:disabled) { background: #e9efdf; }
+.draft-vision-connection button { padding: 8px; font-size: 14px; border-color: transparent; text-decoration: underline; text-underline-offset: 3px; }
+.draft-vision-label { display: block; margin: 14px 0 7px; font-weight: 600; }
+.draft-vision-card textarea { display: block; width: 100%; min-height: 100px; resize: vertical; padding: 11px 12px; border: 1px solid #bfcdbb; border-radius: 10px; background: #fbfbf2; color: #243c3b; font-size: 16px; line-height: 1.6; }
+.draft-vision-card textarea:disabled { opacity: .7; }
+.draft-vision-missions { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 16px; }
+.draft-vision-missions button { border-color: transparent; background: #edf1e6; padding: 7px 10px; font-size: 14px; }
+.draft-vision-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.draft-vision-actions button { flex: 1 1 auto; }
+.draft-vision-actions .draft-vision-primary { background: #276e63; border-color: #276e63; color: #fffdf1; }
+.draft-vision-actions .draft-vision-primary:hover:not(:disabled) { background: #20594f; }
+.draft-vision-actions .draft-vision-stop { display: flex; justify-content: center; align-items: center; gap: 8px; color: #874a31; background: #fff2e8; border-color: #c99e83; }
+.draft-vision-actions .draft-vision-stop:hover:not(:disabled) { background: #f8e2d3; }
+.draft-vision-stop > span { font-size: 11px; }
+.draft-vision-status { display: grid; gap: 3px; min-height: 32px; margin-top: 13px; color: #37654f; }
+.draft-vision-status strong { font-size: 16px; font-weight: 550; }
+.draft-vision-status > span { color: #5d705e; font-size: 14px; font-variant-numeric: tabular-nums; }
+.draft-vision-status.is-error, .draft-vision-error { color: #93472e; }
+.draft-vision-error { margin-top: 7px !important; font-size: 14px; overflow-wrap: anywhere; }
+.draft-vision-note { margin: 6px 0 !important; color: #695c43; font-size: 14px; }
+.draft-vision-observation figure { margin: 0; }
+.draft-vision-frame { display: grid; place-items: center; width: 100%; aspect-ratio: 8 / 5; overflow: hidden; border: 1px solid #d1dcc9; border-radius: 13px; background: #eaf0e3; color: #5d705a; }
+.draft-vision-frame img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.draft-vision-frame p { max-width: 290px; padding: 20px; text-align: center; font-size: 16px; }
+.draft-vision-observation figcaption { margin-top: 9px; font-size: 16px; font-weight: 550; }
+.draft-vision-observation figcaption > span { display: block; margin-top: 3px; color: #61705e; font-size: 14px; font-weight: 400; }
+.draft-vision-history { margin-top: 15px; border-top: 1px solid #dce4d4; font-size: 14px; }
+.draft-vision-history summary { display: flex; align-items: center; justify-content: space-between; min-height: 44px; cursor: pointer; list-style: none; font-size: 16px; }
+.draft-vision-history[open] summary > span { transform: rotate(45deg); }
+.draft-vision-history ol { padding: 0 0 0 22px; margin: 2px 0 8px; }
+.draft-vision-history li { padding: 3px 0 3px 3px; color: #58715c; }
+.draft-vision-history li > span:last-child { margin-left: 10px; color: #6c775e; font-variant-numeric: tabular-nums; }
+.draft-vision-model { margin-top: 9px !important; color: #61705e; font-size: 14px; overflow-wrap: anywhere; }
+.draft-vision-preview { margin-top: 10px; }
+.draft-vision-full { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 12px; }
+.draft-vision-full button { background: #edf1e6; }
+.draft-vision-full span { color: #5b6d58; font-size: 14px; }
+.draft-vision-about { grid-column: 1 / -1; border-top: 1px solid #e0e6d8; padding-top: 14px; color: #5b6d58; font-size: 14px; }
+.draft-vision-about p + p { margin-top: 6px; }
+@media (max-width: 1100px) { .draft-vision-body { grid-template-columns: minmax(0, 1fr); } .draft-vision-observation { max-width: 580px; } }
+@media (max-width: 800px) { .draft-vision-card { order: 1; margin-top: 0; } .draft-vision-card > summary { padding: 15px 16px; gap: 10px; } .draft-vision-body { padding: 0 16px 18px; gap: 18px; } .draft-vision-title strong { font-size: 21px; } .draft-vision-intro, .draft-vision-label, .draft-vision-note { font-size: 16px; } .draft-vision-actions .draft-vision-primary { font-size: 18px; } }
+@media (max-width: 420px) { .draft-vision-actions { display: grid; grid-template-columns: minmax(0, 1fr); } .draft-vision-actions button { min-width: 0; } .draft-vision-title > span { font-size: 14px; } .draft-vision-icon { flex-basis: 36px; height: 36px; } }

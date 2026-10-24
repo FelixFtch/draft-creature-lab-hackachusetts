@@ -1,0 +1,36 @@
+{
+  "createdAt": "2026-10-24T18:32:13.881Z",
+  "scope": "Production Three.js scene-graph properties with a stub canvas; no actual rasterization, browser, physical collision or VLM inference.",
+  "checks": [
+    {
+      "name": "Three numbered signs are initially visible in a new trail",
+      "pass": true
+    },
+    {
+      "name": "Active and future signs use compact global scales without changing floor goals",
+      "pass": true
+    },
+    {
+      "name": "After first goal, only its sign and stem retire; the green floor ring remains",
+      "pass": true
+    },
+    {
+      "name": "After second goal, the third sign remains visible",
+      "pass": true
+    },
+    {
+      "name": "Completed course retains all floor rings and no occluding billboards",
+      "pass": true
+    },
+    {
+      "name": "Starting another round restores every numbered sign and stem",
+      "pass": true
+    },
+    {
+      "name": "Leaving the trail hides its complete scene group",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "sourceSha256": "457053bd26c6ebb9f8fb603cee85874b2bcd7ff8c71b786766176d6ddaa76014"
+}

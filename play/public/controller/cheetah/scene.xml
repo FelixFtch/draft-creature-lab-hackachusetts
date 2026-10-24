@@ -1,0 +1,233 @@
+<mujoco model="mjlab scene">
+  <compiler angle="radian" meshdir="assets" />
+  <option timestep="0.005" integrator="implicitfast" iterations="10" ls_iterations="20" ccd_iterations="50" />
+  <size nkey="1" />
+  <visual>
+    <global azimuth="135" elevation="-25" offwidth="1920" offheight="1080" />
+    <quality shadowsize="8192" />
+    <headlight ambient="0.3 0.3 0.3" diffuse="0.6 0.6 0.6" specular="0 0 0" />
+    <scale forcewidth="0.25" contactwidth="0.4" contactheight="0.15" framelength="5" framewidth="0.3" />
+    <rgba haze="0.15 0.25 0.35 1" force="1 0 0 1" />
+  </visual>
+  <statistic meansize="0.03" extent="2" />
+  <default>
+    <default class="robot/main">
+      <joint damping="0.01" />
+      <geom friction="0.7 0.1 0.1" />
+      <default class="robot/visual">
+        <geom contype="0" conaffinity="0" group="2" />
+      </default>
+    </default>
+  </default>
+  <custom>
+    <numeric name="robot/fl_hip_roll_velocity_limit" size="1" data="40" />
+    <numeric name="robot/fl_hip_pitch_velocity_limit" size="1" data="40" />
+    <numeric name="robot/fl_knee_velocity_limit" size="1" data="40" />
+    <numeric name="robot/fr_hip_roll_velocity_limit" size="1" data="40" />
+    <numeric name="robot/fr_hip_pitch_velocity_limit" size="1" data="40" />
+    <numeric name="robot/fr_knee_velocity_limit" size="1" data="40" />
+    <numeric name="robot/rl_hip_roll_velocity_limit" size="1" data="40" />
+    <numeric name="robot/rl_hip_pitch_velocity_limit" size="1" data="40" />
+    <numeric name="robot/rl_knee_velocity_limit" size="1" data="40" />
+    <numeric name="robot/rr_hip_roll_velocity_limit" size="1" data="40" />
+    <numeric name="robot/rr_hip_pitch_velocity_limit" size="1" data="40" />
+    <numeric name="robot/rr_knee_velocity_limit" size="1" data="40" />
+  </custom>
+  <asset>
+    <texture type="2d" colorspace="auto" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" markrgb="0.8 0.8 0.8" width="300" height="300" />
+    <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="4 4" />
+    <mesh name="robot/torso_mesh" file="torso_mesh.stl" />
+  </asset>
+  <worldbody>
+    <light name="sun" pos="0 0 1.5" dir="0 0 -1" type="directional" />
+    <body name="terrain">
+      <geom name="terrain" size="0 0 0.01" type="plane" material="groundplane" />
+    </body>
+    <body name="robot/torso_link" pos="0 0 0.5076">
+      <joint name="robot/torso_link_freejoint" type="free" />
+      <geom name="robot/torso_link_mesh" type="mesh" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="627.268" rgba="0.298 0.447 0.69 1" mesh="robot/torso_mesh" />
+      <site name="robot/imu" pos="0 0 0" group="5" />
+      <body name="robot/fl_roll_motor_link" pos="0.26 0.08 0">
+        <geom name="robot/fl_roll_motor_link_motor" size="0.063 0.023" pos="0.023 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="1917.8" rgba="0.155 0.232 0.359 1" />
+        <geom name="robot/fl_roll_motor_link_detail" class="robot/visual" size="0.0504 0.0253" pos="0.023 0 0" quat="0.707107 0 0.707107 0" type="cylinder" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+        <body name="robot/fl_roll_link">
+          <joint name="robot/fl_hip_roll" pos="0 0 0" axis="1 0 0" limited="true" range="-0.8 0.8" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+          <geom name="robot/fl_roll_link_link" size="0.023 0.00815" pos="0.04915 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="7438.57" rgba="0.424 0.547 0.746 1" />
+          <geom name="robot/fl_roll_link_motor" size="0.063 0.023" pos="0.1153 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="1917.8" rgba="0.155 0.232 0.359 1" />
+          <geom name="robot/fl_roll_link_detail" class="robot/visual" size="0.0504 0.0253" pos="0.1153 0 0" quat="0.707107 0.707107 0 0" type="cylinder" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+          <body name="robot/fl_pitch_link" pos="0.1153 0 0">
+            <joint name="robot/fl_hip_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="-2.5 2.5" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+            <geom name="robot/fl_pitch_link_link" size="0.023 0.0205" pos="0 0.0385 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="2854.92" rgba="0.424 0.547 0.746 1" />
+            <geom name="robot/fl_pitch_link_motor" size="0.063 0.023" pos="0 0.077 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="1917.8" rgba="0.155 0.232 0.359 1" />
+            <geom name="robot/fl_pitch_link_detail" class="robot/visual" size="0.0504 0.0253" pos="0 0.077 0" quat="0.707107 0.707107 0 0" type="cylinder" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+            <body name="robot/fl_upper_leg_link" pos="0 0.077 0">
+              <geom name="robot/fl_upper_leg_link_link" size="0.023 0.078655" pos="0 0 -0.136655" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="1860.21" rgba="0.424 0.547 0.746 1" />
+              <geom name="robot/fl_upper_leg_link_motor" size="0.03969 0.023" pos="0 0 -0.25" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="0" rgba="0.155 0.232 0.359 1" />
+              <geom name="robot/fl_upper_leg_link_detail" class="robot/visual" size="0.031752 0.0253" pos="0 0 -0.25" quat="0.707107 0.707107 0 0" type="cylinder" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+              <body name="robot/fl_lower_leg_link" pos="0 0 -0.25">
+                <joint name="robot/fl_knee" pos="0 0 0" axis="0 1 0" limited="true" range="-2.8 0" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+                <geom name="robot/fl_lower_leg_link_link" size="0.0184 0.115" pos="0 0 -0.115" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="911.733" rgba="0.424 0.547 0.746 1" />
+                <geom name="robot/fl_lower_leg_link_sphere" size="0.0276" pos="0 0 -0.23" priority="1" friction="0.75 0.1 0.1" density="644.163" rgba="0.302 0.302 0.302 1" />
+                <site name="robot/fl_foot" pos="0 0 -0.23" group="5" />
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="robot/fr_roll_motor_link" pos="0.26 -0.08 0">
+        <geom name="robot/fr_roll_motor_link_motor" size="0.063 0.023" pos="0.023 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="1917.8" rgba="0.155 0.232 0.359 1" />
+        <geom name="robot/fr_roll_motor_link_detail" class="robot/visual" size="0.0504 0.0253" pos="0.023 0 0" quat="0.707107 0 0.707107 0" type="cylinder" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+        <body name="robot/fr_roll_link">
+          <joint name="robot/fr_hip_roll" pos="0 0 0" axis="1 0 0" limited="true" range="-0.8 0.8" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+          <geom name="robot/fr_roll_link_link" size="0.023 0.00815" pos="0.04915 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="7438.57" rgba="0.424 0.547 0.746 1" />
+          <geom name="robot/fr_roll_link_motor" size="0.063 0.023" pos="0.1153 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="1917.8" rgba="0.155 0.232 0.359 1" />
+          <geom name="robot/fr_roll_link_detail" class="robot/visual" size="0.0504 0.0253" pos="0.1153 0 0" quat="0.707107 0.707107 0 0" type="cylinder" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+          <body name="robot/fr_pitch_link" pos="0.1153 0 0">
+            <joint name="robot/fr_hip_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="-2.5 2.5" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+            <geom name="robot/fr_pitch_link_link" size="0.023 0.0205" pos="0 -0.0385 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="2854.92" rgba="0.424 0.547 0.746 1" />
+            <geom name="robot/fr_pitch_link_motor" size="0.063 0.023" pos="0 -0.077 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="1917.8" rgba="0.155 0.232 0.359 1" />
+            <geom name="robot/fr_pitch_link_detail" class="robot/visual" size="0.0504 0.0253" pos="0 -0.077 0" quat="0.707107 0.707107 0 0" type="cylinder" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+            <body name="robot/fr_upper_leg_link" pos="0 -0.077 0">
+              <geom name="robot/fr_upper_leg_link_link" size="0.023 0.078655" pos="0 0 -0.136655" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="1860.21" rgba="0.424 0.547 0.746 1" />
+              <geom name="robot/fr_upper_leg_link_motor" size="0.03969 0.023" pos="0 0 -0.25" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="0" rgba="0.155 0.232 0.359 1" />
+              <geom name="robot/fr_upper_leg_link_detail" class="robot/visual" size="0.031752 0.0253" pos="0 0 -0.25" quat="0.707107 0.707107 0 0" type="cylinder" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+              <body name="robot/fr_lower_leg_link" pos="0 0 -0.25">
+                <joint name="robot/fr_knee" pos="0 0 0" axis="0 1 0" limited="true" range="-2.8 0" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+                <geom name="robot/fr_lower_leg_link_link" size="0.0184 0.115" pos="0 0 -0.115" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="911.733" rgba="0.424 0.547 0.746 1" />
+                <geom name="robot/fr_lower_leg_link_sphere" size="0.0276" pos="0 0 -0.23" priority="1" friction="0.75 0.1 0.1" density="644.163" rgba="0.302 0.302 0.302 1" />
+                <site name="robot/fr_foot" pos="0 0 -0.23" group="5" />
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="robot/rl_roll_motor_link" pos="-0.26 0.08 0">
+        <geom name="robot/rl_roll_motor_link_motor" size="0.063 0.023" pos="-0.023 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="1917.8" rgba="0.155 0.232 0.359 1" />
+        <geom name="robot/rl_roll_motor_link_detail" class="robot/visual" size="0.0504 0.0253" pos="-0.023 0 0" quat="0.707107 0 0.707107 0" type="cylinder" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+        <body name="robot/rl_roll_link">
+          <joint name="robot/rl_hip_roll" pos="0 0 0" axis="1 0 0" limited="true" range="-0.8 0.8" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+          <geom name="robot/rl_roll_link_link" size="0.023 0.00815" pos="-0.04915 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="7438.57" rgba="0.424 0.547 0.746 1" />
+          <geom name="robot/rl_roll_link_motor" size="0.063 0.023" pos="-0.1153 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="1917.8" rgba="0.155 0.232 0.359 1" />
+          <geom name="robot/rl_roll_link_detail" class="robot/visual" size="0.0504 0.0253" pos="-0.1153 0 0" quat="0.707107 0.707107 0 0" type="cylinder" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+          <body name="robot/rl_pitch_link" pos="-0.1153 0 0">
+            <joint name="robot/rl_hip_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="-2.5 2.5" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+            <geom name="robot/rl_pitch_link_link" size="0.023 0.0205" pos="0 0.0385 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="2854.92" rgba="0.424 0.547 0.746 1" />
+            <geom name="robot/rl_pitch_link_motor" size="0.063 0.023" pos="0 0.077 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="1917.8" rgba="0.155 0.232 0.359 1" />
+            <geom name="robot/rl_pitch_link_detail" class="robot/visual" size="0.0504 0.0253" pos="0 0.077 0" quat="0.707107 0.707107 0 0" type="cylinder" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+            <body name="robot/rl_upper_leg_link" pos="0 0.077 0">
+              <geom name="robot/rl_upper_leg_link_link" size="0.023 0.078655" pos="0 0 -0.136655" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="1860.21" rgba="0.424 0.547 0.746 1" />
+              <geom name="robot/rl_upper_leg_link_motor" size="0.03969 0.023" pos="0 0 -0.25" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="0" rgba="0.155 0.232 0.359 1" />
+              <geom name="robot/rl_upper_leg_link_detail" class="robot/visual" size="0.031752 0.0253" pos="0 0 -0.25" quat="0.707107 0.707107 0 0" type="cylinder" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+              <body name="robot/rl_lower_leg_link" pos="0 0 -0.25">
+                <joint name="robot/rl_knee" pos="0 0 0" axis="0 1 0" limited="true" range="-2.8 0" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+                <geom name="robot/rl_lower_leg_link_link" size="0.0184 0.115" pos="0 0 -0.115" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="911.733" rgba="0.424 0.547 0.746 1" />
+                <geom name="robot/rl_lower_leg_link_sphere" size="0.0276" pos="0 0 -0.23" priority="1" friction="0.75 0.1 0.1" density="644.163" rgba="0.302 0.302 0.302 1" />
+                <site name="robot/rl_foot" pos="0 0 -0.23" group="5" />
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="robot/rr_roll_motor_link" pos="-0.26 -0.08 0">
+        <geom name="robot/rr_roll_motor_link_motor" size="0.063 0.023" pos="-0.023 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="1917.8" rgba="0.155 0.232 0.359 1" />
+        <geom name="robot/rr_roll_motor_link_detail" class="robot/visual" size="0.0504 0.0253" pos="-0.023 0 0" quat="0.707107 0 0.707107 0" type="cylinder" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+        <body name="robot/rr_roll_link">
+          <joint name="robot/rr_hip_roll" pos="0 0 0" axis="1 0 0" limited="true" range="-0.8 0.8" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+          <geom name="robot/rr_roll_link_link" size="0.023 0.00815" pos="-0.04915 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="7438.57" rgba="0.424 0.547 0.746 1" />
+          <geom name="robot/rr_roll_link_motor" size="0.063 0.023" pos="-0.1153 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="1917.8" rgba="0.155 0.232 0.359 1" />
+          <geom name="robot/rr_roll_link_detail" class="robot/visual" size="0.0504 0.0253" pos="-0.1153 0 0" quat="0.707107 0.707107 0 0" type="cylinder" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+          <body name="robot/rr_pitch_link" pos="-0.1153 0 0">
+            <joint name="robot/rr_hip_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="-2.5 2.5" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+            <geom name="robot/rr_pitch_link_link" size="0.023 0.0205" pos="0 -0.0385 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="2854.92" rgba="0.424 0.547 0.746 1" />
+            <geom name="robot/rr_pitch_link_motor" size="0.063 0.023" pos="0 -0.077 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="1917.8" rgba="0.155 0.232 0.359 1" />
+            <geom name="robot/rr_pitch_link_detail" class="robot/visual" size="0.0504 0.0253" pos="0 -0.077 0" quat="0.707107 0.707107 0 0" type="cylinder" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+            <body name="robot/rr_upper_leg_link" pos="0 -0.077 0">
+              <geom name="robot/rr_upper_leg_link_link" size="0.023 0.078655" pos="0 0 -0.136655" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="1860.21" rgba="0.424 0.547 0.746 1" />
+              <geom name="robot/rr_upper_leg_link_motor" size="0.03969 0.023" pos="0 0 -0.25" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="0" rgba="0.155 0.232 0.359 1" />
+              <geom name="robot/rr_upper_leg_link_detail" class="robot/visual" size="0.031752 0.0253" pos="0 0 -0.25" quat="0.707107 0.707107 0 0" type="cylinder" group="0" density="0" rgba="0.095 0.143 0.221 1" />
+              <body name="robot/rr_lower_leg_link" pos="0 0 -0.25">
+                <joint name="robot/rr_knee" pos="0 0 0" axis="0 1 0" limited="true" range="-2.8 0" actuatorfrclimited="true" actuatorfrcrange="-72 72" armature="0.0153984" damping="0.0127" frictionloss="0.127" />
+                <geom name="robot/rr_lower_leg_link_link" size="0.0184 0.115" pos="0 0 -0.115" type="cylinder" contype="0" conaffinity="0" friction="0.7 0.1 0.1" density="911.733" rgba="0.424 0.547 0.746 1" />
+                <geom name="robot/rr_lower_leg_link_sphere" size="0.0276" pos="0 0 -0.23" priority="1" friction="0.75 0.1 0.1" density="644.163" rgba="0.302 0.302 0.302 1" />
+                <site name="robot/rr_foot" pos="0 0 -0.23" group="5" />
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <contact>
+    <exclude name="robot/torso_link__fl_roll_motor_link" body1="robot/torso_link" body2="robot/fl_roll_motor_link" />
+    <exclude name="robot/torso_link__fl_roll_link" body1="robot/torso_link" body2="robot/fl_roll_link" />
+    <exclude name="robot/torso_link__fr_roll_motor_link" body1="robot/torso_link" body2="robot/fr_roll_motor_link" />
+    <exclude name="robot/torso_link__fr_roll_link" body1="robot/torso_link" body2="robot/fr_roll_link" />
+    <exclude name="robot/torso_link__rl_roll_motor_link" body1="robot/torso_link" body2="robot/rl_roll_motor_link" />
+    <exclude name="robot/torso_link__rl_roll_link" body1="robot/torso_link" body2="robot/rl_roll_link" />
+    <exclude name="robot/torso_link__rr_roll_motor_link" body1="robot/torso_link" body2="robot/rr_roll_motor_link" />
+    <exclude name="robot/torso_link__rr_roll_link" body1="robot/torso_link" body2="robot/rr_roll_link" />
+    <exclude name="robot/fl_roll_motor_link__fl_roll_link" body1="robot/fl_roll_motor_link" body2="robot/fl_roll_link" />
+    <exclude name="robot/fl_roll_motor_link__fl_pitch_link" body1="robot/fl_roll_motor_link" body2="robot/fl_pitch_link" />
+    <exclude name="robot/fl_roll_link__fl_pitch_link" body1="robot/fl_roll_link" body2="robot/fl_pitch_link" />
+    <exclude name="robot/fl_roll_link__fl_upper_leg_link" body1="robot/fl_roll_link" body2="robot/fl_upper_leg_link" />
+    <exclude name="robot/fl_pitch_link__fl_upper_leg_link" body1="robot/fl_pitch_link" body2="robot/fl_upper_leg_link" />
+    <exclude name="robot/fl_pitch_link__fl_lower_leg_link" body1="robot/fl_pitch_link" body2="robot/fl_lower_leg_link" />
+    <exclude name="robot/fl_upper_leg_link__fl_lower_leg_link" body1="robot/fl_upper_leg_link" body2="robot/fl_lower_leg_link" />
+    <exclude name="robot/fr_roll_motor_link__fr_roll_link" body1="robot/fr_roll_motor_link" body2="robot/fr_roll_link" />
+    <exclude name="robot/fr_roll_motor_link__fr_pitch_link" body1="robot/fr_roll_motor_link" body2="robot/fr_pitch_link" />
+    <exclude name="robot/fr_roll_link__fr_pitch_link" body1="robot/fr_roll_link" body2="robot/fr_pitch_link" />
+    <exclude name="robot/fr_roll_link__fr_upper_leg_link" body1="robot/fr_roll_link" body2="robot/fr_upper_leg_link" />
+    <exclude name="robot/fr_pitch_link__fr_upper_leg_link" body1="robot/fr_pitch_link" body2="robot/fr_upper_leg_link" />
+    <exclude name="robot/fr_pitch_link__fr_lower_leg_link" body1="robot/fr_pitch_link" body2="robot/fr_lower_leg_link" />
+    <exclude name="robot/fr_upper_leg_link__fr_lower_leg_link" body1="robot/fr_upper_leg_link" body2="robot/fr_lower_leg_link" />
+    <exclude name="robot/rl_roll_motor_link__rl_roll_link" body1="robot/rl_roll_motor_link" body2="robot/rl_roll_link" />
+    <exclude name="robot/rl_roll_motor_link__rl_pitch_link" body1="robot/rl_roll_motor_link" body2="robot/rl_pitch_link" />
+    <exclude name="robot/rl_roll_link__rl_pitch_link" body1="robot/rl_roll_link" body2="robot/rl_pitch_link" />
+    <exclude name="robot/rl_roll_link__rl_upper_leg_link" body1="robot/rl_roll_link" body2="robot/rl_upper_leg_link" />
+    <exclude name="robot/rl_pitch_link__rl_upper_leg_link" body1="robot/rl_pitch_link" body2="robot/rl_upper_leg_link" />
+    <exclude name="robot/rl_pitch_link__rl_lower_leg_link" body1="robot/rl_pitch_link" body2="robot/rl_lower_leg_link" />
+    <exclude name="robot/rl_upper_leg_link__rl_lower_leg_link" body1="robot/rl_upper_leg_link" body2="robot/rl_lower_leg_link" />
+    <exclude name="robot/rr_roll_motor_link__rr_roll_link" body1="robot/rr_roll_motor_link" body2="robot/rr_roll_link" />
+    <exclude name="robot/rr_roll_motor_link__rr_pitch_link" body1="robot/rr_roll_motor_link" body2="robot/rr_pitch_link" />
+    <exclude name="robot/rr_roll_link__rr_pitch_link" body1="robot/rr_roll_link" body2="robot/rr_pitch_link" />
+    <exclude name="robot/rr_roll_link__rr_upper_leg_link" body1="robot/rr_roll_link" body2="robot/rr_upper_leg_link" />
+    <exclude name="robot/rr_pitch_link__rr_upper_leg_link" body1="robot/rr_pitch_link" body2="robot/rr_upper_leg_link" />
+    <exclude name="robot/rr_pitch_link__rr_lower_leg_link" body1="robot/rr_pitch_link" body2="robot/rr_lower_leg_link" />
+    <exclude name="robot/rr_upper_leg_link__rr_lower_leg_link" body1="robot/rr_upper_leg_link" body2="robot/rr_lower_leg_link" />
+  </contact>
+  <actuator>
+    <general name="robot/fl_hip_roll" joint="robot/fl_hip_roll" ctrllimited="true" ctrlrange="-72 72" forcelimited="true" forcerange="-72 72" />
+    <general name="robot/fl_hip_pitch" joint="robot/fl_hip_pitch" ctrllimited="true" ctrlrange="-72 72" forcelimited="true" forcerange="-72 72" />
+    <general name="robot/fl_knee" joint="robot/fl_knee" ctrllimited="true" ctrlrange="-72 72" forcelimited="true" forcerange="-72 72" />
+    <general name="robot/fr_hip_roll" joint="robot/fr_hip_roll" ctrllimited="true" ctrlrange="-72 72" forcelimited="true" forcerange="-72 72" />
+    <general name="robot/fr_hip_pitch" joint="robot/fr_hip_pitch" ctrllimited="true" ctrlrange="-72 72" forcelimited="true" forcerange="-72 72" />
+    <general name="robot/fr_knee" joint="robot/fr_knee" ctrllimited="true" ctrlrange="-72 72" forcelimited="true" forcerange="-72 72" />
+    <general name="robot/rl_hip_roll" joint="robot/rl_hip_roll" ctrllimited="true" ctrlrange="-72 72" forcelimited="true" forcerange="-72 72" />
+    <general name="robot/rl_hip_pitch" joint="robot/rl_hip_pitch" ctrllimited="true" ctrlrange="-72 72" forcelimited="true" forcerange="-72 72" />
+    <general name="robot/rl_knee" joint="robot/rl_knee" ctrllimited="true" ctrlrange="-72 72" forcelimited="true" forcerange="-72 72" />
+    <general name="robot/rr_hip_roll" joint="robot/rr_hip_roll" ctrllimited="true" ctrlrange="-72 72" forcelimited="true" forcerange="-72 72" />
+    <general name="robot/rr_hip_pitch" joint="robot/rr_hip_pitch" ctrllimited="true" ctrlrange="-72 72" forcelimited="true" forcerange="-72 72" />
+    <general name="robot/rr_knee" joint="robot/rr_knee" ctrllimited="true" ctrlrange="-72 72" forcelimited="true" forcerange="-72 72" />
+  </actuator>
+  <sensor>
+    <gyro site="robot/imu" name="robot/imu_ang_vel" />
+    <velocimeter site="robot/imu" name="robot/imu_lin_vel" />
+    <accelerometer site="robot/imu" name="robot/imu_lin_acc" />
+    <subtreeangmom body="robot/torso_link" name="robot/root_angmom" />
+    <contact geom1="robot/fl_lower_leg_link_sphere" body2="terrain" reduce="netforce" name="feet_ground_contact_fl_lower_leg_link_sphere_found" />
+    <contact geom1="robot/fl_lower_leg_link_sphere" body2="terrain" data="force" reduce="netforce" name="feet_ground_contact_fl_lower_leg_link_sphere_force" />
+    <contact geom1="robot/fr_lower_leg_link_sphere" body2="terrain" reduce="netforce" name="feet_ground_contact_fr_lower_leg_link_sphere_found" />
+    <contact geom1="robot/fr_lower_leg_link_sphere" body2="terrain" data="force" reduce="netforce" name="feet_ground_contact_fr_lower_leg_link_sphere_force" />
+    <contact geom1="robot/rl_lower_leg_link_sphere" body2="terrain" reduce="netforce" name="feet_ground_contact_rl_lower_leg_link_sphere_found" />
+    <contact geom1="robot/rl_lower_leg_link_sphere" body2="terrain" data="force" reduce="netforce" name="feet_ground_contact_rl_lower_leg_link_sphere_force" />
+    <contact geom1="robot/rr_lower_leg_link_sphere" body2="terrain" reduce="netforce" name="feet_ground_contact_rr_lower_leg_link_sphere_found" />
+    <contact geom1="robot/rr_lower_leg_link_sphere" body2="terrain" data="force" reduce="netforce" name="feet_ground_contact_rr_lower_leg_link_sphere_force" />
+    <contact body1="robot/fl_upper_leg_link" body2="terrain" name="upper_leg_ground_contact_fl_upper_leg_link_found" />
+    <contact body1="robot/fr_upper_leg_link" body2="terrain" name="upper_leg_ground_contact_fr_upper_leg_link_found" />
+    <contact body1="robot/rl_upper_leg_link" body2="terrain" name="upper_leg_ground_contact_rl_upper_leg_link_found" />
+    <contact body1="robot/rr_upper_leg_link" body2="terrain" name="upper_leg_ground_contact_rr_upper_leg_link_found" />
+  </sensor>
+  <keyframe>
+    <key name="init_state" qpos="0 0 0.490909 1 0 0 0 0 0.5 -1 0 0.5 -1 0 0.5 -1 0 0.5 -1" ctrl="0 0.5 -1 0 0.5 -1 0 0.5 -1 0 0.5 -1" />
+  </keyframe>
+</mujoco>

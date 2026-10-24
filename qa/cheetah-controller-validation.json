@@ -1,0 +1,3888 @@
+{
+  "createdAt": "2026-10-24T18:32:14.055Z",
+  "scope": "Node CPU, actual MuJoCo WASM and ONNX Runtime Web WASM; not a live browser test",
+  "engines": {
+    "nativeFixture": "MuJoCo 3.8.0 CPU with source float32 math",
+    "wasm": "3.11.0",
+    "onnxruntime": {
+      "common": "1.27.0",
+      "web": "1.27.0"
+    }
+  },
+  "checkpointSha256": "2c38e5fb6463a1121546f60fa54d5c3cc0544561da84e1056d4c25623e0a045f",
+  "policySha256": "3832f34a2ed6a852c12cd4f7c1acbee3516f816e61ab7ef8ec1a3544291cfe67",
+  "controllerSha256": "28a7a8f10e617b8d42bb7679a01a7b04c36856acf769530ed64a1d0570be81e3",
+  "modelParity": {
+    "pass": true,
+    "robotMass": 32.63809926450245,
+    "options": {
+      "timestep": 0.005,
+      "integrator": 3,
+      "cone": 0,
+      "jacobian": 2,
+      "solver": 2,
+      "iterations": 10,
+      "tolerance": 1e-8,
+      "ls_iterations": 20,
+      "ls_tolerance": 0.01,
+      "gravity": [
+        0,
+        0,
+        -9.81
+      ]
+    },
+    "checks": [
+      {
+        "label": "nq",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "nv",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "nu",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "nbody",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "ngeom",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "nsensor",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "body 0 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 0 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 0 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 0 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 1 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 1 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 1 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 1 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 2 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 2 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 2 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 2 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 3 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 3 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 3 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 3 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 4 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 4 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 4 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 4 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 5 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 5 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 5 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 5 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 6 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 6 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 6 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 6 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 7 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 7 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 7 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 7 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 8 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 8 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 8 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 8 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 9 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 9 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 9 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 9 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 10 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 10 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 10 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 10 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 11 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 11 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 11 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 11 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 12 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 12 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 12 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 12 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 13 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 13 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 13 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 13 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 14 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 14 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 14 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 14 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 15 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 15 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 15 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 15 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 16 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 16 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 16 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 16 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 17 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 17 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 17 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 17 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 18 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 18 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 18 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 18 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 19 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 19 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 19 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 19 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 20 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 20 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 20 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 20 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 21 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 21 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 21 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 21 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 22 mass",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 22 inertia",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 22 inertialPosition",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "body 22 inertialQuaternion",
+        "maxAbs": 0,
+        "tolerance": 1e-8,
+        "pass": true
+      },
+      {
+        "label": "geom 0 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 0 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 0 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 1 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 1 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 1 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 2 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 2 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 2 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 3 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 3 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 3 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 4 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 4 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 4 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 5 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 5 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 5 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 6 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 6 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 6 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 7 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 7 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 7 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 8 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 8 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 8 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 9 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 9 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 9 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 10 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 10 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 10 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 11 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 11 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 11 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 12 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 12 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 12 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 13 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 13 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 13 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 14 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 14 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 14 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 15 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 15 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 15 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 16 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 16 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 16 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 17 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 17 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 17 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 18 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 18 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 18 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 19 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 19 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 19 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 20 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 20 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 20 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 21 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 21 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 21 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 22 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 22 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 22 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 23 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 23 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 23 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 24 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 24 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 24 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 25 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 25 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 25 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 26 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 26 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 26 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 27 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 27 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 27 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 28 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 28 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 28 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 29 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 29 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 29 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 30 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 30 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 30 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 31 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 31 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 31 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 32 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 32 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 32 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 33 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 33 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 33 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 34 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 34 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 34 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 35 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 35 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 35 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 36 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 36 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 36 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 37 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 37 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 37 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 38 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 38 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 38 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 39 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 39 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 39 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 40 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 40 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 40 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 41 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 41 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 41 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 42 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 42 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 42 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 43 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 43 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 43 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 44 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 44 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 44 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 45 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 45 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 45 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 46 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 46 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 46 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 47 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 47 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 47 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 48 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 48 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 48 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 49 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 49 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 49 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 50 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 50 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 50 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 51 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 51 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 51 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 52 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 52 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 52 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "geom 53 masks",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "geom 53 friction",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "geom 53 size",
+        "maxAbs": 0,
+        "tolerance": 1e-7,
+        "pass": true
+      },
+      {
+        "label": "joint 0 addresses",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "joint 0 range",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 0 passive",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 1 addresses",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "joint 1 range",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 1 passive",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 2 addresses",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "joint 2 range",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 2 passive",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 3 addresses",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "joint 3 range",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 3 passive",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 4 addresses",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "joint 4 range",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 4 passive",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 5 addresses",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "joint 5 range",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 5 passive",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 6 addresses",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "joint 6 range",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 6 passive",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 7 addresses",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "joint 7 range",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 7 passive",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 8 addresses",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "joint 8 range",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 8 passive",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 9 addresses",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "joint 9 range",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 9 passive",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 10 addresses",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "joint 10 range",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 10 passive",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 11 addresses",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "joint 11 range",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 11 passive",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 12 addresses",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "joint 12 range",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "joint 12 passive",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "actuator 0",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "actuator 1",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "actuator 2",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "actuator 3",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "actuator 4",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "actuator 5",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "actuator 6",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "actuator 7",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "actuator 8",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "actuator 9",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "actuator 10",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "actuator 11",
+        "maxAbs": 0,
+        "tolerance": 1e-9,
+        "pass": true
+      },
+      {
+        "label": "sensor 0",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "sensor 1",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "sensor 2",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "sensor 3",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "sensor 4",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "sensor 5",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "sensor 6",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "sensor 7",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "sensor 8",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "sensor 9",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "sensor 10",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "sensor 11",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "sensor 12",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "sensor 13",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "sensor 14",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "sensor 15",
+        "maxAbs": 0,
+        "tolerance": 0,
+        "pass": true
+      },
+      {
+        "label": "physics timestep",
+        "maxAbs": 0,
+        "tolerance": 1e-12,
+        "pass": true
+      },
+      {
+        "label": "physics integrator",
+        "maxAbs": 0,
+        "tolerance": 1e-12,
+        "pass": true
+      },
+      {
+        "label": "physics cone",
+        "maxAbs": 0,
+        "tolerance": 1e-12,
+        "pass": true
+      },
+      {
+        "label": "physics jacobian",
+        "maxAbs": 0,
+        "tolerance": 1e-12,
+        "pass": true
+      },
+      {
+        "label": "physics solver",
+        "maxAbs": 0,
+        "tolerance": 1e-12,
+        "pass": true
+      },
+      {
+        "label": "physics iterations",
+        "maxAbs": 0,
+        "tolerance": 1e-12,
+        "pass": true
+      },
+      {
+        "label": "physics tolerance",
+        "maxAbs": 0,
+        "tolerance": 1e-12,
+        "pass": true
+      },
+      {
+        "label": "physics ls_iterations",
+        "maxAbs": 0,
+        "tolerance": 1e-12,
+        "pass": true
+      },
+      {
+        "label": "physics ls_tolerance",
+        "maxAbs": 0,
+        "tolerance": 1e-12,
+        "pass": true
+      },
+      {
+        "label": "physics gravity",
+        "maxAbs": 0,
+        "tolerance": 1e-12,
+        "pass": true
+      }
+    ]
+  },
+  "fixtureParity": [
+    {
+      "name": "neutral",
+      "pass": true,
+      "misses": 0,
+      "selfHits": 8,
+      "comparisons": [
+        {
+          "label": "base_lin_vel",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "base_ang_vel",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "projected_gravity",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "joint_pos",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "joint_vel",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "previous_action",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "command",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "height_scan",
+          "maxAbs": 7.450580596923828e-9,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "rayOrigins",
+          "maxAbs": 1.0171890274524031e-8,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "rayDistances",
+          "maxAbs": 1.0397073882395524e-8,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "rayGeomIds",
+          "maxAbs": 0,
+          "tolerance": 0,
+          "pass": true
+        },
+        {
+          "label": "onnxAction",
+          "maxAbs": 5.960464477539062e-7,
+          "tolerance": 0.00002,
+          "pass": true
+        },
+        {
+          "label": "pytorchAction",
+          "maxAbs": 5.960464477539062e-7,
+          "tolerance": 0.00002,
+          "pass": true
+        },
+        {
+          "label": "torque",
+          "maxAbs": 0.0000035334145991328114,
+          "tolerance": 0.0001,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "crouch",
+      "pass": true,
+      "misses": 0,
+      "selfHits": 8,
+      "comparisons": [
+        {
+          "label": "base_lin_vel",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "base_ang_vel",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "projected_gravity",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "joint_pos",
+          "maxAbs": 5.960464477539063e-8,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "joint_vel",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "previous_action",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "command",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "height_scan",
+          "maxAbs": 2.7939677238464355e-9,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "rayOrigins",
+          "maxAbs": 4.768371586472142e-9,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "rayDistances",
+          "maxAbs": 5.223945165333532e-9,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "rayGeomIds",
+          "maxAbs": 0,
+          "tolerance": 0,
+          "pass": true
+        },
+        {
+          "label": "onnxAction",
+          "maxAbs": 9.5367431640625e-7,
+          "tolerance": 0.00002,
+          "pass": true
+        },
+        {
+          "label": "pytorchAction",
+          "maxAbs": 0.0000011920928955078125,
+          "tolerance": 0.00002,
+          "pass": true
+        },
+        {
+          "label": "torque",
+          "maxAbs": 0.00001144073547365565,
+          "tolerance": 0.0001,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "yawed_moving",
+      "pass": true,
+      "misses": 0,
+      "selfHits": 8,
+      "comparisons": [
+        {
+          "label": "base_lin_vel",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "base_ang_vel",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "projected_gravity",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "joint_pos",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "joint_vel",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "previous_action",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "command",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "height_scan",
+          "maxAbs": 7.450580596923828e-9,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "rayOrigins",
+          "maxAbs": 5.277851478080464e-8,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "rayDistances",
+          "maxAbs": 1.4122364208613014e-8,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "rayGeomIds",
+          "maxAbs": 0,
+          "tolerance": 0,
+          "pass": true
+        },
+        {
+          "label": "onnxAction",
+          "maxAbs": 6.258487701416016e-7,
+          "tolerance": 0.00002,
+          "pass": true
+        },
+        {
+          "label": "pytorchAction",
+          "maxAbs": 5.960464477539062e-7,
+          "tolerance": 0.00002,
+          "pass": true
+        },
+        {
+          "label": "torque",
+          "maxAbs": 0.0000025980640474543293,
+          "tolerance": 0.0001,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "rolled_self_hits",
+      "pass": true,
+      "misses": 0,
+      "selfHits": 12,
+      "comparisons": [
+        {
+          "label": "base_lin_vel",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "base_ang_vel",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "projected_gravity",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "joint_pos",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "joint_vel",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "previous_action",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "command",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "height_scan",
+          "maxAbs": 1.1175870895385742e-8,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "rayOrigins",
+          "maxAbs": 5.330747510079448e-8,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "rayDistances",
+          "maxAbs": 5.367272090835151e-8,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "rayGeomIds",
+          "maxAbs": 0,
+          "tolerance": 0,
+          "pass": true
+        },
+        {
+          "label": "onnxAction",
+          "maxAbs": 7.152557373046875e-7,
+          "tolerance": 0.00002,
+          "pass": true
+        },
+        {
+          "label": "pytorchAction",
+          "maxAbs": 7.152557373046875e-7,
+          "tolerance": 0.00002,
+          "pass": true
+        },
+        {
+          "label": "torque",
+          "maxAbs": 0.000003830679799143866,
+          "tolerance": 0.0001,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "pitch_singularity",
+      "pass": true,
+      "misses": 0,
+      "selfHits": 2,
+      "comparisons": [
+        {
+          "label": "base_lin_vel",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "base_ang_vel",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "projected_gravity",
+          "maxAbs": 5.960464477539063e-8,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "joint_pos",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "joint_vel",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "previous_action",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "command",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "height_scan",
+          "maxAbs": 1.4901161193847656e-8,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "rayOrigins",
+          "maxAbs": 5.999792873634391e-8,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "rayDistances",
+          "maxAbs": 3.356933608866797e-8,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "rayGeomIds",
+          "maxAbs": 0,
+          "tolerance": 0,
+          "pass": true
+        },
+        {
+          "label": "onnxAction",
+          "maxAbs": 9.5367431640625e-7,
+          "tolerance": 0.00002,
+          "pass": true
+        },
+        {
+          "label": "pytorchAction",
+          "maxAbs": 8.344650268554688e-7,
+          "tolerance": 0.00002,
+          "pass": true
+        },
+        {
+          "label": "torque",
+          "maxAbs": 0.0000028050804132817575,
+          "tolerance": 0.0001,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "high_altitude_misses",
+      "pass": true,
+      "misses": 179,
+      "selfHits": 8,
+      "comparisons": [
+        {
+          "label": "base_lin_vel",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "base_ang_vel",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "projected_gravity",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "joint_pos",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "joint_vel",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "previous_action",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "command",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "height_scan",
+          "maxAbs": 2.421438694000244e-8,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "rayOrigins",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "rayDistances",
+          "maxAbs": 1.4986548668716182e-9,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "rayGeomIds",
+          "maxAbs": 0,
+          "tolerance": 0,
+          "pass": true
+        },
+        {
+          "label": "onnxAction",
+          "maxAbs": 0.00000667572021484375,
+          "tolerance": 0.00002,
+          "pass": true
+        },
+        {
+          "label": "pytorchAction",
+          "maxAbs": 0.000006616115570068359,
+          "tolerance": 0.00002,
+          "pass": true
+        },
+        {
+          "label": "torque",
+          "maxAbs": 0.000006381713296477187,
+          "tolerance": 0.0001,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "motor_speed_extremes",
+      "pass": true,
+      "misses": 0,
+      "selfHits": 8,
+      "comparisons": [
+        {
+          "label": "base_lin_vel",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "base_ang_vel",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "projected_gravity",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "joint_pos",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "joint_vel",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "previous_action",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "command",
+          "maxAbs": 0,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "height_scan",
+          "maxAbs": 7.450580596923828e-9,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "rayOrigins",
+          "maxAbs": 1.0171890274524031e-8,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "rayDistances",
+          "maxAbs": 1.0397073882395524e-8,
+          "tolerance": 0.000003,
+          "pass": true
+        },
+        {
+          "label": "rayGeomIds",
+          "maxAbs": 0,
+          "tolerance": 0,
+          "pass": true
+        },
+        {
+          "label": "onnxAction",
+          "maxAbs": 0.0000019073486328125,
+          "tolerance": 0.00002,
+          "pass": true
+        },
+        {
+          "label": "pytorchAction",
+          "maxAbs": 0.0000019073486328125,
+          "tolerance": 0.00002,
+          "pass": true
+        },
+        {
+          "label": "torque",
+          "maxAbs": 0.000004802281548421661,
+          "tolerance": 0.0001,
+          "pass": true
+        }
+      ]
+    }
+  ],
+  "motorParity": [
+    {
+      "label": "positive_large_action",
+      "maxAbs": 0.000004711914073141088,
+      "tolerance": 0.0001,
+      "pass": true
+    },
+    {
+      "label": "negative_large_action",
+      "maxAbs": 0.000004711914073141088,
+      "tolerance": 0.0001,
+      "pass": true
+    },
+    {
+      "label": "zero_action",
+      "maxAbs": 9.918212917625624e-9,
+      "tolerance": 0.0001,
+      "pass": true
+    }
+  ],
+  "fixedActionTrajectory": [
+    {
+      "substep": 1,
+      "pass": true,
+      "checks": [
+        {
+          "label": "torque",
+          "maxAbs": 0.0000035334145991328114,
+          "tolerance": 0.001,
+          "pass": true
+        },
+        {
+          "label": "qpos",
+          "maxAbs": 4.343225445957444e-9,
+          "tolerance": 0.00001,
+          "pass": true
+        },
+        {
+          "label": "qvel",
+          "maxAbs": 8.686451007378082e-7,
+          "tolerance": 0.001,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "substep": 2,
+      "pass": true,
+      "checks": [
+        {
+          "label": "torque",
+          "maxAbs": 0.0000040729600110367414,
+          "tolerance": 0.001,
+          "pass": true
+        },
+        {
+          "label": "qpos",
+          "maxAbs": 6.35841357343736e-9,
+          "tolerance": 0.00001,
+          "pass": true
+        },
+        {
+          "label": "qvel",
+          "maxAbs": 0.0000010223454349755912,
+          "tolerance": 0.001,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "substep": 3,
+      "pass": true,
+      "checks": [
+        {
+          "label": "torque",
+          "maxAbs": 0.00000475599819305117,
+          "tolerance": 0.001,
+          "pass": true
+        },
+        {
+          "label": "qpos",
+          "maxAbs": 7.864278783742407e-9,
+          "tolerance": 0.00001,
+          "pass": true
+        },
+        {
+          "label": "qvel",
+          "maxAbs": 0.0000010139176079282386,
+          "tolerance": 0.001,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "substep": 4,
+      "pass": true,
+      "checks": [
+        {
+          "label": "torque",
+          "maxAbs": 0.000004638593328554208,
+          "tolerance": 0.001,
+          "pass": true
+        },
+        {
+          "label": "qpos",
+          "maxAbs": 1.1859866866359425e-8,
+          "tolerance": 0.00001,
+          "pass": true
+        },
+        {
+          "label": "qvel",
+          "maxAbs": 9.131506408799339e-7,
+          "tolerance": 0.001,
+          "pass": true
+        }
+      ]
+    }
+  ],
+  "episodes": [
+    {
+      "name": "stationary",
+      "command": [
+        0,
+        0,
+        0
+      ],
+      "requestedSteps": 600,
+      "executedSteps": 600,
+      "measurementSamples": 500,
+      "measurementSeconds": 10,
+      "pass": true,
+      "error": null,
+      "fall": false,
+      "final": {
+        "ready": true,
+        "active": true,
+        "error": null,
+        "controlSteps": 600,
+        "physicsSteps": 2400,
+        "timeResets": 0,
+        "warningCounts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "command": [
+          0,
+          0,
+          0
+        ],
+        "action": [
+          0.7408990263938904,
+          -0.8272990584373474,
+          1.058525800704956,
+          0.04376715049147606,
+          -0.23912620544433594,
+          1.642205834388733,
+          -0.3680439889431,
+          -3.3373606204986572,
+          5.507752895355225,
+          -0.12083655595779419,
+          0.32391899824142456,
+          2.5060625076293945
+        ],
+        "position": [
+          -0.031043173520128628,
+          0.010864140644208509,
+          0.4566369257990505
+        ],
+        "actualVelocity": [
+          -0.00013793318523083877,
+          0.0008905954892786819,
+          0.0026242043861462463
+        ],
+        "heading": 0.21232970381019117,
+        "footPositions": [
+          [
+            0.2974327686441353,
+            0.30908221525582413,
+            0.02722910504377593
+          ],
+          [
+            0.2720267010644047,
+            -0.13472730400907412,
+            0.025867752958163875
+          ],
+          [
+            -0.29215325586230634,
+            0.16853768376541362,
+            0.025858026989514865
+          ],
+          [
+            -0.5141620432443461,
+            -0.2504095498969339,
+            0.02710093177929146
+          ]
+        ],
+        "tilt": 0.03443375394017993,
+        "heightAboveFeet": 0.430122971606364,
+        "fall": false,
+        "simTime": 12.000000000000476,
+        "contacts": 4,
+        "displacement": [
+          -0.031043173520128628,
+          0.010864140644208509,
+          -0.034272074200949465
+        ],
+        "busy": false,
+        "manifestId": "cheetah",
+        "controller": "Draft Cheetah PPO; nominal exported native model",
+        "physicsEngine": "MuJoCo WASM 3.11.0",
+        "policyRuntime": "ONNX Runtime Web WASM 1.27.0"
+      },
+      "meanActualVelocity": [
+        0.0019497205527059546,
+        0.002668385949929215,
+        0.013562459710155078
+      ],
+      "meanAbsoluteTrackingError": [
+        0.002177058288406652,
+        0.002900683856391178,
+        0.013562459710155078
+      ],
+      "measurementDisplacement": [
+        0.014877708761019771,
+        0.02995496562059872,
+        -0.018207408815040904
+      ],
+      "headingChange": 0.13569087230501595,
+      "footContactOnEdges": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "footVerticalExcursion": [
+        0.018420027853799453,
+        0.00016073785674627916,
+        0.00021545140793455264,
+        0.00019383925744628772
+      ],
+      "wallSeconds": 0.5258323909999999
+    },
+    {
+      "name": "forward",
+      "command": [
+        0.5,
+        0,
+        0
+      ],
+      "requestedSteps": 600,
+      "executedSteps": 600,
+      "measurementSamples": 500,
+      "measurementSeconds": 10,
+      "pass": true,
+      "error": null,
+      "fall": false,
+      "final": {
+        "ready": true,
+        "active": true,
+        "error": null,
+        "controlSteps": 600,
+        "physicsSteps": 2400,
+        "timeResets": 0,
+        "warningCounts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "command": [
+          0.5,
+          0,
+          0
+        ],
+        "action": [
+          1.3824408054351807,
+          0.3778127431869507,
+          -2.8427255153656006,
+          0.6469058394432068,
+          0.38155612349510193,
+          1.4299001693725586,
+          -0.8325963020324707,
+          -0.2094937413930893,
+          1.433643102645874,
+          0.525470495223999,
+          -1.3109593391418457,
+          -2.5115394592285156
+        ],
+        "position": [
+          5.556395928230762,
+          0.4771792302097711,
+          0.4493587670557782
+        ],
+        "actualVelocity": [
+          0.42177363597438594,
+          -0.02060971421857572,
+          -0.00207336403687263
+        ],
+        "heading": 0.27169775562167514,
+        "footPositions": [
+          [
+            5.851440081426459,
+            0.8018508674904608,
+            0.11044484749751216
+          ],
+          [
+            5.8903006521844,
+            0.38934223308314964,
+            0.025631814576609013
+          ],
+          [
+            5.181362692570946,
+            0.5320275000844965,
+            0.025648454514887842
+          ],
+          [
+            5.3294692788920806,
+            0.28276693163405564,
+            0.11217022526327779
+          ]
+        ],
+        "tilt": 0.013135723071391747,
+        "heightAboveFeet": 0.38088493159270653,
+        "fall": false,
+        "simTime": 12.000000000000476,
+        "contacts": 2,
+        "displacement": [
+          5.556395928230762,
+          0.4771792302097711,
+          -0.04155023294422178
+        ],
+        "busy": false,
+        "manifestId": "cheetah",
+        "controller": "Draft Cheetah PPO; nominal exported native model",
+        "physicsEngine": "MuJoCo WASM 3.11.0",
+        "policyRuntime": "ONNX Runtime Web WASM 1.27.0"
+      },
+      "meanActualVelocity": [
+        0.47230030963324043,
+        -0.02300505151909912,
+        0.02292345679166182
+      ],
+      "meanAbsoluteTrackingError": [
+        0.042489193680521085,
+        0.029451461561070466,
+        0.034060762243488855
+      ],
+      "measurementDisplacement": [
+        4.6825342920305415,
+        0.5087153879869701,
+        -0.0008099985452066361
+      ],
+      "headingChange": 0.228307725493006,
+      "footContactOnEdges": [
+        15,
+        15,
+        15,
+        15
+      ],
+      "footVerticalExcursion": [
+        0.09216217129018323,
+        0.09844822776055595,
+        0.09521326909837768,
+        0.09309015636443636
+      ],
+      "wallSeconds": 0.48442467899999997
+    },
+    {
+      "name": "turn_left",
+      "command": [
+        0,
+        0,
+        0.5
+      ],
+      "requestedSteps": 600,
+      "executedSteps": 600,
+      "measurementSamples": 500,
+      "measurementSeconds": 10,
+      "pass": true,
+      "error": null,
+      "fall": false,
+      "final": {
+        "ready": true,
+        "active": true,
+        "error": null,
+        "controlSteps": 600,
+        "physicsSteps": 2400,
+        "timeResets": 0,
+        "warningCounts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "command": [
+          0,
+          0,
+          0.5
+        ],
+        "action": [
+          -0.7059330940246582,
+          0.19023245573043823,
+          1.0331182479858398,
+          -1.125450611114502,
+          2.1601927280426025,
+          -1.6561528444290161,
+          0.5008126497268677,
+          -1.0158013105392456,
+          -2.05204176902771,
+          1.2490994930267334,
+          -0.7561916708946228,
+          1.6075540781021118
+        ],
+        "position": [
+          -0.011890598984870918,
+          0.025216849904356516,
+          0.45411141839721963
+        ],
+        "actualVelocity": [
+          0.014863165248869546,
+          -0.004511646015893766,
+          0.5370917425842282
+        ],
+        "heading": -0.17681970064819813,
+        "footPositions": [
+          [
+            0.3923724638449131,
+            0.09558137727284845,
+            0.02586375983813241
+          ],
+          [
+            0.20641087077317805,
+            -0.24495646932056,
+            0.10401067954575763
+          ],
+          [
+            -0.23761096922988015,
+            0.25342275553723936,
+            0.10423146985742608
+          ],
+          [
+            -0.356902623252883,
+            -0.01616319376796797,
+            0.025413233898432308
+          ]
+        ],
+        "tilt": 0.020900254114663733,
+        "heightAboveFeet": 0.38923163261228255,
+        "fall": false,
+        "simTime": 12.000000000000476,
+        "contacts": 2,
+        "displacement": [
+          -0.011890598984870918,
+          0.025216849904356516,
+          -0.03679758160278035
+        ],
+        "busy": false,
+        "manifestId": "cheetah",
+        "controller": "Draft Cheetah PPO; nominal exported native model",
+        "physicsEngine": "MuJoCo WASM 3.11.0",
+        "policyRuntime": "ONNX Runtime Web WASM 1.27.0"
+      },
+      "meanActualVelocity": [
+        0.009623758850278951,
+        -0.00887126822173576,
+        0.5123135187299809
+      ],
+      "meanAbsoluteTrackingError": [
+        0.018024230572831635,
+        0.013973168010897272,
+        0.04016166975661456
+      ],
+      "measurementDisplacement": [
+        -0.02744021160184819,
+        0.015345420733471157,
+        0.0013218861708584329
+      ],
+      "headingChange": 5.106589541179317,
+      "footContactOnEdges": [
+        14,
+        14,
+        14,
+        14
+      ],
+      "footVerticalExcursion": [
+        0.09039116545968559,
+        0.08718580855537408,
+        0.08648981933341705,
+        0.10011781362030245
+      ],
+      "wallSeconds": 0.48755144399999994
+    },
+    {
+      "name": "forward_ui_max",
+      "command": [
+        0.7,
+        0,
+        0
+      ],
+      "requestedSteps": 600,
+      "executedSteps": 600,
+      "measurementSamples": 500,
+      "measurementSeconds": 10,
+      "pass": true,
+      "error": null,
+      "fall": false,
+      "final": {
+        "ready": true,
+        "active": true,
+        "error": null,
+        "controlSteps": 600,
+        "physicsSteps": 2400,
+        "timeResets": 0,
+        "warningCounts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "command": [
+          0.7,
+          0,
+          0
+        ],
+        "action": [
+          1.1236505508422852,
+          -0.22752876579761505,
+          -2.785886287689209,
+          0.8629610538482666,
+          0.5543861389160156,
+          1.5530495643615723,
+          -0.7871187925338745,
+          0.16399958729743958,
+          1.3439397811889648,
+          0.38779592514038086,
+          -2.09619140625,
+          -1.913510799407959
+        ],
+        "position": [
+          7.836887298529235,
+          0.3641235156911879,
+          0.4477907446337379
+        ],
+        "actualVelocity": [
+          0.6246650547084118,
+          -0.03010304786900874,
+          -0.04197898500738906
+        ],
+        "heading": 0.16451530785524504,
+        "footPositions": [
+          [
+            8.196000918057669,
+            0.6536904405795462,
+            0.11097986253562234
+          ],
+          [
+            8.135853145011748,
+            0.2494628307447615,
+            0.025697925226898816
+          ],
+          [
+            7.431082475349538,
+            0.45845154012755757,
+            0.025800100382923352
+          ],
+          [
+            7.624810386705185,
+            0.19409061906099168,
+            0.11119232178162722
+          ]
+        ],
+        "tilt": 0.011461920290726398,
+        "heightAboveFeet": 0.37937319215196996,
+        "fall": false,
+        "simTime": 12.000000000000476,
+        "contacts": 2,
+        "displacement": [
+          7.836887298529235,
+          0.3641235156911879,
+          -0.04311825536626207
+        ],
+        "busy": false,
+        "manifestId": "cheetah",
+        "controller": "Draft Cheetah PPO; nominal exported native model",
+        "physicsEngine": "MuJoCo WASM 3.11.0",
+        "policyRuntime": "ONNX Runtime Web WASM 1.27.0"
+      },
+      "meanActualVelocity": [
+        0.6656853845759623,
+        -0.024820634440525555,
+        0.014104973620748954
+      ],
+      "meanAbsoluteTrackingError": [
+        0.04564300593354844,
+        0.028679834728589492,
+        0.033951413125241615
+      ],
+      "measurementDisplacement": [
+        6.631292536732801,
+        0.4025538731363133,
+        0.000986640080458956
+      ],
+      "headingChange": 0.13879219402644455,
+      "footContactOnEdges": [
+        16,
+        16,
+        16,
+        16
+      ],
+      "footVerticalExcursion": [
+        0.09200194423929128,
+        0.10195431056899251,
+        0.09204767290113162,
+        0.09283825959289205
+      ],
+      "wallSeconds": 0.4691682800000001
+    },
+    {
+      "name": "backward_ui_max",
+      "command": [
+        -0.5,
+        0,
+        0
+      ],
+      "requestedSteps": 600,
+      "executedSteps": 600,
+      "measurementSamples": 500,
+      "measurementSeconds": 10,
+      "pass": true,
+      "error": null,
+      "fall": false,
+      "final": {
+        "ready": true,
+        "active": true,
+        "error": null,
+        "controlSteps": 600,
+        "physicsSteps": 2400,
+        "timeResets": 0,
+        "warningCounts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "command": [
+          -0.5,
+          0,
+          0
+        ],
+        "action": [
+          -0.4444054663181305,
+          -0.8685178160667419,
+          1.6185364723205566,
+          -1.3762292861938477,
+          0.9551935791969299,
+          -1.5157076120376587,
+          0.8934309482574463,
+          0.8338022232055664,
+          -2.2123610973358154,
+          1.1180531978607178,
+          -0.7391961812973022,
+          2.2666985988616943
+        ],
+        "position": [
+          -5.7547845692792325,
+          -0.5536859441775743,
+          0.45241164739383427
+        ],
+        "actualVelocity": [
+          -0.4132844444890413,
+          -0.06519767334738166,
+          0.04433453397453897
+        ],
+        "heading": 0.021166115998175545,
+        "footPositions": [
+          [
+            -5.361851238625898,
+            -0.38589670358382566,
+            0.02557687169400824
+          ],
+          [
+            -5.354885053844026,
+            -0.7815243795004503,
+            0.10109600105190292
+          ],
+          [
+            -6.094279449370595,
+            -0.3524704360544966,
+            0.10337837329404229
+          ],
+          [
+            -6.0725516416484915,
+            -0.6767910945060948,
+            0.025120972526932073
+          ]
+        ],
+        "tilt": 0.011934423216283364,
+        "heightAboveFeet": 0.38861859275211286,
+        "fall": false,
+        "simTime": 12.000000000000476,
+        "contacts": 2,
+        "displacement": [
+          -5.7547845692792325,
+          -0.5536859441775743,
+          -0.03849735260616571
+        ],
+        "busy": false,
+        "manifestId": "cheetah",
+        "controller": "Draft Cheetah PPO; nominal exported native model",
+        "physicsEngine": "MuJoCo WASM 3.11.0",
+        "policyRuntime": "ONNX Runtime Web WASM 1.27.0"
+      },
+      "meanActualVelocity": [
+        -0.4876321703923195,
+        -0.04280612383457026,
+        0.0009697222216678017
+      ],
+      "meanAbsoluteTrackingError": [
+        0.04504184457476828,
+        0.042904439873654485,
+        0.035657367816059084
+      ],
+      "measurementDisplacement": [
+        -4.854392585780244,
+        -0.5100544704836059,
+        0.003225513916068623
+      ],
+      "headingChange": 0.009312975675371727,
+      "footContactOnEdges": [
+        16,
+        16,
+        16,
+        16
+      ],
+      "footVerticalExcursion": [
+        0.096430208126433,
+        0.09314570232755329,
+        0.0922485097230808,
+        0.10196362852993678
+      ],
+      "wallSeconds": 0.4661273889999998
+    },
+    {
+      "name": "turn_left_ui_max",
+      "command": [
+        0,
+        0,
+        0.7
+      ],
+      "requestedSteps": 600,
+      "executedSteps": 600,
+      "measurementSamples": 500,
+      "measurementSeconds": 10,
+      "pass": true,
+      "error": null,
+      "fall": false,
+      "final": {
+        "ready": true,
+        "active": true,
+        "error": null,
+        "controlSteps": 600,
+        "physicsSteps": 2400,
+        "timeResets": 0,
+        "warningCounts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "command": [
+          0,
+          0,
+          0.7
+        ],
+        "action": [
+          -0.929643988609314,
+          -0.855420708656311,
+          1.2459183931350708,
+          -0.21575000882148743,
+          0.909512460231781,
+          -0.10464317351579666,
+          0.26682594418525696,
+          -0.894098162651062,
+          -0.5624804496765137,
+          1.047708511352539,
+          -1.013464331626892,
+          1.8689004182815552
+        ],
+        "position": [
+          0.024792687108924603,
+          0.039140926280132826,
+          0.4587899640068383
+        ],
+        "actualVelocity": [
+          -0.03496796645244377,
+          0.0027313015878908955,
+          0.6333181002758066
+        ],
+        "heading": 2.05293006078346,
+        "footPositions": [
+          [
+            -0.2477320729535904,
+            0.36515085565721395,
+            0.025858526899714546
+          ],
+          [
+            0.06183271553410815,
+            0.38254349980234087,
+            0.06889812612986265
+          ],
+          [
+            0.008534617014427093,
+            -0.300386772755712,
+            0.07902556154259671
+          ],
+          [
+            0.23021128560511972,
+            -0.20913410231587384,
+            0.025405618041580508
+          ]
+        ],
+        "tilt": 0.009796235872944873,
+        "heightAboveFeet": 0.4089930058533997,
+        "fall": false,
+        "simTime": 12.000000000000476,
+        "contacts": 2,
+        "displacement": [
+          0.024792687108924603,
+          0.039140926280132826,
+          -0.03211903599316168
+        ],
+        "busy": false,
+        "manifestId": "cheetah",
+        "controller": "Draft Cheetah PPO; nominal exported native model",
+        "physicsEngine": "MuJoCo WASM 3.11.0",
+        "policyRuntime": "ONNX Runtime Web WASM 1.27.0"
+      },
+      "meanActualVelocity": [
+        0.020596903159578413,
+        -0.0070245325092071695,
+        0.6993496113100376
+      ],
+      "meanAbsoluteTrackingError": [
+        0.027895824376987323,
+        0.01192977206089988,
+        0.04628083338313599
+      ],
+      "measurementDisplacement": [
+        0.015322471752805936,
+        0.018993531354806397,
+        -0.0005302854959680636
+      ],
+      "headingChange": 6.975184909819112,
+      "footContactOnEdges": [
+        15,
+        15,
+        15,
+        15
+      ],
+      "footVerticalExcursion": [
+        0.09088500793410306,
+        0.0960251463242742,
+        0.09833134222916823,
+        0.09900930633742482
+      ],
+      "wallSeconds": 0.4667665430000002
+    },
+    {
+      "name": "turn_right_ui_max",
+      "command": [
+        0,
+        0,
+        -0.7
+      ],
+      "requestedSteps": 600,
+      "executedSteps": 600,
+      "measurementSamples": 500,
+      "measurementSeconds": 10,
+      "pass": true,
+      "error": null,
+      "fall": false,
+      "final": {
+        "ready": true,
+        "active": true,
+        "error": null,
+        "controlSteps": 600,
+        "physicsSteps": 2400,
+        "timeResets": 0,
+        "warningCounts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "command": [
+          0,
+          0,
+          -0.7
+        ],
+        "action": [
+          1.053212285041809,
+          0.6827206015586853,
+          -2.6167008876800537,
+          1.138316035270691,
+          -0.4195988178253174,
+          1.381752610206604,
+          -1.262141227722168,
+          0.1345086693763733,
+          2.111299753189087,
+          -0.1825401484966278,
+          -0.4871157109737396,
+          -2.81577205657959
+        ],
+        "position": [
+          -0.05721180735838942,
+          -0.018784081740190764,
+          0.4510854969660183
+        ],
+        "actualVelocity": [
+          -0.015064881875471843,
+          0.0011479134576158454,
+          -0.6101508328217771
+        ],
+        "heading": -2.0568272547737614,
+        "footPositions": [
+          [
+            -0.05878105052680402,
+            -0.4551997199827358,
+            0.06381054500752889
+          ],
+          [
+            -0.35983260535485395,
+            -0.2181610437328928,
+            0.02149466314538226
+          ],
+          [
+            0.22767270188053507,
+            0.18336020190910235,
+            0.02183002071676937
+          ],
+          [
+            -0.06508070829111064,
+            0.29461395059777723,
+            0.0721005773001242
+          ]
+        ],
+        "tilt": 0.013136335505887388,
+        "heightAboveFeet": 0.4062765454235671,
+        "fall": false,
+        "simTime": 12.000000000000476,
+        "contacts": 2,
+        "displacement": [
+          -0.05721180735838942,
+          -0.018784081740190764,
+          -0.03982350303398169
+        ],
+        "busy": false,
+        "manifestId": "cheetah",
+        "controller": "Draft Cheetah PPO; nominal exported native model",
+        "physicsEngine": "MuJoCo WASM 3.11.0",
+        "policyRuntime": "ONNX Runtime Web WASM 1.27.0"
+      },
+      "meanActualVelocity": [
+        -0.007995446352567851,
+        -0.0043076166279156945,
+        -0.7004350375145305
+      ],
+      "meanAbsoluteTrackingError": [
+        0.01936551638360649,
+        0.010695803943765028,
+        0.0349822409101678
+      ],
+      "measurementDisplacement": [
+        0.0033506335503422635,
+        0.013388997015055276,
+        -0.0023865386519242304
+      ],
+      "headingChange": -6.990105885331425,
+      "footContactOnEdges": [
+        15,
+        16,
+        16,
+        15
+      ],
+      "footVerticalExcursion": [
+        0.10615293682991322,
+        0.08348358918805449,
+        0.09559670414102145,
+        0.10804719267479188
+      ],
+      "wallSeconds": 0.465181634
+    },
+    {
+      "name": "forward_left_combined",
+      "command": [
+        0.7,
+        0,
+        0.7
+      ],
+      "requestedSteps": 600,
+      "executedSteps": 600,
+      "measurementSamples": 500,
+      "measurementSeconds": 10,
+      "pass": true,
+      "error": null,
+      "fall": false,
+      "final": {
+        "ready": true,
+        "active": true,
+        "error": null,
+        "controlSteps": 600,
+        "physicsSteps": 2400,
+        "timeResets": 0,
+        "warningCounts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "command": [
+          0.7,
+          0,
+          0.7
+        ],
+        "action": [
+          -0.7367208003997803,
+          0.7219135165214539,
+          0.3020556569099426,
+          -0.8816805481910706,
+          3.7831106185913086,
+          -1.6280136108398438,
+          0.8389451503753662,
+          0.5477285385131836,
+          -3.471691131591797,
+          0.80150306224823,
+          0.8496599197387695,
+          1.7274166345596313
+        ],
+        "position": [
+          0.7429683423426554,
+          1.4436991238024353,
+          0.4462246570454273
+        ],
+        "actualVelocity": [
+          0.6466534350088599,
+          0.003585292274513786,
+          0.7512377094531901
+        ],
+        "heading": 2.1200855443346818,
+        "footPositions": [
+          [
+            0.4326244584122439,
+            1.6941666528994357,
+            0.026011405124275633
+          ],
+          [
+            0.8368448633311005,
+            1.6906112111298386,
+            0.11171859644475585
+          ],
+          [
+            0.7505645559724768,
+            1.0380111731346475,
+            0.11805051377183165
+          ],
+          [
+            1.0044055150339886,
+            1.2406756673472066,
+            0.02503547791872146
+          ]
+        ],
+        "tilt": 0.014018162355058638,
+        "heightAboveFeet": 0.37602065873053114,
+        "fall": false,
+        "simTime": 12.000000000000476,
+        "contacts": 2,
+        "displacement": [
+          0.7429683423426554,
+          1.4436991238024353,
+          -0.04468434295457269
+        ],
+        "busy": false,
+        "manifestId": "cheetah",
+        "controller": "Draft Cheetah PPO; nominal exported native model",
+        "physicsEngine": "MuJoCo WASM 3.11.0",
+        "policyRuntime": "ONNX Runtime Web WASM 1.27.0"
+      },
+      "meanActualVelocity": [
+        0.6843887674469598,
+        -0.022582117498204886,
+        0.7050357366563708
+      ],
+      "meanAbsoluteTrackingError": [
+        0.0563498157372948,
+        0.02681204655758333,
+        0.04183469761347459
+      ],
+      "measurementDisplacement": [
+        -0.10473482327613048,
+        0.7023308100574153,
+        -0.00030392297044451455
+      ],
+      "headingChange": 7.035885432843804,
+      "footContactOnEdges": [
+        18,
+        17,
+        17,
+        18
+      ],
+      "footVerticalExcursion": [
+        0.09271526228425925,
+        0.10324096952552073,
+        0.10445530888285443,
+        0.09611764531474536
+      ],
+      "wallSeconds": 0.4693125110000001
+    }
+  ],
+  "lifecycle": {
+    "reset": {
+      "name": "AbortError",
+      "message": "Controller step was cancelled",
+      "time": 0,
+      "pass": true
+    },
+    "pause": {
+      "name": "AbortError",
+      "message": "Controller step was cancelled",
+      "time": 0,
+      "pass": true
+    },
+    "dispose": {
+      "name": "AbortError",
+      "message": "Controller step was cancelled",
+      "time": null,
+      "pass": true
+    },
+    "invalidState": {
+      "error": "Cheetah observation contains non-finite values",
+      "warningCounts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "timeResets": 0,
+      "pass": true
+    },
+    "badPolicyHash": {
+      "error": "Controller policy SHA-256 does not match the verified export",
+      "pass": true
+    }
+  },
+  "pass": true
+}

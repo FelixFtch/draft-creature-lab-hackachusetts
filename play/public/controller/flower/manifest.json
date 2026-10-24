@@ -1,0 +1,3894 @@
+{
+  "schemaVersion": 1,
+  "robotId": "draft-flower-sixleg-s0",
+  "label": "Flower six-leg new-body learned policy; evaluation pending",
+  "xmlUrl": "/controller/flower/scene.xml",
+  "policyUrl": "/controller/flower/policy.onnx",
+  "fixturesUrl": "/controller/flower/fixtures.json",
+  "nativeMujocoVersion": "3.8.0",
+  "checkpointSha256": "e877b0a3d5447070c7ee2661ba5567b8b2d2c3db226c9f9673d8935783e79e25",
+  "xmlSha256": "95bd775ac07d8b42ccf1936c1662c8d2b13caf45b08289eda784706e375ccbd6",
+  "policySha256": "3364db3b53d5195abc0725b3eb9924eabcb4ae390bd588bd542494700bc08abf",
+  "rawBodyXmlSha256": "63c1b09b73e18372d02fc03eb328aa2e429177ad9fdb058a710fc2529525e683",
+  "sourceRobotXmlSha256": "63c1b09b73e18372d02fc03eb328aa2e429177ad9fdb058a710fc2529525e683",
+  "sourceMeshSha256": "582fd1714c5fbb7e8c6a915b81d115b84ae3e5a63f52b71609341823fbe8a9ec",
+  "jointNames": [
+    "robot/leg0_hip_yaw",
+    "robot/leg0_hip_pitch",
+    "robot/leg0_knee",
+    "robot/leg1_hip_yaw",
+    "robot/leg1_hip_pitch",
+    "robot/leg1_knee",
+    "robot/leg2_hip_yaw",
+    "robot/leg2_hip_pitch",
+    "robot/leg2_knee",
+    "robot/leg3_hip_yaw",
+    "robot/leg3_hip_pitch",
+    "robot/leg3_knee",
+    "robot/leg4_hip_yaw",
+    "robot/leg4_hip_pitch",
+    "robot/leg4_knee",
+    "robot/leg5_hip_yaw",
+    "robot/leg5_hip_pitch",
+    "robot/leg5_knee"
+  ],
+  "logicalJointNames": [
+    "leg0_hip_yaw",
+    "leg0_hip_pitch",
+    "leg0_knee",
+    "leg1_hip_yaw",
+    "leg1_hip_pitch",
+    "leg1_knee",
+    "leg2_hip_yaw",
+    "leg2_hip_pitch",
+    "leg2_knee",
+    "leg3_hip_yaw",
+    "leg3_hip_pitch",
+    "leg3_knee",
+    "leg4_hip_yaw",
+    "leg4_hip_pitch",
+    "leg4_knee",
+    "leg5_hip_yaw",
+    "leg5_hip_pitch",
+    "leg5_knee"
+  ],
+  "jointIds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "jointQposAdr": [
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24
+  ],
+  "jointDofAdr": [
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+  ],
+  "actuatorNames": [
+    "robot/leg0_hip_yaw",
+    "robot/leg0_hip_pitch",
+    "robot/leg0_knee",
+    "robot/leg1_hip_yaw",
+    "robot/leg1_hip_pitch",
+    "robot/leg1_knee",
+    "robot/leg2_hip_yaw",
+    "robot/leg2_hip_pitch",
+    "robot/leg2_knee",
+    "robot/leg3_hip_yaw",
+    "robot/leg3_hip_pitch",
+    "robot/leg3_knee",
+    "robot/leg4_hip_yaw",
+    "robot/leg4_hip_pitch",
+    "robot/leg4_knee",
+    "robot/leg5_hip_yaw",
+    "robot/leg5_hip_pitch",
+    "robot/leg5_knee"
+  ],
+  "actuatorIds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+  ],
+  "sensorNames": {
+    "linearVelocity": "robot/imu_lin_vel",
+    "angularVelocity": "robot/imu_ang_vel"
+  },
+  "torsoBodyName": "robot/torso_link",
+  "torsoBodyId": 2,
+  "footGeomNames": [
+    "robot/leg0_lower_leg_link_sphere",
+    "robot/leg1_lower_leg_link_sphere",
+    "robot/leg2_lower_leg_link_sphere",
+    "robot/leg3_lower_leg_link_sphere",
+    "robot/leg4_lower_leg_link_sphere",
+    "robot/leg5_lower_leg_link_sphere"
+  ],
+  "footSiteNames": [
+    "robot/leg0_foot",
+    "robot/leg1_foot",
+    "robot/leg2_foot",
+    "robot/leg3_foot",
+    "robot/leg4_foot",
+    "robot/leg5_foot"
+  ],
+  "footRadius": 0.025,
+  "fallCriteria": {
+    "orientationLimitRad": 1.0,
+    "minimumBodyHeight": 0.1368489022215,
+    "minimumRootHeightAboveGround": 0.1368489022215,
+    "orientationFormula": "acos(-projectedGravityZ)>orientationLimitRad",
+    "heightFormula": "torsoWorldZ - groundZ < minimumRootHeightAboveGround"
+  },
+  "defaultJointPosition": [
+    0.0,
+    0.15000000596046448,
+    1.25,
+    0.0,
+    0.15000000596046448,
+    1.25,
+    0.0,
+    0.15000000596046448,
+    1.25,
+    0.0,
+    0.15000000596046448,
+    1.25,
+    0.0,
+    0.15000000596046448,
+    1.25,
+    0.0,
+    0.15000000596046448,
+    1.25
+  ],
+  "defaultJointVelocity": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "encoderBias": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "actionScale": 0.25,
+  "actionClip": null,
+  "initialQpos": [
+    0.0,
+    0.0,
+    0.273698,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25
+  ],
+  "initialQvel": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "initialCtrl": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "motors": [
+    {
+      "jointName": "robot/leg0_hip_yaw",
+      "actuatorName": "robot/leg0_hip_yaw",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0
+    },
+    {
+      "jointName": "robot/leg0_hip_pitch",
+      "actuatorName": "robot/leg0_hip_pitch",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0
+    },
+    {
+      "jointName": "robot/leg0_knee",
+      "actuatorName": "robot/leg0_knee",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0
+    },
+    {
+      "jointName": "robot/leg1_hip_yaw",
+      "actuatorName": "robot/leg1_hip_yaw",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0
+    },
+    {
+      "jointName": "robot/leg1_hip_pitch",
+      "actuatorName": "robot/leg1_hip_pitch",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0
+    },
+    {
+      "jointName": "robot/leg1_knee",
+      "actuatorName": "robot/leg1_knee",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0
+    },
+    {
+      "jointName": "robot/leg2_hip_yaw",
+      "actuatorName": "robot/leg2_hip_yaw",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0
+    },
+    {
+      "jointName": "robot/leg2_hip_pitch",
+      "actuatorName": "robot/leg2_hip_pitch",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0
+    },
+    {
+      "jointName": "robot/leg2_knee",
+      "actuatorName": "robot/leg2_knee",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0
+    },
+    {
+      "jointName": "robot/leg3_hip_yaw",
+      "actuatorName": "robot/leg3_hip_yaw",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0
+    },
+    {
+      "jointName": "robot/leg3_hip_pitch",
+      "actuatorName": "robot/leg3_hip_pitch",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0
+    },
+    {
+      "jointName": "robot/leg3_knee",
+      "actuatorName": "robot/leg3_knee",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0
+    },
+    {
+      "jointName": "robot/leg4_hip_yaw",
+      "actuatorName": "robot/leg4_hip_yaw",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0
+    },
+    {
+      "jointName": "robot/leg4_hip_pitch",
+      "actuatorName": "robot/leg4_hip_pitch",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0
+    },
+    {
+      "jointName": "robot/leg4_knee",
+      "actuatorName": "robot/leg4_knee",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0
+    },
+    {
+      "jointName": "robot/leg5_hip_yaw",
+      "actuatorName": "robot/leg5_hip_yaw",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0
+    },
+    {
+      "jointName": "robot/leg5_hip_pitch",
+      "actuatorName": "robot/leg5_hip_pitch",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0
+    },
+    {
+      "jointName": "robot/leg5_knee",
+      "actuatorName": "robot/leg5_knee",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0
+    }
+  ],
+  "physics": {
+    "timestep": 0.005,
+    "integrator": "implicitfast",
+    "impratio": 1.0,
+    "cone": "pyramidal",
+    "jacobian": "auto",
+    "solver": "newton",
+    "iterations": 10,
+    "tolerance": 1e-08,
+    "ls_iterations": 20,
+    "ls_tolerance": 0.01,
+    "ccd_iterations": 50,
+    "gravity": [
+      0.0,
+      0.0,
+      -9.81
+    ],
+    "disableflags": [],
+    "enableflags": []
+  },
+  "decimation": 4,
+  "controlDt": 0.02,
+  "observationSize": 66,
+  "actionSize": 18,
+  "onnxInput": "obs",
+  "onnxOutput": "actions",
+  "normalizerIncluded": true,
+  "observationTerms": [
+    {
+      "name": "base_lin_vel",
+      "start": 0,
+      "length": 3,
+      "scale": 1
+    },
+    {
+      "name": "base_ang_vel",
+      "start": 3,
+      "length": 3,
+      "scale": 1
+    },
+    {
+      "name": "projected_gravity",
+      "start": 6,
+      "length": 3,
+      "scale": 1
+    },
+    {
+      "name": "joint_pos",
+      "start": 9,
+      "length": 18,
+      "scale": 1
+    },
+    {
+      "name": "joint_vel",
+      "start": 27,
+      "length": 18,
+      "scale": 1
+    },
+    {
+      "name": "previous_action",
+      "start": 45,
+      "length": 18,
+      "scale": 1
+    },
+    {
+      "name": "command",
+      "start": 63,
+      "length": 3,
+      "scale": 1
+    }
+  ],
+  "observationFrames": {
+    "base_lin_vel": "native velocimeter at torso imu site, body/IMU frame m/s",
+    "base_ang_vel": "native gyro at torso imu site, body/IMU frame rad/s",
+    "projected_gravity": "world[0,0,-1] rotated by inverse torso quaternion",
+    "joint_pos": "q minus float32 defaultJointPosition, rad",
+    "joint_vel": "rad/s",
+    "previous_action": "previous raw18 network outputs; zeros after reset",
+    "command": "body-relative vx,vy m/s and wz rad/s"
+  },
+  "scan": null,
+  "commandBounds": {
+    "vx": [
+      -0.3,
+      0.4
+    ],
+    "vy": [
+      0,
+      0
+    ],
+    "wz": [
+      -0.7,
+      0.7
+    ]
+  },
+  "nominalParameters": {
+    "friction": [
+      0.8,
+      0.005,
+      0.0001
+    ],
+    "encoder_bias": 0.0,
+    "com_offset": [
+      0,
+      0,
+      0
+    ],
+    "observation_noise": false,
+    "random_pushes": false
+  },
+  "model": {
+    "nq": 25,
+    "nv": 24,
+    "nu": 18,
+    "nbody": 27,
+    "ngeom": 68,
+    "nsensor": 15,
+    "robotMass": 10.108918156217259,
+    "bodies": [
+      {
+        "id": 0,
+        "name": "world",
+        "parentId": 0,
+        "mass": 0.0,
+        "inertia": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "inertialPosition": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 1,
+        "name": "terrain",
+        "parentId": 0,
+        "mass": 0.0,
+        "inertia": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "inertialPosition": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 2,
+        "name": "robot/torso_link",
+        "parentId": 0,
+        "mass": 2.9332381257550937,
+        "inertia": [
+          0.029442055333354335,
+          0.01672983470207885,
+          0.016729833901211928
+        ],
+        "inertialPosition": [
+          8.677635584336689e-20,
+          1.9070878213283465e-18,
+          0.006589179045192971
+        ],
+        "inertialQuaternion": [
+          0.0,
+          0.7071067811865489,
+          0.0,
+          0.7071067811865489
+        ]
+      },
+      {
+        "id": 3,
+        "name": "robot/leg0_mount",
+        "parentId": 2,
+        "mass": 0.34924825803806614,
+        "inertia": [
+          0.00021566034653162114,
+          0.00016235874258771718,
+          0.00015256155337354556
+        ],
+        "inertialPosition": [
+          0.04319754410280936,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.0,
+          0.7071067811865489,
+          0.0,
+          0.7071067811865489
+        ]
+      },
+      {
+        "id": 4,
+        "name": "robot/leg0_yaw_link",
+        "parentId": 3,
+        "mass": 0.353867197281917,
+        "inertia": [
+          0.00023039513299957163,
+          0.00017709352905566773,
+          0.0001527387401467516
+        ],
+        "inertialPosition": [
+          0.08844473785988413,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007
+        ]
+      },
+      {
+        "id": 5,
+        "name": "robot/leg0_upper_leg_link",
+        "parentId": 4,
+        "mass": 0.3973843956198974,
+        "inertia": [
+          0.0006636404929069315,
+          0.0006103388889630277,
+          0.0001571685324602421
+        ],
+        "inertialPosition": [
+          0.16737428944155058,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007
+        ]
+      },
+      {
+        "id": 6,
+        "name": "robot/leg0_lower_leg_link",
+        "parentId": 5,
+        "mass": 0.09544682080381389,
+        "inertia": [
+          0.0005232655377446336,
+          0.0005232655377446336,
+          1.1975905657123094e-05
+        ],
+        "inertialPosition": [
+          0.14771463053376488,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007
+        ]
+      },
+      {
+        "id": 7,
+        "name": "robot/leg1_mount",
+        "parentId": 2,
+        "mass": 0.34924825803806614,
+        "inertia": [
+          0.00021566034653162114,
+          0.00016235874258771718,
+          0.00015256155337354556
+        ],
+        "inertialPosition": [
+          0.04319754410280936,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.0,
+          0.7071067811865489,
+          0.0,
+          0.7071067811865489
+        ]
+      },
+      {
+        "id": 8,
+        "name": "robot/leg1_yaw_link",
+        "parentId": 7,
+        "mass": 0.353867197281917,
+        "inertia": [
+          0.00023039513299957163,
+          0.00017709352905566773,
+          0.0001527387401467516
+        ],
+        "inertialPosition": [
+          0.08844473785988413,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007
+        ]
+      },
+      {
+        "id": 9,
+        "name": "robot/leg1_upper_leg_link",
+        "parentId": 8,
+        "mass": 0.3973843956198974,
+        "inertia": [
+          0.0006636404929069315,
+          0.0006103388889630277,
+          0.0001571685324602421
+        ],
+        "inertialPosition": [
+          0.16737428944155058,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007
+        ]
+      },
+      {
+        "id": 10,
+        "name": "robot/leg1_lower_leg_link",
+        "parentId": 9,
+        "mass": 0.09544682080381389,
+        "inertia": [
+          0.0005232655377446336,
+          0.0005232655377446336,
+          1.1975905657123094e-05
+        ],
+        "inertialPosition": [
+          0.14771463053376488,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007
+        ]
+      },
+      {
+        "id": 11,
+        "name": "robot/leg2_mount",
+        "parentId": 2,
+        "mass": 0.34924825803806614,
+        "inertia": [
+          0.00021566034653162114,
+          0.00016235874258771718,
+          0.00015256155337354556
+        ],
+        "inertialPosition": [
+          0.04319754410280936,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.0,
+          0.7071067811865489,
+          0.0,
+          0.7071067811865489
+        ]
+      },
+      {
+        "id": 12,
+        "name": "robot/leg2_yaw_link",
+        "parentId": 11,
+        "mass": 0.353867197281917,
+        "inertia": [
+          0.00023039513299957163,
+          0.00017709352905566773,
+          0.0001527387401467516
+        ],
+        "inertialPosition": [
+          0.08844473785988413,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007
+        ]
+      },
+      {
+        "id": 13,
+        "name": "robot/leg2_upper_leg_link",
+        "parentId": 12,
+        "mass": 0.3973843956198974,
+        "inertia": [
+          0.0006636404929069315,
+          0.0006103388889630277,
+          0.0001571685324602421
+        ],
+        "inertialPosition": [
+          0.16737428944155058,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007
+        ]
+      },
+      {
+        "id": 14,
+        "name": "robot/leg2_lower_leg_link",
+        "parentId": 13,
+        "mass": 0.09544682080381389,
+        "inertia": [
+          0.0005232655377446336,
+          0.0005232655377446336,
+          1.1975905657123094e-05
+        ],
+        "inertialPosition": [
+          0.14771463053376488,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007
+        ]
+      },
+      {
+        "id": 15,
+        "name": "robot/leg3_mount",
+        "parentId": 2,
+        "mass": 0.34924825803806614,
+        "inertia": [
+          0.00021566034653162114,
+          0.00016235874258771718,
+          0.00015256155337354556
+        ],
+        "inertialPosition": [
+          0.04319754410280936,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.0,
+          0.7071067811865489,
+          0.0,
+          0.7071067811865489
+        ]
+      },
+      {
+        "id": 16,
+        "name": "robot/leg3_yaw_link",
+        "parentId": 15,
+        "mass": 0.353867197281917,
+        "inertia": [
+          0.00023039513299957163,
+          0.00017709352905566773,
+          0.0001527387401467516
+        ],
+        "inertialPosition": [
+          0.08844473785988413,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007
+        ]
+      },
+      {
+        "id": 17,
+        "name": "robot/leg3_upper_leg_link",
+        "parentId": 16,
+        "mass": 0.3973843956198974,
+        "inertia": [
+          0.0006636404929069315,
+          0.0006103388889630277,
+          0.0001571685324602421
+        ],
+        "inertialPosition": [
+          0.16737428944155058,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007
+        ]
+      },
+      {
+        "id": 18,
+        "name": "robot/leg3_lower_leg_link",
+        "parentId": 17,
+        "mass": 0.09544682080381389,
+        "inertia": [
+          0.0005232655377446336,
+          0.0005232655377446336,
+          1.1975905657123094e-05
+        ],
+        "inertialPosition": [
+          0.14771463053376488,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007
+        ]
+      },
+      {
+        "id": 19,
+        "name": "robot/leg4_mount",
+        "parentId": 2,
+        "mass": 0.34924825803806614,
+        "inertia": [
+          0.00021566034653162114,
+          0.00016235874258771718,
+          0.00015256155337354556
+        ],
+        "inertialPosition": [
+          0.04319754410280936,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.0,
+          0.7071067811865489,
+          0.0,
+          0.7071067811865489
+        ]
+      },
+      {
+        "id": 20,
+        "name": "robot/leg4_yaw_link",
+        "parentId": 19,
+        "mass": 0.353867197281917,
+        "inertia": [
+          0.00023039513299957163,
+          0.00017709352905566773,
+          0.0001527387401467516
+        ],
+        "inertialPosition": [
+          0.08844473785988413,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007
+        ]
+      },
+      {
+        "id": 21,
+        "name": "robot/leg4_upper_leg_link",
+        "parentId": 20,
+        "mass": 0.3973843956198974,
+        "inertia": [
+          0.0006636404929069315,
+          0.0006103388889630277,
+          0.0001571685324602421
+        ],
+        "inertialPosition": [
+          0.16737428944155058,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007
+        ]
+      },
+      {
+        "id": 22,
+        "name": "robot/leg4_lower_leg_link",
+        "parentId": 21,
+        "mass": 0.09544682080381389,
+        "inertia": [
+          0.0005232655377446336,
+          0.0005232655377446336,
+          1.1975905657123094e-05
+        ],
+        "inertialPosition": [
+          0.14771463053376488,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007
+        ]
+      },
+      {
+        "id": 23,
+        "name": "robot/leg5_mount",
+        "parentId": 2,
+        "mass": 0.34924825803806614,
+        "inertia": [
+          0.00021566034653162114,
+          0.00016235874258771718,
+          0.00015256155337354556
+        ],
+        "inertialPosition": [
+          0.04319754410280936,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.0,
+          0.7071067811865489,
+          0.0,
+          0.7071067811865489
+        ]
+      },
+      {
+        "id": 24,
+        "name": "robot/leg5_yaw_link",
+        "parentId": 23,
+        "mass": 0.353867197281917,
+        "inertia": [
+          0.00023039513299957163,
+          0.00017709352905566773,
+          0.0001527387401467516
+        ],
+        "inertialPosition": [
+          0.08844473785988413,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007
+        ]
+      },
+      {
+        "id": 25,
+        "name": "robot/leg5_upper_leg_link",
+        "parentId": 24,
+        "mass": 0.3973843956198974,
+        "inertia": [
+          0.0006636404929069315,
+          0.0006103388889630277,
+          0.0001571685324602421
+        ],
+        "inertialPosition": [
+          0.16737428944155058,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007
+        ]
+      },
+      {
+        "id": 26,
+        "name": "robot/leg5_lower_leg_link",
+        "parentId": 25,
+        "mass": 0.09544682080381389,
+        "inertia": [
+          0.0005232655377446336,
+          0.0005232655377446336,
+          1.1975905657123094e-05
+        ],
+        "inertialPosition": [
+          0.14771463053376488,
+          0.0,
+          0.0
+        ],
+        "inertialQuaternion": [
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007,
+          0.5000000000000007
+        ]
+      }
+    ],
+    "joints": [
+      {
+        "id": 0,
+        "name": "robot/torso_link_freejoint",
+        "type": 0,
+        "qposAdr": 0,
+        "dofAdr": 0,
+        "limited": 0,
+        "range": [
+          0.0,
+          0.0
+        ],
+        "armature": 0.0,
+        "damping": 0.0,
+        "frictionloss": 0.0
+      },
+      {
+        "id": 1,
+        "name": "robot/leg0_hip_yaw",
+        "type": 3,
+        "qposAdr": 7,
+        "dofAdr": 6,
+        "limited": 1,
+        "range": [
+          -0.75,
+          0.75
+        ],
+        "armature": 0.00563174,
+        "damping": 0.003,
+        "frictionloss": 0.02
+      },
+      {
+        "id": 2,
+        "name": "robot/leg0_hip_pitch",
+        "type": 3,
+        "qposAdr": 8,
+        "dofAdr": 7,
+        "limited": 1,
+        "range": [
+          -0.65,
+          0.8
+        ],
+        "armature": 0.00563174,
+        "damping": 0.003,
+        "frictionloss": 0.02
+      },
+      {
+        "id": 3,
+        "name": "robot/leg0_knee",
+        "type": 3,
+        "qposAdr": 9,
+        "dofAdr": 8,
+        "limited": 1,
+        "range": [
+          0.35,
+          2.1
+        ],
+        "armature": 0.00563174,
+        "damping": 0.003,
+        "frictionloss": 0.02
+      },
+      {
+        "id": 4,
+        "name": "robot/leg1_hip_yaw",
+        "type": 3,
+        "qposAdr": 10,
+        "dofAdr": 9,
+        "limited": 1,
+        "range": [
+          -0.75,
+          0.75
+        ],
+        "armature": 0.00563174,
+        "damping": 0.003,
+        "frictionloss": 0.02
+      },
+      {
+        "id": 5,
+        "name": "robot/leg1_hip_pitch",
+        "type": 3,
+        "qposAdr": 11,
+        "dofAdr": 10,
+        "limited": 1,
+        "range": [
+          -0.65,
+          0.8
+        ],
+        "armature": 0.00563174,
+        "damping": 0.003,
+        "frictionloss": 0.02
+      },
+      {
+        "id": 6,
+        "name": "robot/leg1_knee",
+        "type": 3,
+        "qposAdr": 12,
+        "dofAdr": 11,
+        "limited": 1,
+        "range": [
+          0.35,
+          2.1
+        ],
+        "armature": 0.00563174,
+        "damping": 0.003,
+        "frictionloss": 0.02
+      },
+      {
+        "id": 7,
+        "name": "robot/leg2_hip_yaw",
+        "type": 3,
+        "qposAdr": 13,
+        "dofAdr": 12,
+        "limited": 1,
+        "range": [
+          -0.75,
+          0.75
+        ],
+        "armature": 0.00563174,
+        "damping": 0.003,
+        "frictionloss": 0.02
+      },
+      {
+        "id": 8,
+        "name": "robot/leg2_hip_pitch",
+        "type": 3,
+        "qposAdr": 14,
+        "dofAdr": 13,
+        "limited": 1,
+        "range": [
+          -0.65,
+          0.8
+        ],
+        "armature": 0.00563174,
+        "damping": 0.003,
+        "frictionloss": 0.02
+      },
+      {
+        "id": 9,
+        "name": "robot/leg2_knee",
+        "type": 3,
+        "qposAdr": 15,
+        "dofAdr": 14,
+        "limited": 1,
+        "range": [
+          0.35,
+          2.1
+        ],
+        "armature": 0.00563174,
+        "damping": 0.003,
+        "frictionloss": 0.02
+      },
+      {
+        "id": 10,
+        "name": "robot/leg3_hip_yaw",
+        "type": 3,
+        "qposAdr": 16,
+        "dofAdr": 15,
+        "limited": 1,
+        "range": [
+          -0.75,
+          0.75
+        ],
+        "armature": 0.00563174,
+        "damping": 0.003,
+        "frictionloss": 0.02
+      },
+      {
+        "id": 11,
+        "name": "robot/leg3_hip_pitch",
+        "type": 3,
+        "qposAdr": 17,
+        "dofAdr": 16,
+        "limited": 1,
+        "range": [
+          -0.65,
+          0.8
+        ],
+        "armature": 0.00563174,
+        "damping": 0.003,
+        "frictionloss": 0.02
+      },
+      {
+        "id": 12,
+        "name": "robot/leg3_knee",
+        "type": 3,
+        "qposAdr": 18,
+        "dofAdr": 17,
+        "limited": 1,
+        "range": [
+          0.35,
+          2.1
+        ],
+        "armature": 0.00563174,
+        "damping": 0.003,
+        "frictionloss": 0.02
+      },
+      {
+        "id": 13,
+        "name": "robot/leg4_hip_yaw",
+        "type": 3,
+        "qposAdr": 19,
+        "dofAdr": 18,
+        "limited": 1,
+        "range": [
+          -0.75,
+          0.75
+        ],
+        "armature": 0.00563174,
+        "damping": 0.003,
+        "frictionloss": 0.02
+      },
+      {
+        "id": 14,
+        "name": "robot/leg4_hip_pitch",
+        "type": 3,
+        "qposAdr": 20,
+        "dofAdr": 19,
+        "limited": 1,
+        "range": [
+          -0.65,
+          0.8
+        ],
+        "armature": 0.00563174,
+        "damping": 0.003,
+        "frictionloss": 0.02
+      },
+      {
+        "id": 15,
+        "name": "robot/leg4_knee",
+        "type": 3,
+        "qposAdr": 21,
+        "dofAdr": 20,
+        "limited": 1,
+        "range": [
+          0.35,
+          2.1
+        ],
+        "armature": 0.00563174,
+        "damping": 0.003,
+        "frictionloss": 0.02
+      },
+      {
+        "id": 16,
+        "name": "robot/leg5_hip_yaw",
+        "type": 3,
+        "qposAdr": 22,
+        "dofAdr": 21,
+        "limited": 1,
+        "range": [
+          -0.75,
+          0.75
+        ],
+        "armature": 0.00563174,
+        "damping": 0.003,
+        "frictionloss": 0.02
+      },
+      {
+        "id": 17,
+        "name": "robot/leg5_hip_pitch",
+        "type": 3,
+        "qposAdr": 23,
+        "dofAdr": 22,
+        "limited": 1,
+        "range": [
+          -0.65,
+          0.8
+        ],
+        "armature": 0.00563174,
+        "damping": 0.003,
+        "frictionloss": 0.02
+      },
+      {
+        "id": 18,
+        "name": "robot/leg5_knee",
+        "type": 3,
+        "qposAdr": 24,
+        "dofAdr": 23,
+        "limited": 1,
+        "range": [
+          0.35,
+          2.1
+        ],
+        "armature": 0.00563174,
+        "damping": 0.003,
+        "frictionloss": 0.02
+      }
+    ],
+    "geoms": [
+      {
+        "id": 0,
+        "name": "terrain",
+        "bodyId": 1,
+        "type": 0,
+        "size": [
+          0.0,
+          0.0,
+          0.01
+        ],
+        "group": 0,
+        "contype": 1,
+        "conaffinity": 1,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          1.0,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.5,
+          0.5,
+          0.5,
+          1.0
+        ]
+      },
+      {
+        "id": 1,
+        "name": "robot/torso_link_mesh",
+        "bodyId": 2,
+        "type": 7,
+        "size": [
+          0.048410820656784,
+          0.1404953449964529,
+          0.1550000011920935
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.8399999737739563,
+          0.4000000059604645,
+          0.47999998927116394,
+          1.0
+        ]
+      },
+      {
+        "id": 2,
+        "name": "robot/leg0_mount_link",
+        "bodyId": 3,
+        "type": 5,
+        "size": [
+          0.015,
+          0.00717843,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 3,
+        "name": "robot/leg0_mount_motor",
+        "bodyId": 3,
+        "type": 5,
+        "size": [
+          0.0346431,
+          0.0207859,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.2199999988079071,
+          0.28999999165534973,
+          0.28999999165534973,
+          1.0
+        ]
+      },
+      {
+        "id": 4,
+        "name": "robot/leg0_mount_detail",
+        "bodyId": 3,
+        "type": 5,
+        "size": [
+          0.0277145,
+          0.0228645,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.7900000214576721,
+          0.5799999833106995,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 5,
+        "name": "robot/leg0_yaw_link_link",
+        "bodyId": 4,
+        "type": 5,
+        "size": [
+          0.013,
+          0.0153569,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 6,
+        "name": "robot/leg0_yaw_link_motor",
+        "bodyId": 4,
+        "type": 5,
+        "size": [
+          0.0346431,
+          0.0207859,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.2199999988079071,
+          0.28999999165534973,
+          0.28999999165534973,
+          1.0
+        ]
+      },
+      {
+        "id": 7,
+        "name": "robot/leg0_yaw_link_detail",
+        "bodyId": 4,
+        "type": 5,
+        "size": [
+          0.0277145,
+          0.0228645,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.7900000214576721,
+          0.5799999833106995,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 8,
+        "name": "robot/leg0_upper_leg_link_link",
+        "bodyId": 5,
+        "type": 5,
+        "size": [
+          0.014,
+          0.0603569,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 9,
+        "name": "robot/leg0_upper_leg_link_motor",
+        "bodyId": 5,
+        "type": 5,
+        "size": [
+          0.0346431,
+          0.0207859,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.2199999988079071,
+          0.28999999165534973,
+          0.28999999165534973,
+          1.0
+        ]
+      },
+      {
+        "id": 10,
+        "name": "robot/leg0_upper_leg_link_detail",
+        "bodyId": 5,
+        "type": 5,
+        "size": [
+          0.0277145,
+          0.0228645,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.7900000214576721,
+          0.5799999833106995,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 11,
+        "name": "robot/leg0_lower_leg_link_link",
+        "bodyId": 6,
+        "type": 5,
+        "size": [
+          0.011,
+          0.11,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 12,
+        "name": "robot/leg0_lower_leg_link_sphere",
+        "bodyId": 6,
+        "type": 2,
+        "size": [
+          0.025,
+          0.0,
+          0.0
+        ],
+        "group": 0,
+        "contype": 1,
+        "conaffinity": 1,
+        "condim": 3,
+        "priority": 1,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.3100000023841858,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 13,
+        "name": "robot/leg1_mount_link",
+        "bodyId": 7,
+        "type": 5,
+        "size": [
+          0.015,
+          0.00717843,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 14,
+        "name": "robot/leg1_mount_motor",
+        "bodyId": 7,
+        "type": 5,
+        "size": [
+          0.0346431,
+          0.0207859,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.2199999988079071,
+          0.28999999165534973,
+          0.28999999165534973,
+          1.0
+        ]
+      },
+      {
+        "id": 15,
+        "name": "robot/leg1_mount_detail",
+        "bodyId": 7,
+        "type": 5,
+        "size": [
+          0.0277145,
+          0.0228645,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.7900000214576721,
+          0.5799999833106995,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 16,
+        "name": "robot/leg1_yaw_link_link",
+        "bodyId": 8,
+        "type": 5,
+        "size": [
+          0.013,
+          0.0153569,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 17,
+        "name": "robot/leg1_yaw_link_motor",
+        "bodyId": 8,
+        "type": 5,
+        "size": [
+          0.0346431,
+          0.0207859,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.2199999988079071,
+          0.28999999165534973,
+          0.28999999165534973,
+          1.0
+        ]
+      },
+      {
+        "id": 18,
+        "name": "robot/leg1_yaw_link_detail",
+        "bodyId": 8,
+        "type": 5,
+        "size": [
+          0.0277145,
+          0.0228645,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.7900000214576721,
+          0.5799999833106995,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 19,
+        "name": "robot/leg1_upper_leg_link_link",
+        "bodyId": 9,
+        "type": 5,
+        "size": [
+          0.014,
+          0.0603569,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 20,
+        "name": "robot/leg1_upper_leg_link_motor",
+        "bodyId": 9,
+        "type": 5,
+        "size": [
+          0.0346431,
+          0.0207859,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.2199999988079071,
+          0.28999999165534973,
+          0.28999999165534973,
+          1.0
+        ]
+      },
+      {
+        "id": 21,
+        "name": "robot/leg1_upper_leg_link_detail",
+        "bodyId": 9,
+        "type": 5,
+        "size": [
+          0.0277145,
+          0.0228645,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.7900000214576721,
+          0.5799999833106995,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 22,
+        "name": "robot/leg1_lower_leg_link_link",
+        "bodyId": 10,
+        "type": 5,
+        "size": [
+          0.011,
+          0.11,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 23,
+        "name": "robot/leg1_lower_leg_link_sphere",
+        "bodyId": 10,
+        "type": 2,
+        "size": [
+          0.025,
+          0.0,
+          0.0
+        ],
+        "group": 0,
+        "contype": 1,
+        "conaffinity": 1,
+        "condim": 3,
+        "priority": 1,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.3100000023841858,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 24,
+        "name": "robot/leg2_mount_link",
+        "bodyId": 11,
+        "type": 5,
+        "size": [
+          0.015,
+          0.00717843,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 25,
+        "name": "robot/leg2_mount_motor",
+        "bodyId": 11,
+        "type": 5,
+        "size": [
+          0.0346431,
+          0.0207859,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.2199999988079071,
+          0.28999999165534973,
+          0.28999999165534973,
+          1.0
+        ]
+      },
+      {
+        "id": 26,
+        "name": "robot/leg2_mount_detail",
+        "bodyId": 11,
+        "type": 5,
+        "size": [
+          0.0277145,
+          0.0228645,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.7900000214576721,
+          0.5799999833106995,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 27,
+        "name": "robot/leg2_yaw_link_link",
+        "bodyId": 12,
+        "type": 5,
+        "size": [
+          0.013,
+          0.0153569,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 28,
+        "name": "robot/leg2_yaw_link_motor",
+        "bodyId": 12,
+        "type": 5,
+        "size": [
+          0.0346431,
+          0.0207859,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.2199999988079071,
+          0.28999999165534973,
+          0.28999999165534973,
+          1.0
+        ]
+      },
+      {
+        "id": 29,
+        "name": "robot/leg2_yaw_link_detail",
+        "bodyId": 12,
+        "type": 5,
+        "size": [
+          0.0277145,
+          0.0228645,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.7900000214576721,
+          0.5799999833106995,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 30,
+        "name": "robot/leg2_upper_leg_link_link",
+        "bodyId": 13,
+        "type": 5,
+        "size": [
+          0.014,
+          0.0603569,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 31,
+        "name": "robot/leg2_upper_leg_link_motor",
+        "bodyId": 13,
+        "type": 5,
+        "size": [
+          0.0346431,
+          0.0207859,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.2199999988079071,
+          0.28999999165534973,
+          0.28999999165534973,
+          1.0
+        ]
+      },
+      {
+        "id": 32,
+        "name": "robot/leg2_upper_leg_link_detail",
+        "bodyId": 13,
+        "type": 5,
+        "size": [
+          0.0277145,
+          0.0228645,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.7900000214576721,
+          0.5799999833106995,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 33,
+        "name": "robot/leg2_lower_leg_link_link",
+        "bodyId": 14,
+        "type": 5,
+        "size": [
+          0.011,
+          0.11,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 34,
+        "name": "robot/leg2_lower_leg_link_sphere",
+        "bodyId": 14,
+        "type": 2,
+        "size": [
+          0.025,
+          0.0,
+          0.0
+        ],
+        "group": 0,
+        "contype": 1,
+        "conaffinity": 1,
+        "condim": 3,
+        "priority": 1,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.3100000023841858,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 35,
+        "name": "robot/leg3_mount_link",
+        "bodyId": 15,
+        "type": 5,
+        "size": [
+          0.015,
+          0.00717843,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 36,
+        "name": "robot/leg3_mount_motor",
+        "bodyId": 15,
+        "type": 5,
+        "size": [
+          0.0346431,
+          0.0207859,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.2199999988079071,
+          0.28999999165534973,
+          0.28999999165534973,
+          1.0
+        ]
+      },
+      {
+        "id": 37,
+        "name": "robot/leg3_mount_detail",
+        "bodyId": 15,
+        "type": 5,
+        "size": [
+          0.0277145,
+          0.0228645,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.7900000214576721,
+          0.5799999833106995,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 38,
+        "name": "robot/leg3_yaw_link_link",
+        "bodyId": 16,
+        "type": 5,
+        "size": [
+          0.013,
+          0.0153569,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 39,
+        "name": "robot/leg3_yaw_link_motor",
+        "bodyId": 16,
+        "type": 5,
+        "size": [
+          0.0346431,
+          0.0207859,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.2199999988079071,
+          0.28999999165534973,
+          0.28999999165534973,
+          1.0
+        ]
+      },
+      {
+        "id": 40,
+        "name": "robot/leg3_yaw_link_detail",
+        "bodyId": 16,
+        "type": 5,
+        "size": [
+          0.0277145,
+          0.0228645,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.7900000214576721,
+          0.5799999833106995,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 41,
+        "name": "robot/leg3_upper_leg_link_link",
+        "bodyId": 17,
+        "type": 5,
+        "size": [
+          0.014,
+          0.0603569,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 42,
+        "name": "robot/leg3_upper_leg_link_motor",
+        "bodyId": 17,
+        "type": 5,
+        "size": [
+          0.0346431,
+          0.0207859,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.2199999988079071,
+          0.28999999165534973,
+          0.28999999165534973,
+          1.0
+        ]
+      },
+      {
+        "id": 43,
+        "name": "robot/leg3_upper_leg_link_detail",
+        "bodyId": 17,
+        "type": 5,
+        "size": [
+          0.0277145,
+          0.0228645,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.7900000214576721,
+          0.5799999833106995,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 44,
+        "name": "robot/leg3_lower_leg_link_link",
+        "bodyId": 18,
+        "type": 5,
+        "size": [
+          0.011,
+          0.11,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 45,
+        "name": "robot/leg3_lower_leg_link_sphere",
+        "bodyId": 18,
+        "type": 2,
+        "size": [
+          0.025,
+          0.0,
+          0.0
+        ],
+        "group": 0,
+        "contype": 1,
+        "conaffinity": 1,
+        "condim": 3,
+        "priority": 1,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.3100000023841858,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 46,
+        "name": "robot/leg4_mount_link",
+        "bodyId": 19,
+        "type": 5,
+        "size": [
+          0.015,
+          0.00717843,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 47,
+        "name": "robot/leg4_mount_motor",
+        "bodyId": 19,
+        "type": 5,
+        "size": [
+          0.0346431,
+          0.0207859,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.2199999988079071,
+          0.28999999165534973,
+          0.28999999165534973,
+          1.0
+        ]
+      },
+      {
+        "id": 48,
+        "name": "robot/leg4_mount_detail",
+        "bodyId": 19,
+        "type": 5,
+        "size": [
+          0.0277145,
+          0.0228645,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.7900000214576721,
+          0.5799999833106995,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 49,
+        "name": "robot/leg4_yaw_link_link",
+        "bodyId": 20,
+        "type": 5,
+        "size": [
+          0.013,
+          0.0153569,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 50,
+        "name": "robot/leg4_yaw_link_motor",
+        "bodyId": 20,
+        "type": 5,
+        "size": [
+          0.0346431,
+          0.0207859,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.2199999988079071,
+          0.28999999165534973,
+          0.28999999165534973,
+          1.0
+        ]
+      },
+      {
+        "id": 51,
+        "name": "robot/leg4_yaw_link_detail",
+        "bodyId": 20,
+        "type": 5,
+        "size": [
+          0.0277145,
+          0.0228645,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.7900000214576721,
+          0.5799999833106995,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 52,
+        "name": "robot/leg4_upper_leg_link_link",
+        "bodyId": 21,
+        "type": 5,
+        "size": [
+          0.014,
+          0.0603569,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 53,
+        "name": "robot/leg4_upper_leg_link_motor",
+        "bodyId": 21,
+        "type": 5,
+        "size": [
+          0.0346431,
+          0.0207859,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.2199999988079071,
+          0.28999999165534973,
+          0.28999999165534973,
+          1.0
+        ]
+      },
+      {
+        "id": 54,
+        "name": "robot/leg4_upper_leg_link_detail",
+        "bodyId": 21,
+        "type": 5,
+        "size": [
+          0.0277145,
+          0.0228645,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.7900000214576721,
+          0.5799999833106995,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 55,
+        "name": "robot/leg4_lower_leg_link_link",
+        "bodyId": 22,
+        "type": 5,
+        "size": [
+          0.011,
+          0.11,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 56,
+        "name": "robot/leg4_lower_leg_link_sphere",
+        "bodyId": 22,
+        "type": 2,
+        "size": [
+          0.025,
+          0.0,
+          0.0
+        ],
+        "group": 0,
+        "contype": 1,
+        "conaffinity": 1,
+        "condim": 3,
+        "priority": 1,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.3100000023841858,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 57,
+        "name": "robot/leg5_mount_link",
+        "bodyId": 23,
+        "type": 5,
+        "size": [
+          0.015,
+          0.00717843,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 58,
+        "name": "robot/leg5_mount_motor",
+        "bodyId": 23,
+        "type": 5,
+        "size": [
+          0.0346431,
+          0.0207859,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.2199999988079071,
+          0.28999999165534973,
+          0.28999999165534973,
+          1.0
+        ]
+      },
+      {
+        "id": 59,
+        "name": "robot/leg5_mount_detail",
+        "bodyId": 23,
+        "type": 5,
+        "size": [
+          0.0277145,
+          0.0228645,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.7900000214576721,
+          0.5799999833106995,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 60,
+        "name": "robot/leg5_yaw_link_link",
+        "bodyId": 24,
+        "type": 5,
+        "size": [
+          0.013,
+          0.0153569,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 61,
+        "name": "robot/leg5_yaw_link_motor",
+        "bodyId": 24,
+        "type": 5,
+        "size": [
+          0.0346431,
+          0.0207859,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.2199999988079071,
+          0.28999999165534973,
+          0.28999999165534973,
+          1.0
+        ]
+      },
+      {
+        "id": 62,
+        "name": "robot/leg5_yaw_link_detail",
+        "bodyId": 24,
+        "type": 5,
+        "size": [
+          0.0277145,
+          0.0228645,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.7900000214576721,
+          0.5799999833106995,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 63,
+        "name": "robot/leg5_upper_leg_link_link",
+        "bodyId": 25,
+        "type": 5,
+        "size": [
+          0.014,
+          0.0603569,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 64,
+        "name": "robot/leg5_upper_leg_link_motor",
+        "bodyId": 25,
+        "type": 5,
+        "size": [
+          0.0346431,
+          0.0207859,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.2199999988079071,
+          0.28999999165534973,
+          0.28999999165534973,
+          1.0
+        ]
+      },
+      {
+        "id": 65,
+        "name": "robot/leg5_upper_leg_link_detail",
+        "bodyId": 25,
+        "type": 5,
+        "size": [
+          0.0277145,
+          0.0228645,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.7900000214576721,
+          0.5799999833106995,
+          0.30000001192092896,
+          1.0
+        ]
+      },
+      {
+        "id": 66,
+        "name": "robot/leg5_lower_leg_link_link",
+        "bodyId": 26,
+        "type": 5,
+        "size": [
+          0.011,
+          0.11,
+          0.0
+        ],
+        "group": 0,
+        "contype": 0,
+        "conaffinity": 0,
+        "condim": 3,
+        "priority": 0,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.5600000023841858,
+          0.4399999976158142,
+          1.0
+        ]
+      },
+      {
+        "id": 67,
+        "name": "robot/leg5_lower_leg_link_sphere",
+        "bodyId": 26,
+        "type": 2,
+        "size": [
+          0.025,
+          0.0,
+          0.0
+        ],
+        "group": 0,
+        "contype": 1,
+        "conaffinity": 1,
+        "condim": 3,
+        "priority": 1,
+        "friction": [
+          0.8,
+          0.005,
+          0.0001
+        ],
+        "rgba": [
+          0.25,
+          0.3100000023841858,
+          0.30000001192092896,
+          1.0
+        ]
+      }
+    ],
+    "actuators": [
+      {
+        "id": 0,
+        "name": "robot/leg0_hip_yaw",
+        "jointId": 1,
+        "ctrlLimited": 1,
+        "ctrlRange": [
+          -12.0,
+          12.0
+        ],
+        "forceLimited": 1,
+        "forceRange": [
+          -12.0,
+          12.0
+        ],
+        "gear": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 1,
+        "name": "robot/leg0_hip_pitch",
+        "jointId": 2,
+        "ctrlLimited": 1,
+        "ctrlRange": [
+          -12.0,
+          12.0
+        ],
+        "forceLimited": 1,
+        "forceRange": [
+          -12.0,
+          12.0
+        ],
+        "gear": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 2,
+        "name": "robot/leg0_knee",
+        "jointId": 3,
+        "ctrlLimited": 1,
+        "ctrlRange": [
+          -12.0,
+          12.0
+        ],
+        "forceLimited": 1,
+        "forceRange": [
+          -12.0,
+          12.0
+        ],
+        "gear": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 3,
+        "name": "robot/leg1_hip_yaw",
+        "jointId": 4,
+        "ctrlLimited": 1,
+        "ctrlRange": [
+          -12.0,
+          12.0
+        ],
+        "forceLimited": 1,
+        "forceRange": [
+          -12.0,
+          12.0
+        ],
+        "gear": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 4,
+        "name": "robot/leg1_hip_pitch",
+        "jointId": 5,
+        "ctrlLimited": 1,
+        "ctrlRange": [
+          -12.0,
+          12.0
+        ],
+        "forceLimited": 1,
+        "forceRange": [
+          -12.0,
+          12.0
+        ],
+        "gear": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 5,
+        "name": "robot/leg1_knee",
+        "jointId": 6,
+        "ctrlLimited": 1,
+        "ctrlRange": [
+          -12.0,
+          12.0
+        ],
+        "forceLimited": 1,
+        "forceRange": [
+          -12.0,
+          12.0
+        ],
+        "gear": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 6,
+        "name": "robot/leg2_hip_yaw",
+        "jointId": 7,
+        "ctrlLimited": 1,
+        "ctrlRange": [
+          -12.0,
+          12.0
+        ],
+        "forceLimited": 1,
+        "forceRange": [
+          -12.0,
+          12.0
+        ],
+        "gear": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 7,
+        "name": "robot/leg2_hip_pitch",
+        "jointId": 8,
+        "ctrlLimited": 1,
+        "ctrlRange": [
+          -12.0,
+          12.0
+        ],
+        "forceLimited": 1,
+        "forceRange": [
+          -12.0,
+          12.0
+        ],
+        "gear": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 8,
+        "name": "robot/leg2_knee",
+        "jointId": 9,
+        "ctrlLimited": 1,
+        "ctrlRange": [
+          -12.0,
+          12.0
+        ],
+        "forceLimited": 1,
+        "forceRange": [
+          -12.0,
+          12.0
+        ],
+        "gear": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 9,
+        "name": "robot/leg3_hip_yaw",
+        "jointId": 10,
+        "ctrlLimited": 1,
+        "ctrlRange": [
+          -12.0,
+          12.0
+        ],
+        "forceLimited": 1,
+        "forceRange": [
+          -12.0,
+          12.0
+        ],
+        "gear": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 10,
+        "name": "robot/leg3_hip_pitch",
+        "jointId": 11,
+        "ctrlLimited": 1,
+        "ctrlRange": [
+          -12.0,
+          12.0
+        ],
+        "forceLimited": 1,
+        "forceRange": [
+          -12.0,
+          12.0
+        ],
+        "gear": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 11,
+        "name": "robot/leg3_knee",
+        "jointId": 12,
+        "ctrlLimited": 1,
+        "ctrlRange": [
+          -12.0,
+          12.0
+        ],
+        "forceLimited": 1,
+        "forceRange": [
+          -12.0,
+          12.0
+        ],
+        "gear": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 12,
+        "name": "robot/leg4_hip_yaw",
+        "jointId": 13,
+        "ctrlLimited": 1,
+        "ctrlRange": [
+          -12.0,
+          12.0
+        ],
+        "forceLimited": 1,
+        "forceRange": [
+          -12.0,
+          12.0
+        ],
+        "gear": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 13,
+        "name": "robot/leg4_hip_pitch",
+        "jointId": 14,
+        "ctrlLimited": 1,
+        "ctrlRange": [
+          -12.0,
+          12.0
+        ],
+        "forceLimited": 1,
+        "forceRange": [
+          -12.0,
+          12.0
+        ],
+        "gear": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 14,
+        "name": "robot/leg4_knee",
+        "jointId": 15,
+        "ctrlLimited": 1,
+        "ctrlRange": [
+          -12.0,
+          12.0
+        ],
+        "forceLimited": 1,
+        "forceRange": [
+          -12.0,
+          12.0
+        ],
+        "gear": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 15,
+        "name": "robot/leg5_hip_yaw",
+        "jointId": 16,
+        "ctrlLimited": 1,
+        "ctrlRange": [
+          -12.0,
+          12.0
+        ],
+        "forceLimited": 1,
+        "forceRange": [
+          -12.0,
+          12.0
+        ],
+        "gear": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 16,
+        "name": "robot/leg5_hip_pitch",
+        "jointId": 17,
+        "ctrlLimited": 1,
+        "ctrlRange": [
+          -12.0,
+          12.0
+        ],
+        "forceLimited": 1,
+        "forceRange": [
+          -12.0,
+          12.0
+        ],
+        "gear": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 17,
+        "name": "robot/leg5_knee",
+        "jointId": 18,
+        "ctrlLimited": 1,
+        "ctrlRange": [
+          -12.0,
+          12.0
+        ],
+        "forceLimited": 1,
+        "forceRange": [
+          -12.0,
+          12.0
+        ],
+        "gear": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "sensors": [
+      {
+        "id": 0,
+        "name": "robot/imu_ang_vel",
+        "type": 3,
+        "adr": 0,
+        "dim": 3,
+        "objType": 6,
+        "objId": 0
+      },
+      {
+        "id": 1,
+        "name": "robot/imu_lin_vel",
+        "type": 2,
+        "adr": 3,
+        "dim": 3,
+        "objType": 6,
+        "objId": 0
+      },
+      {
+        "id": 2,
+        "name": "robot/imu_lin_acc",
+        "type": 1,
+        "adr": 6,
+        "dim": 3,
+        "objType": 6,
+        "objId": 0
+      },
+      {
+        "id": 3,
+        "name": "feet_ground_contact_leg0_lower_leg_link_sphere_found",
+        "type": 42,
+        "adr": 9,
+        "dim": 1,
+        "objType": 5,
+        "objId": 12
+      },
+      {
+        "id": 4,
+        "name": "feet_ground_contact_leg0_lower_leg_link_sphere_force",
+        "type": 42,
+        "adr": 10,
+        "dim": 3,
+        "objType": 5,
+        "objId": 12
+      },
+      {
+        "id": 5,
+        "name": "feet_ground_contact_leg1_lower_leg_link_sphere_found",
+        "type": 42,
+        "adr": 13,
+        "dim": 1,
+        "objType": 5,
+        "objId": 23
+      },
+      {
+        "id": 6,
+        "name": "feet_ground_contact_leg1_lower_leg_link_sphere_force",
+        "type": 42,
+        "adr": 14,
+        "dim": 3,
+        "objType": 5,
+        "objId": 23
+      },
+      {
+        "id": 7,
+        "name": "feet_ground_contact_leg2_lower_leg_link_sphere_found",
+        "type": 42,
+        "adr": 17,
+        "dim": 1,
+        "objType": 5,
+        "objId": 34
+      },
+      {
+        "id": 8,
+        "name": "feet_ground_contact_leg2_lower_leg_link_sphere_force",
+        "type": 42,
+        "adr": 18,
+        "dim": 3,
+        "objType": 5,
+        "objId": 34
+      },
+      {
+        "id": 9,
+        "name": "feet_ground_contact_leg3_lower_leg_link_sphere_found",
+        "type": 42,
+        "adr": 21,
+        "dim": 1,
+        "objType": 5,
+        "objId": 45
+      },
+      {
+        "id": 10,
+        "name": "feet_ground_contact_leg3_lower_leg_link_sphere_force",
+        "type": 42,
+        "adr": 22,
+        "dim": 3,
+        "objType": 5,
+        "objId": 45
+      },
+      {
+        "id": 11,
+        "name": "feet_ground_contact_leg4_lower_leg_link_sphere_found",
+        "type": 42,
+        "adr": 25,
+        "dim": 1,
+        "objType": 5,
+        "objId": 56
+      },
+      {
+        "id": 12,
+        "name": "feet_ground_contact_leg4_lower_leg_link_sphere_force",
+        "type": 42,
+        "adr": 26,
+        "dim": 3,
+        "objType": 5,
+        "objId": 56
+      },
+      {
+        "id": 13,
+        "name": "feet_ground_contact_leg5_lower_leg_link_sphere_found",
+        "type": 42,
+        "adr": 29,
+        "dim": 1,
+        "objType": 5,
+        "objId": 67
+      },
+      {
+        "id": 14,
+        "name": "feet_ground_contact_leg5_lower_leg_link_sphere_force",
+        "type": 42,
+        "adr": 30,
+        "dim": 3,
+        "objType": 5,
+        "objId": 67
+      }
+    ]
+  },
+  "assets": [
+    {
+      "name": "torso_mesh.stl",
+      "url": "/controller/flower/assets/torso_mesh.stl",
+      "sha256": "582fd1714c5fbb7e8c6a915b81d115b84ae3e5a63f52b71609341823fbe8a9ec",
+      "bytes": 19084
+    }
+  ],
+  "browserInferenceVerified": false,
+  "nativeFixtureParityOnly": true,
+  "qualityNote": "Fresh morphology engineering training, not a Draft paper benchmark. Model export/checkpoint presence does not establish useful locomotion.",
+  "taskSourceSha256": "b6b464e6c4679bfa836282f76d419f1edce0104a369be0928cb11ce4e590daa0",
+  "settingsSha256": "b398721eb632d680baf4536a62759d8738c14f05622cb224d54102ce9b4c9764",
+  "collisionMode": "six foot spheres only; other robot geoms disabled",
+  "runConfigSha256": "1323c2dd49f38e2129d0c961f1d2a0f27ae624ea7969d1ff610196010e5cff78",
+  "physicsFrames": "MuJoCo metres,kilograms,seconds; +Z up; body+X forward",
+  "trainingIteration": 1199
+}

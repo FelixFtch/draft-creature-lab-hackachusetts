@@ -1,0 +1,76 @@
+# Engineering assumptions; structural densities are deliberately not assigned to a measured population.
+design_note: Original six-legged flower crawler. Stated engineering assumptions; not
+  a fitted quadruped or humanoid mass population.
+allow_hypothetical: false
+allow_motor_overlap: false
+allow_actuator_in_structure: false
+L_motor_mode: torque_speed
+L_motor_effort: 12.0
+L_motor_velocity: 20.0
+L_motor_gear: 12.0
+L_motor_aspect: 0.6
+L_motor_friction: 0.02
+L_motor_damping: 0.003
+hip_yaw_mot: L
+hip_pitch_mot: L
+knee_mot: L
+hip_yaw_range:
+- -0.75
+- 0.75
+hip_pitch_range:
+- -0.65
+- 0.8
+knee_range:
+- 0.35
+- 2.1
+body_radius: 0.145
+hub_mount_radius: 0.156
+mount_link_length: 0.044
+coxa_length: 0.09
+upper_leg_length: 0.18
+lower_leg_length: 0.22
+foot_sphere_r: 0.025
+link_rho: 750.0
+torso_rho: 500.0
+foot_rho: 500.0
+mount_link_r: 0.015
+coxa_link_r: 0.013
+upper_leg_r: 0.014
+lower_leg_r: 0.011
+link_color: 0.25 0.56 0.44 1
+motor_color: 0.22 0.29 0.29 1
+mot_detail_color: 0.79 0.58 0.30 1
+torso_color: 0.84 0.40 0.48 1
+foot_color: 0.25 0.31 0.30 1
+geom_friction: 0.8 0.005 0.0001
+legs:
+- index: 0
+  name: leg0
+  dx: 1.0
+  dy: 0.0
+  yaw: 0.0
+- index: 1
+  name: leg1
+  dx: 0.5
+  dy: 0.866025403784
+  yaw: 1.0471975511965976
+- index: 2
+  name: leg2
+  dx: -0.5
+  dy: 0.866025403784
+  yaw: 2.0943951023931953
+- index: 3
+  name: leg3
+  dx: -1.0
+  dy: 0.0
+  yaw: 3.141592653589793
+- index: 4
+  name: leg4
+  dx: -0.5
+  dy: -0.866025403784
+  yaw: 4.1887902047863905
+- index: 5
+  name: leg5
+  dx: 0.5
+  dy: -0.866025403784
+  yaw: 5.235987755982989

@@ -1,0 +1,69 @@
+{
+  "id": "giraffe-3478a7075579bcab",
+  "preset": "giraffe",
+  "parameters": {
+    "preset": "giraffe",
+    "lengthScale": 1.0,
+    "legScale": 1.0
+  },
+  "xmlUrl": "/draft/giraffe-3478a7075579bcab/quadruped.xml",
+  "meshUrl": "/draft/giraffe-3478a7075579bcab/torso_mesh.stl",
+  "manifestUrl": "/draft/giraffe-3478a7075579bcab/manifest.json",
+  "massKg": 91.26418031296197,
+  "resolvedParameters": {
+    "torso_lx": 0.64,
+    "torso_ly": 0.34,
+    "torso_lz": 0.33,
+    "upper_leg_link_length": 0.69,
+    "lower_leg_link_length": 0.61,
+    "hip_roll_link_length": 0.18,
+    "shoulder_width": 0.24,
+    "L_motor_effort": 332.0,
+    "L_motor_velocity": 3.93
+  },
+  "provenance": {
+    "generator": "Draft RobotGenerator",
+    "repository": "https://github.com/davidhnguyen2000/draft",
+    "revision": "3b03e144735098ef94b938e85756806f45628f83",
+    "packageVersion": "0.1.0",
+    "robot": "quadruped",
+    "strict": true,
+    "allowHypothetical": false,
+    "generation": "Official experiment YAML plus bounded dimension overrides; regenerated MJCF and torso mesh",
+    "controller": "No learned controller is created or certified by this endpoint",
+    "presetFile": "experiments/quadruped_variants/giraffe.yaml",
+    "presetSha256": "58882fc3dc26003c1bce518a76073ccd037d67a9d36ea7311a51ddadc8de94f9"
+  },
+  "validation": {
+    "massKg": 91.26418031296197,
+    "nq": 19,
+    "nv": 18,
+    "actuators": 0,
+    "hingeJoints": 12,
+    "bodies": 22,
+    "mujocoVersion": "3.8.0",
+    "finiteSteps": 250,
+    "simulationSeconds": 0.5000000000000003,
+    "validationScope": "CPU compile and finite unactuated scene steps; not a locomotion or hardware validation"
+  },
+  "warnings": [
+    "[L]: power density 113 W/kg is above the Harmonic p90 (96 W/kg) — best-in-class territory.",
+    "fl_pitch_link_link: to weigh its 0.686 kg share of the thigh trend inside the actuators it joins, the member's density is 4200 kg/m³ against the class's 345",
+    "fl_roll_link_link: to weigh its 0.292 kg share of the hip_link trend inside the actuators it joins, the member's density is 1982 kg/m³ against the class's 676",
+    "fr_pitch_link_link: to weigh its 0.686 kg share of the thigh trend inside the actuators it joins, the member's density is 4200 kg/m³ against the class's 345",
+    "fr_roll_link_link: to weigh its 0.292 kg share of the hip_link trend inside the actuators it joins, the member's density is 1982 kg/m³ against the class's 676",
+    "rl_pitch_link_link: to weigh its 0.686 kg share of the thigh trend inside the actuators it joins, the member's density is 4200 kg/m³ against the class's 345",
+    "rl_roll_link_link: to weigh its 0.292 kg share of the hip_link trend inside the actuators it joins, the member's density is 1982 kg/m³ against the class's 676",
+    "rr_pitch_link_link: to weigh its 0.686 kg share of the thigh trend inside the actuators it joins, the member's density is 4200 kg/m³ against the class's 345",
+    "rr_roll_link_link: to weigh its 0.292 kg share of the hip_link trend inside the actuators it joins, the member's density is 1982 kg/m³ against the class's 676",
+    "trunk_mass_fraction = 0.405 is outside measured range (measured median 0.468, p10-p90 0.424-0.550, n=20 quadrupeds).",
+    "leg_length_m = 1.30 m is outside the 0.29-0.74 m range of the measured quadrupeds, so mass-vs-size is EXTRAPOLATED: the law predicts 260.8 kg and the design is 91.3 kg, outside 2σ. At 1.75x past the fitted range a ^2.47 law carries 4.0x of leverage on mass, so treat this as a sanity check and not as evidence."
+  ],
+  "assetSha256": {
+    "quadruped.xml": "ae5243f1cfc3b194a599adef8437f5fd450c1da00d4a0e980241d841a3b8b744",
+    "torso_mesh.stl": "23391b85c6072e54a0f8af2c59af67d81071952b0b556e0f33e7e05afc86f5cd",
+    "scene.xml": "d5ecc781c4d692ba9616999d962664ae21b7624870a960f2e1ac9f6220e4c13d",
+    "parameters_resolved.yaml": "30238f139b0391c153aef87092d42acdeb1b720a4cae1613bb5b8376440e994a",
+    "feasibility_report.yaml": "fefb9e38e1c8b5c37b47d6c9b38d8067b5a2730c4c41f7019fe365c36d5b0883"
+  }
+}

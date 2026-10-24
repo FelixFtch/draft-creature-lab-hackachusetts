@@ -1,0 +1,333 @@
+{
+  "createdAt": "2026-10-24T18:32:26.467Z",
+  "scope": "Node CPU production rules and actual MuJoCo WASM + ONNX Runtime Web WASM; no live browser/render/UI lifecycle test",
+  "trailSourceSha256": "cc935ba006a56076f29ae7eba0cd734d9b8a6df7f0275bc7a26a3302fbdb4c4e",
+  "controllerSourceSha256": "28a7a8f10e617b8d42bb7679a01a7b04c36856acf769530ed64a1d0570be81e3",
+  "unitChecks": [
+    {
+      "name": "Targets are disjoint and outside initial torso collection radius",
+      "pass": true
+    },
+    {
+      "name": "Outside radius is not collected; exact boundary and inside are collected",
+      "pass": true
+    },
+    {
+      "name": "Visiting a later target does not skip the first target",
+      "pass": true
+    },
+    {
+      "name": "Lingering in a collected target cannot score it twice",
+      "pass": true
+    },
+    {
+      "name": "Fall and controller error preempt collection and the guide watchdog",
+      "pass": true
+    },
+    {
+      "name": "Invalid position or simulation time fails without score",
+      "pass": true
+    },
+    {
+      "name": "Manual play stays active beyond 60 seconds and can complete without a time limit",
+      "pass": true
+    },
+    {
+      "name": "Guide watchdog at boundary preempts collection; just before boundary can collect",
+      "pass": true
+    },
+    {
+      "name": "Assistance accumulation excludes manual intervals and persists across toggles",
+      "pass": true
+    },
+    {
+      "name": "Ordered completion freezes score, time, positions and assistance",
+      "pass": true
+    },
+    {
+      "name": "Failed state remains frozen and cannot later collect",
+      "pass": true
+    },
+    {
+      "name": "Elapsed and assistance time use simulated deltas, not wall time or polling",
+      "pass": true
+    },
+    {
+      "name": "Assistant waits for stance settling and is off for manual/invalid states",
+      "pass": true
+    },
+    {
+      "name": "Assistant commands are finite and bounded across heading/position sweep",
+      "pass": true,
+      "samples": 1028
+    },
+    {
+      "name": "Three-dimensional torso height does not alter planar checkpoint scoring",
+      "pass": true
+    }
+  ],
+  "course": {
+    "pass": true,
+    "phase": "complete",
+    "score": 3,
+    "total": 3,
+    "elapsedSeconds": 10.160000000000188,
+    "assistedSeconds": 10.160000000000188,
+    "limitSeconds": 60,
+    "limitScope": "Cumulative assisted simulation time only; manual play is untimed",
+    "executedTicks": 508,
+    "records": [
+      {
+        "targetIndex": 0,
+        "target": [
+          1.45,
+          0
+        ],
+        "position": [
+          1.0034131105616813,
+          -0.023418065858935928,
+          0.45271861341781716
+        ],
+        "simTime": 3.519999999999947,
+        "distance": 0.44720046469873725,
+        "controlStep": 176
+      },
+      {
+        "targetIndex": 1,
+        "target": [
+          2.6,
+          0.85
+        ],
+        "position": [
+          2.242563699672001,
+          0.5894999850166959,
+          0.45350380604748963
+        ],
+        "simTime": 6.819999999999877,
+        "distance": 0.44229059067367615,
+        "controlStep": 341
+      },
+      {
+        "targetIndex": 2,
+        "target": [
+          3.8,
+          0.1
+        ],
+        "position": [
+          3.3839208936838165,
+          0.258121866701658,
+          0.45309850762041765
+        ],
+        "simTime": 10.160000000000188,
+        "distance": 0.44511161234244456,
+        "controlStep": 508
+      }
+    ],
+    "pathLengthMetres": 3.7240960709758726,
+    "endState": {
+      "ready": true,
+      "active": true,
+      "error": null,
+      "controlSteps": 508,
+      "physicsSteps": 2032,
+      "timeResets": 0,
+      "warningCounts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "command": [
+        0.4499782243791048,
+        0,
+        -0.017707949341241116
+      ],
+      "action": [
+        -0.43982210755348206,
+        0.35648825764656067,
+        0.8283901810646057,
+        -0.9612655639648438,
+        3.3313512802124023,
+        -1.3332172632217407,
+        0.5580792427062988,
+        0.05915461480617523,
+        -2.6859805583953857,
+        0.9780219793319702,
+        -0.13863398134708405,
+        1.619905710220337
+      ],
+      "position": [
+        3.3839208936838165,
+        0.258121866701658,
+        0.45309850762041765
+      ],
+      "actualVelocity": [
+        0.3932073067314923,
+        0.002833455390117307,
+        0.023308297693844564
+      ],
+      "heading": -0.3525487400900437,
+      "footPositions": [
+        [
+          3.7780097133165027,
+          0.2801270866000002,
+          0.025641043827717813
+        ],
+        [
+          3.4880549866557327,
+          0.0005928904577796809,
+          0.10058520702868368
+        ],
+        [
+          3.125449926663275,
+          0.5464991851370934,
+          0.09276365892114724
+        ],
+        [
+          3.0501026462590417,
+          0.265071403544016,
+          0.02521461548049503
+        ]
+      ],
+      "tilt": 0.01404399089164206,
+      "heightAboveFeet": 0.3920473763059067,
+      "fall": false,
+      "simTime": 10.160000000000188,
+      "contacts": 2,
+      "displacement": [
+        3.3839208936838165,
+        0.258121866701658,
+        -0.03781049237958234
+      ],
+      "busy": false,
+      "manifestId": "cheetah",
+      "controller": "Draft Cheetah PPO; nominal exported native model",
+      "physicsEngine": "MuJoCo WASM 3.11.0",
+      "policyRuntime": "ONNX Runtime Web WASM 1.27.0"
+    },
+    "error": null,
+    "allFinite": true,
+    "zeroWarnings": true,
+    "collectionEvidenceValid": true,
+    "pauseWithoutSteps": {
+      "scope": "Controller pause and snapshot polling without any physics step; no wall-time sleep or browser lifecycle",
+      "pass": true
+    },
+    "postCompletion": {
+      "steps": 50,
+      "allZeroCommands": true,
+      "frozenResult": true,
+      "finalState": {
+        "ready": true,
+        "active": true,
+        "error": null,
+        "controlSteps": 558,
+        "physicsSteps": 2232,
+        "timeResets": 0,
+        "warningCounts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "command": [
+          0,
+          0,
+          0
+        ],
+        "action": [
+          0.5080971717834473,
+          -0.6345813274383545,
+          0.746103823184967,
+          0.19206325709819794,
+          -0.4666476845741272,
+          1.6217501163482666,
+          -0.1906920224428177,
+          -3.022669553756714,
+          4.666273593902588,
+          0.08510535210371017,
+          -0.003288673236966133,
+          2.2849817276000977
+        ],
+        "position": [
+          3.4531107457706516,
+          0.2048789338578986,
+          0.46772220078895643
+        ],
+        "actualVelocity": [
+          0.10213488348570296,
+          -0.028581865016818413,
+          0.016675590487043566
+        ],
+        "heading": -0.32775431887419715,
+        "footPositions": [
+          [
+            3.851139514736051,
+            0.26261218908781414,
+            0.027043495315403815
+          ],
+          [
+            3.651480210436296,
+            -0.05543079170930408,
+            0.026074937821398664
+          ],
+          [
+            3.2719181358190985,
+            0.45554860218054016,
+            0.025958456485266235
+          ],
+          [
+            3.004142471483143,
+            0.21601873399548174,
+            0.027655301975289925
+          ]
+        ],
+        "tilt": 0.03257466927686901,
+        "heightAboveFeet": 0.44103915288961676,
+        "fall": false,
+        "simTime": 11.160000000000345,
+        "contacts": 3,
+        "displacement": [
+          3.4531107457706516,
+          0.2048789338578986,
+          -0.02318679921104355
+        ],
+        "busy": false,
+        "manifestId": "cheetah",
+        "controller": "Draft Cheetah PPO; nominal exported native model",
+        "physicsEngine": "MuJoCo WASM 3.11.0",
+        "policyRuntime": "ONNX Runtime Web WASM 1.27.0"
+      }
+    },
+    "wallSeconds": 0.48274792299999997
+  },
+  "limitations": [
+    "One deterministic nominal original-size Cheetah and one fixed course; not a robustness or altered-body result.",
+    "Synthetic rule inputs validate scoring logic only; the separate course uses real physics positions and learned inference.",
+    "Pause check exercises a controller pause with no simulation steps; it does not verify browser tab, UI, or asynchronous start/reset integration.",
+    "Targets are visual XY checkpoints, not collision objects or physical manipulation."
+  ],
+  "engines": {
+    "mujoco": "3.11.0",
+    "onnxruntime": {
+      "common": "1.27.0",
+      "web": "1.27.0"
+    }
+  },
+  "provenance": {
+    "checkpointSha256": "2c38e5fb6463a1121546f60fa54d5c3cc0544561da84e1056d4c25623e0a045f",
+    "policySha256": "3832f34a2ed6a852c12cd4f7c1acbee3516f816e61ab7ef8ec1a3544291cfe67",
+    "xmlSha256": "e5fae07b0ba2c4d58963fed762300b99419035f4638744b66a94ca89db2af6b1",
+    "nq": 19,
+    "nv": 18,
+    "nu": 12,
+    "ngeom": 54
+  },
+  "pass": true
+}

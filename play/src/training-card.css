@@ -1,0 +1,41 @@
+.training-card { margin-top: 22px; padding: 22px; border: 1px solid #d6dfcf; border-radius: 17px; background: #f8faef; color: var(--ink); min-width: 0; }
+.training-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.training-heading h2 { margin-top: 5px; font-size: 18px; font-weight: 550; line-height: 1.4; }
+.training-badge { flex: 0 0 auto; border: 1px solid #c5d6bd; border-radius: 20px; padding: 5px 10px; font-size: 11px; color: #4c795d; background: #ebf2e4; }
+.training-badge.is-delayed { color: #8c6b3c; border-color: #decba7; background: #fff5df; }
+.training-intro { font-size: 12px; color: #6a7962; line-height: 1.7; margin: 8px 0 18px; }
+.training-progress-label { display: flex; justify-content: space-between; gap: 10px; font-size: 11px; margin-bottom: 7px; color: #65755e; }
+.training-progress-label span { font-variant-numeric: tabular-nums; }
+.training-card progress { display: block; width: 100%; height: 9px; border: 0; border-radius: 8px; overflow: hidden; background: #e1e8d8; accent-color: #5f9677; }
+.training-card progress::-webkit-progress-bar { background: #e1e8d8; border-radius: 8px; }
+.training-card progress::-webkit-progress-value { background: #5f9677; border-radius: 8px; }
+.training-card progress::-moz-progress-bar { background: #5f9677; border-radius: 8px; }
+.training-stages { display: flex; flex-wrap: wrap; gap: 14px; margin: 12px 0 18px; color: #7a8770; font-size: 11px; }
+.training-stages span { display: inline-flex; align-items: center; gap: 6px; }
+.training-stages b { display: inline-grid; place-items: center; border: 1px solid #ced9c4; width: 19px; height: 19px; border-radius: 50%; font-size: 10px; font-weight: 500; }
+.training-stages .is-done { color: #45745b; }
+.training-stages .is-done b { background: #5f9677; color: white; border-color: #5f9677; }
+.training-numbers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0 0 18px; padding: 13px 0; border-block: 1px solid #e0e6d7; }
+.training-numbers dt { color: #7d8873; font-size: 10px; line-height: 1.5; }
+.training-numbers dd { margin: 4px 0 0; font-size: 20px; font-variant-numeric: tabular-nums; font-weight: 500; }
+.training-numbers small { font-size: 11px; font-weight: 400; }
+.training-explainer summary { cursor: pointer; font-size: 12px; color: #456f59; padding: 5px 0; }
+.training-resource-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 15px 0; }
+.training-resource-grid h3, .training-evaluation h3 { font-size: 12px; line-height: 1.5; font-weight: 600; }
+.training-resource-grid p { font-size: 11px; color: #73806b; line-height: 1.8; margin-top: 5px; }
+.training-note { font-size: 11px; color: #7e8875; line-height: 1.8; margin: 10px 0 0; }
+.training-evaluation { margin-top: 17px; border-top: 1px solid #e0e6d7; padding-top: 14px; }
+.training-table-wrap { overflow-x: auto; margin-top: 8px; }
+.training-card table { width: 100%; border-collapse: collapse; text-align: left; font-size: 11px; }
+.training-card th, .training-card td { padding: 8px 6px; border-bottom: 1px solid #e0e6d7; font-weight: 400; }
+.training-card thead th { color: #7e8875; font-size: 10px; }
+.training-card td { font-variant-numeric: tabular-nums; }
+.training-replay { margin: 17px 0 0; }
+.training-drift { margin-top: 13px; padding: 11px 13px; border-radius: 8px; background: #f3ecd8; color: #79633f; font-size: 11px; line-height: 1.8; }
+.training-drift strong { display: block; font-weight: 550; }
+.training-drift span { display: block; }
+.training-replay video { display: block; width: 100%; aspect-ratio: 16 / 9; border-radius: 10px; background: #1b2420; }
+.training-replay figcaption { color: #7e8875; font-size: 11px; line-height: 1.8; margin-top: 7px; }
+.training-scope { margin: 13px 0 0; font-size: 9px; color: #8c957f; }
+@media (max-width: 800px) { .training-card { order: 4; margin-top: 0; padding: 17px; } .draft-footer { order: 5; } .training-heading h2 { font-size: 16px; } }
+@media (max-width: 500px) { .training-heading { flex-direction: column; gap: 9px; } .training-resource-grid { grid-template-columns: 1fr; gap: 11px; } .training-numbers dd { font-size: 18px; } .training-stages { gap: 9px; font-size: 10px; } }

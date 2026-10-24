@@ -1,0 +1,8 @@
+# Versions used to generate and verify the bundled nominal bodies. CPU only.
+mujoco==3.8.0
+numpy==2.2.5
+PyYAML==6.0.3
+trimesh==4.11.3
+mapbox-earcut==2.0.0
+rtree==1.4.1
+scipy==1.15.3

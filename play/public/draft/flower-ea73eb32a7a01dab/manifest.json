@@ -1,0 +1,130 @@
+{
+  "id": "flower-ea73eb32a7a01dab",
+  "preset": "flower",
+  "parameters": {
+    "preset": "flower",
+    "lengthScale": 1.0,
+    "legScale": 1.0
+  },
+  "xmlUrl": "/draft/flower-ea73eb32a7a01dab/flower.xml",
+  "meshUrl": "/draft/flower-ea73eb32a7a01dab/torso_mesh.stl",
+  "manifestUrl": "/draft/flower-ea73eb32a7a01dab/manifest.json",
+  "massKg": 10.108918156217257,
+  "bodyPlan": {
+    "jointNames": [
+      "leg0_hip_yaw",
+      "leg0_hip_pitch",
+      "leg0_knee",
+      "leg1_hip_yaw",
+      "leg1_hip_pitch",
+      "leg1_knee",
+      "leg2_hip_yaw",
+      "leg2_hip_pitch",
+      "leg2_knee",
+      "leg3_hip_yaw",
+      "leg3_hip_pitch",
+      "leg3_knee",
+      "leg4_hip_yaw",
+      "leg4_hip_pitch",
+      "leg4_knee",
+      "leg5_hip_yaw",
+      "leg5_hip_pitch",
+      "leg5_knee"
+    ],
+    "footGeomNames": [
+      "leg0_lower_leg_link_sphere",
+      "leg1_lower_leg_link_sphere",
+      "leg2_lower_leg_link_sphere",
+      "leg3_lower_leg_link_sphere",
+      "leg4_lower_leg_link_sphere",
+      "leg5_lower_leg_link_sphere"
+    ],
+    "footSiteNames": [
+      "leg0_foot",
+      "leg1_foot",
+      "leg2_foot",
+      "leg3_foot",
+      "leg4_foot",
+      "leg5_foot"
+    ],
+    "nominalJointPositions": [
+      0.0,
+      0.15,
+      1.25,
+      0.0,
+      0.15,
+      1.25,
+      0.0,
+      0.15,
+      1.25,
+      0.0,
+      0.15,
+      1.25,
+      0.0,
+      0.15,
+      1.25,
+      0.0,
+      0.15,
+      1.25
+    ],
+    "poseRoles": {
+      "hipYawSuffix": "_hip_yaw",
+      "hipPitchSuffix": "_hip_pitch",
+      "kneeSuffix": "_knee",
+      "crouchDelta": [
+        0,
+        0.18,
+        0.2
+      ],
+      "waveLeg": "leg0",
+      "waveDelta": [
+        0,
+        -0.35,
+        0.35
+      ]
+    },
+    "nominalRootHeight": 0.273697804443
+  },
+  "resolvedParameters": {
+    "lengthScale": "Central housing radius and fixed radial mounts",
+    "legScale": "Coxa, upper and lower segment lengths; actuator sizes unchanged"
+  },
+  "provenance": {
+    "generator": "Draft RobotGenerator",
+    "repository": "https://github.com/davidhnguyen2000/draft",
+    "revision": "3b03e144735098ef94b938e85756806f45628f83",
+    "packageVersion": "0.1.0",
+    "robot": "flower",
+    "strict": true,
+    "allowHypothetical": false,
+    "generation": "Local six-legged specification compiled with Draft; direct torque motors and nominal stance added locally",
+    "controller": "No learned controller is created or certified by this endpoint",
+    "officialPreset": false,
+    "specificationSha256": {
+      "parameters.yaml": "db0baa6b4b256daa98f61f34eb6db482d1e49a27c415829a86afc46a15b777e7",
+      "tree.yaml": "4244b90d2a0617511a0955f1ce81b6252d99e1d8036598d0a0e69e4e5328f3b5",
+      "mesh.yaml": "d9122828f861d18367a3b42173d7e6d8e41c1c033784d9b2348a7f4cfff9ef26",
+      "generate.py": "075145337defa253d65c45fa14199ea0eacac1871fc86a77deae6a852833bd78"
+    },
+    "massValidation": "No mass_composition_reference: structural densities and dimensions are stated assumptions, not validated against a flower population."
+  },
+  "validation": {
+    "scope": "MuJoCo model compile; gait validation is separate",
+    "nq": 25,
+    "nv": 24,
+    "actuators": 18,
+    "hingeJoints": 18,
+    "feet": 6
+  },
+  "warnings": [
+    "Custom morphology; structural masses and controller gains are engineering assumptions."
+  ],
+  "assetSha256": {
+    "flower.xml": "63c1b09b73e18372d02fc03eb328aa2e429177ad9fdb058a710fc2529525e683",
+    "torso_mesh.stl": "582fd1714c5fbb7e8c6a915b81d115b84ae3e5a63f52b71609341823fbe8a9ec",
+    "scene.xml": "8f25faaec295690be8b7a9f6595686085717ad560bd21c880290cce2eebf59ff",
+    "model-info.json": "6110ff89971c8858dd730d7879058b5f391693ac59cccfa1df666ce73c70c596",
+    "parameters_resolved.yaml": "3db366ec3276ad0dcb006adb9ae62b384fdaad61c785a1bbc8c312600aa66914",
+    "feasibility_report.yaml": "c99692ce69f543532714dbcc5450e0da03bb7628e5bace13dcff6d0c5933301f"
+  }
+}

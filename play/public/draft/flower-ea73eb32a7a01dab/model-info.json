@@ -1,0 +1,1017 @@
+{
+  "schemaVersion": 1,
+  "id": "flower",
+  "name": {
+    "en": "Flower crawler",
+    "zh": "\u516d\u8db3\u82b1\u6735\u673a\u5668\u4eba"
+  },
+  "xmlFile": "flower.xml",
+  "rawDraftXmlFile": "flower-generated.xml",
+  "meshFile": "torso_mesh.stl",
+  "parameters": {
+    "preset": "flower",
+    "lengthScale": 1.0,
+    "legScale": 1.0
+  },
+  "scaleMeaning": {
+    "lengthScale": "Central housing radius and fixed radial mounts",
+    "legScale": "Coxa, upper and lower segment lengths; actuator sizes unchanged"
+  },
+  "bodyName": "torso_link",
+  "torsoBodyName": "torso_link",
+  "imuSiteName": "imu",
+  "sensorNames": {
+    "linearVelocity": "imu_lin_vel",
+    "angularVelocity": "imu_ang_vel"
+  },
+  "legNames": [
+    "leg0",
+    "leg1",
+    "leg2",
+    "leg3",
+    "leg4",
+    "leg5"
+  ],
+  "jointNames": [
+    "leg0_hip_yaw",
+    "leg0_hip_pitch",
+    "leg0_knee",
+    "leg1_hip_yaw",
+    "leg1_hip_pitch",
+    "leg1_knee",
+    "leg2_hip_yaw",
+    "leg2_hip_pitch",
+    "leg2_knee",
+    "leg3_hip_yaw",
+    "leg3_hip_pitch",
+    "leg3_knee",
+    "leg4_hip_yaw",
+    "leg4_hip_pitch",
+    "leg4_knee",
+    "leg5_hip_yaw",
+    "leg5_hip_pitch",
+    "leg5_knee"
+  ],
+  "actuatorNames": [
+    "leg0_hip_yaw",
+    "leg0_hip_pitch",
+    "leg0_knee",
+    "leg1_hip_yaw",
+    "leg1_hip_pitch",
+    "leg1_knee",
+    "leg2_hip_yaw",
+    "leg2_hip_pitch",
+    "leg2_knee",
+    "leg3_hip_yaw",
+    "leg3_hip_pitch",
+    "leg3_knee",
+    "leg4_hip_yaw",
+    "leg4_hip_pitch",
+    "leg4_knee",
+    "leg5_hip_yaw",
+    "leg5_hip_pitch",
+    "leg5_knee"
+  ],
+  "joints": [
+    {
+      "name": "leg0_hip_yaw",
+      "id": 1,
+      "qposAdr": 7,
+      "dofAdr": 6,
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "range": [
+        -0.75,
+        0.75
+      ],
+      "nominalPosition": 0.0
+    },
+    {
+      "name": "leg0_hip_pitch",
+      "id": 2,
+      "qposAdr": 8,
+      "dofAdr": 7,
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "range": [
+        -0.65,
+        0.8
+      ],
+      "nominalPosition": 0.15
+    },
+    {
+      "name": "leg0_knee",
+      "id": 3,
+      "qposAdr": 9,
+      "dofAdr": 8,
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "range": [
+        0.35,
+        2.1
+      ],
+      "nominalPosition": 1.25
+    },
+    {
+      "name": "leg1_hip_yaw",
+      "id": 4,
+      "qposAdr": 10,
+      "dofAdr": 9,
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "range": [
+        -0.75,
+        0.75
+      ],
+      "nominalPosition": 0.0
+    },
+    {
+      "name": "leg1_hip_pitch",
+      "id": 5,
+      "qposAdr": 11,
+      "dofAdr": 10,
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "range": [
+        -0.65,
+        0.8
+      ],
+      "nominalPosition": 0.15
+    },
+    {
+      "name": "leg1_knee",
+      "id": 6,
+      "qposAdr": 12,
+      "dofAdr": 11,
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "range": [
+        0.35,
+        2.1
+      ],
+      "nominalPosition": 1.25
+    },
+    {
+      "name": "leg2_hip_yaw",
+      "id": 7,
+      "qposAdr": 13,
+      "dofAdr": 12,
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "range": [
+        -0.75,
+        0.75
+      ],
+      "nominalPosition": 0.0
+    },
+    {
+      "name": "leg2_hip_pitch",
+      "id": 8,
+      "qposAdr": 14,
+      "dofAdr": 13,
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "range": [
+        -0.65,
+        0.8
+      ],
+      "nominalPosition": 0.15
+    },
+    {
+      "name": "leg2_knee",
+      "id": 9,
+      "qposAdr": 15,
+      "dofAdr": 14,
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "range": [
+        0.35,
+        2.1
+      ],
+      "nominalPosition": 1.25
+    },
+    {
+      "name": "leg3_hip_yaw",
+      "id": 10,
+      "qposAdr": 16,
+      "dofAdr": 15,
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "range": [
+        -0.75,
+        0.75
+      ],
+      "nominalPosition": 0.0
+    },
+    {
+      "name": "leg3_hip_pitch",
+      "id": 11,
+      "qposAdr": 17,
+      "dofAdr": 16,
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "range": [
+        -0.65,
+        0.8
+      ],
+      "nominalPosition": 0.15
+    },
+    {
+      "name": "leg3_knee",
+      "id": 12,
+      "qposAdr": 18,
+      "dofAdr": 17,
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "range": [
+        0.35,
+        2.1
+      ],
+      "nominalPosition": 1.25
+    },
+    {
+      "name": "leg4_hip_yaw",
+      "id": 13,
+      "qposAdr": 19,
+      "dofAdr": 18,
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "range": [
+        -0.75,
+        0.75
+      ],
+      "nominalPosition": 0.0
+    },
+    {
+      "name": "leg4_hip_pitch",
+      "id": 14,
+      "qposAdr": 20,
+      "dofAdr": 19,
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "range": [
+        -0.65,
+        0.8
+      ],
+      "nominalPosition": 0.15
+    },
+    {
+      "name": "leg4_knee",
+      "id": 15,
+      "qposAdr": 21,
+      "dofAdr": 20,
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "range": [
+        0.35,
+        2.1
+      ],
+      "nominalPosition": 1.25
+    },
+    {
+      "name": "leg5_hip_yaw",
+      "id": 16,
+      "qposAdr": 22,
+      "dofAdr": 21,
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "range": [
+        -0.75,
+        0.75
+      ],
+      "nominalPosition": 0.0
+    },
+    {
+      "name": "leg5_hip_pitch",
+      "id": 17,
+      "qposAdr": 23,
+      "dofAdr": 22,
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "range": [
+        -0.65,
+        0.8
+      ],
+      "nominalPosition": 0.15
+    },
+    {
+      "name": "leg5_knee",
+      "id": 18,
+      "qposAdr": 24,
+      "dofAdr": 23,
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "range": [
+        0.35,
+        2.1
+      ],
+      "nominalPosition": 1.25
+    }
+  ],
+  "motors": [
+    {
+      "jointName": "leg0_hip_yaw",
+      "actuatorName": "leg0_hip_yaw",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0,
+      "armature": 0.00563174
+    },
+    {
+      "jointName": "leg0_hip_pitch",
+      "actuatorName": "leg0_hip_pitch",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0,
+      "armature": 0.00563174
+    },
+    {
+      "jointName": "leg0_knee",
+      "actuatorName": "leg0_knee",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0,
+      "armature": 0.00563174
+    },
+    {
+      "jointName": "leg1_hip_yaw",
+      "actuatorName": "leg1_hip_yaw",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0,
+      "armature": 0.00563174
+    },
+    {
+      "jointName": "leg1_hip_pitch",
+      "actuatorName": "leg1_hip_pitch",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0,
+      "armature": 0.00563174
+    },
+    {
+      "jointName": "leg1_knee",
+      "actuatorName": "leg1_knee",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0,
+      "armature": 0.00563174
+    },
+    {
+      "jointName": "leg2_hip_yaw",
+      "actuatorName": "leg2_hip_yaw",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0,
+      "armature": 0.00563174
+    },
+    {
+      "jointName": "leg2_hip_pitch",
+      "actuatorName": "leg2_hip_pitch",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0,
+      "armature": 0.00563174
+    },
+    {
+      "jointName": "leg2_knee",
+      "actuatorName": "leg2_knee",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0,
+      "armature": 0.00563174
+    },
+    {
+      "jointName": "leg3_hip_yaw",
+      "actuatorName": "leg3_hip_yaw",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0,
+      "armature": 0.00563174
+    },
+    {
+      "jointName": "leg3_hip_pitch",
+      "actuatorName": "leg3_hip_pitch",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0,
+      "armature": 0.00563174
+    },
+    {
+      "jointName": "leg3_knee",
+      "actuatorName": "leg3_knee",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0,
+      "armature": 0.00563174
+    },
+    {
+      "jointName": "leg4_hip_yaw",
+      "actuatorName": "leg4_hip_yaw",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0,
+      "armature": 0.00563174
+    },
+    {
+      "jointName": "leg4_hip_pitch",
+      "actuatorName": "leg4_hip_pitch",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0,
+      "armature": 0.00563174
+    },
+    {
+      "jointName": "leg4_knee",
+      "actuatorName": "leg4_knee",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0,
+      "armature": 0.00563174
+    },
+    {
+      "jointName": "leg5_hip_yaw",
+      "actuatorName": "leg5_hip_yaw",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0,
+      "armature": 0.00563174
+    },
+    {
+      "jointName": "leg5_hip_pitch",
+      "actuatorName": "leg5_hip_pitch",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0,
+      "armature": 0.00563174
+    },
+    {
+      "jointName": "leg5_knee",
+      "actuatorName": "leg5_knee",
+      "kp": 60.0,
+      "kd": 1.5,
+      "effortLimit": 12.0,
+      "saturationEffort": 12.0,
+      "velocityLimit": 20.0,
+      "armature": 0.00563174
+    }
+  ],
+  "footGeomNames": [
+    "leg0_lower_leg_link_sphere",
+    "leg1_lower_leg_link_sphere",
+    "leg2_lower_leg_link_sphere",
+    "leg3_lower_leg_link_sphere",
+    "leg4_lower_leg_link_sphere",
+    "leg5_lower_leg_link_sphere"
+  ],
+  "footSiteNames": [
+    "leg0_foot",
+    "leg1_foot",
+    "leg2_foot",
+    "leg3_foot",
+    "leg4_foot",
+    "leg5_foot"
+  ],
+  "footRadius": 0.025,
+  "nominalJointPositions": [
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25
+  ],
+  "defaultJointPosition": [
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25
+  ],
+  "defaultJointVelocity": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "initialQpos": [
+    0.0,
+    0.0,
+    0.273697804443,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25,
+    0.0,
+    0.15,
+    1.25
+  ],
+  "initialQvel": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "nominalRootHeight": 0.273697804443,
+  "footPositions": [
+    [
+      0.5053715654665406,
+      0.0,
+      0.030000000000290877
+    ],
+    [
+      0.25268566056231556,
+      0.4376647215893631,
+      0.030000000000290877
+    ],
+    [
+      -0.25268566056231556,
+      0.4376647215893631,
+      0.030000000000290877
+    ],
+    [
+      -0.5053715654665406,
+      0.0,
+      0.030000000000290877
+    ],
+    [
+      -0.25268566056231556,
+      -0.4376647215893631,
+      0.030000000000290877
+    ],
+    [
+      0.25268566056231556,
+      -0.4376647215893631,
+      0.030000000000290877
+    ]
+  ],
+  "poseRoles": {
+    "hipYawSuffix": "_hip_yaw",
+    "hipPitchSuffix": "_hip_pitch",
+    "kneeSuffix": "_knee",
+    "crouchDelta": [
+      0,
+      0.18,
+      0.2
+    ],
+    "waveLeg": "leg0",
+    "waveDelta": [
+      0,
+      -0.35,
+      0.35
+    ]
+  },
+  "massKg": 10.108918156217257,
+  "nq": 25,
+  "nv": 24,
+  "nu": 18,
+  "bodies": [
+    {
+      "name": "world",
+      "parentId": 0,
+      "massKg": 0.0,
+      "inertia": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "torso_link",
+      "parentId": 0,
+      "massKg": 2.9332381257550937,
+      "inertia": [
+        0.029442055333354335,
+        0.01672983470207885,
+        0.016729833901211928
+      ]
+    },
+    {
+      "name": "leg0_mount",
+      "parentId": 1,
+      "massKg": 0.34924825803806614,
+      "inertia": [
+        0.00021566034653162114,
+        0.00016235874258771718,
+        0.00015256155337354556
+      ]
+    },
+    {
+      "name": "leg0_yaw_link",
+      "parentId": 2,
+      "massKg": 0.353867197281917,
+      "inertia": [
+        0.00023039513299957163,
+        0.00017709352905566773,
+        0.0001527387401467516
+      ]
+    },
+    {
+      "name": "leg0_upper_leg_link",
+      "parentId": 3,
+      "massKg": 0.3973843956198974,
+      "inertia": [
+        0.0006636404929069315,
+        0.0006103388889630277,
+        0.0001571685324602421
+      ]
+    },
+    {
+      "name": "leg0_lower_leg_link",
+      "parentId": 4,
+      "massKg": 0.09544682080381389,
+      "inertia": [
+        0.0005232655377446336,
+        0.0005232655377446336,
+        1.1975905657123094e-05
+      ]
+    },
+    {
+      "name": "leg1_mount",
+      "parentId": 1,
+      "massKg": 0.34924825803806614,
+      "inertia": [
+        0.00021566034653162114,
+        0.00016235874258771718,
+        0.00015256155337354556
+      ]
+    },
+    {
+      "name": "leg1_yaw_link",
+      "parentId": 6,
+      "massKg": 0.353867197281917,
+      "inertia": [
+        0.00023039513299957163,
+        0.00017709352905566773,
+        0.0001527387401467516
+      ]
+    },
+    {
+      "name": "leg1_upper_leg_link",
+      "parentId": 7,
+      "massKg": 0.3973843956198974,
+      "inertia": [
+        0.0006636404929069315,
+        0.0006103388889630277,
+        0.0001571685324602421
+      ]
+    },
+    {
+      "name": "leg1_lower_leg_link",
+      "parentId": 8,
+      "massKg": 0.09544682080381389,
+      "inertia": [
+        0.0005232655377446336,
+        0.0005232655377446336,
+        1.1975905657123094e-05
+      ]
+    },
+    {
+      "name": "leg2_mount",
+      "parentId": 1,
+      "massKg": 0.34924825803806614,
+      "inertia": [
+        0.00021566034653162114,
+        0.00016235874258771718,
+        0.00015256155337354556
+      ]
+    },
+    {
+      "name": "leg2_yaw_link",
+      "parentId": 10,
+      "massKg": 0.353867197281917,
+      "inertia": [
+        0.00023039513299957163,
+        0.00017709352905566773,
+        0.0001527387401467516
+      ]
+    },
+    {
+      "name": "leg2_upper_leg_link",
+      "parentId": 11,
+      "massKg": 0.3973843956198974,
+      "inertia": [
+        0.0006636404929069315,
+        0.0006103388889630277,
+        0.0001571685324602421
+      ]
+    },
+    {
+      "name": "leg2_lower_leg_link",
+      "parentId": 12,
+      "massKg": 0.09544682080381389,
+      "inertia": [
+        0.0005232655377446336,
+        0.0005232655377446336,
+        1.1975905657123094e-05
+      ]
+    },
+    {
+      "name": "leg3_mount",
+      "parentId": 1,
+      "massKg": 0.34924825803806614,
+      "inertia": [
+        0.00021566034653162114,
+        0.00016235874258771718,
+        0.00015256155337354556
+      ]
+    },
+    {
+      "name": "leg3_yaw_link",
+      "parentId": 14,
+      "massKg": 0.353867197281917,
+      "inertia": [
+        0.00023039513299957163,
+        0.00017709352905566773,
+        0.0001527387401467516
+      ]
+    },
+    {
+      "name": "leg3_upper_leg_link",
+      "parentId": 15,
+      "massKg": 0.3973843956198974,
+      "inertia": [
+        0.0006636404929069315,
+        0.0006103388889630277,
+        0.0001571685324602421
+      ]
+    },
+    {
+      "name": "leg3_lower_leg_link",
+      "parentId": 16,
+      "massKg": 0.09544682080381389,
+      "inertia": [
+        0.0005232655377446336,
+        0.0005232655377446336,
+        1.1975905657123094e-05
+      ]
+    },
+    {
+      "name": "leg4_mount",
+      "parentId": 1,
+      "massKg": 0.34924825803806614,
+      "inertia": [
+        0.00021566034653162114,
+        0.00016235874258771718,
+        0.00015256155337354556
+      ]
+    },
+    {
+      "name": "leg4_yaw_link",
+      "parentId": 18,
+      "massKg": 0.353867197281917,
+      "inertia": [
+        0.00023039513299957163,
+        0.00017709352905566773,
+        0.0001527387401467516
+      ]
+    },
+    {
+      "name": "leg4_upper_leg_link",
+      "parentId": 19,
+      "massKg": 0.3973843956198974,
+      "inertia": [
+        0.0006636404929069315,
+        0.0006103388889630277,
+        0.0001571685324602421
+      ]
+    },
+    {
+      "name": "leg4_lower_leg_link",
+      "parentId": 20,
+      "massKg": 0.09544682080381389,
+      "inertia": [
+        0.0005232655377446336,
+        0.0005232655377446336,
+        1.1975905657123094e-05
+      ]
+    },
+    {
+      "name": "leg5_mount",
+      "parentId": 1,
+      "massKg": 0.34924825803806614,
+      "inertia": [
+        0.00021566034653162114,
+        0.00016235874258771718,
+        0.00015256155337354556
+      ]
+    },
+    {
+      "name": "leg5_yaw_link",
+      "parentId": 22,
+      "massKg": 0.353867197281917,
+      "inertia": [
+        0.00023039513299957163,
+        0.00017709352905566773,
+        0.0001527387401467516
+      ]
+    },
+    {
+      "name": "leg5_upper_leg_link",
+      "parentId": 23,
+      "massKg": 0.3973843956198974,
+      "inertia": [
+        0.0006636404929069315,
+        0.0006103388889630277,
+        0.0001571685324602421
+      ]
+    },
+    {
+      "name": "leg5_lower_leg_link",
+      "parentId": 24,
+      "massKg": 0.09544682080381389,
+      "inertia": [
+        0.0005232655377446336,
+        0.0005232655377446336,
+        1.1975905657123094e-05
+      ]
+    }
+  ],
+  "motorEngineeringAssumptions": {
+    "peakTorqueNm": 12,
+    "noLoadSpeedRadS": 20,
+    "gearRatio": 12,
+    "estimatedMotorMassKg": 0.34163655991785896,
+    "nominalKp": 60,
+    "nominalKd": 1.5,
+    "note": "Operating point and controller gains selected for this prototype; motor envelope/mass/armature derived by Draft, not a purchased actuator claim."
+  },
+  "provenance": {
+    "generator": "Installed Draft RobotGenerator, strict=True",
+    "upstreamRepository": "https://github.com/davidhnguyen2000/draft",
+    "sourceFilesSha256": {
+      "parameters.yaml": "db0baa6b4b256daa98f61f34eb6db482d1e49a27c415829a86afc46a15b777e7",
+      "tree.yaml": "4244b90d2a0617511a0955f1ce81b6252d99e1d8036598d0a0e69e4e5328f3b5",
+      "mesh.yaml": "d9122828f861d18367a3b42173d7e6d8e41c1c033784d9b2348a7f4cfff9ef26",
+      "generate.py": "075145337defa253d65c45fa14199ea0eacac1871fc86a77deae6a852833bd78"
+    },
+    "xmlSha256": "63c1b09b73e18372d02fc03eb328aa2e429177ad9fdb058a710fc2529525e683",
+    "rawXmlSha256": "b8cd6eab962805473c5d7f59ac67355e3c106617b6802c3c081bc860d7467379",
+    "meshSha256": "582fd1714c5fbb7e8c6a915b81d115b84ae3e5a63f52b71609341823fbe8a9ec",
+    "adaptation": "Six radial branches authored in YAML; generated MJCF augmented with direct torque motors and a forward-kinematics stance keyframe.",
+    "massValidation": "No mass_composition_reference: structural densities and dimensions are stated assumptions, not validated against a flower population.",
+    "locomotionPolicy": "None supplied by the generator; training and gait validation are separate."
+  }
+}

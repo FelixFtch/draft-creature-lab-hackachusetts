@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-25",
+  "scope": "Actual Chrome through the clean release installation, separate from the original lab",
+  "build": "index-DacwsWfh.js",
+  "css": "index-BEUGFlHT.css",
+  "english": {
+    "pageTitle": "Draft Creature Lab",
+    "documentLanguage": "en",
+    "existingChinesePreferenceOverridden": true,
+    "mainAndExpandedPanelsHaveNoHanCharacters": true,
+    "remixRecipesRetained": true,
+    "canvasAccessibilityEnglish": true,
+    "evidencePanelEnglish": true
+  },
+  "packagedFlower": {
+    "modelId": "flower-ea73eb32a7a01dab",
+    "controllerLoaded": true,
+    "joystickEnabledWhilePaused": true,
+    "before": {
+      "time": 0.24000000000000013,
+      "position": [
+        -0.003623819334203969,
+        -0.0022237279886587868,
+        0.27692397885291287
+      ]
+    },
+    "afterJoystickRelease": {
+      "time": 0.6200000000000004,
+      "position": [
+        0.043180072078722896,
+        -0.004764326252114612,
+        0.2814555748952567
+      ],
+      "command": [
+        0,
+        0,
+        0
+      ],
+      "fall": false,
+      "warningCounts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "pauseVerified": true
+  },
+  "visionModelStarted": false,
+  "notes": [
+    "An initial drag used a stale position after asynchronous scrolling and selected page text; the corrected drag above is the measured movement test.",
+    "Physical touch, gamepad and non-Linux installation were not tested."
+  ]
+}

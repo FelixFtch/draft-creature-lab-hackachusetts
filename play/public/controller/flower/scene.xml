@@ -1,0 +1,281 @@
+<mujoco model="mjlab scene">
+  <compiler angle="radian" meshdir="assets" />
+  <option timestep="0.005" integrator="implicitfast" iterations="10" ls_iterations="20" ccd_iterations="50" />
+  <size nkey="2" />
+  <visual>
+    <global azimuth="135" elevation="-25" offwidth="1920" offheight="1080" />
+    <quality shadowsize="8192" />
+    <headlight ambient="0.3 0.3 0.3" diffuse="0.6 0.6 0.6" specular="0 0 0" />
+    <scale forcewidth="0.25" contactwidth="0.4" contactheight="0.15" framelength="5" framewidth="0.3" />
+    <rgba haze="0.15 0.25 0.35 1" force="1 0 0 1" />
+  </visual>
+  <statistic meansize="0.03" extent="2" />
+  <default>
+    <default class="robot/main">
+      <joint damping="0.01" />
+      <geom friction="0.8" />
+      <default class="robot/visual">
+        <geom contype="0" conaffinity="0" group="2" friction="0.7 0.1 0.1" />
+      </default>
+    </default>
+  </default>
+  <custom>
+    <numeric name="robot/leg0_hip_yaw_velocity_limit" size="1" data="20" />
+    <numeric name="robot/leg0_hip_pitch_velocity_limit" size="1" data="20" />
+    <numeric name="robot/leg0_knee_velocity_limit" size="1" data="20" />
+    <numeric name="robot/leg1_hip_yaw_velocity_limit" size="1" data="20" />
+    <numeric name="robot/leg1_hip_pitch_velocity_limit" size="1" data="20" />
+    <numeric name="robot/leg1_knee_velocity_limit" size="1" data="20" />
+    <numeric name="robot/leg2_hip_yaw_velocity_limit" size="1" data="20" />
+    <numeric name="robot/leg2_hip_pitch_velocity_limit" size="1" data="20" />
+    <numeric name="robot/leg2_knee_velocity_limit" size="1" data="20" />
+    <numeric name="robot/leg3_hip_yaw_velocity_limit" size="1" data="20" />
+    <numeric name="robot/leg3_hip_pitch_velocity_limit" size="1" data="20" />
+    <numeric name="robot/leg3_knee_velocity_limit" size="1" data="20" />
+    <numeric name="robot/leg4_hip_yaw_velocity_limit" size="1" data="20" />
+    <numeric name="robot/leg4_hip_pitch_velocity_limit" size="1" data="20" />
+    <numeric name="robot/leg4_knee_velocity_limit" size="1" data="20" />
+    <numeric name="robot/leg5_hip_yaw_velocity_limit" size="1" data="20" />
+    <numeric name="robot/leg5_hip_pitch_velocity_limit" size="1" data="20" />
+    <numeric name="robot/leg5_knee_velocity_limit" size="1" data="20" />
+  </custom>
+  <asset>
+    <texture type="2d" colorspace="auto" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" markrgb="0.8 0.8 0.8" width="300" height="300" />
+    <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="4 4" />
+    <mesh name="robot/torso_mesh" content_type="model/stl" file="torso_mesh.stl" />
+  </asset>
+  <worldbody>
+    <light name="sun" pos="0 0 1.5" dir="0 0 -1" type="directional" />
+    <body name="terrain">
+      <geom name="terrain" size="0 0 0.01" type="plane" material="groundplane" />
+    </body>
+    <body name="robot/torso_link" pos="0 0 0.475">
+      <joint name="robot/torso_link_freejoint" type="free" />
+      <geom name="robot/torso_link_mesh" type="mesh" contype="0" conaffinity="0" friction="0.8" density="500" rgba="0.84 0.4 0.48 1" mesh="robot/torso_mesh" />
+      <site name="robot/imu" pos="0 0 0" group="5" />
+      <body name="robot/leg0_mount" pos="0.156 0 0">
+        <geom name="robot/leg0_mount_link" size="0.015 0.00717843" pos="0.00717843 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+        <geom name="robot/leg0_mount_motor" size="0.0346431 0.0207859" pos="0.044 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="2179.63" rgba="0.22 0.29 0.29 1" />
+        <geom name="robot/leg0_mount_detail" class="robot/visual" size="0.0277145 0.0228645" pos="0.044 0 0" type="cylinder" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+        <body name="robot/leg0_yaw_link" pos="0.044 0 0">
+          <joint name="robot/leg0_hip_yaw" pos="0 0 0" axis="0 0 1" limited="true" range="-0.75 0.75" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+          <geom name="robot/leg0_yaw_link_link" size="0.013 0.0153569" pos="0.045 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+          <geom name="robot/leg0_yaw_link_motor" size="0.0346431 0.0207859" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="2179.63" rgba="0.22 0.29 0.29 1" />
+          <geom name="robot/leg0_yaw_link_detail" class="robot/visual" size="0.0277145 0.0228645" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+          <body name="robot/leg0_upper_leg_link" pos="0.09 0 0">
+            <joint name="robot/leg0_hip_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="-0.65 0.8" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+            <geom name="robot/leg0_upper_leg_link_link" size="0.014 0.0603569" pos="0.09 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+            <geom name="robot/leg0_upper_leg_link_motor" size="0.0346431 0.0207859" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="2179.63" rgba="0.22 0.29 0.29 1" />
+            <geom name="robot/leg0_upper_leg_link_detail" class="robot/visual" size="0.0277145 0.0228645" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+            <body name="robot/leg0_lower_leg_link" pos="0.18 0 0">
+              <joint name="robot/leg0_knee" pos="0 0 0" axis="0 1 0" limited="true" range="0.35 2.1" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+              <geom name="robot/leg0_lower_leg_link_link" size="0.011 0.11" pos="0.11 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+              <geom name="robot/leg0_lower_leg_link_sphere" size="0.025" pos="0.22 0 0" priority="1" friction="0.8" density="500" rgba="0.25 0.31 0.3 1" />
+              <site name="robot/leg0_foot" pos="0.22 0 0" group="5" />
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="robot/leg1_mount" pos="0.078 0.1351 0" quat="0.866025 0 0 0.5">
+        <geom name="robot/leg1_mount_link" size="0.015 0.00717843" pos="0.00717843 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+        <geom name="robot/leg1_mount_motor" size="0.0346431 0.0207859" pos="0.044 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="2179.63" rgba="0.22 0.29 0.29 1" />
+        <geom name="robot/leg1_mount_detail" class="robot/visual" size="0.0277145 0.0228645" pos="0.044 0 0" type="cylinder" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+        <body name="robot/leg1_yaw_link" pos="0.044 0 0">
+          <joint name="robot/leg1_hip_yaw" pos="0 0 0" axis="0 0 1" limited="true" range="-0.75 0.75" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+          <geom name="robot/leg1_yaw_link_link" size="0.013 0.0153569" pos="0.045 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+          <geom name="robot/leg1_yaw_link_motor" size="0.0346431 0.0207859" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="2179.63" rgba="0.22 0.29 0.29 1" />
+          <geom name="robot/leg1_yaw_link_detail" class="robot/visual" size="0.0277145 0.0228645" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+          <body name="robot/leg1_upper_leg_link" pos="0.09 0 0">
+            <joint name="robot/leg1_hip_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="-0.65 0.8" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+            <geom name="robot/leg1_upper_leg_link_link" size="0.014 0.0603569" pos="0.09 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+            <geom name="robot/leg1_upper_leg_link_motor" size="0.0346431 0.0207859" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="2179.63" rgba="0.22 0.29 0.29 1" />
+            <geom name="robot/leg1_upper_leg_link_detail" class="robot/visual" size="0.0277145 0.0228645" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+            <body name="robot/leg1_lower_leg_link" pos="0.18 0 0">
+              <joint name="robot/leg1_knee" pos="0 0 0" axis="0 1 0" limited="true" range="0.35 2.1" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+              <geom name="robot/leg1_lower_leg_link_link" size="0.011 0.11" pos="0.11 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+              <geom name="robot/leg1_lower_leg_link_sphere" size="0.025" pos="0.22 0 0" priority="1" friction="0.8" density="500" rgba="0.25 0.31 0.3 1" />
+              <site name="robot/leg1_foot" pos="0.22 0 0" group="5" />
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="robot/leg2_mount" pos="-0.078 0.1351 0" quat="0.5 0 0 0.866025">
+        <geom name="robot/leg2_mount_link" size="0.015 0.00717843" pos="0.00717843 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+        <geom name="robot/leg2_mount_motor" size="0.0346431 0.0207859" pos="0.044 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="2179.63" rgba="0.22 0.29 0.29 1" />
+        <geom name="robot/leg2_mount_detail" class="robot/visual" size="0.0277145 0.0228645" pos="0.044 0 0" type="cylinder" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+        <body name="robot/leg2_yaw_link" pos="0.044 0 0">
+          <joint name="robot/leg2_hip_yaw" pos="0 0 0" axis="0 0 1" limited="true" range="-0.75 0.75" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+          <geom name="robot/leg2_yaw_link_link" size="0.013 0.0153569" pos="0.045 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+          <geom name="robot/leg2_yaw_link_motor" size="0.0346431 0.0207859" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="2179.63" rgba="0.22 0.29 0.29 1" />
+          <geom name="robot/leg2_yaw_link_detail" class="robot/visual" size="0.0277145 0.0228645" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+          <body name="robot/leg2_upper_leg_link" pos="0.09 0 0">
+            <joint name="robot/leg2_hip_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="-0.65 0.8" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+            <geom name="robot/leg2_upper_leg_link_link" size="0.014 0.0603569" pos="0.09 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+            <geom name="robot/leg2_upper_leg_link_motor" size="0.0346431 0.0207859" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="2179.63" rgba="0.22 0.29 0.29 1" />
+            <geom name="robot/leg2_upper_leg_link_detail" class="robot/visual" size="0.0277145 0.0228645" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+            <body name="robot/leg2_lower_leg_link" pos="0.18 0 0">
+              <joint name="robot/leg2_knee" pos="0 0 0" axis="0 1 0" limited="true" range="0.35 2.1" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+              <geom name="robot/leg2_lower_leg_link_link" size="0.011 0.11" pos="0.11 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+              <geom name="robot/leg2_lower_leg_link_sphere" size="0.025" pos="0.22 0 0" priority="1" friction="0.8" density="500" rgba="0.25 0.31 0.3 1" />
+              <site name="robot/leg2_foot" pos="0.22 0 0" group="5" />
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="robot/leg3_mount" pos="-0.156 0 0" quat="0 0 0 1">
+        <geom name="robot/leg3_mount_link" size="0.015 0.00717843" pos="0.00717843 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+        <geom name="robot/leg3_mount_motor" size="0.0346431 0.0207859" pos="0.044 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="2179.63" rgba="0.22 0.29 0.29 1" />
+        <geom name="robot/leg3_mount_detail" class="robot/visual" size="0.0277145 0.0228645" pos="0.044 0 0" type="cylinder" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+        <body name="robot/leg3_yaw_link" pos="0.044 0 0">
+          <joint name="robot/leg3_hip_yaw" pos="0 0 0" axis="0 0 1" limited="true" range="-0.75 0.75" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+          <geom name="robot/leg3_yaw_link_link" size="0.013 0.0153569" pos="0.045 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+          <geom name="robot/leg3_yaw_link_motor" size="0.0346431 0.0207859" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="2179.63" rgba="0.22 0.29 0.29 1" />
+          <geom name="robot/leg3_yaw_link_detail" class="robot/visual" size="0.0277145 0.0228645" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+          <body name="robot/leg3_upper_leg_link" pos="0.09 0 0">
+            <joint name="robot/leg3_hip_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="-0.65 0.8" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+            <geom name="robot/leg3_upper_leg_link_link" size="0.014 0.0603569" pos="0.09 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+            <geom name="robot/leg3_upper_leg_link_motor" size="0.0346431 0.0207859" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="2179.63" rgba="0.22 0.29 0.29 1" />
+            <geom name="robot/leg3_upper_leg_link_detail" class="robot/visual" size="0.0277145 0.0228645" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+            <body name="robot/leg3_lower_leg_link" pos="0.18 0 0">
+              <joint name="robot/leg3_knee" pos="0 0 0" axis="0 1 0" limited="true" range="0.35 2.1" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+              <geom name="robot/leg3_lower_leg_link_link" size="0.011 0.11" pos="0.11 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+              <geom name="robot/leg3_lower_leg_link_sphere" size="0.025" pos="0.22 0 0" priority="1" friction="0.8" density="500" rgba="0.25 0.31 0.3 1" />
+              <site name="robot/leg3_foot" pos="0.22 0 0" group="5" />
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="robot/leg4_mount" pos="-0.078 -0.1351 0" quat="-0.5 0 0 0.866025">
+        <geom name="robot/leg4_mount_link" size="0.015 0.00717843" pos="0.00717843 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+        <geom name="robot/leg4_mount_motor" size="0.0346431 0.0207859" pos="0.044 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="2179.63" rgba="0.22 0.29 0.29 1" />
+        <geom name="robot/leg4_mount_detail" class="robot/visual" size="0.0277145 0.0228645" pos="0.044 0 0" type="cylinder" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+        <body name="robot/leg4_yaw_link" pos="0.044 0 0">
+          <joint name="robot/leg4_hip_yaw" pos="0 0 0" axis="0 0 1" limited="true" range="-0.75 0.75" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+          <geom name="robot/leg4_yaw_link_link" size="0.013 0.0153569" pos="0.045 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+          <geom name="robot/leg4_yaw_link_motor" size="0.0346431 0.0207859" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="2179.63" rgba="0.22 0.29 0.29 1" />
+          <geom name="robot/leg4_yaw_link_detail" class="robot/visual" size="0.0277145 0.0228645" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+          <body name="robot/leg4_upper_leg_link" pos="0.09 0 0">
+            <joint name="robot/leg4_hip_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="-0.65 0.8" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+            <geom name="robot/leg4_upper_leg_link_link" size="0.014 0.0603569" pos="0.09 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+            <geom name="robot/leg4_upper_leg_link_motor" size="0.0346431 0.0207859" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="2179.63" rgba="0.22 0.29 0.29 1" />
+            <geom name="robot/leg4_upper_leg_link_detail" class="robot/visual" size="0.0277145 0.0228645" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+            <body name="robot/leg4_lower_leg_link" pos="0.18 0 0">
+              <joint name="robot/leg4_knee" pos="0 0 0" axis="0 1 0" limited="true" range="0.35 2.1" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+              <geom name="robot/leg4_lower_leg_link_link" size="0.011 0.11" pos="0.11 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+              <geom name="robot/leg4_lower_leg_link_sphere" size="0.025" pos="0.22 0 0" priority="1" friction="0.8" density="500" rgba="0.25 0.31 0.3 1" />
+              <site name="robot/leg4_foot" pos="0.22 0 0" group="5" />
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="robot/leg5_mount" pos="0.078 -0.1351 0" quat="-0.866025 0 0 0.5">
+        <geom name="robot/leg5_mount_link" size="0.015 0.00717843" pos="0.00717843 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+        <geom name="robot/leg5_mount_motor" size="0.0346431 0.0207859" pos="0.044 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="2179.63" rgba="0.22 0.29 0.29 1" />
+        <geom name="robot/leg5_mount_detail" class="robot/visual" size="0.0277145 0.0228645" pos="0.044 0 0" type="cylinder" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+        <body name="robot/leg5_yaw_link" pos="0.044 0 0">
+          <joint name="robot/leg5_hip_yaw" pos="0 0 0" axis="0 0 1" limited="true" range="-0.75 0.75" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+          <geom name="robot/leg5_yaw_link_link" size="0.013 0.0153569" pos="0.045 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+          <geom name="robot/leg5_yaw_link_motor" size="0.0346431 0.0207859" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="2179.63" rgba="0.22 0.29 0.29 1" />
+          <geom name="robot/leg5_yaw_link_detail" class="robot/visual" size="0.0277145 0.0228645" pos="0.09 0 0" quat="0.707107 0.707107 0 0" type="cylinder" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+          <body name="robot/leg5_upper_leg_link" pos="0.09 0 0">
+            <joint name="robot/leg5_hip_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="-0.65 0.8" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+            <geom name="robot/leg5_upper_leg_link_link" size="0.014 0.0603569" pos="0.09 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+            <geom name="robot/leg5_upper_leg_link_motor" size="0.0346431 0.0207859" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="2179.63" rgba="0.22 0.29 0.29 1" />
+            <geom name="robot/leg5_upper_leg_link_detail" class="robot/visual" size="0.0277145 0.0228645" pos="0.18 0 0" quat="0.707107 0.707107 0 0" type="cylinder" group="0" friction="0.8 0.005 0.0001" density="0" rgba="0.79 0.58 0.3 1" />
+            <body name="robot/leg5_lower_leg_link" pos="0.18 0 0">
+              <joint name="robot/leg5_knee" pos="0 0 0" axis="0 1 0" limited="true" range="0.35 2.1" actuatorfrclimited="true" actuatorfrcrange="-12 12" armature="0.00563174" damping="0.003" frictionloss="0.02" />
+              <geom name="robot/leg5_lower_leg_link_link" size="0.011 0.11" pos="0.11 0 0" quat="0.707107 0 0.707107 0" type="cylinder" contype="0" conaffinity="0" friction="0.8" density="750" rgba="0.25 0.56 0.44 1" />
+              <geom name="robot/leg5_lower_leg_link_sphere" size="0.025" pos="0.22 0 0" priority="1" friction="0.8" density="500" rgba="0.25 0.31 0.3 1" />
+              <site name="robot/leg5_foot" pos="0.22 0 0" group="5" />
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <contact>
+    <exclude name="robot/torso_link__leg0_mount" body1="robot/torso_link" body2="robot/leg0_mount" />
+    <exclude name="robot/torso_link__leg0_yaw_link" body1="robot/torso_link" body2="robot/leg0_yaw_link" />
+    <exclude name="robot/torso_link__leg1_mount" body1="robot/torso_link" body2="robot/leg1_mount" />
+    <exclude name="robot/torso_link__leg1_yaw_link" body1="robot/torso_link" body2="robot/leg1_yaw_link" />
+    <exclude name="robot/torso_link__leg2_mount" body1="robot/torso_link" body2="robot/leg2_mount" />
+    <exclude name="robot/torso_link__leg2_yaw_link" body1="robot/torso_link" body2="robot/leg2_yaw_link" />
+    <exclude name="robot/torso_link__leg3_mount" body1="robot/torso_link" body2="robot/leg3_mount" />
+    <exclude name="robot/torso_link__leg3_yaw_link" body1="robot/torso_link" body2="robot/leg3_yaw_link" />
+    <exclude name="robot/torso_link__leg4_mount" body1="robot/torso_link" body2="robot/leg4_mount" />
+    <exclude name="robot/torso_link__leg4_yaw_link" body1="robot/torso_link" body2="robot/leg4_yaw_link" />
+    <exclude name="robot/torso_link__leg5_mount" body1="robot/torso_link" body2="robot/leg5_mount" />
+    <exclude name="robot/torso_link__leg5_yaw_link" body1="robot/torso_link" body2="robot/leg5_yaw_link" />
+    <exclude name="robot/leg0_mount__leg0_yaw_link" body1="robot/leg0_mount" body2="robot/leg0_yaw_link" />
+    <exclude name="robot/leg0_mount__leg0_upper_leg_link" body1="robot/leg0_mount" body2="robot/leg0_upper_leg_link" />
+    <exclude name="robot/leg0_yaw_link__leg0_upper_leg_link" body1="robot/leg0_yaw_link" body2="robot/leg0_upper_leg_link" />
+    <exclude name="robot/leg0_yaw_link__leg0_lower_leg_link" body1="robot/leg0_yaw_link" body2="robot/leg0_lower_leg_link" />
+    <exclude name="robot/leg0_upper_leg_link__leg0_lower_leg_link" body1="robot/leg0_upper_leg_link" body2="robot/leg0_lower_leg_link" />
+    <exclude name="robot/leg1_mount__leg1_yaw_link" body1="robot/leg1_mount" body2="robot/leg1_yaw_link" />
+    <exclude name="robot/leg1_mount__leg1_upper_leg_link" body1="robot/leg1_mount" body2="robot/leg1_upper_leg_link" />
+    <exclude name="robot/leg1_yaw_link__leg1_upper_leg_link" body1="robot/leg1_yaw_link" body2="robot/leg1_upper_leg_link" />
+    <exclude name="robot/leg1_yaw_link__leg1_lower_leg_link" body1="robot/leg1_yaw_link" body2="robot/leg1_lower_leg_link" />
+    <exclude name="robot/leg1_upper_leg_link__leg1_lower_leg_link" body1="robot/leg1_upper_leg_link" body2="robot/leg1_lower_leg_link" />
+    <exclude name="robot/leg2_mount__leg2_yaw_link" body1="robot/leg2_mount" body2="robot/leg2_yaw_link" />
+    <exclude name="robot/leg2_mount__leg2_upper_leg_link" body1="robot/leg2_mount" body2="robot/leg2_upper_leg_link" />
+    <exclude name="robot/leg2_yaw_link__leg2_upper_leg_link" body1="robot/leg2_yaw_link" body2="robot/leg2_upper_leg_link" />
+    <exclude name="robot/leg2_yaw_link__leg2_lower_leg_link" body1="robot/leg2_yaw_link" body2="robot/leg2_lower_leg_link" />
+    <exclude name="robot/leg2_upper_leg_link__leg2_lower_leg_link" body1="robot/leg2_upper_leg_link" body2="robot/leg2_lower_leg_link" />
+    <exclude name="robot/leg3_mount__leg3_yaw_link" body1="robot/leg3_mount" body2="robot/leg3_yaw_link" />
+    <exclude name="robot/leg3_mount__leg3_upper_leg_link" body1="robot/leg3_mount" body2="robot/leg3_upper_leg_link" />
+    <exclude name="robot/leg3_yaw_link__leg3_upper_leg_link" body1="robot/leg3_yaw_link" body2="robot/leg3_upper_leg_link" />
+    <exclude name="robot/leg3_yaw_link__leg3_lower_leg_link" body1="robot/leg3_yaw_link" body2="robot/leg3_lower_leg_link" />
+    <exclude name="robot/leg3_upper_leg_link__leg3_lower_leg_link" body1="robot/leg3_upper_leg_link" body2="robot/leg3_lower_leg_link" />
+    <exclude name="robot/leg4_mount__leg4_yaw_link" body1="robot/leg4_mount" body2="robot/leg4_yaw_link" />
+    <exclude name="robot/leg4_mount__leg4_upper_leg_link" body1="robot/leg4_mount" body2="robot/leg4_upper_leg_link" />
+    <exclude name="robot/leg4_yaw_link__leg4_upper_leg_link" body1="robot/leg4_yaw_link" body2="robot/leg4_upper_leg_link" />
+    <exclude name="robot/leg4_yaw_link__leg4_lower_leg_link" body1="robot/leg4_yaw_link" body2="robot/leg4_lower_leg_link" />
+    <exclude name="robot/leg4_upper_leg_link__leg4_lower_leg_link" body1="robot/leg4_upper_leg_link" body2="robot/leg4_lower_leg_link" />
+    <exclude name="robot/leg5_mount__leg5_yaw_link" body1="robot/leg5_mount" body2="robot/leg5_yaw_link" />
+    <exclude name="robot/leg5_mount__leg5_upper_leg_link" body1="robot/leg5_mount" body2="robot/leg5_upper_leg_link" />
+    <exclude name="robot/leg5_yaw_link__leg5_upper_leg_link" body1="robot/leg5_yaw_link" body2="robot/leg5_upper_leg_link" />
+    <exclude name="robot/leg5_yaw_link__leg5_lower_leg_link" body1="robot/leg5_yaw_link" body2="robot/leg5_lower_leg_link" />
+    <exclude name="robot/leg5_upper_leg_link__leg5_lower_leg_link" body1="robot/leg5_upper_leg_link" body2="robot/leg5_lower_leg_link" />
+  </contact>
+  <actuator>
+    <general name="robot/leg0_hip_yaw" joint="robot/leg0_hip_yaw" ctrllimited="true" ctrlrange="-12 12" forcelimited="true" forcerange="-12 12" />
+    <general name="robot/leg0_hip_pitch" joint="robot/leg0_hip_pitch" ctrllimited="true" ctrlrange="-12 12" forcelimited="true" forcerange="-12 12" />
+    <general name="robot/leg0_knee" joint="robot/leg0_knee" ctrllimited="true" ctrlrange="-12 12" forcelimited="true" forcerange="-12 12" />
+    <general name="robot/leg1_hip_yaw" joint="robot/leg1_hip_yaw" ctrllimited="true" ctrlrange="-12 12" forcelimited="true" forcerange="-12 12" />
+    <general name="robot/leg1_hip_pitch" joint="robot/leg1_hip_pitch" ctrllimited="true" ctrlrange="-12 12" forcelimited="true" forcerange="-12 12" />
+    <general name="robot/leg1_knee" joint="robot/leg1_knee" ctrllimited="true" ctrlrange="-12 12" forcelimited="true" forcerange="-12 12" />
+    <general name="robot/leg2_hip_yaw" joint="robot/leg2_hip_yaw" ctrllimited="true" ctrlrange="-12 12" forcelimited="true" forcerange="-12 12" />
+    <general name="robot/leg2_hip_pitch" joint="robot/leg2_hip_pitch" ctrllimited="true" ctrlrange="-12 12" forcelimited="true" forcerange="-12 12" />
+    <general name="robot/leg2_knee" joint="robot/leg2_knee" ctrllimited="true" ctrlrange="-12 12" forcelimited="true" forcerange="-12 12" />
+    <general name="robot/leg3_hip_yaw" joint="robot/leg3_hip_yaw" ctrllimited="true" ctrlrange="-12 12" forcelimited="true" forcerange="-12 12" />
+    <general name="robot/leg3_hip_pitch" joint="robot/leg3_hip_pitch" ctrllimited="true" ctrlrange="-12 12" forcelimited="true" forcerange="-12 12" />
+    <general name="robot/leg3_knee" joint="robot/leg3_knee" ctrllimited="true" ctrlrange="-12 12" forcelimited="true" forcerange="-12 12" />
+    <general name="robot/leg4_hip_yaw" joint="robot/leg4_hip_yaw" ctrllimited="true" ctrlrange="-12 12" forcelimited="true" forcerange="-12 12" />
+    <general name="robot/leg4_hip_pitch" joint="robot/leg4_hip_pitch" ctrllimited="true" ctrlrange="-12 12" forcelimited="true" forcerange="-12 12" />
+    <general name="robot/leg4_knee" joint="robot/leg4_knee" ctrllimited="true" ctrlrange="-12 12" forcelimited="true" forcerange="-12 12" />
+    <general name="robot/leg5_hip_yaw" joint="robot/leg5_hip_yaw" ctrllimited="true" ctrlrange="-12 12" forcelimited="true" forcerange="-12 12" />
+    <general name="robot/leg5_hip_pitch" joint="robot/leg5_hip_pitch" ctrllimited="true" ctrlrange="-12 12" forcelimited="true" forcerange="-12 12" />
+    <general name="robot/leg5_knee" joint="robot/leg5_knee" ctrllimited="true" ctrlrange="-12 12" forcelimited="true" forcerange="-12 12" />
+  </actuator>
+  <sensor>
+    <gyro site="robot/imu" name="robot/imu_ang_vel" />
+    <velocimeter site="robot/imu" name="robot/imu_lin_vel" />
+    <accelerometer site="robot/imu" name="robot/imu_lin_acc" />
+    <contact geom1="robot/leg0_lower_leg_link_sphere" body2="terrain" reduce="netforce" name="feet_ground_contact_leg0_lower_leg_link_sphere_found" />
+    <contact geom1="robot/leg0_lower_leg_link_sphere" body2="terrain" data="force" reduce="netforce" name="feet_ground_contact_leg0_lower_leg_link_sphere_force" />
+    <contact geom1="robot/leg1_lower_leg_link_sphere" body2="terrain" reduce="netforce" name="feet_ground_contact_leg1_lower_leg_link_sphere_found" />
+    <contact geom1="robot/leg1_lower_leg_link_sphere" body2="terrain" data="force" reduce="netforce" name="feet_ground_contact_leg1_lower_leg_link_sphere_force" />
+    <contact geom1="robot/leg2_lower_leg_link_sphere" body2="terrain" reduce="netforce" name="feet_ground_contact_leg2_lower_leg_link_sphere_found" />
+    <contact geom1="robot/leg2_lower_leg_link_sphere" body2="terrain" data="force" reduce="netforce" name="feet_ground_contact_leg2_lower_leg_link_sphere_force" />
+    <contact geom1="robot/leg3_lower_leg_link_sphere" body2="terrain" reduce="netforce" name="feet_ground_contact_leg3_lower_leg_link_sphere_found" />
+    <contact geom1="robot/leg3_lower_leg_link_sphere" body2="terrain" data="force" reduce="netforce" name="feet_ground_contact_leg3_lower_leg_link_sphere_force" />
+    <contact geom1="robot/leg4_lower_leg_link_sphere" body2="terrain" reduce="netforce" name="feet_ground_contact_leg4_lower_leg_link_sphere_found" />
+    <contact geom1="robot/leg4_lower_leg_link_sphere" body2="terrain" data="force" reduce="netforce" name="feet_ground_contact_leg4_lower_leg_link_sphere_force" />
+    <contact geom1="robot/leg5_lower_leg_link_sphere" body2="terrain" reduce="netforce" name="feet_ground_contact_leg5_lower_leg_link_sphere_found" />
+    <contact geom1="robot/leg5_lower_leg_link_sphere" body2="terrain" data="force" reduce="netforce" name="feet_ground_contact_leg5_lower_leg_link_sphere_force" />
+  </sensor>
+  <keyframe>
+    <key name="init_state" qpos="0 0 0.273698 1 0 0 0 0 0.15 1.25 0 0.15 1.25 0 0.15 1.25 0 0.15 1.25 0 0.15 1.25 0 0.15 1.25" />
+    <key name="robot/init_state" qpos="0 0 0.273698 1 0 0 0 0 0.15 1.25 0 0.15 1.25 0 0.15 1.25 0 0.15 1.25 0 0.15 1.25 0 0.15 1.25" ctrl="0 0.15 1.25 0 0.15 1.25 0 0.15 1.25 0 0.15 1.25 0 0.15 1.25 0 0.15 1.25" />
+  </keyframe>
+</mujoco>

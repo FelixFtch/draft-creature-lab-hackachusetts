@@ -1,0 +1,397 @@
+# Six-lobed load-bearing central housing, lofted along Z.
+name: torso
+axis: z
+density_param: torso_rho
+layers:
+- pos: -0.04
+  polygon:
+  - - ${body_radius * 0.919310344828}
+    - ${body_radius * 0.000000000000}
+  - - ${body_radius * 0.894222536009}
+    - ${body_radius * 0.117726630265}
+  - - ${body_radius * 0.830696210609}
+    - ${body_radius * 0.222584378788}
+  - - ${body_radius * 0.755790047967}
+    - ${body_radius * 0.313058488174}
+  - - ${body_radius * 0.693417581927}
+    - ${body_radius * 0.400344827586}
+  - - ${body_radius * 0.649011627613}
+    - ${body_radius * 0.498004137379}
+  - - ${body_radius * 0.608111831820}
+    - ${body_radius * 0.608111831820}
+  - - ${body_radius * 0.549065520516}
+    - ${body_radius * 0.715556117688}
+  - - ${body_radius * 0.459655172414}
+    - ${body_radius * 0.796146112583}
+  - - ${body_radius * 0.345157015493}
+    - ${body_radius * 0.833282747953}
+  - - ${body_radius * 0.222584378788}
+    - ${body_radius * 0.830696210609}
+  - - ${body_radius * 0.106778420354}
+    - ${body_radius * 0.811062625554}
+  - - ${body_radius * 0.000000000000}
+    - ${body_radius * 0.800689655172}
+  - - ${body_radius * -0.106778420354}
+    - ${body_radius * 0.811062625554}
+  - - ${body_radius * -0.222584378788}
+    - ${body_radius * 0.830696210609}
+  - - ${body_radius * -0.345157015493}
+    - ${body_radius * 0.833282747953}
+  - - ${body_radius * -0.459655172414}
+    - ${body_radius * 0.796146112583}
+  - - ${body_radius * -0.549065520516}
+    - ${body_radius * 0.715556117688}
+  - - ${body_radius * -0.608111831820}
+    - ${body_radius * 0.608111831820}
+  - - ${body_radius * -0.649011627613}
+    - ${body_radius * 0.498004137379}
+  - - ${body_radius * -0.693417581927}
+    - ${body_radius * 0.400344827586}
+  - - ${body_radius * -0.755790047967}
+    - ${body_radius * 0.313058488174}
+  - - ${body_radius * -0.830696210609}
+    - ${body_radius * 0.222584378788}
+  - - ${body_radius * -0.894222536009}
+    - ${body_radius * 0.117726630265}
+  - - ${body_radius * -0.919310344828}
+    - ${body_radius * 0.000000000000}
+  - - ${body_radius * -0.894222536009}
+    - ${body_radius * -0.117726630265}
+  - - ${body_radius * -0.830696210609}
+    - ${body_radius * -0.222584378788}
+  - - ${body_radius * -0.755790047967}
+    - ${body_radius * -0.313058488174}
+  - - ${body_radius * -0.693417581927}
+    - ${body_radius * -0.400344827586}
+  - - ${body_radius * -0.649011627613}
+    - ${body_radius * -0.498004137379}
+  - - ${body_radius * -0.608111831820}
+    - ${body_radius * -0.608111831820}
+  - - ${body_radius * -0.549065520516}
+    - ${body_radius * -0.715556117688}
+  - - ${body_radius * -0.459655172414}
+    - ${body_radius * -0.796146112583}
+  - - ${body_radius * -0.345157015493}
+    - ${body_radius * -0.833282747953}
+  - - ${body_radius * -0.222584378788}
+    - ${body_radius * -0.830696210609}
+  - - ${body_radius * -0.106778420354}
+    - ${body_radius * -0.811062625554}
+  - - ${body_radius * -0.000000000000}
+    - ${body_radius * -0.800689655172}
+  - - ${body_radius * 0.106778420354}
+    - ${body_radius * -0.811062625554}
+  - - ${body_radius * 0.222584378788}
+    - ${body_radius * -0.830696210609}
+  - - ${body_radius * 0.345157015493}
+    - ${body_radius * -0.833282747953}
+  - - ${body_radius * 0.459655172414}
+    - ${body_radius * -0.796146112583}
+  - - ${body_radius * 0.549065520516}
+    - ${body_radius * -0.715556117688}
+  - - ${body_radius * 0.608111831820}
+    - ${body_radius * -0.608111831820}
+  - - ${body_radius * 0.649011627613}
+    - ${body_radius * -0.498004137379}
+  - - ${body_radius * 0.693417581927}
+    - ${body_radius * -0.400344827586}
+  - - ${body_radius * 0.755790047967}
+    - ${body_radius * -0.313058488174}
+  - - ${body_radius * 0.830696210609}
+    - ${body_radius * -0.222584378788}
+  - - ${body_radius * 0.894222536009}
+    - ${body_radius * -0.117726630265}
+- pos: -0.025
+  polygon:
+  - - ${body_radius * 1.068965517241}
+    - ${body_radius * 0.000000000000}
+  - - ${body_radius * 1.039793646522}
+    - ${body_radius * 0.136891430540}
+  - - ${body_radius * 0.965925826289}
+    - ${body_radius * 0.258819045103}
+  - - ${body_radius * 0.878825637171}
+    - ${body_radius * 0.364021497877}
+  - - ${body_radius * 0.806299513868}
+    - ${body_radius * 0.465517241379}
+  - - ${body_radius * 0.754664683271}
+    - ${body_radius * 0.579074578348}
+  - - ${body_radius * 0.707106781187}
+    - ${body_radius * 0.707106781187}
+  - - ${body_radius * 0.638448279669}
+    - ${body_radius * 0.832041997312}
+  - - ${body_radius * 0.534482758621}
+    - ${body_radius * 0.925751293701}
+  - - ${body_radius * 0.401345366853}
+    - ${body_radius * 0.968933427852}
+  - - ${body_radius * 0.258819045103}
+    - ${body_radius * 0.965925826289}
+  - - ${body_radius * 0.124160953900}
+    - ${body_radius * 0.943096076226}
+  - - ${body_radius * 0.000000000000}
+    - ${body_radius * 0.931034482759}
+  - - ${body_radius * -0.124160953900}
+    - ${body_radius * 0.943096076226}
+  - - ${body_radius * -0.258819045103}
+    - ${body_radius * 0.965925826289}
+  - - ${body_radius * -0.401345366853}
+    - ${body_radius * 0.968933427852}
+  - - ${body_radius * -0.534482758621}
+    - ${body_radius * 0.925751293701}
+  - - ${body_radius * -0.638448279669}
+    - ${body_radius * 0.832041997312}
+  - - ${body_radius * -0.707106781187}
+    - ${body_radius * 0.707106781187}
+  - - ${body_radius * -0.754664683271}
+    - ${body_radius * 0.579074578348}
+  - - ${body_radius * -0.806299513868}
+    - ${body_radius * 0.465517241379}
+  - - ${body_radius * -0.878825637171}
+    - ${body_radius * 0.364021497877}
+  - - ${body_radius * -0.965925826289}
+    - ${body_radius * 0.258819045103}
+  - - ${body_radius * -1.039793646522}
+    - ${body_radius * 0.136891430540}
+  - - ${body_radius * -1.068965517241}
+    - ${body_radius * 0.000000000000}
+  - - ${body_radius * -1.039793646522}
+    - ${body_radius * -0.136891430540}
+  - - ${body_radius * -0.965925826289}
+    - ${body_radius * -0.258819045103}
+  - - ${body_radius * -0.878825637171}
+    - ${body_radius * -0.364021497877}
+  - - ${body_radius * -0.806299513868}
+    - ${body_radius * -0.465517241379}
+  - - ${body_radius * -0.754664683271}
+    - ${body_radius * -0.579074578348}
+  - - ${body_radius * -0.707106781187}
+    - ${body_radius * -0.707106781187}
+  - - ${body_radius * -0.638448279669}
+    - ${body_radius * -0.832041997312}
+  - - ${body_radius * -0.534482758621}
+    - ${body_radius * -0.925751293701}
+  - - ${body_radius * -0.401345366853}
+    - ${body_radius * -0.968933427852}
+  - - ${body_radius * -0.258819045103}
+    - ${body_radius * -0.965925826289}
+  - - ${body_radius * -0.124160953900}
+    - ${body_radius * -0.943096076226}
+  - - ${body_radius * -0.000000000000}
+    - ${body_radius * -0.931034482759}
+  - - ${body_radius * 0.124160953900}
+    - ${body_radius * -0.943096076226}
+  - - ${body_radius * 0.258819045103}
+    - ${body_radius * -0.965925826289}
+  - - ${body_radius * 0.401345366853}
+    - ${body_radius * -0.968933427852}
+  - - ${body_radius * 0.534482758621}
+    - ${body_radius * -0.925751293701}
+  - - ${body_radius * 0.638448279669}
+    - ${body_radius * -0.832041997312}
+  - - ${body_radius * 0.707106781187}
+    - ${body_radius * -0.707106781187}
+  - - ${body_radius * 0.754664683271}
+    - ${body_radius * -0.579074578348}
+  - - ${body_radius * 0.806299513868}
+    - ${body_radius * -0.465517241379}
+  - - ${body_radius * 0.878825637171}
+    - ${body_radius * -0.364021497877}
+  - - ${body_radius * 0.965925826289}
+    - ${body_radius * -0.258819045103}
+  - - ${body_radius * 1.039793646522}
+    - ${body_radius * -0.136891430540}
+- pos: 0.035
+  polygon:
+  - - ${body_radius * 1.068965517241}
+    - ${body_radius * 0.000000000000}
+  - - ${body_radius * 1.039793646522}
+    - ${body_radius * 0.136891430540}
+  - - ${body_radius * 0.965925826289}
+    - ${body_radius * 0.258819045103}
+  - - ${body_radius * 0.878825637171}
+    - ${body_radius * 0.364021497877}
+  - - ${body_radius * 0.806299513868}
+    - ${body_radius * 0.465517241379}
+  - - ${body_radius * 0.754664683271}
+    - ${body_radius * 0.579074578348}
+  - - ${body_radius * 0.707106781187}
+    - ${body_radius * 0.707106781187}
+  - - ${body_radius * 0.638448279669}
+    - ${body_radius * 0.832041997312}
+  - - ${body_radius * 0.534482758621}
+    - ${body_radius * 0.925751293701}
+  - - ${body_radius * 0.401345366853}
+    - ${body_radius * 0.968933427852}
+  - - ${body_radius * 0.258819045103}
+    - ${body_radius * 0.965925826289}
+  - - ${body_radius * 0.124160953900}
+    - ${body_radius * 0.943096076226}
+  - - ${body_radius * 0.000000000000}
+    - ${body_radius * 0.931034482759}
+  - - ${body_radius * -0.124160953900}
+    - ${body_radius * 0.943096076226}
+  - - ${body_radius * -0.258819045103}
+    - ${body_radius * 0.965925826289}
+  - - ${body_radius * -0.401345366853}
+    - ${body_radius * 0.968933427852}
+  - - ${body_radius * -0.534482758621}
+    - ${body_radius * 0.925751293701}
+  - - ${body_radius * -0.638448279669}
+    - ${body_radius * 0.832041997312}
+  - - ${body_radius * -0.707106781187}
+    - ${body_radius * 0.707106781187}
+  - - ${body_radius * -0.754664683271}
+    - ${body_radius * 0.579074578348}
+  - - ${body_radius * -0.806299513868}
+    - ${body_radius * 0.465517241379}
+  - - ${body_radius * -0.878825637171}
+    - ${body_radius * 0.364021497877}
+  - - ${body_radius * -0.965925826289}
+    - ${body_radius * 0.258819045103}
+  - - ${body_radius * -1.039793646522}
+    - ${body_radius * 0.136891430540}
+  - - ${body_radius * -1.068965517241}
+    - ${body_radius * 0.000000000000}
+  - - ${body_radius * -1.039793646522}
+    - ${body_radius * -0.136891430540}
+  - - ${body_radius * -0.965925826289}
+    - ${body_radius * -0.258819045103}
+  - - ${body_radius * -0.878825637171}
+    - ${body_radius * -0.364021497877}
+  - - ${body_radius * -0.806299513868}
+    - ${body_radius * -0.465517241379}
+  - - ${body_radius * -0.754664683271}
+    - ${body_radius * -0.579074578348}
+  - - ${body_radius * -0.707106781187}
+    - ${body_radius * -0.707106781187}
+  - - ${body_radius * -0.638448279669}
+    - ${body_radius * -0.832041997312}
+  - - ${body_radius * -0.534482758621}
+    - ${body_radius * -0.925751293701}
+  - - ${body_radius * -0.401345366853}
+    - ${body_radius * -0.968933427852}
+  - - ${body_radius * -0.258819045103}
+    - ${body_radius * -0.965925826289}
+  - - ${body_radius * -0.124160953900}
+    - ${body_radius * -0.943096076226}
+  - - ${body_radius * -0.000000000000}
+    - ${body_radius * -0.931034482759}
+  - - ${body_radius * 0.124160953900}
+    - ${body_radius * -0.943096076226}
+  - - ${body_radius * 0.258819045103}
+    - ${body_radius * -0.965925826289}
+  - - ${body_radius * 0.401345366853}
+    - ${body_radius * -0.968933427852}
+  - - ${body_radius * 0.534482758621}
+    - ${body_radius * -0.925751293701}
+  - - ${body_radius * 0.638448279669}
+    - ${body_radius * -0.832041997312}
+  - - ${body_radius * 0.707106781187}
+    - ${body_radius * -0.707106781187}
+  - - ${body_radius * 0.754664683271}
+    - ${body_radius * -0.579074578348}
+  - - ${body_radius * 0.806299513868}
+    - ${body_radius * -0.465517241379}
+  - - ${body_radius * 0.878825637171}
+    - ${body_radius * -0.364021497877}
+  - - ${body_radius * 0.965925826289}
+    - ${body_radius * -0.258819045103}
+  - - ${body_radius * 1.039793646522}
+    - ${body_radius * -0.136891430540}
+- pos: 0.055
+  polygon:
+  - - ${body_radius * 0.833793103448}
+    - ${body_radius * 0.000000000000}
+  - - ${body_radius * 0.811039044287}
+    - ${body_radius * 0.106775315821}
+  - - ${body_radius * 0.753422144505}
+    - ${body_radius * 0.201878855180}
+  - - ${body_radius * 0.685483996993}
+    - ${body_radius * 0.283936768344}
+  - - ${body_radius * 0.628913620817}
+    - ${body_radius * 0.363103448276}
+  - - ${body_radius * 0.588638452951}
+    - ${body_radius * 0.451678171112}
+  - - ${body_radius * 0.551543289326}
+    - ${body_radius * 0.551543289326}
+  - - ${body_radius * 0.497989658142}
+    - ${body_radius * 0.648992757903}
+  - - ${body_radius * 0.416896551724}
+    - ${body_radius * 0.722086009086}
+  - - ${body_radius * 0.313049386145}
+    - ${body_radius * 0.755768073724}
+  - - ${body_radius * 0.201878855180}
+    - ${body_radius * 0.753422144505}
+  - - ${body_radius * 0.096845544042}
+    - ${body_radius * 0.735614939456}
+  - - ${body_radius * 0.000000000000}
+    - ${body_radius * 0.726206896552}
+  - - ${body_radius * -0.096845544042}
+    - ${body_radius * 0.735614939456}
+  - - ${body_radius * -0.201878855180}
+    - ${body_radius * 0.753422144505}
+  - - ${body_radius * -0.313049386145}
+    - ${body_radius * 0.755768073724}
+  - - ${body_radius * -0.416896551724}
+    - ${body_radius * 0.722086009086}
+  - - ${body_radius * -0.497989658142}
+    - ${body_radius * 0.648992757903}
+  - - ${body_radius * -0.551543289326}
+    - ${body_radius * 0.551543289326}
+  - - ${body_radius * -0.588638452951}
+    - ${body_radius * 0.451678171112}
+  - - ${body_radius * -0.628913620817}
+    - ${body_radius * 0.363103448276}
+  - - ${body_radius * -0.685483996993}
+    - ${body_radius * 0.283936768344}
+  - - ${body_radius * -0.753422144505}
+    - ${body_radius * 0.201878855180}
+  - - ${body_radius * -0.811039044287}
+    - ${body_radius * 0.106775315821}
+  - - ${body_radius * -0.833793103448}
+    - ${body_radius * 0.000000000000}
+  - - ${body_radius * -0.811039044287}
+    - ${body_radius * -0.106775315821}
+  - - ${body_radius * -0.753422144505}
+    - ${body_radius * -0.201878855180}
+  - - ${body_radius * -0.685483996993}
+    - ${body_radius * -0.283936768344}
+  - - ${body_radius * -0.628913620817}
+    - ${body_radius * -0.363103448276}
+  - - ${body_radius * -0.588638452951}
+    - ${body_radius * -0.451678171112}
+  - - ${body_radius * -0.551543289326}
+    - ${body_radius * -0.551543289326}
+  - - ${body_radius * -0.497989658142}
+    - ${body_radius * -0.648992757903}
+  - - ${body_radius * -0.416896551724}
+    - ${body_radius * -0.722086009086}
+  - - ${body_radius * -0.313049386145}
+    - ${body_radius * -0.755768073724}
+  - - ${body_radius * -0.201878855180}
+    - ${body_radius * -0.753422144505}
+  - - ${body_radius * -0.096845544042}
+    - ${body_radius * -0.735614939456}
+  - - ${body_radius * -0.000000000000}
+    - ${body_radius * -0.726206896552}
+  - - ${body_radius * 0.096845544042}
+    - ${body_radius * -0.735614939456}
+  - - ${body_radius * 0.201878855180}
+    - ${body_radius * -0.753422144505}
+  - - ${body_radius * 0.313049386145}
+    - ${body_radius * -0.755768073724}
+  - - ${body_radius * 0.416896551724}
+    - ${body_radius * -0.722086009086}
+  - - ${body_radius * 0.497989658142}
+    - ${body_radius * -0.648992757903}
+  - - ${body_radius * 0.551543289326}
+    - ${body_radius * -0.551543289326}
+  - - ${body_radius * 0.588638452951}
+    - ${body_radius * -0.451678171112}
+  - - ${body_radius * 0.628913620817}
+    - ${body_radius * -0.363103448276}
+  - - ${body_radius * 0.685483996993}
+    - ${body_radius * -0.283936768344}
+  - - ${body_radius * 0.753422144505}
+    - ${body_radius * -0.201878855180}
+  - - ${body_radius * 0.811039044287}
+    - ${body_radius * -0.106775315821}

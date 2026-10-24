@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "pass": true,
+  "sourceSha256": "1fbdf3249f3cb896ea26c9f934815c8480a3130c8cc6307622b13b2b94518ad5",
+  "checks": 13,
+  "results": [
+    {
+      "name": "paused gesture resumes and applies its held command",
+      "pass": true
+    },
+    {
+      "name": "latest drag replaces the original command during asynchronous load",
+      "pass": true
+    },
+    {
+      "name": "release before load finishes stops owned loading and never moves later",
+      "pass": true
+    },
+    {
+      "name": "external pause invalidates a pending start even with a held gesture",
+      "pass": true
+    },
+    {
+      "name": "body change discards old commands without pausing the replacement",
+      "pass": true
+    },
+    {
+      "name": "engine replacement discards the old gesture",
+      "pass": true
+    },
+    {
+      "name": "body becomes ineligible during startup",
+      "pass": true
+    },
+    {
+      "name": "late rejected old request cannot cancel a new successful gesture",
+      "pass": true
+    },
+    {
+      "name": "manual input takes over visual control without resetting the walker",
+      "pass": true
+    },
+    {
+      "name": "manual input cancels VLM controller loading before its own startup",
+      "pass": true
+    },
+    {
+      "name": "release during walking requests zero speed and keeps balance running",
+      "pass": true
+    },
+    {
+      "name": "drag update after external pause cannot resume the old gesture",
+      "pass": true
+    },
+    {
+      "name": "startup error clears pending and reports once",
+      "pass": true
+    }
+  ],
+  "scope": "Production input ownership helper with controlled asynchronous engine mocks; actual browser and physics validation are separate."
+}

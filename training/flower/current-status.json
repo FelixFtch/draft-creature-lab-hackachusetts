@@ -1,0 +1,12 @@
+{
+  "status": "completed",
+  "phase": "full",
+  "iterations_observed": 1200,
+  "iterations_requested": 1200,
+  "elapsed_s": 451.986,
+  "peak_owned_gpu_mib": 1476,
+  "peak_owned_rss_mib": 2746.57421875,
+  "cumulative_supervised_training_elapsed_s": 763.057,
+  "updated_at": "2026-10-23T06:25:48.859025+00:00",
+  "releaseNote": "Historical local training summary for bundled nominal policy; this service does not launch training."
+}

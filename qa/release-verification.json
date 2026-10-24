@@ -1,0 +1,92 @@
+{
+  "scope": "Fresh local installation and portable release checks on Linux; browser UI is verified separately by the parent task.",
+  "date": "2026-10-25",
+  "setup": {
+    "command": "./setup.sh",
+    "pass": true,
+    "pinnedDraftRevision": "3b03e144735098ef94b938e85756806f45628f83",
+    "isolatedPythonEnvironment": true,
+    "pythonVersion": "Python 3.13.13",
+    "nodeVersion": "v24.21.0",
+    "freshNpmCi": true,
+    "nodeModulesIsSymlink": false,
+    "gpuOrRlExtrasInstalled": false,
+    "modelWeightsDownloaded": false
+  },
+  "runtime": {
+    "launcher": "./start.sh --port 18581 --api-port 18582",
+    "loopbackApi": true,
+    "frontendHttp200": true,
+    "flowerBrowserReady": true,
+    "defaults": [
+      {
+        "preset": "cheetah",
+        "id": "cheetah-31f2a9bfec7b90a8",
+        "massKg": 32.63809926450245
+      },
+      {
+        "preset": "bear",
+        "id": "bear-58f91b599b31ad6b",
+        "massKg": 110.04996939582054
+      },
+      {
+        "preset": "giraffe",
+        "id": "giraffe-3478a7075579bcab",
+        "massKg": 91.26418031296197
+      },
+      {
+        "preset": "flower",
+        "id": "flower-ea73eb32a7a01dab",
+        "massKg": 10.108918156217257
+      }
+    ],
+    "resizedFlowerPost": {
+      "lengthScale": 1,
+      "legScale": 1.1,
+      "pass": true
+    },
+    "vlmStarted": false,
+    "originalLabServicesChanged": false
+  },
+  "checks": {
+    "driveInput": {
+      "passed": 13
+    },
+    "trailVisuals": {
+      "passed": 7
+    },
+    "visionArbiter": {
+      "passed": 21,
+      "scope": "injected decisions with actual MuJoCo/ONNX, not live model"
+    },
+    "adapter": {
+      "passed": 17,
+      "scope": "mocked provider and HTTP validation; no live VLM"
+    },
+    "flowerController": {
+      "pass": true,
+      "commandEpisodes": 11,
+      "nativeFixtures": 6
+    },
+    "cheetahController": {
+      "pass": true,
+      "commandEpisodes": 8,
+      "nativeFixtures": 7
+    },
+    "flowerTrail": {
+      "pass": true,
+      "score": 3,
+      "simSeconds": 10.020000000000167
+    },
+    "cheetahTrail": {
+      "pass": true,
+      "score": 3,
+      "simSeconds": 10.160000000000188
+    }
+  },
+  "limitations": [
+    "Linux fresh install; macOS/Windows installation not tested.",
+    "No training, vision model launch, hardware or public web deployment.",
+    "Physics and controller checks are bounded nominal flat-body tests."
+  ]
+}
