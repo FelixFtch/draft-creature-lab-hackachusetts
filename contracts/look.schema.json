@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "creature-look/1",
+  "title": "AppearanceSpec",
+  "description": "Cosmetic look of a creature. Purely visual: it must never change masses, collisions or the compiled MuJoCo model, so trained policies stay valid. Rendered by play/src/appearance. Owner: look agent (may extend; keep this file the single source of truth, ai-service reads it at runtime). Unknown or missing fields fall back to defaults.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema"],
+  "properties": {
+    "schema": { "const": "creature-look/1" },
+    "theme": { "type": "string", "maxLength": 40, "description": "Free text label, e.g. 'ladybug', 'toy tank', 'jade dragon'." },
+    "palette": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "body": { "$ref": "#/$defs/color" },
+        "limbs": { "$ref": "#/$defs/color" },
+        "joints": { "$ref": "#/$defs/color" },
+        "accent": { "$ref": "#/$defs/color" },
+        "feet": { "$ref": "#/$defs/color" }
+      }
+    },
+    "finish": { "enum": ["matte", "satin", "gloss", "metal", "toon", "glow"], "description": "matte/satin read like printed PLA; metal like machined aluminium; glow adds emissive accents." },
+    "pattern": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "enum": ["none", "spots", "stripes", "bands", "gradient", "checker", "camo", "panels"] },
+        "color": { "$ref": "#/$defs/color" },
+        "scale": { "type": "number", "minimum": 0.5, "maximum": 2 }
+      }
+    },
+    "shell": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Decorative printed shell over the torso.",
+      "properties": {
+        "kind": { "enum": ["none", "dome", "beetle", "turtle", "petals", "armor", "fluffy", "saddle"] },
+        "color": { "$ref": "#/$defs/color" },
+        "size": { "type": "number", "minimum": 0.8, "maximum": 1.3 }
+      }
+    },
+    "face": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "eyes": { "enum": ["none", "round", "cute", "visor", "cyclops", "sleepy", "compound"] },
+        "eyeColor": { "$ref": "#/$defs/color" }
+      }
+    },
+    "accessories": {
+      "type": "array",
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind"],
+        "properties": {
+          "kind": { "enum": ["antennae", "horns", "ears", "tail", "spikes", "fin", "wings", "crown", "hat", "bow", "flower", "propeller", "backpack"] },
+          "color": { "$ref": "#/$defs/color" },
+          "size": { "type": "number", "minimum": 0.6, "maximum": 1.6 }
+        }
+      }
+    },
+    "limbs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "style": { "enum": ["classic", "sleek", "chunky", "bones"] },
+        "feet": { "enum": ["ball", "paw", "hoof", "pad"] }
+      }
+    }
+  },
+  "$defs": {
+    "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" }
+  }
+}

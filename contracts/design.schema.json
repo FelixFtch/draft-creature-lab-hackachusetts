@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "creature-design/1",
+  "title": "DesignSpec",
+  "description": "What Tinker (the AI designer) or the UI proposes. draft-service validates it, maps it onto a Draft template, runs the real Draft generator with its feasibility gate, and returns a body contract. Owner: morphology agent (may tighten/extend bounds; keep this file the single source of truth, ai-service reads it at runtime to build prompts).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "name", "bodyPlan"],
+  "properties": {
+    "schema": { "const": "creature-design/1" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 40, "description": "Short creature name shown in the UI." },
+    "concept": { "type": "string", "maxLength": 280, "description": "One-sentence pitch in the user's words." },
+    "bodyPlan": {
+      "enum": ["quadruped", "multileg"],
+      "description": "quadruped = Draft's official four-legged template (3 joints per leg: hip roll, hip pitch, knee). multileg = radial or bilateral body with 3 to 8 identical three-joint legs (hip yaw, hip pitch, knee), generalised from the Flower crawler."
+    },
+    "basePreset": {
+      "enum": ["cheetah", "bear", "giraffe", "flower"],
+      "description": "Optional: start from a Draft preset's actuators and proportions, then apply the overrides below."
+    },
+    "quadruped": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Only for bodyPlan=quadruped. Metres. Omitted fields keep the preset/template value.",
+      "properties": {
+        "torsoLength": { "type": "number", "minimum": 0.25, "maximum": 0.8 },
+        "torsoWidth": { "type": "number", "minimum": 0.14, "maximum": 0.5 },
+        "torsoHeight": { "type": "number", "minimum": 0.08, "maximum": 0.35 },
+        "shoulderWidth": { "type": "number", "minimum": 0.1, "maximum": 0.4 },
+        "hipOffset": { "type": "number", "minimum": 0.06, "maximum": 0.2, "description": "Lateral hip link (Draft hip_roll_link_length)." },
+        "upperLeg": { "type": "number", "minimum": 0.12, "maximum": 0.7 },
+        "lowerLeg": { "type": "number", "minimum": 0.12, "maximum": 0.65 },
+        "actuator": { "enum": ["micro", "qdd", "geared", "harmonic"], "description": "Actuator family; Draft sizes the motors from its fitted trends. qdd = quasi-direct-drive, fast and springy (best for jumping); geared = strong planetary, slower; harmonic = very strong, very slow; micro = small hobby-scale servos for small robots." },
+        "strength": { "type": "number", "minimum": 0.5, "maximum": 1.5, "description": "Multiplier on the family's rated torque. Draft may flag strong/small combinations as infeasible." }
+      }
+    },
+    "multileg": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Only for bodyPlan=multileg. Metres.",
+      "properties": {
+        "legCount": { "type": "integer", "minimum": 3, "maximum": 8 },
+        "arrangement": { "enum": ["radial", "bilateral"], "description": "radial = legs evenly around a round hub (flower, starfish, octopus); bilateral = legs in left/right pairs along an elongated body (insect, crab, millipede-ish)." },
+        "bodyRadius": { "type": "number", "minimum": 0.08, "maximum": 0.25 },
+        "bodyAspect": { "type": "number", "minimum": 1.0, "maximum": 2.2, "description": "Length/width of the hub; >1 elongates bilateral bodies." },
+        "coxa": { "type": "number", "minimum": 0.04, "maximum": 0.14 },
+        "upperLeg": { "type": "number", "minimum": 0.1, "maximum": 0.32 },
+        "lowerLeg": { "type": "number", "minimum": 0.12, "maximum": 0.36 },
+        "actuator": { "enum": ["micro", "qdd"] },
+        "strength": { "type": "number", "minimum": 0.5, "maximum": 1.5 }
+      }
+    },
+    "skills": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 2,
+      "items": { "enum": ["walk", "jump"] },
+      "description": "Skills the user wants to train. walk is always first. jump needs a strong, light body."
+    },
+    "look": {
+      "$ref": "look.schema.json",
+      "description": "Optional cosmetic look; never changes physics."
+    }
+  }
+}
