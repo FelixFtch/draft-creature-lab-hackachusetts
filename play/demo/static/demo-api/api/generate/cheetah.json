@@ -1,0 +1,68 @@
+{
+  "id": "cheetah-31f2a9bfec7b90a8",
+  "preset": "cheetah",
+  "parameters": {
+    "preset": "cheetah",
+    "lengthScale": 1.0,
+    "legScale": 1.0
+  },
+  "xmlUrl": "/draft/cheetah-31f2a9bfec7b90a8/quadruped.xml",
+  "meshUrl": "/draft/cheetah-31f2a9bfec7b90a8/torso_mesh.stl",
+  "manifestUrl": "/draft/cheetah-31f2a9bfec7b90a8/manifest.json",
+  "massKg": 32.63809926450245,
+  "resolvedParameters": {
+    "torso_lx": 0.52,
+    "torso_ly": 0.2,
+    "torso_lz": 0.18,
+    "upper_leg_link_length": 0.25,
+    "lower_leg_link_length": 0.23,
+    "hip_roll_link_length": 0.1,
+    "shoulder_width": 0.16,
+    "L_motor_effort": 72.0,
+    "L_motor_velocity": 40.0
+  },
+  "provenance": {
+    "generator": "Draft RobotGenerator",
+    "repository": "https://github.com/davidhnguyen2000/draft",
+    "revision": "3b03e144735098ef94b938e85756806f45628f83",
+    "packageVersion": "0.1.0",
+    "robot": "quadruped",
+    "strict": true,
+    "allowHypothetical": false,
+    "generation": "Official experiment YAML plus bounded dimension overrides; regenerated MJCF and torso mesh",
+    "controller": "No learned controller is created or certified by this endpoint",
+    "presetFile": "experiments/quadruped_variants/cheetah.yaml",
+    "presetSha256": "6c1410a1dc4eb2d730badf896b4c6a96fac842a6ff3d8328dad94d1f12e0ef91"
+  },
+  "validation": {
+    "massKg": 32.63809926450245,
+    "nq": 19,
+    "nv": 18,
+    "actuators": 0,
+    "hingeJoints": 12,
+    "bodies": 22,
+    "mujocoVersion": "3.8.0",
+    "finiteSteps": 250,
+    "simulationSeconds": 0.5000000000000003,
+    "validationScope": "CPU compile and finite unactuated scene steps; not a locomotion or hardware validation"
+  },
+  "warnings": [
+    "[L]: torque density 65 Nm/kg is above the QDD p90 (64 Nm/kg) — best-in-class territory.",
+    "[L]: power density 655 W/kg is above the QDD p90 (532 W/kg) — best-in-class territory.",
+    "fl_roll_link_link: to weigh its 0.202 kg share of the hip_link trend inside the actuators it joins, the member's density is 7439 kg/m³ against the class's 676",
+    "fl_upper_leg_link_link: to weigh its 0.486 kg share of the thigh trend inside the actuators it joins, the member's density is 1860 kg/m³ against the class's 345",
+    "fr_roll_link_link: to weigh its 0.202 kg share of the hip_link trend inside the actuators it joins, the member's density is 7439 kg/m³ against the class's 676",
+    "fr_upper_leg_link_link: to weigh its 0.486 kg share of the thigh trend inside the actuators it joins, the member's density is 1860 kg/m³ against the class's 345",
+    "rl_roll_link_link: to weigh its 0.202 kg share of the hip_link trend inside the actuators it joins, the member's density is 7439 kg/m³ against the class's 676",
+    "rl_upper_leg_link_link: to weigh its 0.486 kg share of the thigh trend inside the actuators it joins, the member's density is 1860 kg/m³ against the class's 345",
+    "rr_roll_link_link: to weigh its 0.202 kg share of the hip_link trend inside the actuators it joins, the member's density is 7439 kg/m³ against the class's 676",
+    "rr_upper_leg_link_link: to weigh its 0.486 kg share of the thigh trend inside the actuators it joins, the member's density is 1860 kg/m³ against the class's 345"
+  ],
+  "assetSha256": {
+    "quadruped.xml": "bb4fcf76d7462b588c11cad35632164956d87e8ae27dba97c9973175492ebf17",
+    "torso_mesh.stl": "a6eede2c727d2953b97987605d0defb9f320614969ab05bbd96f925a8f28cf2d",
+    "scene.xml": "d5ecc781c4d692ba9616999d962664ae21b7624870a960f2e1ac9f6220e4c13d",
+    "parameters_resolved.yaml": "ed6398908f60615686c7cb319ac814cdf38a809b1b5886ff6a42749b8a48f958",
+    "feasibility_report.yaml": "b304177be928a2cb56ee8ffa5efe8355139ea7651dff12586d6910cc4321d0b7"
+  }
+}

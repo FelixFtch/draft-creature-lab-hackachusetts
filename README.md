@@ -28,6 +28,17 @@ Open **http://127.0.0.1:18381/**. `Ctrl+C` in the terminal stops everything. To 
 
 Without `--no-training`, setup also creates `.venv-train` (CPU PyTorch + MuJoCo 3.11) for in-app training. You can add it later with `./training/setup-train-env.sh`. `start.sh` builds the web app and starts three local services: the web app (18381), the Draft API (18382) and the AI service (18383). All three listen only on `127.0.0.1`.
 
+### Web demo (no install)
+
+The web demo is a static build of the same app that needs no local services. It opens the pre-built robots in the workshop and lets you drive the ones with verified skills (Dog walks and jumps; Octo and Flower walk) in the playground. Designing new bodies, training and Tinker chat need the local install above; in the demo they answer with a short note instead.
+
+```bash
+cd play
+npx vite build --mode demo     # writes play/dist-demo (relative paths, works from any sub-path)
+```
+
+Serve `play/dist-demo` with any static file server, for example GitHub Pages. `play/demo/snapshot.sh` refreshes the API snapshots in `play/demo/static/` from a running local stack.
+
 ## The flow: Imagine → Draft → Dress up → Train → Play
 
 1. **Imagine.** Chat with Tinker, for example *"an eight-legged spider that can cross gaps"*, *"make the legs longer"* or *"paint it olive"*. Tinker proposes a design spec (body plan, size, leg count, motor class) and a look.
