@@ -198,8 +198,10 @@ class Tinker:
         example, _, _ = self.store.repair(DESIGN_ID, EXAMPLE["design"], synonyms=SYNONYMS)
         example_look, _, _ = self.store.repair(LOOK_ID, EXAMPLE["look"], synonyms=SYNONYMS)
         sample = dict(EXAMPLE, design=example, look=example_look)
+        # Looks travel in their own "look" field, so the design's embedded
+        # look property is left out of the prompt.
         system = TINKER_PROMPT.format(draft=DRAFT_LINE, example=json.dumps(sample, separators=(",", ":")),
-                                      design_schema=self.store.summary(DESIGN_ID, "Design"),
+                                      design_schema=self.store.summary(DESIGN_ID, "Design", skip=("look",)),
                                       look_schema=self.store.summary(LOOK_ID, "Look"))
         system += "\n\n" + self.state_block(request)
         if request.language:

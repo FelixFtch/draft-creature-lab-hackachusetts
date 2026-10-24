@@ -198,10 +198,14 @@ class SchemaStore:
                 ok = False
         return (repaired if ok else None), ctx.notes, ctx.errors
 
-    def summary(self, schema_id, title=None):
-        """Compact, prompt-friendly description of a schema."""
+    def summary(self, schema_id, title=None, skip=()):
+        """Compact, prompt-friendly description of a schema (top-level
+        properties named in skip are left out)."""
         self.reload()
         document = self.doc(schema_id)
+        if skip:
+            document = dict(document, properties={k: v for k, v in (document.get("properties") or {}).items()
+                                                  if k not in skip})
         lines = [f"{title or document.get('title') or schema_id} ({schema_id}) - JSON object:"]
         _summarise_object(self, schema_id, document, lines, "", 0)
         return "\n".join(lines)
