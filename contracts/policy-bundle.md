@@ -82,7 +82,8 @@ the robot part (bodies, joints, actuators, sensors) is identical.
   "pd": { "kp": [ … ], "kv": [ … ], "effort": [ … ], "rule": "…" },
   "training": { "algorithm": "PPO", "envSteps": …, "iterations": …, "wallSeconds": …, "machine": { … },
                 "seed": 0, "envs": 256, "budget": "quick", "mujocoVersion": "3.11.0", "torchVersion": "…",
-                "ppo": { … }, "domainRandomization": { … }, "terrain": "…" },
+                "ppo": { … }, "domainRandomization": { … }, "terrain": "…",
+                "jumpReference": { … } },                                  // jump only: training-time target profile
   "export": { "onnxMaxAbsErrorVsTorch": 3.6e-7, "opset": 17, "irVersion": 8 },
   "evaluation": { "evalFile": "eval.json", "evalSha256": "…", "pass": true },
   "fixtures": { "file": "fixtures.json", "sha256": "…" },
@@ -132,7 +133,10 @@ sceneSha256, pass, rows: [...], engine, scope}`. Each row: `name`, command
 `schedule` (`[[t, vx, vy, wz], …]`), optional `pushes` (`[[t, dvx, dvy]]`) and
 `jumps` (`[t]`), `durationS`, `measureFromS`, `criteria`, measured
 `meanVelocity` `[vx, vy, wz]` (root frame), `fall`, `complete`, `outcomes`,
-`pass`. Top-level `pass` is true only if every required row passes.
+`pass`; walk rows also carry `gait` (`dutyFactor`, `touchdownsPerS`,
+`peakFootClearanceM` per leg, over the measurement window) and jump rows
+`jumpsMeasured` (`apexGainM`, `airborneS`, `maxTiltRad`, `pass` per jump).
+Top-level `pass` is true only if every required row passes.
 
 Walk rows (thresholds scale with the body): `stand` (drift ≤ max(0.2, 0.5·leg)
 m, speed ≤ 0.1·vmax, |Δyaw| ≤ 0.5), `forward` (0.6·vmax; ≥ 50%, |wz| ≤
