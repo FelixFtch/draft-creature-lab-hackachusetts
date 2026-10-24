@@ -1,0 +1,13 @@
+# CPU-only training stack for training/creature_gym (creates .venv-train).
+# Install with training/setup-train-env.sh, which on Linux takes torch from the
+# PyTorch CPU wheel index first (the default PyPI Linux wheel pulls CUDA libs).
+#
+# mujoco is pinned to the exact version of the browser's @mujoco/mujoco WASM
+# build (3.11.0) so trained physics, evaluation and the playground agree.
+mujoco==3.11.0
+numpy==2.2.6
+torch==2.11.0
+onnx==1.22.0
+# Same ONNX Runtime as play/ (onnxruntime-web 1.27.0); 1.27 needs Python >= 3.11.
+onnxruntime==1.27.0 ; python_version >= "3.11"
+onnxruntime==1.23.2 ; python_version < "3.11"

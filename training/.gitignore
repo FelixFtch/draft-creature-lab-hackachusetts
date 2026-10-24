@@ -1,0 +1,5 @@
+# Local training runs, scratch bodies and per-bundle work dirs (checkpoints, logs).
+.scratch/
+runs/
+**/.work/
+**/progress.json.tmp

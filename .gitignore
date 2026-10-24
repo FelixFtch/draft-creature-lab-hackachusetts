@@ -1,6 +1,7 @@
 # Installed tools, local configuration and generated build output
 .deps/
 .venv/
+.venv-train/
 **/node_modules/
 play/dist/
 **/__pycache__/
