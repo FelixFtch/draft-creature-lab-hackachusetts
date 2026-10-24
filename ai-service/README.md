@@ -230,9 +230,15 @@ Environment variables:
    - falls back to the offline designer if it still fails. The response then reports `provider.offline` and
      `fallbackReason`.
 3. Small local models get an optional, schema-valid "starter sketch" from the offline designer to copy and improve.
-4. Looks are always separate `look` actions and never part of the design. Looks never change physics, so a trained
+4. Draft's feedback goes into the loop.
+   - When the client passes the draft-service 422 response (`gate`, `message`, `hints`) or the body's
+     `trainability` (`verdict`, `flags`), Tinker revises with them.
+   - Hint values are applied as given, because draft-service guarantees each one clears the gate.
+   - The schema's `x-designRules` go into the prompt, and the `x-actuatorFamilies` minimums and strength limits are
+     enforced on every design. Many builds then pass the first time.
+5. Looks are always separate `look` actions and never part of the design. Looks never change physics, so a trained
    policy stays valid.
-5. Replies never claim that something was built or trained. Sentences like "I've built it" or "it can now walk" are
+6. Replies never claim that something was built or trained. Sentences like "I've built it" or "it can now walk" are
    removed. Building and training are the client's job.
 
 The offline designer knows dozens of creatures:

@@ -20,6 +20,7 @@ import json
 import random
 import re
 
+from design_rules import enforce
 import looks as L
 from schemas import DESIGN_ID, NAMED_COLORS
 
@@ -39,8 +40,8 @@ ARCHETYPES = {
     "hopper": {
         "plan": Q, "preset": "cheetah", "skills": ["walk", "jump"],
         "body": {"torsoLength": (0.32, 0.40), "torsoWidth": (0.20, 0.24), "torsoHeight": (0.11, 0.14),
-                 "shoulderWidth": (0.16, 0.20), "hipOffset": (0.07, 0.09), "upperLeg": (0.22, 0.27),
-                 "lowerLeg": (0.21, 0.26), "actuator": "qdd", "strength": (1.30, 1.45)},
+                 "shoulderWidth": (0.16, 0.20), "hipOffset": (0.08, 0.10), "upperLeg": (0.22, 0.27),
+                 "lowerLeg": (0.21, 0.26), "actuator": "qdd", "strength": (1.25, 1.35)},
         "strong": ("frog", "toad", "kangaroo", "rabbit", "bunny", "hare", "grasshopper", "cricket", "flea", "hopper",
                    "wallaby", "jerboa", "locust", "poison dart frog", "dart frog"),
         "weak": ("jump", "jumper", "jumping", "jumps", "hop", "hopping", "hops", "leap", "leaping", "bouncy", "bounce",
@@ -83,7 +84,7 @@ ARCHETYPES = {
     "stilts": {
         "plan": Q, "preset": "giraffe", "skills": ["walk"],
         "body": {"torsoLength": (0.58, 0.66), "torsoWidth": (0.28, 0.34), "torsoHeight": (0.28, 0.33),
-                 "shoulderWidth": (0.22, 0.26), "hipOffset": (0.16, 0.18), "upperLeg": (0.58, 0.69),
+                 "shoulderWidth": (0.22, 0.26), "hipOffset": (0.19, 0.20), "upperLeg": (0.58, 0.69),
                  "lowerLeg": (0.52, 0.61), "actuator": "harmonic", "strength": (0.95, 1.1)},
         "strong": ("giraffe", "llama", "alpaca", "camel", "stilt", "stilts", "ostrich", "moose", "flamingo"),
         "weak": ("tall", "taller", "tallest", "long legs", "long-legged", "leggy", "lanky"),
@@ -108,7 +109,7 @@ ARCHETYPES = {
     "critter": {
         "plan": Q, "preset": None, "skills": ["walk"],
         "body": {"torsoLength": (0.25, 0.30), "torsoWidth": (0.14, 0.17), "torsoHeight": (0.08, 0.10),
-                 "shoulderWidth": (0.10, 0.12), "hipOffset": (0.06, 0.07), "upperLeg": (0.12, 0.15),
+                 "shoulderWidth": (0.10, 0.12), "hipOffset": (0.065, 0.075), "upperLeg": (0.12, 0.15),
                  "lowerLeg": (0.12, 0.15), "actuator": "micro", "strength": (0.9, 1.1)},
         "strong": ("mouse", "mice", "hamster", "rat", "gerbil", "chipmunk", "squirrel", "guinea pig", "hedgehog",
                    "ferret", "shrew"),
@@ -121,7 +122,7 @@ ARCHETYPES = {
     "lizard": {
         "plan": Q, "preset": "cheetah", "skills": ["walk"],
         "body": {"torsoLength": (0.60, 0.72), "torsoWidth": (0.22, 0.28), "torsoHeight": (0.10, 0.13),
-                 "shoulderWidth": (0.22, 0.28), "hipOffset": (0.12, 0.16), "upperLeg": (0.15, 0.20),
+                 "shoulderWidth": (0.22, 0.28), "hipOffset": (0.13, 0.16), "upperLeg": (0.15, 0.20),
                  "lowerLeg": (0.15, 0.19), "actuator": "qdd", "strength": (1.0, 1.2)},
         "strong": ("lizard", "gecko", "salamander", "newt", "iguana", "komodo", "chameleon", "crocodile", "croc",
                    "alligator", "gator", "dino", "dinosaur", "t-rex", "trex", "raptor", "dragon", "jade dragon",
@@ -135,7 +136,7 @@ ARCHETYPES = {
     "turtle": {
         "plan": Q, "preset": "bear", "skills": ["walk"],
         "body": {"torsoLength": (0.40, 0.46), "torsoWidth": (0.34, 0.40), "torsoHeight": (0.13, 0.16),
-                 "shoulderWidth": (0.28, 0.32), "hipOffset": (0.12, 0.14), "upperLeg": (0.15, 0.18),
+                 "shoulderWidth": (0.28, 0.32), "hipOffset": (0.15, 0.17), "upperLeg": (0.15, 0.18),
                  "lowerLeg": (0.14, 0.17), "actuator": "geared", "strength": (1.0, 1.1)},
         "strong": ("turtle", "tortoise", "terrapin", "armadillo", "pangolin"),
         "weak": ("slow", "steady", "slowpoke"),
@@ -147,7 +148,7 @@ ARCHETYPES = {
     "insect": {
         "plan": M, "preset": None, "skills": ["walk"],
         "body": {"legCount": 6, "arrangement": "bilateral", "bodyRadius": (0.10, 0.14), "bodyAspect": (1.5, 1.9),
-                 "coxa": (0.05, 0.07), "upperLeg": (0.13, 0.17), "lowerLeg": (0.15, 0.20), "actuator": "qdd",
+                 "coxa": (0.09, 0.11), "upperLeg": (0.13, 0.17), "lowerLeg": (0.17, 0.21), "actuator": "qdd",
                  "strength": (1.0, 1.2)},
         "strong": ("beetle", "ant", "insect", "bug", "cockroach", "roach", "ladybug", "ladybird", "mantis", "bee",
                    "bumblebee", "wasp", "hornet", "firefly", "weevil", "scarab", "termite", "butterfly", "moth",
@@ -161,7 +162,7 @@ ARCHETYPES = {
     "spider": {
         "plan": M, "preset": None, "skills": ["walk"],
         "body": {"legCount": 8, "arrangement": "radial", "bodyRadius": (0.12, 0.16), "bodyAspect": (1.0, 1.15),
-                 "coxa": (0.06, 0.08), "upperLeg": (0.20, 0.26), "lowerLeg": (0.24, 0.30), "actuator": "qdd",
+                 "coxa": (0.09, 0.11), "upperLeg": (0.19, 0.23), "lowerLeg": (0.25, 0.30), "actuator": "qdd",
                  "strength": (1.05, 1.2)},
         "strong": ("spider", "tarantula", "octopus", "octopi", "arachnid", "daddy long legs", "black widow",
                    "octopod", "kraken", "squid"),
@@ -173,8 +174,8 @@ ARCHETYPES = {
     },
     "crab": {
         "plan": M, "preset": None, "skills": ["walk"],
-        "body": {"legCount": 8, "arrangement": "bilateral", "bodyRadius": (0.14, 0.18), "bodyAspect": (1.0, 1.2),
-                 "coxa": (0.06, 0.08), "upperLeg": (0.14, 0.18), "lowerLeg": (0.16, 0.20), "actuator": "qdd",
+        "body": {"legCount": 8, "arrangement": "bilateral", "bodyRadius": (0.17, 0.20), "bodyAspect": (1.0, 1.15),
+                 "coxa": (0.10, 0.12), "upperLeg": (0.14, 0.17), "lowerLeg": (0.17, 0.20), "actuator": "qdd",
                  "strength": (1.2, 1.35)},
         "strong": ("crab", "lobster", "crayfish", "scorpion", "hermit crab", "shrimp", "krill"),
         "weak": ("sideways", "pinchy", "claws"),
@@ -185,8 +186,8 @@ ARCHETYPES = {
     },
     "centipede": {
         "plan": M, "preset": None, "skills": ["walk"],
-        "body": {"legCount": 8, "arrangement": "bilateral", "bodyRadius": (0.09, 0.12), "bodyAspect": (2.0, 2.2),
-                 "coxa": (0.04, 0.06), "upperLeg": (0.10, 0.13), "lowerLeg": (0.12, 0.15), "actuator": "micro",
+        "body": {"legCount": 8, "arrangement": "bilateral", "bodyRadius": (0.11, 0.13), "bodyAspect": (2.0, 2.2),
+                 "coxa": (0.08, 0.09), "upperLeg": (0.10, 0.13), "lowerLeg": (0.12, 0.15), "actuator": "micro",
                  "strength": (1.0, 1.1)},
         "strong": ("centipede", "millipede", "caterpillar", "inchworm", "worm", "snake", "dachshund"),
         "weak": ("many legs", "lots of legs", "most legs", "all the legs", "long body", "wiggly"),
@@ -210,7 +211,7 @@ ARCHETYPES = {
     "starfish": {
         "plan": M, "preset": None, "skills": ["walk"],
         "body": {"legCount": 5, "arrangement": "radial", "bodyRadius": (0.11, 0.14), "bodyAspect": 1.0,
-                 "coxa": (0.05, 0.07), "upperLeg": (0.15, 0.19), "lowerLeg": (0.17, 0.21), "actuator": "micro",
+                 "coxa": (0.08, 0.10), "upperLeg": (0.15, 0.19), "lowerLeg": (0.17, 0.21), "actuator": "micro",
                  "strength": (1.0, 1.15)},
         "strong": ("starfish", "sea star", "star fish", "pentapod"),
         "weak": ("five legs", "5 legs", "five-legged", "5-legged", "star-shaped"),
@@ -222,7 +223,7 @@ ARCHETYPES = {
     "jellyfish": {
         "plan": M, "preset": None, "skills": ["walk"],
         "body": {"legCount": 8, "arrangement": "radial", "bodyRadius": (0.16, 0.20), "bodyAspect": 1.0,
-                 "coxa": (0.04, 0.06), "upperLeg": (0.12, 0.15), "lowerLeg": (0.20, 0.25), "actuator": "micro",
+                 "coxa": (0.08, 0.09), "upperLeg": (0.12, 0.15), "lowerLeg": (0.20, 0.25), "actuator": "micro",
                  "strength": (0.95, 1.1)},
         "strong": ("jellyfish", "jelly", "medusa", "anemone"),
         "weak": ("floaty", "dreamy", "wobbly"),
@@ -234,7 +235,7 @@ ARCHETYPES = {
     "tripod": {
         "plan": M, "preset": None, "skills": ["walk"],
         "body": {"legCount": 3, "arrangement": "radial", "bodyRadius": (0.14, 0.18), "bodyAspect": 1.0,
-                 "coxa": (0.08, 0.10), "upperLeg": (0.24, 0.29), "lowerLeg": (0.28, 0.33), "actuator": "qdd",
+                 "coxa": (0.10, 0.12), "upperLeg": (0.24, 0.29), "lowerLeg": (0.28, 0.33), "actuator": "qdd",
                  "strength": (1.25, 1.4)},
         "strong": ("tripod", "alien", "martian", "ufo", "extraterrestrial", "war of the worlds"),
         "weak": ("three legs", "3 legs", "three-legged", "3-legged"),
@@ -615,8 +616,24 @@ def _detect_colors(text, exclude):
 # State
 # ---------------------------------------------------------------------------
 
+ERROR_CODES = {"infeasible-design", "invalid-design", "design-failed"}
+HINT_FIELD = re.compile(r"(quadruped|multileg)\.[A-Za-z]{2,32}")
+
+
+def _strings(value, limit=200):
+    if isinstance(value, str):
+        value = [value]
+    return [item.strip()[:limit] for item in value if isinstance(item, str) and item.strip()] if isinstance(value, list) else []
+
+
 class StateView:
-    """Defensive read of the client's state (designs already schema-repaired)."""
+    """Defensive read of the client's state (designs already schema-repaired).
+
+    state.body may be the current body.json (creature-body/1) or the error JSON
+    draft-service returned for this design: 422 {error: "infeasible-design",
+    gate, message, hints: [{field, direction, reason, value?}], violations} or
+    400 {error: "invalid-design", message, issues: [{field, message}]}.
+    """
 
     def __init__(self, state, design, look):
         state = state if isinstance(state, dict) else {}
@@ -629,29 +646,57 @@ class StateView:
         feasibility = body.get("feasibility") if isinstance(body.get("feasibility"), dict) else {}
         passed = feasibility.get("passed")
         self.passed = passed if isinstance(passed, bool) else None
+        self.gate = body.get("gate") if isinstance(body.get("gate"), str) and len(body["gate"]) <= 40 else None
         messages = []
-        for key in ("reasons", "errors", "failures", "warnings"):
-            value = feasibility.get(key)
-            if isinstance(value, str):
-                value = [value]
-            for item in value if isinstance(value, list) else []:
-                if isinstance(item, str) and item.strip():
-                    messages.append(item.strip()[:200])
-        if isinstance(body.get("error"), str) and body["error"].strip():
-            messages.insert(0, body["error"].strip()[:300])
-            if self.passed is None:
-                self.passed = False
-        self.feasibility_messages = messages[:6]
-        trainability = body.get("trainability") or state.get("trainability")
-        notes = []
+        error = body.get("error")
+        if isinstance(error, str) and error.strip():
+            self.passed = False
+            if error not in ERROR_CODES:
+                messages.append(error.strip()[:300])
+        if isinstance(body.get("message"), str) and body["message"].strip() and (error or self.gate):
+            self.passed = False
+            messages.insert(0, body["message"].strip()[:300])
+        for issue in body.get("issues") or [] if isinstance(body.get("issues"), list) else []:
+            if isinstance(issue, dict) and isinstance(issue.get("message"), str):
+                messages.append(f"{issue.get('field', 'design')}: {issue['message']}"[:200])
+        messages += _strings(body.get("violations"))
+        for key in ("reasons", "errors", "failures"):
+            messages += _strings(feasibility.get(key))
+        self.draft_warnings = _strings(feasibility.get("warnings"))[:4]
+        if self.passed is False:
+            messages += self.draft_warnings
+        self.feasibility_messages = list(dict.fromkeys(messages))[:6]
+        self.hints = []
+        raw_hints = body.get("hints") if isinstance(body.get("hints"), list) else feasibility.get("hints")
+        for hint in raw_hints if isinstance(raw_hints, list) else []:
+            if (isinstance(hint, dict) and isinstance(hint.get("field"), str) and HINT_FIELD.fullmatch(hint["field"])
+                    and hint.get("direction") in ("increase", "decrease", "change")):
+                clean = {"field": hint["field"], "direction": hint["direction"],
+                         "reason": hint["reason"][:160] if isinstance(hint.get("reason"), str) else ""}
+                value = hint.get("value")
+                if (type(value) in (int, float) and abs(value) < 100) or (isinstance(value, str) and len(value) <= 20):
+                    clean["value"] = value
+                self.hints.append(clean)
+        self.hints = self.hints[:6]
+        resolved = body.get("resolvedDesign")
+        self.resolved = resolved if isinstance(resolved, dict) else {}
+        trainability = body.get("trainability") if body.get("trainability") is not None else state.get("trainability")
+        notes, self.flags, self.verdict = [], [], {}
         if isinstance(trainability, dict):
-            trainability = trainability.get("warnings") or trainability.get("messages") or []
-        if isinstance(trainability, str):
-            trainability = [trainability]
-        for item in trainability if isinstance(trainability, list) else []:
-            if isinstance(item, str) and item.strip():
-                notes.append(item.strip()[:200])
-        self.trainability = notes[:4]
+            for flag in trainability.get("flags") or [] if isinstance(trainability.get("flags"), list) else []:
+                if isinstance(flag, dict) and isinstance(flag.get("code"), str):
+                    self.flags.append(flag["code"])
+                    if flag.get("severity") in ("warning", "error"):
+                        notes.append((flag.get("message") if isinstance(flag.get("message"), str) else flag["code"])[:200])
+                elif isinstance(flag, str):
+                    notes.append(flag[:200])
+            verdict = trainability.get("verdict")
+            if isinstance(verdict, dict):
+                self.verdict = {k: v for k, v in verdict.items() if isinstance(k, str) and isinstance(v, str)}
+            notes += _strings(trainability.get("warnings")) + _strings(trainability.get("messages"))
+        else:
+            notes += _strings(trainability)
+        self.trainability = list(dict.fromkeys(notes))[:4]
         self.policies = {}
         policies = state.get("policies") if isinstance(state.get("policies"), dict) else {}
         for skill in ("walk", "jump"):
@@ -710,12 +755,17 @@ class OfflineDesigner:
             question = _last_question(messages[-2]["content"])
             if question:
                 offered = Intent(question)
-                if offered.archetype or offered.theme or offered.body_mods or offered.look_mods:
+                if (offered.archetype or offered.theme or offered.body_mods or offered.look_mods or offered.fix
+                        or offered.train or offered.play):
                     ctx["intent"] = intent = offered
 
         actionable = intent.archetype or intent.theme or intent.body_mods or intent.look_mods
         if view.failed and view.design and (not last_user or intent.fix or intent.why or not actionable):
             return self._revise_for_failure(ctx)
+        if not last_user and view.passed is True and view.design:
+            return self._after_build(ctx)
+        if intent.fix and view.trainability and view.design and not actionable:
+            return self._revise_for_trainability(ctx)
         if intent.train_q:
             return self._explain_training(ctx)
         if intent.train and not (intent.archetype and intent.new_words):
@@ -811,10 +861,14 @@ class OfflineDesigner:
             design["concept"] = concept
         if keyword in ("crocodile", "croc", "alligator", "gator"):
             design[Q]["actuator"] = "geared"
+            design[Q]["hipOffset"] = max(design[Q]["hipOffset"], 0.15)  # geared hips need a longer link
         if keyword in ("dragon", "jade dragon", "dino", "dinosaur", "t-rex", "trex", "raptor", "stegosaurus"):
             _scale(design[Q], ("torsoHeight",), 1.3)
             _scale(design[Q], ("upperLeg", "lowerLeg"), 1.25)
         notes = _apply_body_mods(design, intent, fresh=True)
+        design, limited = self._settle(design)
+        if limited:
+            notes.append("some sizes are at the edge of what Draft's template allows")
         if intent.theme and (intent.look_words or not keyword):
             theme = intent.theme
         else:
@@ -850,6 +904,9 @@ class OfflineDesigner:
         intent, view, rng = ctx["intent"], ctx["view"], ctx["rng"]
         design = copy.deepcopy(view.design)
         notes = _apply_body_mods(design, intent) if intent.body_mods else []
+        design, limited = self._settle(design)
+        if limited and design != view.design:
+            notes.append("it's now at the edge of what Draft's template allows")
         if intent.name:
             design["name"] = intent.name
             notes.append(f"renamed it {intent.name}")
@@ -881,6 +938,15 @@ class OfflineDesigner:
         return {"reply": " ".join(reply), "design": design if changed_body else None, "look": look,
                 "suggestions": self._suggest(ctx, design, look or view.look)}
 
+    def _settle(self, design):
+        """Clamp to the live schema bounds and template rules now, so the reply
+        can say so; returns (design, limited)."""
+        design, rule_notes = enforce(self.store, design)
+        repaired, notes, _ = self.store.repair(DESIGN_ID, design)
+        if repaired is None:
+            return design, False
+        return repaired, bool(rule_notes) or any("clamped" in n for n in notes)
+
     def _restyle(self, ctx, theme):
         intent, view, rng = ctx["intent"], ctx["view"], ctx["rng"]
         look = L.theme_look(theme)
@@ -889,6 +955,7 @@ class OfflineDesigner:
         if intent.body_mods:
             design = copy.deepcopy(view.design)
             notes = _apply_body_mods(design, intent)
+            design, _ = self._settle(design)
             if design == view.design:
                 design = None
         label = theme.title()
@@ -935,9 +1002,12 @@ class OfflineDesigner:
     def _revise_for_failure(self, ctx):
         view, rng = ctx["view"], ctx["rng"]
         design = copy.deepcopy(view.design)
-        text = " ".join(view.feasibility_messages).lower()
+        text = " ".join(view.feasibility_messages).lower() + " " + (view.gate or "")
         detail = design.setdefault(design["bodyPlan"], {})
-        if re.search(r"overlap|collid|collision|fit|space|clearance|interfer|too small|motor size|crowd", text):
+        hint_notes = _apply_hints(design, view.hints, view.resolved) if view.hints else []
+        if hint_notes:
+            notes = hint_notes
+        elif re.search(r"overlap|collid|collision|fit|space|clearance|interfer|too small|motor size|crowd|packing|in-structure", text):
             _scale(detail, ("upperLeg", "lowerLeg", "coxa", "torsoLength", "torsoWidth", "bodyRadius"), 1.12)
             if "strength" in detail:
                 detail["strength"] = round(max(0.5, detail["strength"] - 0.15), 2)
@@ -953,31 +1023,79 @@ class OfflineDesigner:
             detail["strength"] = round(min(1.5, detail.get("strength", 1.0) + 0.2), 2)
             notes = ["shortened the legs about 14%", "slimmed the body", "raised motor strength"]
         reason = (view.feasibility_messages[0] if view.feasibility_messages else "the feasibility gate didn't pass").rstrip(".")
-        opener = rng.choice(("Draft's feasibility gate said no", "Draft flagged a problem", "Close, but Draft objected"))
-        reply = (f"{opener}: \"{_clip(reason, 140)}\". So I {_join_notes(notes, lower=True, end='')}. "
+        gate = f" ({view.gate.replace('-', ' ')})" if view.gate else ""
+        opener = rng.choice((f"Draft's feasibility gate{gate} said no", f"Draft flagged a problem{gate}",
+                             f"Close, but Draft objected{gate}"))
+        design, _ = self._settle(design)
+        action = "So I applied Draft's own hints:" if hint_notes else "So I"
+        reply = (f"{opener}: \"{_clip(reason, 140)}\". {action} {_join_notes(notes, lower=True, end='')}. "
                  + rng.choice(("Want to try building this revision?", "Give the revision a Build?",
                                "Try a Build with this one?")))
         return {"reply": reply, "design": design,
                 "suggestions": ["Make it smaller", "Make it lighter", "Try a different body", "What is feasibility?"]}
 
+    def _after_build(self, ctx):
+        """The client reports a build that passed Draft's gate."""
+        view, rng = ctx["view"], ctx["rng"]
+        if "cannot-stand" in view.flags or view.verdict.get("stand") == "fails":
+            return self._revise_for_trainability(ctx)
+        name = view.design.get("name") or "it"
+        weight = f" at {view.mass:.1f} kg" if view.mass else ""
+        skills = view.design.get("skills") or ["walk"]
+        if view.trainability:
+            reply = (f"Draft can build {name}{weight}, but the trainer's check warns: \"{_clip(view.trainability[0], 120)}\". "
+                     "Want me to fix that before training?")
+            return _reply(reply, ["Fix it", "Train it anyway", "Make it lighter"])
+        opener = rng.choice(("Draft says yes!", "It passed Draft's feasibility gate!", "Buildable!"))
+        verdict = ""
+        if "jump" in skills and view.verdict.get("jump"):
+            verdict = f" Jump outlook: {view.verdict['jump']}."
+        reply = (f"{opener} {name} can be built{weight}.{verdict} Ready to train "
+                 + " + ".join(["walk"] + [s for s in skills if s != "walk"]) + "?")
+        return _reply(reply, ["Train it", LOOK_SURPRISE_CHIP, "What does training do?"])
+
     def _revise_for_trainability(self, ctx):
         view, rng = ctx["view"], ctx["rng"]
         design = copy.deepcopy(view.design)
+        flags = set(view.flags)
         text = " ".join(view.trainability).lower()
-        detail = design.setdefault(design["bodyPlan"], {})
-        if re.search(r"tip|topple|unstable|balance|tall|narrow|fall", text):
+        plan = design["bodyPlan"]
+        detail = design.setdefault(plan, {})
+        if flags & {"cannot-stand", "may-struggle-to-stand"} or view.verdict.get("stand") in ("fails", "marginal") \
+                or re.search(r"stand", text):
+            detail["strength"] = round(min(1.5, detail.get("strength", 1.0) + 0.2), 2)
+            _scale(detail, ("upperLeg", "lowerLeg"), 0.85)
+            _scale(detail, ("torsoLength", "torsoWidth", "torsoHeight", "bodyRadius"), 0.9)
+            note = "made it lighter and shorter-legged with stronger motors so it can hold itself up"
+        elif "jump-unlikely" in flags or re.search(r"jump", text):
+            if plan == Q:
+                detail["actuator"] = "qdd"
+                detail["torsoLength"] = min(max(detail.get("torsoLength", 0.4), 0.3), 0.45)
+                for leg in ("upperLeg", "lowerLeg"):
+                    detail[leg] = min(max(detail.get(leg, 0.24), 0.18), 0.3)
+                detail["strength"] = 1.3
+                note = "rebuilt it as a jumper: QDD motors, a compact trunk and 0.18-0.3 m legs"
+            else:
+                design["skills"] = ["walk"]
+                note = "dropped the jump skill (multi-leg crawlers are walkers)"
+        elif "tippy" in flags or re.search(r"tip|topple|unstable|balance|narrow|fall", text):
             _scale(detail, ("shoulderWidth", "hipOffset", "torsoWidth", "bodyRadius"), 1.12)
             _scale(detail, ("upperLeg", "lowerLeg"), 0.9)
             note = "widened the stance and lowered it a little for balance"
-        elif re.search(r"jump|heavy|mass|weak|torque", text):
-            detail["actuator"] = "qdd"
+        elif "low-belly" in flags or re.search(r"belly|clearance", text):
+            _scale(detail, ("lowerLeg",), 1.15)
+            note = "gave it longer shins so its belly clears the ground"
+        elif "may-struggle-to-walk" in flags or re.search(r"walk|heavy|mass|weak|torque", text):
             detail["strength"] = round(min(1.5, detail.get("strength", 1.0) + 0.15), 2)
-            _scale(detail, ("torsoHeight", "torsoLength"), 0.9)
-            note = "made it lighter with stronger QDD motors"
+            _scale(detail, ("upperLeg", "lowerLeg"), 0.9)
+            note = "made the legs shorter and the motors stronger so walking is easier"
         else:
             _scale(detail, ("upperLeg", "lowerLeg"), 0.92)
             note = "made the legs a bit shorter and easier to control"
-        reply = (f"The trainer warned: \"{_clip(view.trainability[0], 120)}\". I {note} - "
+        design, _ = self._settle(design)
+        warning = view.trainability[0] if view.trainability else \
+            ", ".join(f"{k} {v}" for k, v in view.verdict.items()) or "this body will be hard to train"
+        reply = (f"The trainer's check says: \"{_clip(warning, 120)}\". I {note} - "
                  + rng.choice(("rebuild it and it should learn more easily.", "a fresh Build should train more happily.")))
         return {"reply": reply, "design": design, "suggestions": ["Make it smaller", "Make it lighter", "Train it anyway"]}
 
@@ -1251,6 +1369,57 @@ def _apply_body_mods(design, intent, fresh=False):
         skills = ["walk"]
         notes.append("dropped the jump skill")
     design["skills"] = ["walk"] + [s for s in skills if s != "walk"]
+    if plan == Q and detail.get("actuator") == "qdd" and detail.get("strength", 1.0) > 1.35:
+        detail["strength"] = 1.35  # the best catalogued QDD is already at the power-density frontier
+    return notes
+
+
+FIELD_WORDS = {"strength": "motor strength", "hipOffset": "hip link", "shoulderWidth": "shoulder width",
+               "torsoLength": "torso length", "torsoWidth": "torso width", "torsoHeight": "torso height",
+               "coxa": "coxa", "bodyRadius": "hub radius", "bodyAspect": "body aspect", "upperLeg": "thigh",
+               "lowerLeg": "shin", "legCount": "leg count", "actuator": "actuator family"}
+
+
+def _apply_hints(design, hints, resolved):
+    """Apply draft-service 422 hints. A hint value is a schema-valid fix that
+    clears the gate on its own, so value hints win; direction-only hints are
+    used only when no value hint exists."""
+    plan = design.get("bodyPlan")
+    detail = design.setdefault(plan, {})
+    mine = [h for h in hints if h["field"].startswith(plan + ".")]
+    chosen = [h for h in mine if "value" in h] or mine
+    notes = []
+    for hint in chosen:
+        field = hint["field"].split(".", 1)[1]
+        words = FIELD_WORDS.get(field, field)
+        if "value" in hint:
+            detail[field] = hint["value"]
+            value = hint["value"]
+            notes.append(f"{words} to {value:g}" if type(value) in (int, float) else f"{words} to {value}")
+            continue
+        current = detail.get(field)
+        if current is None:
+            section = resolved.get(plan) if isinstance(resolved.get(plan), dict) else resolved
+            current = section.get(field) if isinstance(section, dict) else None
+        increase = hint["direction"] == "increase"
+        if hint["direction"] == "change" and field == "actuator":
+            if plan == M:
+                new = "micro" if current != "micro" else "qdd"
+            elif "jump" in (design.get("skills") or []):
+                continue  # geared/harmonic motors would end the jump; the other hints must do
+            else:
+                new = "geared" if current in ("qdd", "micro", None) else "harmonic"
+            detail["actuator"] = new
+            notes.append(f"switched to {ACTUATOR_WORDS[new]}")
+        elif type(current) in (int, float) and hint["direction"] in ("increase", "decrease"):
+            if field == "strength":
+                new = round(current + (0.15 if increase else -0.15), 2)
+            elif field == "legCount":
+                new = int(current + (2 if increase else -2))
+            else:
+                new = round(current * (1.15 if increase else 0.87), 3)
+            detail[field] = new
+            notes.append(f"{'raised' if increase else 'lowered'} the {words} to {new:g}")
     return notes
 
 
@@ -1266,11 +1435,13 @@ def _set_leg_count(design, count, arrangement=None):
         upper, lower = multileg.get("upperLeg", 0.18), multileg.get("lowerLeg", 0.2)
         design["bodyPlan"] = Q
         design.pop("basePreset", None)
+        actuator = multileg.get("actuator", "micro")
+        shoulder_min, hip_min = (0.14, 0.08) if actuator == "qdd" else (0.10, 0.065)
         design[Q] = {"torsoLength": round(radius * 3.4, 3), "torsoWidth": round(radius * 1.5, 3),
-                     "torsoHeight": round(radius * 1.0, 3), "shoulderWidth": round(radius * 1.2, 3),
-                     "hipOffset": round(max(0.06, radius * 0.6), 3), "upperLeg": round(upper * 1.3, 3),
-                     "lowerLeg": round(lower * 1.2, 3), "actuator": multileg.get("actuator", "qdd"),
-                     "strength": multileg.get("strength", 1.0)}
+                     "torsoHeight": round(radius * 1.0, 3), "shoulderWidth": round(max(shoulder_min, radius * 1.2), 3),
+                     "hipOffset": round(max(hip_min, radius * 0.6), 3), "upperLeg": round(upper * 1.3, 3),
+                     "lowerLeg": round(lower * 1.2, 3), "actuator": actuator,
+                     "strength": min(multileg.get("strength", 1.0), 1.35 if actuator == "qdd" else 1.5)}
         return True
     if plan == Q:
         quad = design.pop(Q, {})
@@ -1280,13 +1451,16 @@ def _set_leg_count(design, count, arrangement=None):
         design.pop("basePreset", None)
         # Six legs read as an insect (pairs); eight as a spider unless the body is long.
         bilateral = arrangement == "bilateral" or (arrangement is None and (count == 6 or (count == 8 and length > 0.5)))
+        bilateral = bilateral and count % 2 == 0
+        family = actuator if actuator in ("micro", "qdd") else "qdd"
+        strength = quad.get("strength", 1.1)
+        upper = round(min(0.3, quad.get("upperLeg", 0.25) * 0.75), 3)
+        lower = round(min(0.34, quad.get("lowerLeg", 0.23) * 0.85), 3)
         design[M] = {"legCount": count, "arrangement": "bilateral" if bilateral else "radial",
-                     "bodyRadius": round(min(0.22, max(0.1, length / 3.6)), 3),
-                     "bodyAspect": 1.7 if bilateral else 1.0, "coxa": 0.06,
-                     "upperLeg": round(min(0.3, quad.get("upperLeg", 0.25) * 0.75), 3),
-                     "lowerLeg": round(min(0.34, quad.get("lowerLeg", 0.23) * 0.85), 3),
-                     "actuator": actuator if actuator in ("micro", "qdd") else "qdd",
-                     "strength": quad.get("strength", 1.1)}
+                     "bodyRadius": round(min(0.22, max(0.11, length / 3.6)), 3),
+                     "bodyAspect": 1.7 if bilateral else 1.0,
+                     "coxa": 0.08 if family == "micro" else (0.10 if strength > 1.2 else 0.09),
+                     "upperLeg": min(upper, lower), "lowerLeg": lower, "actuator": family, "strength": strength}
         return True
     detail = design.setdefault(M, {})
     detail["legCount"] = count
@@ -1294,6 +1468,14 @@ def _set_leg_count(design, count, arrangement=None):
         design.pop("basePreset", None)
     if arrangement:
         detail["arrangement"] = arrangement
+    if detail.get("arrangement") == "bilateral" and count % 2:
+        detail["arrangement"] = "radial"  # odd legs cannot pair up
+        detail["bodyAspect"] = 1.0
+    if count >= 7 and detail.get("arrangement", "radial") == "radial":
+        detail["bodyRadius"] = max(detail.get("bodyRadius", 0.15), 0.11)
+        detail["bodyAspect"] = min(detail.get("bodyAspect", 1.0), 1.2)
+    if count == 8 and detail.get("arrangement") == "bilateral" and detail.get("bodyRadius", 0.15) < 0.17:
+        detail["bodyAspect"] = max(detail.get("bodyAspect", 1.0), 1.6)
     return True
 
 

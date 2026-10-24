@@ -39,22 +39,44 @@ Request:
   "state": {                                    // all optional; invalid parts are ignored, never fatal
     "design": { /* creature-design/1 */ },
     "look":   { /* creature-look/1 */ },
-    "body": {                                   // a subset of creature-body/1 is enough
+    "body": {                                   // EITHER the body.json of the current design (creature-body/1; a subset is enough)…
       "id": "quadruped-…",                      // present once Draft has built the current design
       "massKg": 9.1,
       "design": { … },                          // used when state.design is missing
-      "feasibility": { "passed": false, "warnings": ["…"], "reasons": ["…"] },   // also: errors/failures
-      "error": "Draft feasibility gate failed: …",   // a build error string counts as a failed build
-      "trainability": { "warnings": ["tips over easily"] }   // or a list/string; also accepted at state.trainability
+      "resolvedDesign": { … },                  // optional: base values for direction-only hints
+      "feasibility": { "passed": true, "warnings": ["…"] },        // also: reasons/errors/failures
+      "trainability": { "verdict": { "stand": "ok", "walk": "plausible", "jump": "weak" },
+                        "flags": [ { "code": "may-struggle-to-walk", "severity": "warning", "message": "…" } ] }
+                                                // warning/error flags are coached; info flags are ignored.
+                                                // A list/string of warnings is also accepted, here or at state.trainability
     },
+    // …OR, when the build failed, the draft-service error JSON itself:
+    //   422 { "error": "infeasible-design", "gate": "actuator-frontier", "message": "…",
+    //         "hints": [ { "field": "quadruped.strength", "direction": "decrease", "reason": "…", "value": 1.35 } ],
+    //         "violations": ["…"], "design": { … } }
+    //   400 { "error": "invalid-design", "message": "…", "issues": [ { "field": "…", "message": "…" } ] }
+    // A free-text "error" string also counts as a failed build.
     "policies": { "walk": <status>, "jump": <status> }  // true | "ready"/"validated"/"pass" | {ready|pass|validated: true} | {status}
   },
   "language": "en"                              // optional BCP-47-ish tag; the LLM replies in it
 }
 ```
 
-If the last message is from the assistant, or there are no messages, Tinker reacts to the state. For example, after
-the client reports a failed Draft build, Tinker proposes a revised design.
+If the last message is from the assistant, or there are no messages, Tinker reacts to the state:
+
+- **Build failed (400/422):** Tinker proposes a revised design. Hints that carry a `value` are applied first; draft-service
+  guarantees each one clears the gate. Direction-only hints are used when no hint has a value. If there are no hints,
+  the gate and message decide the revision.
+- **Build passed:**
+  - `cannot-stand` (or `verdict.stand: fails`): Tinker proposes a revision directly.
+  - Warnings: Tinker explains them and offers to fix them ("Fix it" or "yes" accepts).
+  - Otherwise: Tinker reports the mass and the jump outlook, and suggests training.
+
+The LLM prompt also carries the gate, the hints, the verdict and the flags.
+
+Every proposed design also passes the schema's machine-readable template rules when the schema provides them:
+`x-actuatorFamilies.<plan>.<family>.minimums` and `strengthMax` are enforced, and `x-designRules` is shown to the LLM.
+On top of that, bilateral layouts with an odd leg count become radial. Each fix is listed in `repairs`.
 
 Response:
 
@@ -206,9 +228,10 @@ All providers are OpenAI-compatible chat completions.
 
 - `/decide` provenance: `source` can be `cloud_vlm`, and `provider` was added (coordinator decision).
 - `/chat`:
-  - request accepts `language`, `state.body.error` and `state.body.trainability`;
+  - request accepts `language`, draft-service 400/422 error JSON as `state.body` (with `hints`), and body.json
+    `trainability` (`verdict`, `flags`);
   - response adds `provider.local`, `provider.fallbackReason`, `provider.fallbackFrom` and `repairs`;
-  - design actions never embed `look`.
+  - design actions never embed `look`, and they follow `x-actuatorFamilies` when the schema has it.
 - `/critique` response adds `look`, `provider` and `provenance`.
 - `/health` adds `roles`, `offline`, `version`, `schemas`, `configProblems` and `?refresh=1`, and keeps all legacy
   fields.

@@ -106,7 +106,7 @@ class IntentTests(unittest.TestCase):
         frog, _ = self.design("a frog that jumps onto platforms")
         self.assertEqual((frog["bodyPlan"], frog["quadruped"]["actuator"]), ("quadruped", "qdd"))
         self.assertIn("jump", frog["skills"])
-        self.assertGreaterEqual(frog["quadruped"]["strength"], 1.3)
+        self.assertTrue(1.25 <= frog["quadruped"]["strength"] <= 1.35)  # strong, but inside the QDD frontier
         for text in ("a spider", "an octopus"):
             spider, _ = self.design(text)
             self.assertEqual((spider["bodyPlan"], spider["multileg"]["legCount"], spider["multileg"]["arrangement"]),

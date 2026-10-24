@@ -18,6 +18,7 @@ import json
 import re
 import threading
 
+from design_rules import design_rules, enforce
 from modeljson import clean_text, extract_json_object
 from offline_designer import DRAFT_LINE, MODEL as OFFLINE_MODEL, OfflineDesigner, StateView
 from providers import ProviderError, message_content
@@ -165,7 +166,9 @@ class Tinker:
         problem = "invalid_model_output"
         for attempt in range(2):
             try:
-                response = self.provider.complete(messages, max_tokens=900, temperature=0.7, json_mode=True,
+                # ~350-450 tokens is a full design + look + reply; 800 leaves
+                # room while prompt + answer still fit Ollama's 4k default.
+                response = self.provider.complete(messages, max_tokens=800, temperature=0.7, json_mode=True,
                                                   limit=CHAT_RESPONSE_LIMIT)
                 content = message_content(response)
             except ProviderError as exc:
@@ -203,6 +206,9 @@ class Tinker:
         system = TINKER_PROMPT.format(draft=DRAFT_LINE, example=json.dumps(sample, separators=(",", ":")),
                                       design_schema=self.store.summary(DESIGN_ID, "Design", skip=("look",)),
                                       look_schema=self.store.summary(LOOK_ID, "Look"))
+        rules = design_rules(self.store)
+        if rules:
+            system += "\n\nDraft design rules (follow them so the build passes):\n- " + "\n- ".join(rules)
         system += "\n\n" + self.state_block(request)
         if request.language:
             system += f"\nReply language: {request.language}."
@@ -231,12 +237,26 @@ class Tinker:
             if view.mass:
                 build += f", mass {view.mass:.1f} kg"
         elif view.passed is False:
-            build = "Draft build FAILED: " + ("; ".join(view.feasibility_messages) or "feasibility gate did not pass")
+            gate = f" (gate {view.gate})" if view.gate else ""
+            build = f"Draft build FAILED{gate}: " + ("; ".join(view.feasibility_messages) or "feasibility gate did not pass")
         else:
             build = "not built yet"
         lines.append("Build: " + build)
-        if view.passed is True and view.feasibility_messages:
-            lines.append("Draft warnings: " + "; ".join(view.feasibility_messages))
+        if view.hints:
+            hints = []
+            for hint in view.hints:
+                text = f"{hint['field']} {hint['direction']}"
+                if "value" in hint:
+                    text += f" to {hint['value']}"
+                if hint.get("reason"):
+                    text += f" ({hint['reason']})"
+                hints.append(text)
+            lines.append("Draft's fix hints (a value is a schema-valid fix that clears the gate; apply them): "
+                         + "; ".join(hints))
+        if view.passed is True and view.draft_warnings:
+            lines.append("Draft warnings: " + "; ".join(view.draft_warnings))
+        if view.verdict:
+            lines.append("Trainability verdict: " + ", ".join(f"{k} {v}" for k, v in view.verdict.items()))
         if view.trainability:
             lines.append("Trainer warnings: " + "; ".join(view.trainability))
         lines.append("Policies: " + ", ".join(f"{skill} {status}" for skill, status in view.policies.items()))
@@ -362,11 +382,15 @@ class Tinker:
         repairs = list(proposal.get("repairs") or [])
         design = proposal.get("design")
         if design is not None:
-            design = {k: v for k, v in design.items() if k != "look"}
+            design = copy.deepcopy({k: v for k, v in design.items() if k != "look"})
+            design, rule_notes = enforce(self.store, design)
             checked, notes, _ = self.store.repair(DESIGN_ID, design, synonyms=SYNONYMS)
-            repairs += notes
+            repairs += rule_notes + notes
             if checked is not None:
                 actions.append({"type": "design", "design": checked})
+            else:
+                proposal["reply"] = (proposal.get("reply") or "") + " (That design did not pass the lab's checks, so "\
+                                                                    "there is no design card this time - try rephrasing?)"
         look = proposal.get("look")
         if look is not None:
             checked, notes, _ = self.store.repair(LOOK_ID, look, synonyms=SYNONYMS)

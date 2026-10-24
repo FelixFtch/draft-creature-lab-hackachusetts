@@ -558,10 +558,16 @@ def _repair_array(value, schema, ctx, path, depth):
 # Prompt summaries
 # ---------------------------------------------------------------------------
 
-def _short(text, limit):
+def _short(text, limit, first_sentence=False):
     if not isinstance(text, str):
         return ""
     text = " ".join(text.split())
+    if first_sentence:
+        # Keep prompts lean: details beyond the first sentence usually repeat
+        # x-designRules, which the prompt carries separately.
+        cut = re.search(r"(?<=[a-z0-9)\]])\.\s", text)
+        if cut:
+            text = text[:cut.start() + 1]
     return text if len(text) <= limit else text[:limit - 1].rstrip() + "…"
 
 
@@ -614,8 +620,9 @@ def _summarise_object(store, schema_id, schema, lines, indent, depth):
         mark = " (required)" if name in required else ""
         # Enum explanations (e.g. what qdd/geared/harmonic mean) are the most
         # useful hints for a small model, so they get a longer budget.
-        limit = 280 if "enum" in resolved else 150
-        description = _short(prop.get("description") or resolved.get("description"), limit)
+        is_enum = "enum" in resolved
+        description = _short(prop.get("description") or resolved.get("description"), 300 if is_enum else 150,
+                             first_sentence=not is_enum)
         kind = resolved.get("type")
         if prop_id != schema_id and resolved.get("properties"):
             title = resolved.get("title") or prop_id
