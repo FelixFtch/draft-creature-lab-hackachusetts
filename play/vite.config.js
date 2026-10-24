@@ -9,8 +9,8 @@ const port = Number(process.env.LAB_PORT || 18381);
 // ai-service is reached as /ai/<route>; /vlm/<route> stays for the original
 // vision adapter contract.
 const proxy = {
-  '/ai': { target: ai, rewrite: path => path.replace(/^\/ai/, '') },
-  '/vlm': { target: ai, rewrite: path => path.replace(/^\/vlm/, '') },
+  '^/ai/': { target: ai, rewrite: path => path.replace(/^\/ai/, '') },
+  '^/vlm/': { target: ai, rewrite: path => path.replace(/^\/vlm/, '') },
   '/api': api,
   '/draft': api,
   '/creatures': api,
