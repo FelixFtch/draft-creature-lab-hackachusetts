@@ -169,7 +169,16 @@ export function createWorldView({ scene, root, layout, terrain, hfields = [], pr
   const plankTex = new Map();
   const mutedFor = c => { const col = new THREE.Color(c), hsl = {}; col.getHSL(hsl);
     return '#' + new THREE.Color().setHSL(hsl.h, Math.min(.22, hsl.s * .35), .62 + .22 * Math.min(1, hsl.l)).getHexString(); };
+  // AI Explore goals are named by colour ("go to the red ball"), so the coloured
+  // part of each landmark keeps a dusty tint of it, about as saturated as the
+  // terracotta HIGHLIGHT. Pedestals and trunks stay plaster like everything else.
+  const landmarkColors = new Set(layout.landmarks.map(l => l.color));
+  // Kept mid-dark on purpose: a light tint reads as pink, not red, in the sun.
+  const landmarkTint = c => { const col = new THREE.Color(c), hsl = {}; col.getHSL(hsl);
+    return '#' + new THREE.Color().setHSL(hsl.h, Math.min(.48, Math.max(.35, hsl.s * .6)), Math.min(.6, Math.max(.38, hsl.l * .85))).getHexString(); };
   function matFor(s) {
+    if (s.role === 'landmark' && landmarkColors.has(s.color))
+      return material(`landmark${s.color}`, () => { const m = createTopoMaterial({ base: landmarkTint(s.color) }); m.userData.whitebox = true; return m; });
     // White-box level: every obstacle is plaster in a muted tint of its colour.
     if (s.color) return material(`muted${s.color}`, () => { const m = createTopoMaterial({ base: mutedFor(s.color) }); m.userData.whitebox = true; return m; });
     const c = s.color;

@@ -102,9 +102,21 @@ All four policies were trained on flat ground, so the table shows how each body 
 ## AI: Tinker and Explore
 
 - **Offline by default.** With no model configured, Tinker uses a rule-based designer that still produces valid Draft specs.
-- **Local model.** `./scripts/setup-local-ai.sh` installs [Ollama](https://ollama.com) and picks a vision model that fits your RAM: `qwen3-vl:2b-instruct` under 12 GB, `qwen3.5:4b` for 12–23 GB, `qwen3.5:9b` for 24 GB or more.
+- **Local model.** `./scripts/setup-local-ai.sh` installs [Ollama](https://ollama.com) with Homebrew (or tells you how to install the app) and picks a vision model that fits your RAM: `qwen3-vl:2b-instruct` under 12 GB, `qwen3.5:4b` for 12–23 GB, `qwen3.5:9b` for 24 GB or more. Add `--roles eyes` to use the model only for Explore and keep Tinker's offline designer.
 - **Cloud model.** Export a key in your shell or put it in the git-ignored `ai-service/.env.local`. Supported keys are `DASHSCOPE_API_KEY` (Qwen), `ZHIPUAI_API_KEY` (GLM), `GEMINI_API_KEY` and `OPENAI_API_KEY`. Providers and models are listed in [ai-service/README.md](ai-service/README.md).
-- **Explore.** In the playground, open **Explore** and type a goal, for example *"Go to the red ball"* or *"reach the yellow flag beyond the gap"*. At each step the robot's camera image goes to the vision model, which picks one bounded move: walk, turn, or jump if the robot has a validated jump. The learned gait carries out the move. The world, not the model, decides when the goal is reached, and any manual input takes over.
+- **Explore.** In the playground, open **Explore** and type a goal such as *"Go to the red ball"*. At each step the robot's camera image goes to the vision model, which picks one bounded move: forward, backward, turn left, turn right or stop. The learned gait carries out the move. The world, not the model, decides when the goal is reached, and any manual input takes over. A run allows 30 decisions of at most 2 s each. Goals that need a jump, such as the yellow flag beyond the gap, are out of reach because Explore has no jump move.
+
+### Explore setup that worked
+
+Tested on an Apple M5 Pro with 64 GB of RAM, macOS 27, with the Dog:
+
+```bash
+./scripts/setup-local-ai.sh --model qwen3.5:9b --roles eyes   # ~7.6 GB download, image smoke test, writes ai-service/config.json
+./start.sh
+curl -s 'http://127.0.0.1:18383/health?refresh=1'              # roles.eyes must be configured, reachable and ready
+```
+
+In two runs from the spawn pad, the Dog reached the red ball after 24 and 27 decisions, about 50 s each. Each decision took about 0.45 s. `qwen3-vl:2b-instruct` passed the smoke test but answered "stand" on the first frame, so it cannot drive Explore. Only the red ball has been tested as a goal.
 
 ## Training from the command line
 

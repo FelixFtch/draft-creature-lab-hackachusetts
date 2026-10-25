@@ -14,6 +14,7 @@ import { createDraftLab } from './draft-lab.js';
 import { getMujoco } from './app/mujoco.js';
 import { normalizeLook, exportPrintKit } from './appearance/index.js';
 import { createPlayground } from './world/playground.js';
+import { EXPLORE_MAX_DECISIONS } from './world/explore.js';
 import { createLegacyCheetahPilot, createLegacyFlowerPilot, createCreaturePilot as wrapCreaturePilot } from './world/pilots.js';
 import { createCreaturePilot } from './creature-controller.js';
 import terrainResults from './world/terrain-results.json';
@@ -76,6 +77,19 @@ function evalRows(evaluation) {
     measured: row.meanVelocity ? { vx: +row.meanVelocity[0].toFixed(2), wz: +row.meanVelocity[2].toFixed(2) } : {},
     fall: !!row.fell, pass: !!row.pass,
   }));
+}
+
+// world/explore.js reports idle | thinking | moving | done | cancelled | error;
+// ExplorePanel shows idle | looking | moving | arrived | gave-up | error |
+// unavailable. Only the world's own goal check (reason goal_reached) is "arrived".
+function explorePanelState(explore, eyesConfigured) {
+  switch (explore?.phase) {
+    case 'thinking': return 'looking';
+    case 'moving': return 'moving';
+    case 'error': return 'error';
+    case 'done': return explore.reason === 'goal_reached' ? 'arrived' : 'gave-up';
+    default: return eyesConfigured ? 'idle' : 'unavailable';
+  }
 }
 
 export default function App() {
@@ -389,9 +403,14 @@ export default function App() {
     <PlayHUD creature={creature} snapshot={snapshot || {}} canJump={canJump} jumpHint={canJump ? undefined : 'This robot has no validated jump yet'}
       onJump={() => game.current?.trigger?.('jump')} onJumpBlocked={hint => push({ tone: 'info', title: 'Jump is locked', text: hint })}
       onExplore={() => setExploreOpen(open => !open)} exploreOpen={exploreOpen}
-      explorePanel={<ExplorePanel state={snapshot?.explore?.phase || 'idle'} instruction={exploreText} onInstructionChange={setExploreText}
-        landmarks={['red ball', 'goal', 'yellow flag', 'blue tower', 'jump pad']} onStart={() => game.current?.startExplore?.(exploreText)}
-        onStop={() => game.current?.stopExplore?.()} onClose={() => setExploreOpen(false)} lastDecision={snapshot?.explore?.lastDecision}
+      explorePanel={<ExplorePanel state={explorePanelState(snapshot?.explore, !!health?.roles?.eyes?.configured)} instruction={exploreText} onInstructionChange={setExploreText}
+        // Ring landmarks are ~9.5 m from the hub; a move is at most 0.7 m, so the default 12 decisions cannot reach one.
+        landmarks={['red ball', 'green tree', 'yellow arch', 'blue tower', 'orange windmill']} onStart={() => game.current?.startExplore?.(exploreText, { maxSteps: EXPLORE_MAX_DECISIONS })}
+        onStop={() => game.current?.stopExplore?.()} onClose={() => setExploreOpen(false)} onOpenSettings={() => setModal('settings')}
+        lastDecision={snapshot?.explore?.lastDecision ? { action: snapshot.explore.lastDecision.action?.operation } : undefined}
+        steps={snapshot?.explore?.phase && snapshot.explore.phase !== 'idle' ? { done: snapshot.explore.completedSteps, max: snapshot.explore.maxSteps } : undefined}
+        frame={snapshot?.explore?.phase && snapshot.explore.phase !== 'idle' ? game.current?.getExploreFrame?.() || undefined : undefined}
+        note={snapshot?.explore?.phase === 'error' && snapshot.explore.error ? snapshot.explore.error : undefined}
         eyes={health?.roles?.eyes?.configured ? { model: health.roles.eyes.model, kind: health.roles.eyes.kind } : undefined} />}
       cameraMode={snapshot?.camera?.mode === 'intro' ? 'chase' : snapshot?.camera?.mode || 'chase'}
       onCamera={() => game.current?.setCameraMode?.(snapshot?.camera?.mode === 'chase' ? 'overview' : 'chase')}

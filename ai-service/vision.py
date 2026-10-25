@@ -43,9 +43,11 @@ The existing learned controller handles balance. Do not invent observations or
 claim that a task is complete. If the direction, target, or situation is unclear,
 request standing. The supplied screenshot is a robot-mounted forward camera,
 slightly tilted down. Image left/right match the robot's left/right. A left turn
-rotates the robot toward image-left, a right turn toward image-right. Select a
-short turn to face a visible target before moving forward. Forward moves 0.35
-meters per second, backward 0.2 meters per second, and turns 0.5 radians per second.
+rotates the robot toward image-left, a right turn toward image-right. When the
+target is in the left or right third of the image, turn toward it briefly. When
+it is in the middle third, move forward for 1.0 to 2.0 seconds instead of
+turning. Forward moves 0.35 meters per second, backward 0.2 meters per second,
+and turns 0.5 radians per second.
 Return exactly one JSON object, without markdown, explanation, code or tool calls:
 {"operation":"forward","durationSeconds":1.0}
 Allowed operations: forward, backward, turn_left, turn_right, stand.
